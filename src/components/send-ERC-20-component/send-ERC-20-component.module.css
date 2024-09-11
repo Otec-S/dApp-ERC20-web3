@@ -1,0 +1,17 @@
+.component {
+  width: 100vw;
+  /* TODO: заминусовал тут высоту хедера */
+  height: calc(100vh - 100px);
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  /* align-items: center; */
+  background-color: black;
+}
+
+.block {
+  width: 780px;
+  height: 423px;
+  margin-top: 108px;
+  border: 1px solid red;
+}
