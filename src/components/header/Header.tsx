@@ -8,11 +8,11 @@ import { slide as BurgerMenu } from 'react-burger-menu';
 import imgUrl from '../../assets/logo.svg';
 
 const Header = (): React.ReactElement => {
-
+  const positionRight = false;
   return (
     <header className={styles.header}>
       <div className={styles.burgerWrapper}>
-        <BurgerMenu >
+        <BurgerMenu right={positionRight}>
           <NavLink className={styles.navLink} to="/">
             Send ERC-20
           </NavLink>
