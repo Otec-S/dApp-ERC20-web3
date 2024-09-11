@@ -1,11 +1,31 @@
-import './App.css'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WagmiProvider } from 'wagmi';
+import { RainbowKitProvider, darkTheme  } from '@rainbow-me/rainbowkit';
+import { config } from '../wagmiConfig.ts';
+import Header from './components/header/Header';
 
-function App() {
+import './App.css';
+
+const queryClient = new QueryClient();
+
+const App = () => {
 
   return (
-    <>
-      <h1>Kethers project</h1>
-    </>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}> 
+        <RainbowKitProvider 
+          modalSize="compact" 
+          theme={darkTheme({  accentColor: '#2D4BC1',
+                              accentColorForeground: '#FFF',
+                              borderRadius: 'small',
+                              overlayBlur: 'small',
+                            })
+                }
+        >
+          <Header/>
+        </RainbowKitProvider>
+      </QueryClientProvider> 
+    </WagmiProvider>
   )
 }
 

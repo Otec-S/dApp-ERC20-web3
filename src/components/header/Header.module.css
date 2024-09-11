@@ -1,0 +1,60 @@
+.header {
+  min-height: 100px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.nav {
+  display: flex;
+  gap: 48px;
+  flex-direction: row;
+}
+
+.navLink {
+  color: #FFF;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  opacity: 0.7;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: lightgray;
+}
+
+.navLink a.active {
+  opacity: 1;
+}
+
+.burgerWrapper {
+  display: none;
+}
+
+@media (max-width:1280px) {
+  .burgerWrapper {
+    display: block;
+  }
+  .nav {
+    display: none;
+  }
+  .body {
+    justify-content: right;
+  }
+}
