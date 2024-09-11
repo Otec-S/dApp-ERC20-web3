@@ -7,7 +7,10 @@ const SendERC20Component = () => {
     <>
       <MockHeader />
       <main className={style.component}>
-        <section className={style.block}></section>
+        <section className={style.block}>
+          <div className={style.blockTitle}>Send ERC-20</div>
+          <div className={style.blockForm}></div>
+        </section>
       </main>
     </>
   );

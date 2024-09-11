@@ -6,12 +6,28 @@
   /* flex-direction: column; */
   justify-content: center;
   /* align-items: center; */
-  background-color: black;
+  background-color: #1e1e1e;
 }
 
 .block {
   width: 780px;
   height: 423px;
   margin-top: 108px;
-  border: 1px solid red;
+}
+.blockTitle {
+  height: 57px;
+  color: #ffffff;
+  /* TODO: что у нас со шрифтами ?*/
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32.68px;
+  text-align: left;
+}
+
+.blockForm {
+  background-color: #333333;
+  height: 366px;
+  /* TODO: радиус скругления углов добавь */
+  border-radius: 16px;
 }
