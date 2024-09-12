@@ -8,28 +8,25 @@ import imgUrl from '../../assets/logo.svg';
 
 const Header = (): React.ReactElement => {
 
-  const [burgerIsActive, setBurger] = useState(false);
+  const [burgerIsOpen, setBurger] = useState(false);
   const handleBurgerClick = (): void => {
-    setBurger(!burgerIsActive);
+    setBurger(!burgerIsOpen);
   };
-
-  let burgerClasses = styles.burger;
-  burgerClasses += burgerIsActive ? ` ${styles.burgerActive}` : '';
 
   return (
     <header className={styles.header}>
       <div className={styles.burgerWrapper}>
         <button
             type='button'
-            className={burgerClasses}
+            className={burgerIsOpen ? styles.burgerIsOpen : styles.burger}
             onClick={handleBurgerClick}
           >
             <div className={styles.burgerImage} />
           </button>
       </div>
-      <img className={burgerIsActive ? styles.imgBurgerIsOpen : ''} src={imgUrl} alt="Project logo" />
-      <div className={burgerIsActive ? styles.bodyBurgerIsOpen :styles.body}>
-        <nav className={burgerIsActive? styles.navBurgerIsOpen : styles.nav}>
+      <img className={burgerIsOpen ? styles.imgBurgerIsOpen : ''} src={imgUrl} alt="Project logo" />
+      <div className={burgerIsOpen ? styles.bodyBurgerIsOpen :styles.body}>
+        <nav className={burgerIsOpen? styles.navBurgerIsOpen : styles.nav}>
           <NavLink className={styles.navLink} to="/">
             Send ERC-20
           </NavLink>

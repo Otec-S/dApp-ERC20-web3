@@ -16,7 +16,7 @@
   flex-grow: 1;
 }
 
-.connectButtonWrapper button{
+.connectButtonWrapper button {
   border-radius: 100px !important;
   background: #2D4BC1 !important;
   border: none !important;
@@ -83,28 +83,28 @@
   cursor: pointer;
 }
 
-.burgerActive .burgerImage {
+.burgerIsOpen {
+  cursor: pointer;
+  border: none;
+}
+
+.burgerIsOpen .burgerImage {
   background: transparent;
 }
 
-.burgerActive .burgerImage:before {
+.burgerIsOpen .burgerImage:before {
   background: white;
-  transition: background 0.1s ease 0.4s, top 0.2s ease-in 0.6s,
-    transform 0.2s ease-in 0.8s;
   top: 0;
   transform: rotate(-45deg);
 }
 
-.burgerActive .burgerImage:after {
+.burgerIsOpen .burgerImage:after {
   background: white;
-  transition: background 0.1s ease 0.4s, top 0.2s ease-in 0.6s,
-    transform 0.2s ease-in 0.8s;
   top: 0;
   transform: rotate(45deg);
 }
 
 .burgerImage {
-  transition: background 0.2s ease-in 0.2s;
   position: relative;
   margin: 0;
   width: 25px;
@@ -114,7 +114,6 @@
 
 .burgerImage:before {
   content: '';
-  transition: top 0.2s ease-in 0.2s, transform 0.2s ease-in;
   position: absolute;
   top: -9px;
   display: block;
@@ -125,7 +124,6 @@
 
 .burgerImage:after {
   content: '';
-  transition: top 0.2s ease-in 0.2s, transform 0.2s ease-in;
   position: absolute;
   top: 9px;
   display: block;
@@ -155,7 +153,6 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
-    transition: all 1.6s;
   }
 
   .body {
@@ -190,10 +187,12 @@
     gap: 10px;
   }
 
-  .body button,
-  .bodyBurgerIsOpen button {
+  .connectButtonWrapper button {
+    justify-content: center;
+  }
+
+  .connectButtonWrapper div {
     font-size: 12px !important;
-    padding: 0 10px !important;
   }
 
 }
