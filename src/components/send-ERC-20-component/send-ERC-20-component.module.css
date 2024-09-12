@@ -1,16 +1,9 @@
-* {
-  /* border: 1px solid white; */
-}
-
 .component {
-  width: 100vw;
-  /* TODO: заминусовал тут высоту хедера */
-  /* height: calc(100vh - 100px); */
+  width: 100%;
   height: 100vh;
   display: flex;
-  /* flex-direction: column; */
   justify-content: center;
-  /* align-items: center; */
+  align-items: center;
   background-color: #1e1e1e;
 }
 
@@ -37,8 +30,6 @@
 }
 
 .sender {
-  /* width: 100%; */
-  /* height: 102px; */
   margin-bottom: 24px;
   border-radius: 24px;
   background-color: #515151;
@@ -47,7 +38,6 @@
 }
 
 .inputBlock {
-  /* border: 1px solid blue; */
   width: 80%;
 }
 
@@ -59,8 +49,6 @@
   color: #fff;
   font-feature-settings: "liga" off, "clig" off;
   text-overflow: ellipsis;
-
-  /* H2 */
   font-family: "Inter", sans-serif;
   font-size: 24px;
   font-style: normal;
@@ -84,23 +72,8 @@
   line-height: normal;
   margin-right: 8px;
 }
-.balanceMaxSign {
-  background-color: #ffffff;
-  /* border-radius: 50%; */
-  /* TODO: длина нужна? */
-  width: 41px;
-  color: #000;
-  font-feature-settings: "liga" off, "clig" off;
-  font-family: "Inter", sans-serif;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-}
 
 .tokenBlock {
-  /* border: 1px solid yellow; */
-  /* width: 20%; */
   padding: 1px 11px 7px 0;
   display: flex;
   flex-direction: column;
@@ -113,12 +86,6 @@
   cursor: pointer;
 }
 
-.availableTokenLogo {
-}
-
-.availableTokenArrowDown {
-}
-
 .addCustomToken {
   color: #fff;
   font-feature-settings: "liga" off, "clig" off;
@@ -128,13 +95,10 @@
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
-  /* border: 1px solid white; */
   cursor: pointer;
 }
 
 .recipient {
-  /* width: 100%; */
-  /* height: 48px; */
   margin-bottom: 48px;
   border-radius: 50px;
   background-color: #515151;
@@ -172,7 +136,7 @@
   line-height: normal;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 845px) {
   .block {
     margin-left: 10px;
     margin-right: 10px;
