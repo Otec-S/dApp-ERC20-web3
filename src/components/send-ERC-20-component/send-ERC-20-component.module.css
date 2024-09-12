@@ -1,7 +1,12 @@
+* {
+  /* border: 1px solid white; */
+}
+
 .component {
   width: 100vw;
   /* TODO: заминусовал тут высоту хедера */
-  height: calc(100vh - 100px);
+  /* height: calc(100vh - 100px); */
+  height: 100vh;
   display: flex;
   /* flex-direction: column; */
   justify-content: center;
@@ -165,4 +170,24 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+}
+
+@media (max-width: 768px) {
+  .block {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .blockForm {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sender {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .blockForm {
+    padding: 12px;
+  }
 }
