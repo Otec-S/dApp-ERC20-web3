@@ -2,28 +2,53 @@
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  background-color: dark from './assets/colors';
+  background-color: #080f2b;
+  z-index: 2;
 }
 
 .imageSection {
   position: relative;
-  height: 812px;
+  height: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media screen and (max-width: 900px) {
+    height: 100vh;
+  }
 }
 
 .image {
   object-fit: cover;
   position: absolute;
+  overflow: hidden;
   width: 100%;
   height: 100%;
 }
 
+.mainImage {
+  composes: image;
+  z-index: 1;
+}
+
 .title {
-  margin-top: 148px;
-  margin-bottom: 48px;
+  margin: 148px 0 48px 0;
   color: #fff;
+
+  @media screen and (max-width: 900px) {
+    margin: 124px 0 24px 0;
+  }
+
+  h1 {
+    @media screen and (max-width: 1200px) {
+      font-size: 36px;
+      padding: 0 24px;
+    }
+
+    @media screen and (max-width: 900px) {
+      font-size: 32px;
+    }
+  }
 }
 
 .button {
@@ -33,21 +58,35 @@
   background: #ffa300;
   padding: 0 24px;
   color: #080f2b;
-  font-weight: 600;
   border: none;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 2;
+
+  &:hover {
+    opacity: 70%;
+  }
 }
 
 .section {
-  padding: 72px 120px;
+  padding: 70px 120px;
   box-sizing: border-box;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 46px;
   color: #fff;
 
   @media screen and (max-width: 1200px) {
     padding: 48px 72px;
+  }
+
+  @media screen and (max-width: 900px) {
+    padding: 36px 48px;
+  }
+
+  @media screen and (max-width: 720px) {
+    padding: 24px;
   }
 }
 
@@ -57,6 +96,11 @@
   border-radius: 24px;
   padding: 48px 24px;
   box-sizing: border-box;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column-reverse;
+    gap: 24px;
+  }
 }
 
 .sendBlock {
@@ -78,6 +122,10 @@
 .blockImg {
   composes: image;
   position: relative;
+
+  @media screen and (max-width: 900px) {
+    width: fit-content;
+  }
 }
 
 .blockButton {
@@ -89,6 +137,14 @@
   color: #080f2b;
   background-color: #ffa300;
   border: none;
+
+  &:hover {
+    opacity: 70%;
+  }
+
+  @media screen and (max-width: 900px) {
+    align-self: center;
+  }
 }
 
 .blockTextGroup {
@@ -98,6 +154,31 @@
   width: 50%;
   padding: 0px 48px;
   box-sizing: border-box;
+
+  p {
+    font-family: 'Open Sans';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  @media screen and (min-width: 1600px) {
+    align-self: center;
+    gap: 48px;
+  }
+
+  @media screen and (max-width: 1240px) {
+    padding: 0px 24px;
+  }
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+  }
+
+  @media screen and (max-width: 720px) {
+    padding: 0px 16px;
+  }
 }
 
 .blockImgWrap {
@@ -105,14 +186,22 @@
   padding: 0px 48px;
   box-sizing: border-box;
   align-self: center;
-}
 
-.text {
-  font-family: 'Open Sans';
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
+  @media screen and (max-width: 1240px) {
+    padding: 0px 24px;
+  }
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+    height: 240px;
+    display: flex;
+    justify-content: center;
+  }
+
+  @media screen and (max-width: 720px) {
+    padding: 0px 16px;
+    height: 200px;
+  }
 }
 
 .statisticBlock {
@@ -122,13 +211,15 @@
   justify-content: space-between;
   gap: 32px;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1240px) {
     padding: 48px;
+    gap: 16px;
   }
 
   @media screen and (max-width: 900px) {
     flex-direction: column;
-    align-items: center;
+    gap: 32px;
+    padding: 24px;
   }
 }
 
@@ -144,6 +235,11 @@
     gap: 48px;
     width: 100%;
   }
+
+  @media screen and (max-width: 720px) {
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .statisticText {
@@ -158,6 +254,10 @@
   @media screen and (max-width: 900px) {
     text-align: end;
     width: 50%;
+  }
+
+  @media screen and (max-width: 720px) {
+    width: fit-content;
   }
 }
 

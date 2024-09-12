@@ -6,13 +6,11 @@ export const Landing: React.FC = () => {
   return (
     <div className={classes.container}>
       <div className={classes.imageSection}>
-        <img src={landing.default} className={classes.image} />
+        <img src={landing.default} className={classes.mainImage} />
         <div className={classes.title}>
           <h1>Web3 platform for everything in crypto</h1>
         </div>
-        <div>
-          <button className={classes.button}>Start using now</button>
-        </div>
+        <button className={classes.button}>Start using now</button>
       </div>
       <div className={classes.section}>
         <h2>Products</h2>
@@ -28,12 +26,13 @@ export const Landing: React.FC = () => {
             <button className={classes.blockButton}>Go to app</button>
           </div>
           <div className={classes.blockImgWrap}>
-            <a href="/">
-              <img src={sendErc.default} className={classes.blockImg} />
-            </a>
+            <img src={sendErc.default} className={classes.blockImg} />
           </div>
         </div>
         <div className={classes.tradeBlock}>
+          <div className={classes.blockImgWrap}>
+            <img src={tradeErc.default} className={classes.blockImg} />
+          </div>
           <div className={classes.blockTextGroup}>
             <h3>Trade ERC-20</h3>
             <p>Token exchange made simple and secure!</p>
@@ -44,16 +43,11 @@ export const Landing: React.FC = () => {
             </p>
             <button className={classes.blockButton}>Go to app</button>
           </div>
-          <div className={classes.blockImgWrap}>
-            <a href="/">
-              <img src={tradeErc.default} className={classes.blockImg} />
-            </a>
-          </div>
         </div>
         <div className={classes.collectionBlock}>
           <div className={classes.blockTextGroup}>
             <h3>NFT Collection</h3>
-            <p>Unlock unique opportunities with our NFT</p>
+            <p>Unlock unique opportunities with our NFT collection!</p>
             <p>
               Each token is a unique piece of digital art and your access to exclusive company products and services.
               Join our community of collectors and gain privileges available only to our NFT holders. Invest in the
@@ -62,9 +56,7 @@ export const Landing: React.FC = () => {
             <button className={classes.blockButton}>Go to app</button>
           </div>
           <div className={classes.blockImgWrap}>
-            <a href="/">
-              <img src={collection.default} className={classes.blockImg} />
-            </a>
+            <img src={collection.default} className={classes.blockImg} />
           </div>
         </div>
       </div>
