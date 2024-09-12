@@ -63,6 +63,7 @@
 
 .navLink:hover {
   color: lightgray;
+  transform: scale(1.025);
 }
 
 .navLink a.active {
@@ -86,6 +87,7 @@
 .burgerIsOpen {
   cursor: pointer;
   border: none;
+  background: transparent;
 }
 
 .burgerIsOpen .burgerImage {
