@@ -18,7 +18,7 @@
   height: 57px;
   color: #ffffff;
   /* TODO: что у нас со шрифтами ?*/
-  font-family: sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 24px;
   font-weight: 600;
   line-height: 32.68px;
@@ -27,7 +27,123 @@
 
 .blockForm {
   background-color: #333333;
-  height: 366px;
-  /* TODO: радиус скругления углов добавь */
   border-radius: 16px;
+  padding: 48px;
+}
+
+.sender {
+  /* width: 100%; */
+  /* height: 102px; */
+  margin-bottom: 24px;
+  border-radius: 24px;
+  background-color: #515151;
+  display: flex;
+  padding: 24px;
+}
+
+.inputBlock {
+  /* border: 1px solid blue; */
+  width: 70%;
+}
+
+.input {
+  width: 100%;
+  background-color: inherit;
+  border: none;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  text-overflow: ellipsis;
+
+  /* H2 */
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 13.5px;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+}
+
+.balanceValue {
+  color: #ffffff;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 8px;
+}
+.balanceMaxSign {
+  background-color: #ffffff;
+  /* border-radius: 50%; */
+  /* TODO: длина нужна? */
+  width: 41px;
+  color: #000;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.tokenBlock {
+  /* border: 1px solid yellow; */
+  width: 30%;
+  padding: 10px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.availableTokensSelector {
+  display: flex;
+  justify-content: space-between;
+}
+
+.availableTokenLogo {
+}
+
+.availableTokenArrowDown {
+}
+
+.addCustomToken {
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+  /* border: 1px solid red; */
+}
+
+.recipient {
+  /* width: 100%; */
+  height: 48px;
+  margin-bottom: 48px;
+  border-radius: 50px;
+  background-color: #515151;
+  padding: 16px;
+}
+.button {
+  width: 100%;
+  height: 48px;
+  background-color: #222222;
+  border: none;
+  border-radius: 50px;
+  color: #ffffff;
+  opacity: 0.3;
+  font-family: "Open Sans", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
