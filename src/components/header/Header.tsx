@@ -24,7 +24,7 @@ const Header = (): React.ReactElement => {
             <div className={styles.burgerImage} />
           </button>
       </div>
-      <img className={burgerIsOpen ? styles.imgBurgerIsOpen : ''} src={imgUrl} alt="Project logo" />
+      <img className={burgerIsOpen ? styles.imgBurgerIsOpen : styles.img} src={imgUrl} alt="Project logo" />
       <div className={burgerIsOpen ? styles.bodyBurgerIsOpen :styles.body}>
         <nav className={burgerIsOpen? styles.navBurgerIsOpen : styles.nav}>
           <NavLink className={styles.navLink} to="/">
