@@ -40,8 +40,12 @@ const SendERC20Component = () => {
                 <div className={style.addCustomToken}>+ Add a custom token</div>
               </div>
             </div>
-
-            <div className={style.recipient}></div>
+            <div className={style.recipient}>
+              <input
+                className={style.recipientInput}
+                placeholder="0x0000000000000000000000000000000000000000"
+              />
+            </div>
             <button className={style.button}>Send</button>
           </div>
         </section>
