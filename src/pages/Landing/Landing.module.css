@@ -112,6 +112,7 @@
   composes: block;
   background-color: #ffd66c;
   color: #000;
+  flex-direction: row-reverse;
 }
 
 .collectionBlock {
