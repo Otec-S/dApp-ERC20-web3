@@ -10,7 +10,7 @@ const Header = (): React.ReactElement => {
 
   const [burgerIsOpen, setBurger] = useState(false);
   const handleBurgerClick = (): void => {
-    setBurger(!burgerIsOpen);
+    setBurger((prev) => !prev);
   };
 
   return (
