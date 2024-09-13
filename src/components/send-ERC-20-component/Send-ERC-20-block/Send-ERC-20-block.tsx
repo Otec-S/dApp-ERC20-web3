@@ -7,9 +7,13 @@ import SendERC20ResultForm from "../Send-ERC-20-result-form/Send-ERC-20-result-f
 
 interface ISendERC20BlockProps {
   blockTitleText: string;
+  isSuccess: boolean;
 }
 
-const SendERC20Block: FC<ISendERC20BlockProps> = ({ blockTitleText }) => {
+const SendERC20Block: FC<ISendERC20BlockProps> = ({
+  blockTitleText,
+  isSuccess,
+}) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isButtonActive, setIsButtonActive] = useState(true);
 
@@ -23,8 +27,11 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({ blockTitleText }) => {
       <div className={style.blockTitle}>{blockTitleText}</div>
       <form className={style.blockForm} onSubmit={handleSubmit}>
         {/* <SendERC20SendForm setIsButtonActive={setIsButtonActive} /> */}
-        <SendERC20ResultForm />
-        <SubmitButton buttonText="Great!" isButtonActive={isButtonActive} />
+        <SendERC20ResultForm isSuccess={isSuccess} />
+        <SubmitButton
+          buttonText={isSuccess ? "Great!" : "Start again"}
+          isButtonActive={isButtonActive}
+        />
       </form>
     </section>
   );
