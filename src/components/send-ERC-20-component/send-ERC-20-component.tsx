@@ -79,7 +79,7 @@ const SendERC20Component = () => {
             </div>
             <button
               className={`${style.button} ${
-                isButtonActive ? style.activeButton : ""
+                !isButtonActive ? style.inactiveButton : ""
               }`}
               disabled={!isButtonActive}
             >

@@ -124,11 +124,14 @@
 .button {
   width: 100%;
   height: 48px;
-  background-color: #222222;
+
+  background-color: #ffffff;
+  color: #000000;
+  opacity: 1;
+  cursor: pointer;
+
   border: none;
   border-radius: 50px;
-  color: #ffffff;
-  opacity: 0.3;
   font-family: "Open Sans", sans-serif;
   font-size: 24px;
   font-style: normal;
@@ -136,11 +139,11 @@
   line-height: normal;
 }
 
-.activeButton {
-  background-color: #ffffff;
-  color: #000000;
-  opacity: 1;
-  cursor: pointer;
+.inactiveButton {
+  background-color: #222222;
+  color: #ffffff;
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 .activeButton:hover {
