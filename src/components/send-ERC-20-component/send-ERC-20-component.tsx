@@ -4,6 +4,7 @@ import USDTLogo from "../../assets/USDTLogo.svg";
 import arrow_down from "../../assets/arrow_down.svg";
 import { useState } from "react";
 import SubmitButton from "../../UI/submit-button/Submit-button";
+import SendERC20Block from "./Send-ERC-20-block/Send-ERC-20-block";
 
 const SendERC20Component = () => {
   const [inputValue, setInputValue] = useState(0);
@@ -33,8 +34,7 @@ const SendERC20Component = () => {
   return (
     <>
       <main className={style.component}>
-        <section className={style.block}>
-          <div className={style.blockTitle}>Send ERC-20</div>
+        <SendERC20Block blockTitleText="Send ERC-20">
           <form className={style.blockForm} onSubmit={handleSubmit}>
             <div className={style.sender}>
               <div className={style.inputBlock}>
@@ -80,7 +80,7 @@ const SendERC20Component = () => {
             </div>
             <SubmitButton isButtonActive={isButtonActive} buttonText="Send" />
           </form>
-        </section>
+        </SendERC20Block>
       </main>
     </>
   );
