@@ -1,0 +1,31 @@
+.resultForm {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.resultSuccessIcon {
+  width: 96px;
+  height: 96px;
+}
+
+.transactionValue {
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+}
+
+.viewTransactionIcon {
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.viewTransactionIcon:hover {
+  opacity: 0.7;
+}
