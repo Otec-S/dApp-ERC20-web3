@@ -3,6 +3,7 @@ import balanceMaxSign from "../../assets/balanceMaxSign.svg";
 import USDTLogo from "../../assets/USDTLogo.svg";
 import arrow_down from "../../assets/arrow_down.svg";
 import { useState } from "react";
+import SubmitButton from "../../UI/submit-button/Submit-button";
 
 const SendERC20Component = () => {
   const [inputValue, setInputValue] = useState(0);
@@ -77,14 +78,7 @@ const SendERC20Component = () => {
                 onChange={handleRecipientChange}
               />
             </div>
-            <button
-              className={`${style.button} ${
-                !isButtonActive ? style.inactiveButton : ""
-              }`}
-              disabled={!isButtonActive}
-            >
-              Send
-            </button>
+            <SubmitButton isButtonActive={isButtonActive} />
           </form>
         </section>
       </main>
