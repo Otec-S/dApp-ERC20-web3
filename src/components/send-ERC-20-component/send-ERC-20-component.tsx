@@ -78,7 +78,7 @@ const SendERC20Component = () => {
                 onChange={handleRecipientChange}
               />
             </div>
-            <SubmitButton isButtonActive={isButtonActive} />
+            <SubmitButton isButtonActive={isButtonActive} buttonText="Send" />
           </form>
         </section>
       </main>

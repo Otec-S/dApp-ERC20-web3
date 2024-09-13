@@ -2,10 +2,12 @@ import style from "./Submit-button.module.css";
 
 interface ISubmitButtonProps {
   isButtonActive?: boolean;
+  buttonText: string;
 }
 
 const SubmitButton: React.FC<ISubmitButtonProps> = ({
   isButtonActive = true,
+  buttonText,
 }) => {
   return (
     <button
@@ -14,7 +16,7 @@ const SubmitButton: React.FC<ISubmitButtonProps> = ({
       }`}
       disabled={!isButtonActive}
     >
-      Send
+      {buttonText}
     </button>
   );
 };
