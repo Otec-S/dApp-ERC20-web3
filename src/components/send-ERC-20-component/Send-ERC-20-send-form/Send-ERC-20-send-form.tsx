@@ -16,11 +16,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const balance = 5800;
   const formattedBalance = balance.toLocaleString("en-US");
 
-  // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  //   event.preventDefault();
-  //   console.log("Form submitted");
-  // };
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseFloat(event.target.value);
     setInputValue(isNaN(value) ? 0 : value);
@@ -32,8 +27,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     setRecipientValue(event.target.value);
   };
 
-  // setIsButtonActive(inputValue > 0 && recipientValue.length > 0);
-  // Эффект для обновления состояния кнопки в родительском компоненте
   useEffect(() => {
     if (setIsButtonActive) {
       setIsButtonActive(inputValue > 0 && recipientValue.length > 0);
@@ -81,7 +74,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           onChange={handleRecipientChange}
         />
       </div>
-      ;
     </>
   );
 };
