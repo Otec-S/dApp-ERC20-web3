@@ -136,6 +136,17 @@
   line-height: normal;
 }
 
+.activeButton {
+  background-color: #ffffff;
+  color: #000000;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.activeButton:hover {
+  opacity: 0.7;
+}
+
 @media (max-width: 845px) {
   .block {
     margin-left: 10px;
