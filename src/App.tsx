@@ -1,32 +1,22 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider, darkTheme  } from '@rainbow-me/rainbowkit';
-import { config } from '../wagmiConfig.ts';
-import Header from './components/header/Header';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { FC } from 'react';
 
+import Landing from './pages/Landing/Landing';
 import './App.css';
 
-const queryClient = new QueryClient();
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Landing />,
+  },
+]);
 
-const App = () => {
-
+const App: FC = () => {
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}> 
-        <RainbowKitProvider 
-          modalSize="compact" 
-          theme={darkTheme({  accentColor: '#2D4BC1',
-                              accentColorForeground: '#FFF',
-                              borderRadius: 'small',
-                              overlayBlur: 'small',
-                            })
-                }
-        >
-          <Header/>
-        </RainbowKitProvider>
-      </QueryClientProvider> 
-    </WagmiProvider>
-  )
-}
+    <div className="app">
+      <RouterProvider router={router} />
+    </div>
+  );
+};
 
-export default App
+export default App;

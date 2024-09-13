@@ -7,7 +7,7 @@
   justify-content: space-between;
   max-width: 1440px;
   margin: 0 auto;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.20);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .body {
@@ -21,11 +21,13 @@
 /* Сергей: по умолчанию использованрие !important является плохой практикой. Чем оно тут обосновано?*/
 .connectButtonWrapper button {
   border-radius: 100px !important;
-  background: #2D4BC1 !important;
+  background: #2d4bc1 !important;
   border: none !important;
   padding: 0 16px !important;
-  color: #FFF !important;
-  font-feature-settings: 'liga' off, 'clig' off !important;
+  color: #fff !important;
+  font-feature-settings:
+    'liga' off,
+    'clig' off !important;
   font-family: 'Montserrat', sans-serif !important;
   font-size: 16px !important;
   font-style: normal !important;
@@ -43,7 +45,7 @@
 }
 
 .connectButtonWrapper div {
-  background: #2D4BC1 !important;
+  background: #2d4bc1 !important;
   border-radius: 100px !important;
   font-family: 'Montserrat', sans-serif !important;
   font-size: 16px !important;
@@ -57,8 +59,10 @@
 }
 
 .navLink {
-  color: #FFF;
-  font-feature-settings: 'liga' off, 'clig' off;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
   font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -143,7 +147,7 @@
   background: white;
 }
 
-@media (max-width:1280px) {
+@media (max-width: 1280px) {
   .burgerWrapper {
     display: block;
   }
@@ -179,13 +183,13 @@
   }
 }
 
-@media (max-width:780px) {
+@media (max-width: 780px) {
   .header {
     padding: 0 15px;
   }
 }
 
-@media (max-width:480px) {
+@media (max-width: 480px) {
   .header img {
     width: 120px;
   }
@@ -205,5 +209,4 @@
   .connectButtonWrapper div {
     font-size: 12px !important;
   }
-
 }
