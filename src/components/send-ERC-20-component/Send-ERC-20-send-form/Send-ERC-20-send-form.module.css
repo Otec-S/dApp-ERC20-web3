@@ -1,0 +1,111 @@
+.sender {
+  margin-bottom: 24px;
+  border-radius: 24px;
+  background-color: #515151;
+  display: flex;
+  padding: 22px 22px 12px;
+}
+
+.inputBlock {
+  width: 80%;
+}
+
+.input {
+  width: 95%;
+  background-color: inherit;
+  border: none;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  text-overflow: ellipsis;
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 13.5px;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+}
+
+.balanceValue {
+  color: #ffffff;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 8px;
+}
+
+.tokenBlock {
+  padding: 1px 11px 7px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.availableTokensSelector {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.addCustomToken {
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.recipient {
+  margin-bottom: 48px;
+  border-radius: 50px;
+  background-color: #515151;
+  padding: 11.5px 16px;
+  border: none;
+}
+
+.recipientInput {
+  width: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings: "liga" off, "clig" off;
+  text-overflow: ellipsis;
+  font-family: "Open Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background-color: #515151;
+  border: none;
+}
+
+@media (max-width: 845px) {
+  .block {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .blockForm {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sender {
+    flex-direction: column;
+    gap: 20px;
+  }
+  .blockForm {
+    padding: 12px;
+  }
+}

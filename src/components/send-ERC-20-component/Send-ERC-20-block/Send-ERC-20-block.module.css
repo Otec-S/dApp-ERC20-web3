@@ -13,3 +13,9 @@
   line-height: 32.68px;
   text-align: left;
 }
+
+.blockForm {
+  background-color: #333333;
+  border-radius: 16px;
+  padding: 48px;
+}
