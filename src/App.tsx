@@ -3,6 +3,7 @@ import { FC } from 'react';
 
 import Landing from './pages/Landing/Landing';
 import './App.css';
+import './styles/reset.css';
 
 const router = createBrowserRouter([
   {
