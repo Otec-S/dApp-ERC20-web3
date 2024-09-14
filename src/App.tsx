@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import Landing from './pages/Landing/Landing';
 import './App.css';
-import SendERC20Component from './components/send-ERC-20-component/send-ERC-20-component';
+import SendERC20 from './pages/SendERC20/send-ERC-20';
 
 const router = createBrowserRouter([
   {
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/send-ERC20-tokens',
-    element: <SendERC20Component />,
+    element: <SendERC20 />,
   },
 ]);
 
