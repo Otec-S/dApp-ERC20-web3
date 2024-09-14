@@ -18,7 +18,6 @@
   flex-grow: 1;
 }
 
-/* Сергей: по умолчанию использованрие !important является плохой практикой. Чем оно тут обосновано?*/
 .connectButtonWrapper button {
   border-radius: 100px !important;
   background: #2d4bc1 !important;
@@ -39,7 +38,6 @@
   text-align: center !important;
 }
 
-/*Сергей: по умолчанию использование стилей на теги, а не на классы является плохой практикой. Предлагаю стили писать на классы, где это возможно*/
 .img {
   margin-right: 24px;
 }
