@@ -3,6 +3,7 @@
   min-height: 100vh;
   width: 100%;
   background-color: #080f2b;
+  box-sizing: border-box;
   z-index: 2;
 }
 
@@ -38,16 +39,23 @@
   @media screen and (max-width: 900px) {
     margin: 124px 0 24px 0;
   }
+}
 
-  h1 {
-    @media screen and (max-width: 1200px) {
-      font-size: 36px;
-      padding: 0 24px;
-    }
+.titleText {
+  text-align: center;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
 
-    @media screen and (max-width: 900px) {
-      font-size: 32px;
-    }
+  @media screen and (max-width: 1200px) {
+    font-size: 36px;
+    padding: 0 24px;
+  }
+
+  @media screen and (max-width: 900px) {
+    font-size: 32px;
   }
 }
 
@@ -90,6 +98,15 @@
   }
 }
 
+.sectionTitle {
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+}
+
 .block {
   width: 100%;
   display: flex;
@@ -118,6 +135,15 @@
 .collectionBlock {
   composes: block;
   background-color: #2d4bc1;
+}
+
+.blockTitle {
+  font-family: Montserrat;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
 }
 
 .blockImg {
@@ -156,14 +182,6 @@
   padding: 0px 48px;
   box-sizing: border-box;
 
-  p {
-    font-family: 'Open Sans';
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
-  }
-
   @media screen and (min-width: 1600px) {
     align-self: center;
     gap: 48px;
@@ -180,6 +198,14 @@
   @media screen and (max-width: 720px) {
     padding: 0px 16px;
   }
+}
+
+.text {
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
 }
 
 .blockImgWrap {
@@ -247,6 +273,7 @@
   font-family: Montserrat;
   font-size: 32px;
   font-weight: 600;
+  margin: 0;
 
   @media screen and (max-width: 1200px) {
     font-size: 24px;
@@ -267,4 +294,5 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
+  margin: 0;
 }
