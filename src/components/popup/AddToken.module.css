@@ -1,6 +1,7 @@
 .addToken {
   display: flex;
   max-width: 640px;
+  height: 638px;
   padding: 0 48px;
   flex-direction: column;
   align-items: flex-start;
@@ -8,12 +9,15 @@
   border-radius: 16px;
   background: #333;
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
+  padding: 48px;
 }
 
 .header {
-  color: #FFF;
-  font-feature-settings: 'liga' off, 'clig' off;
-  font-family: "Open Sans", sans-serif;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -29,5 +33,166 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+}
+
+.inputLabel {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+}
+
+.inputAddress {
+  display: flex;
+  height: 48px;
+  padding: 0 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 100px;
+  border: 1px solid #222;
+  background: #515151;
+  outline: none;
+  margin: 8px 0;
+  width: 100%;
+  overflow: hidden;
+  color: white;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.inputName {
+  display: flex;
+  height: 48px;
+  padding: 0 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 100px;
+  border: 1px solid #222;
+  background: #515151;
+  outline: none;
+  margin: 8px 0;
+  width: 100%;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.3);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.inputDecimals {
+  width: 100px;
+  display: flex;
+  height: 48px;
+  padding: 0 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-radius: 100px;
+  border: 1px solid #222;
+  background: #515151;
+  outline: none;
+  margin: 8px 0;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.3);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.error {
+  color: #ff007a;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.close {
+  transition: transform 0.5s ease;
+}
+
+.close:hover {
+  transform: rotate(90deg);
+}
+
+.button {
+  height: 48px;
+  width: 100%;
+  border-radius: 100px;
+  background: #fff;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.button:hover {
+  background: lightgrey;
+}
+
+.buttonWrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  min-height: 48px;
+  gap: 24px;
   flex-grow: 1;
 }

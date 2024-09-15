@@ -1,7 +1,10 @@
 import { FC } from 'react';
 
-import Header from '../../components/header/Header';
+import AddToken from '../../components/popup/AddToken';
 
-const Landing: FC = () => <Header />;
+const Landing: FC = () => {
+  const handleClose = () => undefined;
+  return <AddToken handleClose={handleClose} />;
+};
 
 export default Landing;
