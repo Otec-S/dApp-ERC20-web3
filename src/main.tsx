@@ -9,20 +9,18 @@ import App from './App.tsx';
 
 import './index.css';
 const queryClient = new QueryClient();
+const rainbowtTheme = darkTheme({
+  accentColor: '#2D4BC1',
+  accentColorForeground: '#FFF',
+  borderRadius: 'small',
+  overlayBlur: 'small',
+});
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          modalSize="compact"
-          theme={darkTheme({
-            accentColor: '#2D4BC1',
-            accentColorForeground: '#FFF',
-            borderRadius: 'small',
-            overlayBlur: 'small',
-          })}
-        >
+        <RainbowKitProvider modalSize="compact" theme={rainbowtTheme}>
           <App />
         </RainbowKitProvider>
       </QueryClientProvider>
