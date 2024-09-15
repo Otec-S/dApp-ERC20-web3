@@ -8,6 +8,7 @@ import { config } from '../wagmiConfig.ts';
 import App from './App.tsx';
 
 import './index.css';
+
 const queryClient = new QueryClient();
 const rainbowtTheme = darkTheme({
   accentColor: '#2D4BC1',
