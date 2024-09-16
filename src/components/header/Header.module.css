@@ -1,0 +1,210 @@
+.header {
+  min-height: 100px;
+  padding: 0 48px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+  max-width: 1440px;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.connectButtonWrapper button {
+  border-radius: 100px !important;
+  background: #2d4bc1 !important;
+  border: none !important;
+  padding: 0 16px !important;
+  color: #fff !important;
+  font-feature-settings:
+    'liga' off,
+    'clig' off !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 16px !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  line-height: normal !important;
+  border: none !important;
+  min-width: 157px !important;
+  height: 36px !important;
+  text-align: center !important;
+}
+
+.img {
+  margin-right: 24px;
+}
+
+.connectButtonWrapper div {
+  background: #2d4bc1 !important;
+  border-radius: 100px !important;
+  font-family: 'Montserrat', sans-serif !important;
+  font-size: 16px !important;
+  border: none !important;
+}
+
+.nav {
+  display: flex;
+  gap: 55px;
+  flex-direction: row;
+}
+
+.navLink {
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  text-transform: uppercase;
+  opacity: 0.7;
+  text-decoration: none;
+}
+
+.navLink:hover {
+  color: lightgray;
+  transform: scale(1.025);
+}
+
+.navLink a.active {
+  opacity: 1;
+}
+
+.burgerWrapper {
+  display: none;
+}
+
+.burger {
+  background: none;
+  border: none;
+  display: none;
+  position: relative;
+  padding: 8px 0;
+  z-index: 1;
+  cursor: pointer;
+  margin-right: 24px;
+}
+
+.burgerIsOpen {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+.burgerIsOpen .burgerImage {
+  background: transparent;
+}
+
+.burgerIsOpen .burgerImage:before {
+  background: white;
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.burgerIsOpen .burgerImage:after {
+  background: white;
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.burgerImage {
+  position: relative;
+  margin: 0;
+  width: 25px;
+  height: 3px;
+  background: white;
+}
+
+.burgerImage:before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: white;
+}
+
+.burgerImage:after {
+  content: '';
+  position: absolute;
+  top: 9px;
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: white;
+}
+
+@media (max-width: 1280px) {
+  .burgerWrapper {
+    display: block;
+  }
+
+  .imgBurgerIsOpen {
+    display: none;
+  }
+
+  .burger {
+    display: flex;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .navBurgerIsOpen {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .body {
+    justify-content: right;
+  }
+
+  .bodyBurgerIsOpen {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+  }
+}
+
+@media (max-width: 780px) {
+  .header {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header img {
+    width: 120px;
+  }
+
+  .navLink {
+    font-size: 12px;
+  }
+
+  .header {
+    gap: 10px;
+  }
+
+  .connectButtonWrapper button {
+    justify-content: center;
+  }
+
+  .connectButtonWrapper div {
+    font-size: 12px !important;
+  }
+}
