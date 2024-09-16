@@ -8,15 +8,7 @@ import TRXIcon from '@assets/icons/trx.svg';
 import USDCIcon from '@assets/icons/usdc.svg';
 import USDTIcon from '@assets/icons/usdt.svg';
 import WBTSIcon from '@assets/icons/wbtc.svg';
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { ITokens } from '@src/types/tokens';
-import { polygonAmoy, sepolia } from '@wagmi/core/chains';
-
-export const config = getDefaultConfig({
-  appName: 'Scrum Team 17 web3 kEthers fans',
-  projectId: import.meta.env.VITE_WAGMI_PROJECT_ID,
-  chains: [sepolia, polygonAmoy],
-});
 
 export const sepoliaId = 11155111;
 export const polygonId = 80002;
