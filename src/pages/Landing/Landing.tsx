@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { landing } from '../../assets/images';
+import Header from '../../components/header/Header';
 import classes from './Landing.module.css';
 import { blockData, statisticData } from './Landing.constants';
-import Header from '../../components/header/Header';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
