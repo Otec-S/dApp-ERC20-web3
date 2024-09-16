@@ -1,8 +1,8 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { FC } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
-import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 import { config } from '../wagmiConfig';
 import { Landing } from './pages/Landing';
 import './App.css';

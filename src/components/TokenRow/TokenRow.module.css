@@ -1,0 +1,42 @@
+.tokenRow {
+  display: flex;
+  width: 160px;
+  height: 32px;
+  align-items: center;
+  gap: 8px;
+
+  @media screen and (max-width: 1200px) {
+    width: 140px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 100%;
+  }
+}
+
+.tokenText {
+  /* color: #fff; */
+  font-family: Montserrat;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.plusButton {
+  height: 32px;
+  width: 32px;
+  background-color: #2d4bc1;
+  margin-left: auto;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 70%;
+    cursor: pointer;
+  }
+}

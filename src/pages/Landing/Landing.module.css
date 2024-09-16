@@ -313,3 +313,69 @@
   line-height: 24px;
   margin: 0;
 }
+
+.tokenBlock {
+  display: flex;
+  gap: 48px;
+
+  @media screen and (max-width: 1200px) {
+    gap: 24px;
+  }
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+}
+
+.tokenGroup {
+  padding: 14px 0 14px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  justify-content: space-between;
+  flex-shrink: 0;
+
+  @media screen and (max-width: 900px) {
+    width: fit-content;
+    padding: 14px 0;
+  }
+
+  @media screen and (max-width: 720px) {
+    padding: 0;
+  }
+}
+
+.tokenImageWrap {
+  width: 547px;
+  height: fit-content;
+  margin-right: 48px;
+  margin-left: auto;
+  box-sizing: border-box;
+
+  @media screen and (max-width: 900px) {
+    height: 320px;
+    width: fit-content;
+    margin: 0;
+  }
+
+  @media screen and (max-width: 720px) {
+    width: fit-content;
+    height: fit-content;
+  }
+}
+
+.tokenBlockImage {
+  composes: image;
+  position: relative;
+  border-radius: 16px;
+}
+
+.tokenDescription {
+  color: #fff;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
