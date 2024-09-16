@@ -1,6 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { NavLink } from 'react-router-dom';
 import { FC, useState } from 'react';
+import cn from 'classnames';
 import '@rainbow-me/rainbowkit/styles.css';
 
 import imgUrl from '../../assets/images/logo.svg';
@@ -11,21 +12,20 @@ const Header: FC = () => {
   const handleBurgerClick = () => {
     setBurgerIsOpen((prev) => !prev);
   };
-
   return (
     <header className={styles.header}>
       <div className={styles.burgerWrapper}>
         <button
           type="button"
-          className={burgerIsOpen ? styles.burgerIsOpen : styles.burger}
+          className={cn(styles.burger,{[styles.burgerIsOpen]:burgerIsOpen})}
           onClick={handleBurgerClick}
         >
           <div className={styles.burgerImage} />
         </button>
       </div>
-      <img className={burgerIsOpen ? styles.imgBurgerIsOpen : styles.img} src={imgUrl} alt="Project logo" />
-      <div className={burgerIsOpen ? styles.bodyBurgerIsOpen : styles.body}>
-        <nav className={burgerIsOpen ? styles.navBurgerIsOpen : styles.nav}>
+      <img className={cn(styles.img,{[styles.imgBurgerIsOpen]:burgerIsOpen})} src={imgUrl} alt="Project logo" />
+      <div className={cn(styles.body,{[styles.bodyBurgerIsOpen]:burgerIsOpen})}>
+        <nav className={cn(styles.nav,{[styles.navBurgerIsOpen]:burgerIsOpen})}>
           <NavLink className={styles.navLink} to="/">
             Send ERC-20
           </NavLink>
