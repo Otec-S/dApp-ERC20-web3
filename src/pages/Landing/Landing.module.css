@@ -7,6 +7,14 @@
   z-index: 2;
 }
 
+.header {
+  width: 100%;
+  position: fixed;
+  background-color: #080f2b;
+  height: fit-content;
+  z-index: 3;
+}
+
 .imageSection {
   position: relative;
   height: 800px;
@@ -42,6 +50,7 @@
 }
 
 .titleText {
+  font-family: Montserrat;
   text-align: center;
   font-size: 42px;
   font-style: normal;
@@ -66,6 +75,7 @@
   background: #ffa300;
   padding: 0 24px;
   color: #080f2b;
+  font-family: Montserrat;
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -73,6 +83,7 @@
 
   &:hover {
     opacity: 70%;
+    cursor: pointer;
   }
 }
 
@@ -105,6 +116,7 @@
   font-weight: 600;
   line-height: normal;
   margin: 0;
+  font-family: Montserrat;
 }
 
 .block {
@@ -130,6 +142,10 @@
   background-color: #ffd66c;
   color: #000;
   flex-direction: row-reverse;
+
+  @media screen and (max-width: 900px) {
+    flex-direction: column-reverse;
+  }
 }
 
 .collectionBlock {
@@ -206,6 +222,7 @@
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
+  margin: 0;
 }
 
 .blockImgWrap {

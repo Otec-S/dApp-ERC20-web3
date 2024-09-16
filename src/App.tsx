@@ -3,9 +3,8 @@ import { FC } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
-
 import { config } from '../wagmiConfig';
-import Landing from './pages/Landing/Landing';
+import { Landing } from './pages/Landing/Landing';
 import './App.css';
 import './index.css';
 
