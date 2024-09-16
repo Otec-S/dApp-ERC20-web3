@@ -17,15 +17,15 @@ const Header: FC = () => {
       <div className={styles.burgerWrapper}>
         <button
           type="button"
-          className={cn([styles.burger],{[styles.burgerIsOpen]:burgerIsOpen})}
+          className={cn(styles.burger,{[styles.burgerIsOpen]:burgerIsOpen})}
           onClick={handleBurgerClick}
         >
           <div className={styles.burgerImage} />
         </button>
       </div>
-      <img className={cn([styles.img],{[styles.imgBurgerIsOpen]:burgerIsOpen})} src={imgUrl} alt="Project logo" />
-      <div className={cn([styles.body],{[styles.bodyBurgerIsOpen]:burgerIsOpen})}>
-        <nav className={cn([styles.nav],{[styles.navBurgerIsOpen]:burgerIsOpen})}>
+      <img className={cn(styles.img,{[styles.imgBurgerIsOpen]:burgerIsOpen})} src={imgUrl} alt="Project logo" />
+      <div className={cn(styles.body,{[styles.bodyBurgerIsOpen]:burgerIsOpen})}>
+        <nav className={cn(styles.nav,{[styles.navBurgerIsOpen]:burgerIsOpen})}>
           <NavLink className={styles.navLink} to="/">
             Send ERC-20
           </NavLink>
