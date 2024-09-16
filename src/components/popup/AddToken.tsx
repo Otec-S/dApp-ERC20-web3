@@ -8,15 +8,15 @@ import tokenLogo from '../../assets/images/token_logo.svg';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
 
-interface AddTokenType {
+interface IAddTokenType {
   handleClose: () => void;
 }
 
-interface FormInputs {
+interface IFormInputs {
   tokenId: string;
 }
 
-const AddToken: FC<AddTokenType> = ({ handleClose }: AddTokenType) => {
+const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
   const initialTokenAddress = '0x0000000000000000000000000000000000000000' as Address;
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
@@ -45,7 +45,7 @@ const AddToken: FC<AddTokenType> = ({ handleClose }: AddTokenType) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormInputs>();
+  } = useForm<IFormInputs>();
 
   const handlePreviosButton = () => {
     switch (formState) {
@@ -62,7 +62,7 @@ const AddToken: FC<AddTokenType> = ({ handleClose }: AddTokenType) => {
     }
   };
 
-  const onSubmit: SubmitHandler<FormInputs> = (data) => {
+  const onSubmit: SubmitHandler<IFormInputs> = (data) => {
     switch (formState) {
       case 'initialState':
         setTokenAddress(data.tokenId as Address);
