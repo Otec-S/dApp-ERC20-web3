@@ -1,27 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
 import PlusIcon from '@assets/icons/plus-icon.svg';
 import { polygonId, sepoliaId } from '@src/assets/constants';
+import { fetchAddToken } from '@src/fetches/fetchAddToken';
 import { useMutation } from '@tanstack/react-query';
 import { useChainId, useToken } from 'wagmi';
-import { watchAsset } from 'wagmi/actions';
-import { config } from '../../../wagmiConfig';
 import { ITokenRow } from './TokenRow.interface';
 import classes from './TokenRow.module.css';
 
 export const TokenRow: React.FC<ITokenRow> = ({ icon, sepoliaAddress, polygonAddress }) => {
-  const fetchAddToken = useMutation({
-    mutationFn: async ({ address, symbol, decimals }: { address: string; symbol: string; decimals: number }) => {
-      await watchAsset(config, {
-        type: 'ERC20',
-        options: {
-          address: address,
-          symbol: symbol,
-          decimals: decimals,
-        },
-      });
-    },
-  });
-
+  const addTokenMutation = useMutation({ mutationFn: fetchAddToken });
   const chainId = useChainId();
   const address = useMemo(() => {
     switch (chainId) {
@@ -39,15 +26,15 @@ export const TokenRow: React.FC<ITokenRow> = ({ icon, sepoliaAddress, polygonAdd
 
   const tokenData = useToken({ address }).data;
 
-  const handleAddToken = useCallback(async () => {
+  const handleAddToken = useCallback(() => {
     if (tokenData) {
-      fetchAddToken.mutate({
+      addTokenMutation.mutate({
         address: tokenData.address,
         symbol: tokenData.symbol ?? '',
         decimals: tokenData.decimals,
       });
     }
-  }, [fetchAddToken, tokenData]);
+  }, [addTokenMutation, tokenData]);
 
   if (!tokenData) {
     return null;
