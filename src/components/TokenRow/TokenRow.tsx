@@ -4,7 +4,7 @@ import { polygonId, sepoliaId } from '@src/assets/constants';
 import { useMutation } from '@tanstack/react-query';
 import { useChainId, useToken } from 'wagmi';
 import { watchAsset } from 'wagmi/actions';
-import { config } from 'wagmiConfig';
+import { config } from '../../../wagmiConfig';
 import { ITokenRow } from './TokenRow.interface';
 import classes from './TokenRow.module.css';
 
