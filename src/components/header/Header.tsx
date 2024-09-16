@@ -37,7 +37,7 @@ const Header: FC = () => {
           </NavLink>
         </nav>
         <div className={styles.connectButtonWrapper}>
-          <ConnectButton label="Connect wallet" chainStatus={'none'} showBalance={false} accountStatus="address" />
+          <ConnectButton label="Connect wallet" chainStatus={'full'} showBalance={false} accountStatus="full" />
         </div>
       </div>
     </header>
