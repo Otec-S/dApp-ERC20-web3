@@ -87,34 +87,36 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         </button>
       </div>
       <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
+      
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-
-      {formState !== 'showTokenAvatarState' && (
-        <>
-        <label className={styles.inputLabel}>
-          Token contract address
-          <input
-            disabled={formState !== 'initialState'}
-            className={styles.inputAddress}
-            defaultValue=""
-            {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
-          />
-          {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
-          {errors.tokenId?.type === 'validate' && <span className={styles.error}>This input is not token address</span>}
-        </label>
-        <div>
-          <label className={styles.inputLabel}>
-            Token contract name
-            <input type="text" value={tokenName} className={styles.inputName} readOnly />
-          </label>
-        </div>
-        <div>
-          <label className={styles.inputLabel}>
-            Token contract decimals
-            <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
-          </label>
-        </div>
-        </>
+        {formState !== 'showTokenAvatarState' && (
+          <>
+            <label className={styles.inputLabel}>
+              Token contract address
+              <input
+                disabled={formState !== 'initialState'}
+                className={styles.inputAddress}
+                defaultValue=""
+                {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
+              />
+              {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
+              {errors.tokenId?.type === 'validate' && (
+                <span className={styles.error}>This input is not token address</span>
+              )}
+            </label>
+            <div>
+              <label className={styles.inputLabel}>
+                Token contract name
+                <input type="text" value={tokenName} className={styles.inputName} readOnly />
+              </label>
+            </div>
+            <div>
+              <label className={styles.inputLabel}>
+                Token contract decimals
+                <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
+              </label>
+            </div>
+          </>
         )}
 
         {formState === 'showTokenAvatarState' && (
@@ -124,7 +126,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
           </div>
         )}
 
-                <div className={styles.buttonWrapper}>
+        <div className={styles.buttonWrapper}>
           {formState !== 'initialState' && (
             <button onPointerDown={handlePreviosButton} className={styles.button} type="button">
               Back
