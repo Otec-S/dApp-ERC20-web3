@@ -196,3 +196,25 @@
   gap: 24px;
   flex-grow: 1;
 }
+
+.tokenImgWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.tokenImg {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.tokenNameHeader {
+  color: #FFF;
+  font-feature-settings: 'liga' off, 'clig' off;
+  font-family: "Open Sans",sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

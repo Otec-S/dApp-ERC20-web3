@@ -1,12 +1,14 @@
 import { Address, isAddress } from 'viem';
 import { FC, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useToken } from 'wagmi';
+import { useAccount, useToken } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 import close from '../../assets/images/clear_close_icon.svg';
-import tokenLogo from '../../assets/images/token_logo.svg';
+import defaultTokenLogo from '../../assets/images/token_logo.svg';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
+import { tokens } from '../../assets/constants';
 
 interface IAddTokenType {
   handleClose: () => void;
@@ -21,14 +23,21 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
   const [formState, setFormState] = useState<
-    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToSendFormState'
+    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'sendedState'
   >('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
+  const { isConnected } = useAccount()
+  console.log(isConnected);
+  const { openConnectModal } = useConnectModal();
+  if(!isConnected && openConnectModal){
+    openConnectModal();
+  }
   const token = useToken({
     address: tokenAddress,
   });
+
 
   useEffect(() => {
     if (formState === 'initialState') {
@@ -56,7 +65,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
       case 'showTokenAvatarState':
         setFormState('showTokenNameState');
         break;
-      case 'readyToSendFormState':
+      case 'sendedState':
         setFormState('showTokenAvatarState');
         break;
     }
@@ -72,7 +81,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         setFormState('showTokenAvatarState');
         break;
       case 'showTokenAvatarState':
-        setFormState('readyToSendFormState');
+        setFormState('sendedState');
         break;
     }
     console.log(data);
@@ -120,9 +129,11 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         )}
 
         {formState === 'showTokenAvatarState' && (
-          <div>
-            <img src={tokenLogo} alt="token logo" />
-            <span>{tokenName}</span>
+          <div className={styles.tokenImgWrapper}>
+            <img className={styles.tokenImg} src={tokens.find((t)=>(t.polygonAddress === tokenAddress)||(t.sepoliaAddress === tokenAddress))?.iconPath ?? defaultTokenLogo} alt="token logo" />
+            <div className={styles.imgTextWrapper}>
+              <span className={styles.tokenNameHeader}>{tokenName}</span>
+            </div>
           </div>
         )}
 
