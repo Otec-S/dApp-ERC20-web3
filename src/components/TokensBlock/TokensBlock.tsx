@@ -7,8 +7,6 @@ import classes from './TokensBlock.module.css';
 export const TokensBlock: React.FC = () => {
   const connections = useConnections();
 
-  console.log(connections);
-
   return (
     <div className={classes.tokenContainer}>
       {connections.length > 0 ? (
