@@ -1,17 +1,16 @@
 import { Address, isAddress } from 'viem';
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import ClipLoader from "react-spinners/ClipLoader";
- 
+import BeatLoader from "react-spinners/BeatLoader";
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
 
 import close from '../../assets/images/clear_close_icon.svg';
+import { config } from '../../../wagmiConfig';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
-import { wagmiConfig } from '../../../wagmiConfig';
 
 export interface ITokenInfo {
   tokenAddress: Address | undefined;
@@ -29,8 +28,7 @@ interface IFormInputs {
 
 const override: CSSProperties = {
   display: "block",
-  margin: "0 auto",
-  borderColor: "red",
+  margin: "100px auto",
 };
 
 const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
@@ -39,9 +37,9 @@ const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
   const initialTokenDecimals = 18;
 
   const [formState, setFormState] = useState<
-    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'successfullState'
+    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState'
   >('initialState');
-  const [ showSpinner, setShowSpinner ] = useState(false);
+  const [showLoader, setShowLoader ] = useState(false);
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
@@ -57,14 +55,19 @@ const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
       setTokenDecimals(initialTokenDecimals);
       setTokenName(initialTokenName);
     } else if (formState === 'showTokenNameState') {
-      setShowSpinner(true);
+      setShowLoader(true);
       const fetchTokenData = async () => {
-        const token = await getToken(wagmiConfig, {
+        try {
+          const token = await getToken(config, {
           address: tokenAddress,
         });
-        setShowSpinner(false);
         setTokenName(token.name ?? initialTokenName);
         setTokenDecimals(token.decimals ?? initialTokenDecimals);
+        } catch (error) {
+          console.error('Error getting token: '+error);
+          setShowLoader(false);
+        }
+        setShowLoader(false);
       }
       fetchTokenData();
     }
@@ -99,7 +102,7 @@ const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
         setFormState('showTokenAvatarState');
         break;
       case 'showTokenAvatarState':
-        setFormState('successfullState');
+        setFormState('readyToAddState');
         break;
     }
   };
@@ -110,27 +113,31 @@ const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
 
   return (
     <div className={styles.addToken}>
-      <ClipLoader
+      {
+        showLoader && <div className={styles.loader}>
+        <BeatLoader
         color={'red'}
-        loading={showSpinner}
+        loading={showLoader}
         cssOverride={override}
-        size={150}
+        size={100}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
+      </div> 
+      }
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>
-          {formState !== 'successfullState' ? 'Add a custom token' : 'Successful import'}
+          {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
         </h5>
         <button className={styles.closeForm} onPointerDown={handleCloseForm}>
           <img className={styles.close} src={close} alt="close" />
         </button>
       </div>
-      {formState !== 'successfullState' && (
+      {formState !== 'readyToAddState' && (
         <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
       )}
 
-      {formState !== 'successfullState' && (
+      {formState !== 'readyToAddState' && (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div>
             {formState !== 'showTokenAvatarState' && (
@@ -176,7 +183,7 @@ const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
           </div>
         </form>
       )}
-      {formState === 'successfullState' && (
+      {formState === 'readyToAddState' && (
         <button onPointerDown={handleCloseForm} className={styles.button} type="button">
           Okay
         </button>

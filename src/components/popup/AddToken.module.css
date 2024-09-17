@@ -11,6 +11,19 @@
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
   padding: 48px;
   justify-content: space-between;
+  position: relative;
+}
+
+.loader {
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+  text-align: center;
+  padding: 100px;
 }
 
 .header {
