@@ -5,6 +5,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
+import { getBalance, getAccount } from '@wagmi/core';
 
 import close from '../../assets/images/clear_close_icon.svg';
 import successLogo from '../../assets/icons/success.svg';
@@ -12,7 +13,6 @@ import { config } from '../../../wagmiConfig';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
-import { getBalance, getAccount } from '@wagmi/core';
 
 interface ITokenInfo {
   tokenAddress: Address | undefined;
@@ -21,7 +21,7 @@ interface ITokenInfo {
   tokenBalance: string | undefined;
 }
 
-interface IAddTokenType {
+interface IAddTokenProps {
   callback: FC<ITokenInfo>;
 }
 
@@ -34,7 +34,7 @@ const override: CSSProperties = {
   margin: "100px auto",
 };
 
-const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
+const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   const initialTokenAddress = '0x0000000000000000000000000000000000000000' as Address;
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
