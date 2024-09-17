@@ -3,6 +3,7 @@ import style from './Send-ERC-20-send-form.module.css';
 import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
 import USDTLogo from '../../../assets/USDTLogo.svg';
 import arrow_down from '../../../assets/arrow_down.svg';
+import BalanceDisplay from '../../balance-display/balance-display';
 // import { useBalance } from 'wagmi';
 // import { getBalance } from '@wagmi/core';
 // import { config } from '../../../../wagmiConfig';
@@ -33,35 +34,15 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ setIsButtonActive }) =
     }
   }, [inputValue, recipientValue, setIsButtonActive]);
 
-  // TODO: получение баланса
-
-  // const currentBalance = getBalance(config, {
-  //   address: '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054',
-  //   chainId: sepolia.id,
-  // });
-
-  // console.log('balance:', currentBalance);
-
-  // Получаем баланс для текущего кошелька
-  // const { isConnected, address } = useAccount();
-
-  // const {
-  //   data: balanceData,
-  //   isLoading,
-  //   error,
-  // } = useBalance({
-  //   address,
-  // });
-
-  // console.log('balanceData:', balanceData);
-
   return (
     <>
       <div className={style.sender}>
         <div className={style.inputBlock}>
           <input className={style.input} type="text" value={inputValue} onChange={handleInputChange} />
           <div className={style.balance}>
-            <div className={style.balanceValue}>Balance {formattedBalance}</div>
+            <div className={style.balanceValue}>
+              Balance <BalanceDisplay />
+            </div>
             <img src={balanceMaxSign} alt="Max balance icon" />
           </div>
         </div>
