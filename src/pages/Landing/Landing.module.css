@@ -50,7 +50,7 @@
 }
 
 .titleText {
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   text-align: center;
   font-size: 42px;
   font-style: normal;
@@ -75,7 +75,7 @@
   background: #ffa300;
   padding: 0 24px;
   color: #080f2b;
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -116,7 +116,7 @@
   font-weight: 600;
   line-height: normal;
   margin: 0;
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
 }
 
 .block {
@@ -154,7 +154,7 @@
 }
 
 .blockTitle {
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -174,7 +174,7 @@
 .blockButton {
   height: 36px;
   width: 112px;
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-weight: 600;
   color: #080f2b;
@@ -217,7 +217,7 @@
 }
 
 .text {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -287,7 +287,7 @@
 }
 
 .statisticText {
-  font-family: Montserrat;
+  font-family: Montserrat, sans-serif;
   font-size: 32px;
   font-weight: 600;
   margin: 0;
@@ -307,7 +307,7 @@
 }
 
 .statisticDescription {
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
@@ -373,7 +373,7 @@
 
 .tokenDescription {
   color: #fff;
-  font-family: 'Open Sans';
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

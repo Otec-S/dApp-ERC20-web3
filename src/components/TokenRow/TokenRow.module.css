@@ -15,8 +15,8 @@
 }
 
 .tokenText {
-  /* color: #fff; */
-  font-family: Montserrat;
+  color: #fff;
+  font-family: Montserrat, sans-serif;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

@@ -1,49 +1,33 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import PlusIcon from '@assets/icons/plus-icon.svg';
-import { polygonId, sepoliaId } from '@src/assets/constants';
 import { fetchAddToken } from '@src/fetches/fetchAddToken';
-import { useMutation } from '@tanstack/react-query';
-import { useChainId, useToken } from 'wagmi';
+import { fetchGetToken } from '@src/fetches/fetchGetToken';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { ITokenRow } from './TokenRow.interface';
 import classes from './TokenRow.module.css';
 
-export const TokenRow: React.FC<ITokenRow> = ({ icon, sepoliaAddress, polygonAddress }) => {
+export const TokenRow: React.FC<ITokenRow> = ({ icon, address }) => {
   const addTokenMutation = useMutation({ mutationFn: fetchAddToken });
-  const chainId = useChainId();
-  const address = useMemo(() => {
-    switch (chainId) {
-      case sepoliaId: {
-        return sepoliaAddress;
-      }
-      case polygonId: {
-        return polygonAddress;
-      }
-      default: {
-        throw new Error();
-      }
-    }
-  }, [chainId, polygonAddress, sepoliaAddress]);
-
-  const tokenData = useToken({ address }).data;
+  const { data } = useQuery({ queryKey: ['token'], queryFn: fetchGetToken(address) });
 
   const handleAddToken = useCallback(() => {
-    if (tokenData) {
+    if (data) {
       addTokenMutation.mutate({
-        address: tokenData.address,
-        symbol: tokenData.symbol ?? '',
-        decimals: tokenData.decimals,
+        address: data.address,
+        symbol: data.symbol ?? '',
+        decimals: data.decimals,
       });
     }
-  }, [addTokenMutation, tokenData]);
+  }, [addTokenMutation, data]);
 
-  if (!tokenData) {
+  if (!data) {
     return null;
   }
 
   return (
     <div className={classes.tokenRow}>
       <div>{icon}</div>
-      <div className={classes.tokenText}>{tokenData.symbol}</div>
+      <div className={classes.tokenText}>{data.symbol}</div>
       <button className={classes.plusButton} onClick={handleAddToken}>
         <PlusIcon />
       </button>

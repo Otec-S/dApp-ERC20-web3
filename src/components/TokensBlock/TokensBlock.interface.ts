@@ -1,9 +1,9 @@
 import { ReactElement } from 'react';
+import { Address } from 'viem';
 
 export interface ITokens {
   id: number;
   name: string;
-  sepoliaAddress: `0x${string}`;
-  polygonAddress: `0x${string}`;
+  address: Address;
   icon: ReactElement;
 }

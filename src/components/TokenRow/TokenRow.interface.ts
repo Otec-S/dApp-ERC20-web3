@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
+import { Address } from 'viem';
 
 export interface ITokenRow {
   icon: ReactElement;
-  sepoliaAddress: `0x${string}`;
-  polygonAddress: `0x${string}`;
+  address: Address;
 }

@@ -1,23 +1,18 @@
 import React from 'react';
-import { tokens } from '@src/assets/constants';
-import { useConnections } from 'wagmi';
+import { useChainId, useConnections } from 'wagmi';
 import { TokenRow } from '../TokenRow';
+import { getTokens } from './TokensBlock.utils';
 import classes from './TokensBlock.module.css';
 
 export const TokensBlock: React.FC = () => {
   const connections = useConnections();
+  const chainId = useChainId();
+  const tokens = getTokens(chainId);
 
   return (
     <div className={classes.tokenContainer}>
       {connections.length > 0 ? (
-        tokens.map((token) => (
-          <TokenRow
-            icon={token.icon}
-            sepoliaAddress={token.sepoliaAddress}
-            polygonAddress={token.polygonAddress}
-            key={token.id}
-          />
-        ))
+        tokens.map((token) => <TokenRow icon={token.icon} address={token.address} key={token.id} />)
       ) : (
         <h3>Connect to wallet</h3>
       )}
