@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import Header from '../../components/header/Header';
-import AddToken from '../../components/popup/AddToken';
+import AddToken, { ITokenInfo } from '../../components/popup/AddToken';
 
 export const ERC20: FC = () => {
-  const handleClose = () => undefined;
+  const handleClose = (data: ITokenInfo) => console.log(data);
   return (
     <div style={{ background: '#000' }}>
       <Header />

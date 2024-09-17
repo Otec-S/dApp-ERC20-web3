@@ -9,8 +9,14 @@ import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
 
-interface IAddTokenType {
-  handleClose: () => void;
+export interface ITokenInfo {
+  tokenAddress: Address | undefined;
+  tokenName: string | undefined;
+  tokenDecimals: number | undefined;
+}
+
+export interface IAddTokenType {
+  handleClose: (data: ITokenInfo) => void;
 }
 
 interface IFormInputs {
@@ -23,7 +29,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
   const initialTokenDecimals = 18;
 
   const [formState, setFormState] = useState<
-    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'sendedState'
+    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'successfullState'
   >('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
@@ -65,9 +71,6 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
       case 'showTokenAvatarState':
         setFormState('showTokenNameState');
         break;
-      case 'sendedState':
-        setFormState('showTokenAvatarState');
-        break;
     }
   };
 
@@ -81,66 +84,81 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         setFormState('showTokenAvatarState');
         break;
       case 'showTokenAvatarState':
-        setFormState('sendedState');
+        setFormState('successfullState');
         break;
     }
     console.log(data);
   };
 
+  const handleCloseForm = () => {
+    handleClose({ tokenAddress, tokenName, tokenDecimals });
+  }
+
   return (
     <div className={styles.addToken}>
       <div className={styles.headerWrapper}>
-        <h5 className={styles.header}>Add a custom token</h5>
-        <button className={styles.closeForm} onPointerDown={handleClose}>
-          <img className={styles.close} src={close} alt="close" onPointerDown={handleClose} />
+        <h5 className={styles.header}>
+          {formState !== 'successfullState' ? 'Add a custom token' : 'Successful import'}
+        </h5>
+        <button className={styles.closeForm} onPointerDown={handleCloseForm}>
+          <img className={styles.close} src={close} alt="close" />
         </button>
       </div>
-      <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
+      {formState !== 'successfullState' && (
+        <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
+      )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        <div>
-          {formState !== 'showTokenAvatarState' && (
-            <>
-              <label className={styles.inputLabel}>
-                Token contract address
-                <input
-                  disabled={formState !== 'initialState'}
-                  className={styles.inputAddress}
-                  defaultValue=""
-                  {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
-                />
-                {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
-                {errors.tokenId?.type === 'validate' && (
-                  <span className={styles.error}>This input is not token address</span>
-                )}
-              </label>
-              <label className={styles.inputLabel}>
-                Token contract name
-                <input type="text" value={tokenName} className={styles.inputName} readOnly />
-              </label>
-              <div>
+      {formState !== 'successfullState' && (
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          <div>
+            {formState !== 'showTokenAvatarState' && (
+              <>
                 <label className={styles.inputLabel}>
-                  Token contract decimals
-                  <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
+                  Token contract address
+                  <input
+                    disabled={formState !== 'initialState'}
+                    className={styles.inputAddress}
+                    defaultValue=""
+                    {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
+                  />
+                  {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
+                  {errors.tokenId?.type === 'validate' && (
+                    <span className={styles.error}>This input is not token address</span>
+                  )}
                 </label>
-              </div>
-            </>
-          )}
+                <label className={styles.inputLabel}>
+                  Token contract name
+                  <input type="text" value={tokenName} className={styles.inputName} readOnly />
+                </label>
+                <div>
+                  <label className={styles.inputLabel}>
+                    Token contract decimals
+                    <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
+                  </label>
+                </div>
+              </>
+            )}
 
-          {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} />}
-        </div>
-        <div className={styles.buttonWrapper}>
-          {formState !== 'initialState' && (
-            <button onPointerDown={handlePreviosButton} className={styles.button} type="button">
-              Back
+            {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} />}
+          </div>
+          <div className={styles.buttonWrapper}>
+            {formState !== 'initialState' && (
+              <button onPointerDown={handlePreviosButton} className={styles.button} type="button">
+                Back
+              </button>
+            )}
+            <button className={styles.button} type="submit">
+              {' '}
+              Next{' '}
             </button>
-          )}
-          <button className={styles.button} type="submit">
-            {' '}
-            Next{' '}
-          </button>
-        </div>
-      </form>
+          </div>
+        </form>
+      )}
+      {formState === 'successfullState' && (
+        <button onPointerDown={handleCloseForm} className={styles.button} type="button">
+          Okay
+        </button>
+      )}
     </div>
   );
 };
