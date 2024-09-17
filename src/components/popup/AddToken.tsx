@@ -5,10 +5,9 @@ import { useAccount, useToken } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 import close from '../../assets/images/clear_close_icon.svg';
-import defaultTokenLogo from '../../assets/images/token_logo.svg';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
-import { tokens } from '../../assets/constants';
+import { TokenIcon } from './TokenIcon';
 
 interface IAddTokenType {
   handleClose: () => void;
@@ -22,22 +21,23 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
   const initialTokenAddress = '0x0000000000000000000000000000000000000000' as Address;
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
+
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'sendedState'
   >('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
-  const { isConnected } = useAccount()
-  console.log(isConnected);
+
+  const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
-  if(!isConnected && openConnectModal){
+  if (!isConnected && openConnectModal) {
     openConnectModal();
   }
+
   const token = useToken({
     address: tokenAddress,
   });
-
 
   useEffect(() => {
     if (formState === 'initialState') {
@@ -96,47 +96,39 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         </button>
       </div>
       <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
-      
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-        {formState !== 'showTokenAvatarState' && (
-          <>
-            <label className={styles.inputLabel}>
-              Token contract address
-              <input
-                disabled={formState !== 'initialState'}
-                className={styles.inputAddress}
-                defaultValue=""
-                {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
-              />
-              {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
-              {errors.tokenId?.type === 'validate' && (
-                <span className={styles.error}>This input is not token address</span>
-              )}
-            </label>
-            <div>
+        <div>
+          {formState !== 'showTokenAvatarState' && (
+            <>
+              <label className={styles.inputLabel}>
+                Token contract address
+                <input
+                  disabled={formState !== 'initialState'}
+                  className={styles.inputAddress}
+                  defaultValue=""
+                  {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
+                />
+                {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
+                {errors.tokenId?.type === 'validate' && (
+                  <span className={styles.error}>This input is not token address</span>
+                )}
+              </label>
               <label className={styles.inputLabel}>
                 Token contract name
                 <input type="text" value={tokenName} className={styles.inputName} readOnly />
               </label>
-            </div>
-            <div>
-              <label className={styles.inputLabel}>
-                Token contract decimals
-                <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
-              </label>
-            </div>
-          </>
-        )}
+              <div>
+                <label className={styles.inputLabel}>
+                  Token contract decimals
+                  <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
+                </label>
+              </div>
+            </>
+          )}
 
-        {formState === 'showTokenAvatarState' && (
-          <div className={styles.tokenImgWrapper}>
-            <img className={styles.tokenImg} src={tokens.find((t)=>(t.polygonAddress === tokenAddress)||(t.sepoliaAddress === tokenAddress))?.iconPath ?? defaultTokenLogo} alt="token logo" />
-            <div className={styles.imgTextWrapper}>
-              <span className={styles.tokenNameHeader}>{tokenName}</span>
-            </div>
-          </div>
-        )}
-
+          {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} />}
+        </div>
         <div className={styles.buttonWrapper}>
           {formState !== 'initialState' && (
             <button onPointerDown={handlePreviosButton} className={styles.button} type="button">

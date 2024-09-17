@@ -24,6 +24,12 @@
   line-height: normal;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .closeForm {
   background: transparent;
   cursor: pointer;
@@ -56,6 +62,8 @@
   display: flex;
   gap: 24px;
   flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
 }
 
 .inputAddress {
@@ -191,30 +199,6 @@
 .buttonWrapper {
   display: flex;
   width: 100%;
-  justify-content: space-between;
   min-height: 48px;
   gap: 24px;
-  flex-grow: 1;
-}
-
-.tokenImgWrapper {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
-
-.tokenImg {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-}
-
-.tokenNameHeader {
-  color: #FFF;
-  font-feature-settings: 'liga' off, 'clig' off;
-  font-family: "Open Sans",sans-serif;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
 }

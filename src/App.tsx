@@ -7,7 +7,7 @@ import { config } from '../wagmiConfig';
 import { Landing } from './pages/Landing';
 import './App.css';
 import './index.css';
-import { ERC20 } from './pages/Landing/ERC20/ERC20';
+import { ERC20 } from './pages/ERC20/ERC20';
 
 const queryClient = new QueryClient();
 const rainbowtTheme = darkTheme({

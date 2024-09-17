@@ -20,9 +20,8 @@ export interface ITokens {
   sepoliaAddress: Address;
   polygonAddress: Address;
   icon: ReactElement;
-  iconPath:string;
+  iconPath: string;
 }
-
 
 export const tokens: ITokens[] = [
   {
