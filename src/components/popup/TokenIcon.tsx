@@ -1,17 +1,18 @@
 import { FC } from 'react';
+import { Address } from 'viem';
 
 import { tokens } from '../../assets/constants';
-import styles from './TokenIcon.module.css';
-import { Address } from 'viem';
 import defaultTokenLogo from '../../assets/images/token_logo.svg';
+import styles from './TokenIcon.module.css';
 
 export interface ITokenIcon {
   tokenName: string;
   tokenDecimals:number;
   tokenAddress:Address;
+  tokenBalance:string | undefined;
 }
 
-export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress }) => {
+export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress,tokenBalance }) => {
   return (
     <div className={styles.tokenImgWrapper}>
       <img
@@ -24,7 +25,7 @@ export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress }) => {
       />
       <div className={styles.imgTextWrapper}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
-        <span className={styles.tokenName}>123</span>
+        <span className={styles.tokenName}>{tokenBalance + ' ' + tokenName}</span>
       </div>
     </div>
   );
