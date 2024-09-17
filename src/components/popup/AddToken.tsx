@@ -1,13 +1,17 @@
 import { Address, isAddress } from 'viem';
-import { FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useAccount, useToken } from 'wagmi';
+import ClipLoader from "react-spinners/ClipLoader";
+ 
+import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { getToken } from '@wagmi/core';
 
 import close from '../../assets/images/clear_close_icon.svg';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
+import { wagmiConfig } from '../../../wagmiConfig';
 
 export interface ITokenInfo {
   tokenAddress: Address | undefined;
@@ -16,14 +20,20 @@ export interface ITokenInfo {
 }
 
 export interface IAddTokenType {
-  handleClose: (data: ITokenInfo) => void;
+  callback: (data: ITokenInfo) => void;
 }
 
 interface IFormInputs {
   tokenId: string;
 }
 
-const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
+const override: CSSProperties = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
+
+const AddToken: FC<IAddTokenType> = ({ callback }: IAddTokenType) => {
   const initialTokenAddress = '0x0000000000000000000000000000000000000000' as Address;
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
@@ -31,6 +41,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'successfullState'
   >('initialState');
+  const [ showSpinner, setShowSpinner ] = useState(false);
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
@@ -41,19 +52,23 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
     openConnectModal();
   }
 
-  const token = useToken({
-    address: tokenAddress,
-  });
-
   useEffect(() => {
     if (formState === 'initialState') {
       setTokenDecimals(initialTokenDecimals);
       setTokenName(initialTokenName);
     } else if (formState === 'showTokenNameState') {
-      setTokenName(token.data?.name ?? initialTokenName);
-      setTokenDecimals(token.data?.decimals ?? initialTokenDecimals);
+      setShowSpinner(true);
+      const fetchTokenData = async () => {
+        const token = await getToken(wagmiConfig, {
+          address: tokenAddress,
+        });
+        setShowSpinner(false);
+        setTokenName(token.name ?? initialTokenName);
+        setTokenDecimals(token.decimals ?? initialTokenDecimals);
+      }
+      fetchTokenData();
     }
-  }, [formState, token.data?.name, token.data?.decimals]);
+  }, [formState,tokenAddress]);
 
   const {
     register,
@@ -87,15 +102,22 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
         setFormState('successfullState');
         break;
     }
-    console.log(data);
   };
 
   const handleCloseForm = () => {
-    handleClose({ tokenAddress, tokenName, tokenDecimals });
+    callback({ tokenAddress, tokenName, tokenDecimals });
   }
 
   return (
     <div className={styles.addToken}>
+      <ClipLoader
+        color={'red'}
+        loading={showSpinner}
+        cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>
           {formState !== 'successfullState' ? 'Add a custom token' : 'Successful import'}
@@ -139,7 +161,7 @@ const AddToken: FC<IAddTokenType> = ({ handleClose }: IAddTokenType) => {
               </>
             )}
 
-            {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} />}
+            {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} tokenDecimals={tokenDecimals} tokenName={tokenName}/>}
           </div>
           <div className={styles.buttonWrapper}>
             {formState !== 'initialState' && (

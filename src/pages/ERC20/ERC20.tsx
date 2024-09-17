@@ -7,7 +7,7 @@ export const ERC20: FC = () => {
   return (
     <div style={{ background: '#000' }}>
       <Header />
-      <AddToken handleClose={handleClose} />
+      <AddToken callback={handleClose} />
     </div>
   );
 };
