@@ -119,6 +119,11 @@
   border: none;
 }
 
+.transactionHash {
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+}
+
 @media (max-width: 845px) {
   .block {
     margin-left: 10px;

@@ -21,6 +21,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
 
   const [amountError, setAmountError] = useState<string | null>(null);
 
+  const { data: hash, isPending, sendTransaction } = useSendTransaction();
+
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
 
@@ -43,8 +45,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
   const handleRecipientChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRecipientValue(event.target.value);
   };
-
-  const { data: hash, sendTransaction } = useSendTransaction();
 
   // TODO: Implement submitTocken function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -119,8 +119,12 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
             required
           />
         </div>
-        {hash && <div>Transaction Hash: {hash}</div>}
-        <SubmitButton buttonText={isSuccess ? 'Great!' : 'Start again'} isButtonActive={isButtonActive} />
+        {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>}
+        <SubmitButton
+          disabled={isPending}
+          buttonText={isSuccess ? 'Great!' : 'Start again'}
+          isButtonActive={isButtonActive}
+        />
       </form>
     </>
   );
