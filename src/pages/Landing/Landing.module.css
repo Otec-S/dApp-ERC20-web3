@@ -1,8 +1,13 @@
+@value colors: "@assets/colors.css";
+@value fonts: "@assets/fonts.css";
+@value dark, orange, white, darkBlue from colors;
+@value montserrat, openSans from fonts;
+
 .container {
   height: 100%;
   min-height: 100vh;
   width: 100%;
-  background-color: #080f2b;
+  background-color: dark;
   box-sizing: border-box;
   z-index: 2;
 }
@@ -10,7 +15,7 @@
 .header {
   width: 100%;
   position: fixed;
-  background-color: #080f2b;
+  background-color: dark;
   height: fit-content;
   z-index: 3;
 }
@@ -42,7 +47,7 @@
 
 .title {
   margin: 148px 0 48px 0;
-  color: #fff;
+  color: white;
 
   @media screen and (max-width: 900px) {
     margin: 124px 0 24px 0;
@@ -50,7 +55,7 @@
 }
 
 .titleText {
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
   text-align: center;
   font-size: 42px;
   font-style: normal;
@@ -72,10 +77,10 @@
   width: 180px;
   height: 48px;
   border-radius: 100px;
-  background: #ffa300;
+  background: orange;
   padding: 0 24px;
-  color: #080f2b;
-  font-family: Montserrat, sans-serif;
+  color: dark;
+  font-family: montserrat;
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -94,7 +99,7 @@
   display: flex;
   flex-direction: column;
   gap: 46px;
-  color: #fff;
+  color: white;
 
   @media screen and (max-width: 1200px) {
     padding: 48px 72px;
@@ -116,7 +121,7 @@
   font-weight: 600;
   line-height: normal;
   margin: 0;
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
 }
 
 .block {
@@ -139,7 +144,7 @@
 
 .tradeBlock {
   composes: block;
-  background-color: #ffd66c;
+  background-color: orange;
   color: #000;
   flex-direction: row-reverse;
 
@@ -150,11 +155,11 @@
 
 .collectionBlock {
   composes: block;
-  background-color: #2d4bc1;
+  background-color: blue;
 }
 
 .blockTitle {
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -174,11 +179,11 @@
 .blockButton {
   height: 36px;
   width: 112px;
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
   font-size: 16px;
   font-weight: 600;
-  color: #080f2b;
-  background-color: #ffa300;
+  color: dark;
+  background-color: orange;
   border: none;
 
   &:hover {
@@ -217,7 +222,7 @@
 }
 
 .text {
-  font-family: 'Open Sans', sans-serif;
+  font-family: openSans;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -251,7 +256,7 @@
 .statisticBlock {
   composes: block;
   padding: 96px 126px;
-  background-color: #07144b;
+  background-color: darkBlue;
   justify-content: space-between;
   gap: 32px;
 
@@ -287,7 +292,7 @@
 }
 
 .statisticText {
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
   font-size: 32px;
   font-weight: 600;
   margin: 0;
@@ -307,7 +312,7 @@
 }
 
 .statisticDescription {
-  font-family: 'Open Sans', sans-serif;
+  font-family: openSans;
   font-size: 14px;
   font-weight: 400;
   line-height: 24px;
@@ -372,8 +377,8 @@
 }
 
 .tokenDescription {
-  color: #fff;
-  font-family: 'Open Sans', sans-serif;
+  color: white;
+  font-family: openSans;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

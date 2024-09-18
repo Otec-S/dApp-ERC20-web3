@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 import ARBIcon from '@assets/icons/arb.svg';
 import DAIIcon from '@assets/icons/dai.svg';
 import DOGEIcon from '@assets/icons/doge.svg';
@@ -8,36 +10,40 @@ import TRXIcon from '@assets/icons/trx.svg';
 import USDCIcon from '@assets/icons/usdc.svg';
 import USDTIcon from '@assets/icons/usdt.svg';
 import WBTSIcon from '@assets/icons/wbtc.svg';
-import { polygonAddress, polygonId, sepoliaAddress, sepoliaId } from './TokensBlock.constants';
-import { ITokens } from './TokensBlock.interface';
+import { Address } from 'viem/accounts';
+import { polygonAmoy, sepolia } from 'viem/chains';
 
-export const getTokens = (chainId: number): ITokens[] =>
+import { polygonAddress, sepoliaAddress } from './TokensBlock.constants';
+
+type TokensType = {
+  symbol: string;
+  address: Address;
+  icon: ReactElement;
+  decimals: number;
+};
+
+export const getTokens = (chainId: number): TokensType[] =>
   [
-    { id: 1, name: 'ARB', icon: <ARBIcon /> },
-    { id: 2, name: 'DAI', icon: <DAIIcon /> },
-    { id: 3, name: 'DOGE', icon: <DOGEIcon /> },
-    { id: 4, name: 'LINK', icon: <LINKIcon /> },
-    { id: 5, name: 'OP', icon: <OPIcon /> },
-    { id: 6, name: 'PEPE', icon: <PEPEIcon /> },
-    { id: 7, name: 'TRX', icon: <TRXIcon /> },
-    { id: 8, name: 'USDT', icon: <USDTIcon /> },
-    { id: 9, name: 'USDC', icon: <USDCIcon /> },
-    { id: 10, name: 'WBTC', icon: <WBTSIcon /> },
+    { symbol: 'ARB', icon: <ARBIcon />, decimals: 18 },
+    { symbol: 'DAI', icon: <DAIIcon />, decimals: 18 },
+    { symbol: 'DOGE', icon: <DOGEIcon />, decimals: 18 },
+    { symbol: 'LINK', icon: <LINKIcon />, decimals: 18 },
+    { symbol: 'OP', icon: <OPIcon />, decimals: 18 },
+    { symbol: 'PEPE', icon: <PEPEIcon />, decimals: 18 },
+    { symbol: 'TRX', icon: <TRXIcon />, decimals: 18 },
+    { symbol: 'USDT', icon: <USDTIcon />, decimals: 6 },
+    { symbol: 'USDC', icon: <USDCIcon />, decimals: 6 },
+    { symbol: 'WBTC', icon: <WBTSIcon />, decimals: 8 },
   ].map((item) => {
-    let address;
     switch (chainId) {
-      case sepoliaId: {
-        address = sepoliaAddress[item.name];
-        break;
+      case sepolia.id: {
+        return { ...item, address: sepoliaAddress[item.symbol] };
       }
-      case polygonId: {
-        address = polygonAddress[item.name];
-        break;
+      case polygonAmoy.id: {
+        return { ...item, address: polygonAddress[item.symbol] };
       }
       default: {
         throw new Error();
       }
     }
-
-    return { ...item, address };
   });

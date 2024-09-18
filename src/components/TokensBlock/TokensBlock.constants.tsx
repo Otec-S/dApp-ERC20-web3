@@ -1,8 +1,5 @@
 import { Address } from 'viem';
 
-export const sepoliaId = 11155111;
-export const polygonId = 80002;
-
 export const sepoliaAddress: { [key: string]: Address } = {
   ARB: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
   DAI: '0xA68ecAb53bdcFdC753378a088CfB29d42915617E',

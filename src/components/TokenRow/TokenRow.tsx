@@ -1,33 +1,37 @@
-import React, { useCallback } from 'react';
+import React, { ReactElement, useCallback } from 'react';
+
 import PlusIcon from '@assets/icons/plus-icon.svg';
-import { fetchAddToken } from '@src/fetches/fetchAddToken';
-import { fetchGetToken } from '@src/fetches/fetchGetToken';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { ITokenRow } from './TokenRow.interface';
+import { Address } from 'viem';
+import { useConfig } from 'wagmi';
+import { watchAsset } from 'wagmi/actions';
+
 import classes from './TokenRow.module.css';
 
-export const TokenRow: React.FC<ITokenRow> = ({ icon, address }) => {
-  const addTokenMutation = useMutation({ mutationFn: fetchAddToken });
-  const { data } = useQuery({ queryKey: ['token'], queryFn: fetchGetToken(address) });
+type Props = {
+  icon: ReactElement;
+  address: Address;
+  symbol: string;
+  decimals: number;
+};
 
-  const handleAddToken = useCallback(() => {
-    if (data) {
-      addTokenMutation.mutate({
-        address: data.address,
-        symbol: data.symbol ?? '',
-        decimals: data.decimals,
-      });
-    }
-  }, [addTokenMutation, data]);
+export const TokenRow: React.FC<Props> = ({ icon, address, symbol, decimals }) => {
+  const config = useConfig();
 
-  if (!data) {
-    return null;
-  }
+  const handleAddToken = useCallback(async () => {
+    await watchAsset(config, {
+      type: 'ERC20',
+      options: {
+        address: address,
+        symbol: symbol,
+        decimals: decimals,
+      },
+    });
+  }, [address, config, decimals, symbol]);
 
   return (
     <div className={classes.tokenRow}>
       <div>{icon}</div>
-      <div className={classes.tokenText}>{data.symbol}</div>
+      <div className={classes.tokenText}>{symbol}</div>
       <button className={classes.plusButton} onClick={handleAddToken}>
         <PlusIcon />
       </button>

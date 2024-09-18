@@ -1,3 +1,8 @@
+@value colors: "@assets/colors.css";
+@value fonts: "@assets/fonts.css";
+@value white, blue from colors;
+@value montserrat from fonts;
+
 .header {
   min-height: 100px;
   padding: 0 48px;
@@ -20,14 +25,14 @@
 
 .connectButtonWrapper button {
   border-radius: 100px !important;
-  background: #2d4bc1 !important;
+  background: blue !important;
   border: none !important;
   padding: 0 16px !important;
-  color: #fff !important;
+  color: white !important;
   font-feature-settings:
     'liga' off,
     'clig' off !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: montserrat !important;
   font-size: 16px !important;
   font-style: normal !important;
   font-weight: 600 !important;
@@ -43,9 +48,9 @@
 }
 
 .connectButtonWrapper div {
-  background: #2d4bc1 !important;
+  background: blue !important;
   border-radius: 100px !important;
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: montserrat !important;
   font-size: 16px !important;
   border: none !important;
 }
@@ -57,11 +62,11 @@
 }
 
 .navLink {
-  color: #fff;
+  color: white;
   font-feature-settings:
     'liga' off,
     'clig' off;
-  font-family: Montserrat, sans-serif;
+  font-family: montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
