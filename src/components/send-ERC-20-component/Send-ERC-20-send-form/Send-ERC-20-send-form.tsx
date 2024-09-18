@@ -17,8 +17,9 @@ interface ISendERC20SendFormProps {
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
   const [inputValue, setInputValue] = useState('0');
   const [recipientValue, setRecipientValue] = useState('');
-
   const [isButtonActive, setIsButtonActive] = useState(true);
+
+  const [amountError, setAmountError] = useState<string | null>(null);
 
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
@@ -29,7 +30,14 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // const value = parseFloat(event.target.value);
     // setInputValue(isNaN(value) ? 0 : value);
-    setInputValue(event.target.value);
+    const value = event.target.value;
+    setInputValue(value);
+
+    if (balance && parseFloat(value) > parseFloat(balance)) {
+      setAmountError('The amount exceeds your balance');
+    } else {
+      setAmountError(null);
+    }
   };
 
   const handleRecipientChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,6 +49,11 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
   // TODO: Implement submitTocken function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (amountError) {
+      return;
+    }
+
     console.log('Form submitted');
     const formData = new FormData(e.target as HTMLFormElement);
     const to = formData.get('recipient') as `0x${string}`;
@@ -49,10 +62,11 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
   };
 
   useEffect(() => {
+    const inputValueNumber = parseFloat(inputValue);
     if (setIsButtonActive) {
-      setIsButtonActive(inputValue.length > 0 && recipientValue.length > 0);
+      setIsButtonActive(inputValue.length > 0 && inputValueNumber > 0 && recipientValue.length > 0 && !amountError);
     }
-  }, [inputValue, recipientValue, setIsButtonActive]);
+  }, [inputValue, recipientValue, setIsButtonActive, amountError]);
 
   return (
     <>
@@ -79,6 +93,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
               </div>
               <img src={balanceMaxSign} alt="Max balance icon" />
             </div>
+            {amountError && <div className={style.balanceExceededError}>{amountError}</div>}
           </div>
 
           <div className={style.tokenBlock}>

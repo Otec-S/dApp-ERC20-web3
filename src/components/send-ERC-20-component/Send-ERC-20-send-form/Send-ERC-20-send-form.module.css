@@ -46,6 +46,10 @@
   margin-right: 8px;
 }
 
+.balanceExceededError {
+  color: pink;
+}
+
 .tokenBlock {
   padding: 1px 11px 7px 0;
   display: flex;
