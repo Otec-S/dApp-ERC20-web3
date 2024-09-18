@@ -15,7 +15,7 @@ import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
 
-interface ITokenInfo {
+export interface ITokenInfo {
   tokenAddress: Address | undefined;
   tokenName: string | undefined;
   tokenDecimals: number | undefined;
@@ -23,7 +23,7 @@ interface ITokenInfo {
 }
 
 interface IAddTokenProps {
-  callback: FC<ITokenInfo>;
+  callback: (data:ITokenInfo)=>void;
 }
 
 interface IFormInputs {
@@ -36,17 +36,15 @@ const override: CSSProperties = {
 };
 
 const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
-  const initialTokenAddress = '0x0000000000000000000000000000000000000000' as Address;
-  const initialTokenName = '0x0000000000000000000000000000000000000000';
   const initialTokenDecimals = 18;
-
+  const initialTokenName = '0x0000000000000000000000000000000000000000';
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
   const [tokenBalance, setTokenBalance] = useState<string | undefined>(undefined);
   const [showLoader, setShowLoader] = useState(false);
-  const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
-  const [tokenName, setTokenName] = useState(initialTokenName);
+  const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
+  const [tokenName, setTokenName] = useState<string | undefined>(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
 
   const { isConnected } = useAccount();
@@ -63,36 +61,72 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   } = useForm<IFormInputs>();
 
   useEffect(() => {
-    if (formState === 'initialState') {
-      setTokenDecimals(initialTokenDecimals);
-      setTokenName(initialTokenName);
-      reset();
-    } else if (formState === 'showTokenNameState') {
-      setShowLoader(true);
-      const account = getAccount(config);
-      getToken(config, {
-        address: tokenAddress,
-      })
-        .then((token: GetTokenReturnType) => {
-          setTokenName(token.name ?? initialTokenName);
-          setTokenDecimals(token.decimals ?? undefined);
+    switch (formState) {
+      case 'initialState':
+        setTokenDecimals(initialTokenDecimals);
+        setTokenName(initialTokenName);
+        setTokenAddress(undefined);
+        reset();
+        break;
+      case 'showTokenNameState':
+        setShowLoader(true);
+        getToken(config, {
+          address: tokenAddress as Address,
         })
-        .then(() => {
-          getBalance(config, {
-            address: account.address as Address,
-            token: tokenAddress,
-          }).then((balanceData:GetBalanceReturnType) => {
-            const balance = formatUnits(balanceData.value, 18);
-            setTokenBalance(balance ?? undefined);
+          .then((token: GetTokenReturnType) => {
+            setTokenName(token.name ?? undefined);
+            setTokenDecimals(token.decimals ?? undefined);
+          })
+          .then(() => {
+            const account = getAccount(config);
+            getBalance(config, {
+              address: account.address as Address,
+              token: tokenAddress,
+            }).then((balanceData: GetBalanceReturnType) => {
+              const balance = formatUnits(balanceData.value, 18);
+              setTokenBalance(balance ?? undefined);
+              setShowLoader(false);
+            });
+          })
+          .catch((error) => {
             setShowLoader(false);
+            console.error('Error: ' + error);
+            setFormState('errorState');
           });
-        })
-        .catch((error) => {
-          setShowLoader(false);
-          console.error('Error: ' + error);
-          setFormState('errorState');
-        });
+        break;
     }
+
+    // if (formState === 'initialState') {
+    //   setTokenDecimals(initialTokenDecimals);
+    //   setTokenName(initialTokenName);
+    //   setTokenAddress(undefined);
+    //   reset();
+    // } else if (formState === 'showTokenNameState') {
+    //   setShowLoader(true);
+    //   const account = getAccount(config);
+    //   getToken(config, {
+    //     address: tokenAddress as Address,
+    //   })
+    //     .then((token: GetTokenReturnType) => {
+    //       setTokenName(token.name ?? undefined);
+    //       setTokenDecimals(token.decimals ?? undefined);
+    //     })
+    //     .then(() => {
+    //       getBalance(config, {
+    //         address: account.address as Address,
+    //         token: tokenAddress,
+    //       }).then((balanceData:GetBalanceReturnType) => {
+    //         const balance = formatUnits(balanceData.value, 18);
+    //         setTokenBalance(balance ?? undefined);
+    //         setShowLoader(false);
+    //       });
+    //     })
+    //     .catch((error) => {
+    //       setShowLoader(false);
+    //       console.error('Error: ' + error);
+    //       setFormState('errorState');
+    //     });
+    // }
   }, [formState, tokenAddress, reset]);
 
   const onHandlePreviosButton = () => {
@@ -102,7 +136,8 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
         reset();
         break;
       case 'showTokenAvatarState':
-        setFormState('showTokenNameState');
+        setFormState('initialState');
+        reset();
         break;
     }
   };
@@ -191,9 +226,9 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
 
             {formState === 'showTokenAvatarState' && (
               <TokenIcon
-                tokenAddress={tokenAddress}
+                tokenAddress={tokenAddress as Address}
                 tokenDecimals={tokenDecimals}
-                tokenName={tokenName}
+                tokenName={tokenName ?? ''}
                 tokenBalance={tokenBalance}
               />
             )}
