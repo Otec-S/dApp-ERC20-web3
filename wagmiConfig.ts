@@ -14,5 +14,3 @@ export const config = getDefaultConfig({
     [polygonAmoy.id]: http(),
   },
 });
-
-

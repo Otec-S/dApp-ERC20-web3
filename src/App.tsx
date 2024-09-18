@@ -4,8 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAccount, WagmiProvider } from 'wagmi';
 import { RainbowKitProvider, darkTheme } from '@rainbow-me/rainbowkit';
 // TODO: заменить wagmiConfig на testWagmiConfig
-// import { config } from '../wagmiConfig';
-import { config } from '../testWagmiConfig';
+import { config } from '../wagmiConfig';
+// import { config } from '../testWagmiConfig';
 import { Landing } from './pages/Landing';
 import './App.css';
 import './index.css';

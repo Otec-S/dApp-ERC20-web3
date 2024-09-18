@@ -1,5 +1,5 @@
 import { type BaseError, useReadContract } from 'wagmi';
-import { config } from '../../../testWagmiConfig';
+import { config } from '../../../wagmiConfig';
 
 export function ReadContract() {
   const {

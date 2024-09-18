@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAccount, useDisconnect, useEnsAvatar, useEnsName } from 'wagmi';
 import { GetBalanceReturnType, getBalance } from 'wagmi/actions';
-import { config } from '../../../testWagmiConfig';
+// import { config } from '../../../testWagmiConfig';
+import { config } from '../../../wagmiConfig';
 import { formatUnits } from 'viem/utils';
 
 export function Account() {
