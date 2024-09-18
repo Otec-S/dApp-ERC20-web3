@@ -67,7 +67,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           address: tokenAddress,
         });
         setTokenName(token.name ?? initialTokenName);
-        setTokenDecimals(token.decimals ?? initialTokenDecimals);
+        setTokenDecimals(token.decimals ?? undefined);
         } catch (error) {
           console.error('Error getting token: ' + error);
           setShowLoader(false);
@@ -81,7 +81,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           token:tokenAddress
         });
         const balance = formatUnits(balanceData.value, 18);
-        setTokenBalance(balance??'');
+        setTokenBalance(balance??undefined);
       } catch (err) {
         console.error('Error retrieving balance:', err);
       }

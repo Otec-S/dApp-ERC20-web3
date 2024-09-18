@@ -25,7 +25,7 @@ export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress,tokenBalance
       />
       <div className={styles.imgTextWrapper}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
-        <span className={styles.tokenName}>{tokenBalance + ' ' + tokenName}</span>
+        <span className={styles.tokenName}>{tokenBalance ? tokenBalance + ' ' + tokenName:'0 UNKNWN'}</span>
       </div>
     </div>
   );
