@@ -44,11 +44,6 @@ const router = createBrowserRouter([
     path: '/profile',
     element: <ConnectWallet />,
   },
-  // TODO: тест
-  // {
-  //   path: '/balance',
-  //   element: <ReadContract />,
-  // },
 ]);
 
 const App: FC = () => {

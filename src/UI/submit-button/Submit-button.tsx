@@ -1,19 +1,15 @@
-import style from "./Submit-button.module.css";
+import style from './Submit-button.module.css';
 
 interface ISubmitButtonProps {
   isButtonActive?: boolean;
   buttonText: string;
 }
 
-const SubmitButton: React.FC<ISubmitButtonProps> = ({
-  isButtonActive = true,
-  buttonText,
-}) => {
+const SubmitButton: React.FC<ISubmitButtonProps> = ({ isButtonActive = true, buttonText }) => {
   return (
     <button
-      className={`${style.button} ${
-        !isButtonActive ? style.inactiveButton : ""
-      }`}
+      type="submit"
+      className={`${style.button} ${!isButtonActive ? style.inactiveButton : ''}`}
       disabled={!isButtonActive}
     >
       {buttonText}
