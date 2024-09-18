@@ -9,11 +9,12 @@ import { getBalance, getAccount } from '@wagmi/core';
 import { GetBalanceReturnType, GetTokenReturnType } from 'wagmi/actions';
 
 import { config } from '../../../wagmiConfig';
-import close from '../../assets/images/clear_close_icon.svg';
-import successLogo from '../../assets/icons/success.svg';
+import ClearIcon from '@assets/icons/clear_close_icon.svg';
+import SuccessIcon from '@assets/icons/success.svg';
+
 import styles from './AddToken.module.css';
 import Warning from './Warning';
-import { TokenIcon } from './TokenIcon';
+import TokenIcon from './TokenIcon';
 
 export interface ITokenInfo {
   tokenAddress: Address | undefined;
@@ -153,7 +154,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
           </h5>
           <button className={styles.closeForm} onPointerDown={handleCloseForm}>
-            <img className={styles.close} src={close} alt="close" />
+            <ClearIcon/>
           </button>
         </div>
       )}
@@ -217,7 +218,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
       {formState === 'readyToAddState' && (
         <>
           <div className={styles.successLogoWrapper}>
-            <img src={successLogo} alt="success logo" />
+            <SuccessIcon/>
             <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
           </div>
           <button onPointerDown={handleCloseForm} className={styles.button} type="button">

@@ -47,6 +47,11 @@
 .closeForm {
   background: transparent;
   cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+.closeForm:hover {
+  transform: rotate(90deg);
 }
 
 .headerWrapper {
@@ -176,14 +181,6 @@
   line-height: normal;
 }
 
-.close {
-  transition: transform 0.5s ease;
-}
-
-.close:hover {
-  transform: rotate(90deg);
-}
-
 .button {
   height: 48px;
   width: 100%;
@@ -223,7 +220,9 @@
   flex-direction: column;
   gap: 24px;
   align-self: stretch;
+  align-items: center;
 }
+
 .successLogoText {
   color: #fff;
   text-align: center;

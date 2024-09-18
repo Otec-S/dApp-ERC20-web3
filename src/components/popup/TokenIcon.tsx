@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Address } from 'viem';
 
 import { tokens } from '../../assets/constants';
-import defaultTokenLogo from '../../assets/images/token_logo.svg';
+import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import styles from './TokenIcon.module.css';
 
 export interface ITokenIcon {
@@ -15,14 +15,7 @@ export interface ITokenIcon {
 export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress, tokenBalance }) => {
   return (
     <div className={styles.tokenImgWrapper}>
-      <img
-        className={styles.tokenImg}
-        src={
-          tokens.find((t) => t.polygonAddress === tokenAddress || t.sepoliaAddress === tokenAddress)?.iconPath ??
-          defaultTokenLogo
-        }
-        alt="token logo"
-      />
+      {tokens.find((t)=>t.polygonAddress === tokenAddress || t.sepoliaAddress === tokenAddress)?.icon??<NotFoundTokenLogo/>}
       <div className={styles.imgTextWrapper}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
         <span className={styles.tokenName}>{tokenBalance + ' ' + tokenName}</span>
@@ -30,3 +23,5 @@ export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress, tokenBalanc
     </div>
   );
 };
+
+export default TokenIcon;

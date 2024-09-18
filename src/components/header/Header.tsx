@@ -1,10 +1,11 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { NavLink } from 'react-router-dom';
 import { FC, useState } from 'react';
-import cn from 'classnames';
+import { NavLink } from 'react-router-dom';
 import '@rainbow-me/rainbowkit/styles.css';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import cn from 'classnames';
 
-import imgUrl from '../../assets/images/logo.svg';
+import { logo } from '@assets/images';
+
 import styles from './Header.module.css';
 
 const Header: FC = () => {
@@ -23,7 +24,7 @@ const Header: FC = () => {
           <div className={styles.burgerImage} />
         </button>
       </div>
-      <img className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })} src={imgUrl} alt="Project logo" />
+      <img className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })} src={logo.default} alt="Project logo" />
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink className={styles.navLink} to="/erc20">
