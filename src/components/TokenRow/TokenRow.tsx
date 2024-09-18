@@ -1,9 +1,8 @@
-import React, { ReactElement, useCallback } from 'react';
+import { FC, ReactElement } from 'react';
+import { Address } from 'viem';
+import { useWatchAsset } from 'wagmi';
 
 import PlusIcon from '@assets/icons/plus-icon.svg';
-import { Address } from 'viem';
-import { useConfig } from 'wagmi';
-import { watchAsset } from 'wagmi/actions';
 
 import classes from './TokenRow.module.css';
 
@@ -14,11 +13,11 @@ type Props = {
   decimals: number;
 };
 
-export const TokenRow: React.FC<Props> = ({ icon, address, symbol, decimals }) => {
-  const config = useConfig();
+export const TokenRow: FC<Props> = ({ icon, address, symbol, decimals }) => {
+  const { watchAsset } = useWatchAsset();
 
-  const handleAddToken = useCallback(async () => {
-    await watchAsset(config, {
+  const handleAddToken = () => {
+    watchAsset({
       type: 'ERC20',
       options: {
         address: address,
@@ -26,7 +25,7 @@ export const TokenRow: React.FC<Props> = ({ icon, address, symbol, decimals }) =
         decimals: decimals,
       },
     });
-  }, [address, config, decimals, symbol]);
+  };
 
   return (
     <div className={classes.tokenRow}>

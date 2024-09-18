@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-
-import { logo } from '@assets/images';
+import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
-import '@rainbow-me/rainbowkit/styles.css';
+import { logo } from '@assets/images';
+
 import styles from './Header.module.css';
 
 const Header: FC = () => {

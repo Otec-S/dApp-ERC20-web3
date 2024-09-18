@@ -1,4 +1,6 @@
 import { ReactElement } from 'react';
+import { Address } from 'viem/accounts';
+import { polygonAmoy, sepolia } from 'viem/chains';
 
 import ARBIcon from '@assets/icons/arb.svg';
 import DAIIcon from '@assets/icons/dai.svg';
@@ -10,8 +12,6 @@ import TRXIcon from '@assets/icons/trx.svg';
 import USDCIcon from '@assets/icons/usdc.svg';
 import USDTIcon from '@assets/icons/usdt.svg';
 import WBTSIcon from '@assets/icons/wbtc.svg';
-import { Address } from 'viem/accounts';
-import { polygonAmoy, sepolia } from 'viem/chains';
 
 import { polygonAddress, sepoliaAddress } from './TokensBlock.constants';
 

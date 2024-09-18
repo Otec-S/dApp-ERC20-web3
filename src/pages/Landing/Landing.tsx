@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { landing, tokenBlockImage } from '@src/assets/images';
@@ -8,7 +8,7 @@ import { TokensBlock } from '@src/components/TokensBlock/TokensBlock';
 import { blockData, statisticData } from './Landing.constants';
 import classes from './Landing.module.css';
 
-export const Landing: React.FC = () => {
+export const Landing: FC = () => {
   const navigate = useNavigate();
 
   return (

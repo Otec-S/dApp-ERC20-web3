@@ -1,13 +1,12 @@
-import React from 'react';
-
+import { FC } from 'react';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useChainId, useConnections } from 'wagmi';
-import { TokenRow } from '../TokenRow/TokenRow';
 
+import { TokenRow } from '../TokenRow/TokenRow';
 import { getTokens } from './TokensBlock.utils';
 import classes from './TokensBlock.module.css';
 
-export const TokensBlock: React.FC = () => {
+export const TokensBlock: FC = () => {
   const connections = useConnections();
   const chainId = useChainId();
   const isExistChain = chainId === sepolia.id || chainId === polygonAmoy.id;
