@@ -13,17 +13,25 @@ interface ISendERC20SendFormProps {
   // setIsButtonActive?: (value: boolean) => void;
   isTxFormSubmitted: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
+  setIsTxSuccess: (value: boolean) => void;
+  inputValue: string;
+  setInputValue: (value: string) => void;
 }
 
-const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isTxFormSubmitted, setIsTxFormSubmitted }) => {
-  const [inputValue, setInputValue] = useState('0');
+const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
+  setIsTxSuccess,
+  setIsTxFormSubmitted,
+  inputValue,
+  setInputValue,
+}) => {
+  // const [inputValue, setInputValue] = useState('0');
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
 
   const [amountError, setAmountError] = useState<string | null>(null);
 
   // TODO:
-  const { data: hash, isPending, error, sendTransaction } = useSendTransaction();
+  const { data: hash, error: txError, sendTransaction } = useSendTransaction();
 
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
@@ -61,13 +69,39 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isTxFormSubmitted, set
     const to = formData.get('recipient') as `0x${string}`;
     const value = formData.get('value') as string;
     sendTransaction({ to, value: parseEther(value) });
-    setIsTxFormSubmitted(true);
+    // setIsTxFormSubmitted(true);
   };
 
   // TODO: используй это для отслеживания статуса транзакции
-  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError,
+  } = useWaitForTransactionReceipt({
     hash,
   });
+
+  // Используем эффект для реакции на успешное подтверждение транзакции
+  useEffect(() => {
+    if (isConfirmed) {
+      setIsTxFormSubmitted(true);
+      setIsButtonActive(true);
+    }
+  }, [isConfirmed]);
+
+  useEffect(() => {
+    if (isConfirming) {
+      setIsButtonActive(false);
+    }
+  }, [isConfirming]);
+
+  // FIXME: не срабатывает
+  useEffect(() => {
+    if (isError) {
+      console.log('Error: ', isError);
+      setIsTxSuccess(false);
+    }
+  }, [isError]);
 
   useEffect(() => {
     const inputValueNumber = parseFloat(inputValue);
@@ -128,7 +162,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isTxFormSubmitted, set
           />
         </div>
         {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>}
-        <SubmitButton disabled={isPending} buttonText="Send" isButtonActive={isButtonActive} />
+        <SubmitButton buttonText="Send" isButtonActive={isButtonActive} />
       </form>
     </>
   );

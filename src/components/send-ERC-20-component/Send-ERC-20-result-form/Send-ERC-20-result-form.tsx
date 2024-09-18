@@ -7,11 +7,16 @@ import SubmitButton from '../../../UI/submit-button/Submit-button';
 interface ISendERC20ResultFormProps {
   isTxSuccess: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
+  inputValue: string;
 }
 
-const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({ isTxSuccess, setIsTxFormSubmitted }) => {
-  const balance = 5800;
-  const formattedBalance = balance.toLocaleString('en-US');
+const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
+  isTxSuccess,
+  setIsTxFormSubmitted,
+  inputValue,
+}) => {
+  // const balance = 5800;
+  // const formattedBalance = balance.toLocaleString('en-US');
 
   // TODO: временно
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,7 +29,7 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({ isTxSuccess,
     <form className={style.blockForm} onSubmit={handleSubmit}>
       <div className={style.resultForm}>
         <img className={style.resultIcon} src={isTxSuccess ? resultSuccessIcon : resultErrorIcon} alt="Result icon" />
-        <p className={style.transactionValue}>{formattedBalance} USDT</p>
+        <p className={style.transactionValue}>{inputValue} ETH</p>
         <img className={style.viewTransactionIcon} src={viewTransactionIcon} alt="View transaction icon" />
       </div>
       <SubmitButton buttonText="Great!" />

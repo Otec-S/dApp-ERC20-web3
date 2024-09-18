@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import style from './Send-ERC-20-block.module.css'; // Импорт стилей для блока
 // import SubmitButton from '../../../UI/submit-button/Submit-button';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,15 +26,27 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   // const [isButtonActive, setIsButtonActive] = useState(true);
 
+  const [inputValue, setInputValue] = useState('0');
+
   return (
     <section className={style.block}>
       <div className={style.blockTitle}>{blockTitleText}</div>
       {/* <form className={style.blockForm} onSubmit={handleSubmit}> */}
 
       {isTxFormSubmitted ? (
-        <SendERC20ResultForm isTxSuccess={isTxSuccess} setIsTxFormSubmitted={setIsTxFormSubmitted} />
+        <SendERC20ResultForm
+          isTxSuccess={isTxSuccess}
+          setIsTxFormSubmitted={setIsTxFormSubmitted}
+          inputValue={inputValue}
+        />
       ) : (
-        <SendERC20SendForm isTxFormSubmitted={isTxFormSubmitted} setIsTxFormSubmitted={setIsTxFormSubmitted} />
+        <SendERC20SendForm
+          setIsTxSuccess={setIsTxSuccess}
+          isTxFormSubmitted={isTxFormSubmitted}
+          setIsTxFormSubmitted={setIsTxFormSubmitted}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+        />
       )}
 
       {/* <SendERC20SendForm isTxFormSubmitted={isTxFormSubmitted} setIsTxFormSubmitted={setIsTxFormSubmitted} /> */}
