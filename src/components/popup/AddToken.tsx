@@ -95,38 +95,6 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           });
         break;
     }
-
-    // if (formState === 'initialState') {
-    //   setTokenDecimals(initialTokenDecimals);
-    //   setTokenName(initialTokenName);
-    //   setTokenAddress(undefined);
-    //   reset();
-    // } else if (formState === 'showTokenNameState') {
-    //   setShowLoader(true);
-    //   const account = getAccount(config);
-    //   getToken(config, {
-    //     address: tokenAddress as Address,
-    //   })
-    //     .then((token: GetTokenReturnType) => {
-    //       setTokenName(token.name ?? undefined);
-    //       setTokenDecimals(token.decimals ?? undefined);
-    //     })
-    //     .then(() => {
-    //       getBalance(config, {
-    //         address: account.address as Address,
-    //         token: tokenAddress,
-    //       }).then((balanceData:GetBalanceReturnType) => {
-    //         const balance = formatUnits(balanceData.value, 18);
-    //         setTokenBalance(balance ?? undefined);
-    //         setShowLoader(false);
-    //       });
-    //     })
-    //     .catch((error) => {
-    //       setShowLoader(false);
-    //       console.error('Error: ' + error);
-    //       setFormState('errorState');
-    //     });
-    // }
   }, [formState, tokenAddress, reset]);
 
   const onHandlePreviosButton = () => {
