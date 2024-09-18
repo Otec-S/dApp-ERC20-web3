@@ -3,7 +3,7 @@ import SendERC20Block from '../../components/send-ERC-20-component/Send-ERC-20-b
 import { useState } from 'react';
 import Header from '../../components/header/Header';
 
-const SendERC20Component = () => {
+const SendERC20 = () => {
   const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
   const [isTxSuccess, setIsTxSuccess] = useState(true);
 
@@ -21,4 +21,4 @@ const SendERC20Component = () => {
   );
 };
 
-export default SendERC20Component;
+export default SendERC20;
