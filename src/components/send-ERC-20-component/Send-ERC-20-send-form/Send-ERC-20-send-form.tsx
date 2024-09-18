@@ -1,16 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import style from './Send-ERC-20-send-form.module.css';
 import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
-// import USDTLogo from '../../../assets/USDTLogo.svg';
 import ETHLogo from '../../../assets/ETHLogo.svg';
 import arrow_down from '../../../assets/arrow_down.svg';
-import { useAccount, useSendTransaction, useWaitForTransactionReceipt, type BaseError } from 'wagmi';
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther } from 'viem';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 
 interface ISendERC20SendFormProps {
-  // setIsButtonActive?: (value: boolean) => void;
   isTxFormSubmitted: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsTxSuccess: (value: boolean) => void;
@@ -24,25 +22,17 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   inputValue,
   setInputValue,
 }) => {
-  // const [inputValue, setInputValue] = useState('0');
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
 
   const [amountError, setAmountError] = useState<string | null>(null);
 
-  // TODO:
-  const { data: hash, error: txError, sendTransaction } = useSendTransaction();
-
-  // const balance = 5800;
-  // const formattedBalance = balance.toLocaleString('en-US');
+  const { data: hash, sendTransaction } = useSendTransaction();
 
   const { address } = useAccount();
-  // const address: `0x${string}` = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(address as `0x${string}`);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // const value = parseFloat(event.target.value);
-    // setInputValue(isNaN(value) ? 0 : value);
     const value = event.target.value;
     setInputValue(value);
 
@@ -57,7 +47,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     setRecipientValue(event.target.value);
   };
 
-  // TODO: Implement submitTocken function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -70,10 +59,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     const to = formData.get('recipient') as `0x${string}`;
     const value = formData.get('value') as string;
     sendTransaction({ to, value: parseEther(value) });
-    // setIsTxFormSubmitted(true);
   };
 
-  // TODO: используй это для отслеживания статуса транзакции
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -82,7 +69,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     hash,
   });
 
-  // Используем эффект для реакции на успешное подтверждение транзакции
   useEffect(() => {
     if (isConfirmed) {
       setIsTxFormSubmitted(true);
@@ -96,7 +82,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     }
   }, [isConfirming]);
 
-  // FIXME: не срабатывает
   useEffect(() => {
     if (isError) {
       console.log('Error: ', isError);

@@ -4,9 +4,7 @@ import { useState } from 'react';
 import Header from '../../components/header/Header';
 
 const SendERC20Component = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isTxSuccess, setIsTxSuccess] = useState(true);
 
   return (
@@ -19,10 +17,6 @@ const SendERC20Component = () => {
         setIsTxFormSubmitted={setIssTxFormSubmitted}
         blockTitleText={isTxFormSubmitted ? 'Tokens has been successfully sent!' : 'Send ERC-20'}
       />
-      {/* <SendERC20Block
-          isSuccess={isSuccess}
-          blockTitleText={isSuccess ? 'Tokens has been successfully sent!' : 'Something went wrong'}
-        /> */}
     </div>
   );
 };

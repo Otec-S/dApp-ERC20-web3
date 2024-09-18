@@ -8,21 +8,19 @@ interface ISendERC20ResultFormProps {
   isTxSuccess: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   inputValue: string;
+  setInputValue: (value: string) => void;
 }
 
 const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
   isTxSuccess,
   setIsTxFormSubmitted,
   inputValue,
+  setInputValue,
 }) => {
-  // const balance = 5800;
-  // const formattedBalance = balance.toLocaleString('en-US');
-
-  // TODO: временно
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted');
     setIsTxFormSubmitted(false);
+    setInputValue('0');
   };
 
   return (

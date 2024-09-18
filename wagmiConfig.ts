@@ -6,7 +6,6 @@ export const config = getDefaultConfig({
   appName: 'Scrum Team 17 web3 kEthers fans',
   projectId: import.meta.env.VITE_WAGMI_PROJECT_ID,
   chains: [mainnet, polygon, sepolia, polygonAmoy],
-  // TODO: добавил транспорты
   transports: {
     [mainnet.id]: http(),
     [sepolia.id]: http(),

@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { GetBalanceReturnType, getBalance } from 'wagmi/actions';
-// FIXME: замените на стандартный конфиг wagmiConfig
-// import { config } from '../../testWagmiConfig';
 import { config } from '../../wagmiConfig';
 import { formatUnits } from 'viem/utils';
 

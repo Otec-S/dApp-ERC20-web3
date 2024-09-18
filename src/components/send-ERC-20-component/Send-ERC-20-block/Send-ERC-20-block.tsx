@@ -1,12 +1,7 @@
 import { FC, useState } from 'react';
-import style from './Send-ERC-20-block.module.css'; // Импорт стилей для блока
-// import SubmitButton from '../../../UI/submit-button/Submit-button';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import style from './Send-ERC-20-block.module.css';
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
-// import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
-// import { useSendTransaction } from 'wagmi';
-// import { parseEther } from 'viem';
 
 interface ISendERC20BlockProps {
   blockTitleText: string;
@@ -23,21 +18,18 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   isTxFormSubmitted,
   setIsTxFormSubmitted,
 }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const [isButtonActive, setIsButtonActive] = useState(true);
-
   const [inputValue, setInputValue] = useState('0');
 
   return (
     <section className={style.block}>
       <div className={style.blockTitle}>{blockTitleText}</div>
-      {/* <form className={style.blockForm} onSubmit={handleSubmit}> */}
 
       {isTxFormSubmitted ? (
         <SendERC20ResultForm
           isTxSuccess={isTxSuccess}
           setIsTxFormSubmitted={setIsTxFormSubmitted}
           inputValue={inputValue}
+          setInputValue={setInputValue}
         />
       ) : (
         <SendERC20SendForm
@@ -48,11 +40,6 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setInputValue={setInputValue}
         />
       )}
-
-      {/* <SendERC20SendForm isTxFormSubmitted={isTxFormSubmitted} setIsTxFormSubmitted={setIsTxFormSubmitted} /> */}
-      {/* <SendERC20ResultForm isSuccess={isSuccess} /> */}
-      {/* <SubmitButton buttonText={isSuccess ? 'Great!' : 'Start again'} isButtonActive={isButtonActive} /> */}
-      {/* </form> */}
     </section>
   );
 };
