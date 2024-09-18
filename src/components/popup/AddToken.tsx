@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
 import { getBalance, getAccount } from '@wagmi/core';
+import { GetBalanceReturnType, GetTokenReturnType } from 'wagmi/actions';
 
 import { config } from '../../../wagmiConfig';
 import close from '../../assets/images/clear_close_icon.svg';
@@ -54,51 +55,45 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
     openConnectModal();
   }
 
-  useEffect(() => {
-    if (formState === 'initialState') {
-      setTokenDecimals(initialTokenDecimals);
-      setTokenName(initialTokenName);
-    } else if (formState === 'showTokenNameState') {
-      setShowLoader(true);
-      const account = getAccount(config);
-      const fetchTokenData = async () => {
-        try {
-          const token = await getToken(config, {
-            address: tokenAddress,
-          });
-          setTokenName(token.name ?? initialTokenName);
-          setTokenDecimals(token.decimals ?? undefined);
-        } catch (error) {
-          console.error('Error getting token: ' + error);
-          setShowLoader(false);
-          setFormState('errorState');
-        }
-        setShowLoader(false);
-      };
-      const fetchBalance = async () => {
-        try {
-          const balanceData = await getBalance(config, {
-            address: account.address as Address,
-            token: tokenAddress,
-          });
-          const balance = formatUnits(balanceData.value, 18);
-          setTokenBalance(balance ?? undefined);
-        } catch (err) {
-          console.error('Error retrieving balance:', err);
-          setFormState('errorState');
-        }
-      };
-      fetchTokenData();
-      fetchBalance();
-    }
-  }, [formState, tokenAddress]);
-
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<IFormInputs>();
+
+  useEffect(() => {
+    if (formState === 'initialState') {
+      setTokenDecimals(initialTokenDecimals);
+      setTokenName(initialTokenName);
+      reset();
+    } else if (formState === 'showTokenNameState') {
+      setShowLoader(true);
+      const account = getAccount(config);
+      getToken(config, {
+        address: tokenAddress,
+      })
+        .then((token: GetTokenReturnType) => {
+          setTokenName(token.name ?? initialTokenName);
+          setTokenDecimals(token.decimals ?? undefined);
+        })
+        .then(() => {
+          getBalance(config, {
+            address: account.address as Address,
+            token: tokenAddress,
+          }).then((balanceData:GetBalanceReturnType) => {
+            const balance = formatUnits(balanceData.value, 18);
+            setTokenBalance(balance ?? undefined);
+            setShowLoader(false);
+          });
+        })
+        .catch((error) => {
+          setShowLoader(false);
+          console.error('Error: ' + error);
+          setFormState('errorState');
+        });
+    }
+  }, [formState, tokenAddress, reset]);
 
   const onHandlePreviosButton = () => {
     switch (formState) {
@@ -230,7 +225,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
       {formState === 'errorState' && (
         <>
           <div className={styles.successLogoWrapper}>
-            <h5 className={styles.header}>Something went wrong. Pls check network and token address</h5>
+            <h5 className={styles.header}>Something went wrong. Pls check network and token address.</h5>
           </div>
           <button onPointerDown={onHandleErrorButton} className={styles.button} type="button">
             Okay
