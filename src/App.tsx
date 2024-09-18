@@ -8,6 +8,7 @@ import { config } from '../wagmiConfig';
 import { Landing } from './pages/Landing';
 import './App.module.css';
 import './index.module.css';
+import SendERC20 from './pages/SendERC20/send-ERC-20';
 
 const queryClient = new QueryClient();
 const rainbowtTheme = darkTheme({

@@ -1,4 +1,3 @@
-import { polygon, mainnet, sepolia, polygonAmoy } from 'wagmi/chains';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import { mainnet, polygon, polygonAmoy, sepolia } from 'wagmi/chains';
 import { http } from 'wagmi';
