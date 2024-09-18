@@ -1,15 +1,15 @@
 import { Address, formatUnits, isAddress } from 'viem';
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import BeatLoader from "react-spinners/BeatLoader";
+import BeatLoader from 'react-spinners/BeatLoader';
 import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
 import { getBalance, getAccount } from '@wagmi/core';
 
+import { config } from '../../../wagmiConfig';
 import close from '../../assets/images/clear_close_icon.svg';
 import successLogo from '../../assets/icons/success.svg';
-import { config } from '../../../wagmiConfig';
 import styles from './AddToken.module.css';
 import Warning from './Warning';
 import { TokenIcon } from './TokenIcon';
@@ -30,8 +30,8 @@ interface IFormInputs {
 }
 
 const override: CSSProperties = {
-  display: "block",
-  margin: "100px auto",
+  display: 'block',
+  margin: '100px auto',
 };
 
 const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
@@ -40,10 +40,10 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   const initialTokenDecimals = 18;
 
   const [formState, setFormState] = useState<
-    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState'
+    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
-  const [ tokenBalance, setTokenBalance ] = useState<string|undefined>(undefined);
-  const [showLoader, setShowLoader ] = useState(false);
+  const [tokenBalance, setTokenBalance] = useState<string | undefined>(undefined);
+  const [showLoader, setShowLoader] = useState(false);
   const [tokenAddress, setTokenAddress] = useState<Address>(initialTokenAddress);
   const [tokenName, setTokenName] = useState(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
@@ -64,32 +64,34 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
       const fetchTokenData = async () => {
         try {
           const token = await getToken(config, {
-          address: tokenAddress,
-        });
-        setTokenName(token.name ?? initialTokenName);
-        setTokenDecimals(token.decimals ?? undefined);
+            address: tokenAddress,
+          });
+          setTokenName(token.name ?? initialTokenName);
+          setTokenDecimals(token.decimals ?? undefined);
         } catch (error) {
           console.error('Error getting token: ' + error);
           setShowLoader(false);
+          setFormState('errorState');
         }
         setShowLoader(false);
-      }
+      };
       const fetchBalance = async () => {
-      try {
-        const balanceData = await getBalance(config, {
-          address: account.address as Address,
-          token:tokenAddress
-        });
-        const balance = formatUnits(balanceData.value, 18);
-        setTokenBalance(balance??undefined);
-      } catch (err) {
-        console.error('Error retrieving balance:', err);
-      }
-    };
+        try {
+          const balanceData = await getBalance(config, {
+            address: account.address as Address,
+            token: tokenAddress,
+          });
+          const balance = formatUnits(balanceData.value, 18);
+          setTokenBalance(balance ?? undefined);
+        } catch (err) {
+          console.error('Error retrieving balance:', err);
+          setFormState('errorState');
+        }
+      };
       fetchTokenData();
       fetchBalance();
     }
-  }, [formState,tokenAddress]);
+  }, [formState, tokenAddress]);
 
   const {
     register,
@@ -110,6 +112,10 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
     }
   };
 
+  const onHandleErrorButton = () => {
+    setFormState('initialState');
+  };
+
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
     switch (formState) {
       case 'initialState':
@@ -127,35 +133,37 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
 
   const handleCloseForm = () => {
     callback({ tokenAddress, tokenName, tokenDecimals, tokenBalance });
-  }
+  };
 
   return (
     <div className={styles.addToken}>
-      {
-        showLoader && <div className={styles.loader}>
-        <BeatLoader
-        color={'red'}
-        loading={showLoader}
-        cssOverride={override}
-        size={100}
-        aria-label="Loading Spinner"
-        data-testid="loader"
-      />
-      </div> 
-      }
-      <div className={styles.headerWrapper}>
-        <h5 className={styles.header}>
-          {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
-        </h5>
-        <button className={styles.closeForm} onPointerDown={handleCloseForm}>
-          <img className={styles.close} src={close} alt="close" />
-        </button>
-      </div>
-      {formState !== 'readyToAddState' && (
+      {showLoader && (
+        <div className={styles.loader}>
+          <BeatLoader
+            color={'red'}
+            loading={showLoader}
+            cssOverride={override}
+            size={100}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
+      {formState !== 'errorState' && (
+        <div className={styles.headerWrapper}>
+          <h5 className={styles.header}>
+            {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
+          </h5>
+          <button className={styles.closeForm} onPointerDown={handleCloseForm}>
+            <img className={styles.close} src={close} alt="close" />
+          </button>
+        </div>
+      )}
+      {formState !== 'readyToAddState' && formState !== 'errorState' && (
         <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
       )}
 
-      {formState !== 'readyToAddState' && (
+      {formState !== 'readyToAddState' && formState !== 'errorState' && (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div>
             {formState !== 'showTokenAvatarState' && (
@@ -186,7 +194,14 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
               </>
             )}
 
-            {formState === 'showTokenAvatarState' && <TokenIcon tokenAddress={tokenAddress} tokenDecimals={tokenDecimals} tokenName={tokenName} tokenBalance={tokenBalance}/>}
+            {formState === 'showTokenAvatarState' && (
+              <TokenIcon
+                tokenAddress={tokenAddress}
+                tokenDecimals={tokenDecimals}
+                tokenName={tokenName}
+                tokenBalance={tokenBalance}
+              />
+            )}
           </div>
           <div className={styles.buttonWrapper}>
             {formState !== 'initialState' && (
@@ -208,6 +223,16 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
           </div>
           <button onPointerDown={handleCloseForm} className={styles.button} type="button">
+            Okay
+          </button>
+        </>
+      )}
+      {formState === 'errorState' && (
+        <>
+          <div className={styles.successLogoWrapper}>
+            <h5 className={styles.header}>Something went wrong. Pls check network and token address</h5>
+          </div>
+          <button onPointerDown={onHandleErrorButton} className={styles.button} type="button">
             Okay
           </button>
         </>

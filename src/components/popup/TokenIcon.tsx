@@ -7,12 +7,12 @@ import styles from './TokenIcon.module.css';
 
 export interface ITokenIcon {
   tokenName: string;
-  tokenDecimals:number;
-  tokenAddress:Address;
-  tokenBalance:string | undefined;
+  tokenDecimals: number;
+  tokenAddress: Address;
+  tokenBalance: string | undefined;
 }
 
-export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress,tokenBalance }) => {
+export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress, tokenBalance }) => {
   return (
     <div className={styles.tokenImgWrapper}>
       <img
@@ -25,7 +25,7 @@ export const TokenIcon: FC<ITokenIcon> = ({ tokenName, tokenAddress,tokenBalance
       />
       <div className={styles.imgTextWrapper}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
-        <span className={styles.tokenName}>{tokenBalance ? tokenBalance + ' ' + tokenName:'0 UNKNWN'}</span>
+        <span className={styles.tokenName}>{tokenBalance ? tokenBalance + ' ' + tokenName : '0 UNKNWN'}</span>
       </div>
     </div>
   );
