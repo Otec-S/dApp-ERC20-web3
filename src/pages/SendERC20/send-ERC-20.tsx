@@ -5,12 +5,20 @@ import Header from '../../components/header/Header';
 
 const SendERC20Component = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isSuccess, setIsSuccess] = useState(true);
+  const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isTxSuccess, setIsTxSuccess] = useState(true);
 
   return (
     <div className={style.component}>
       <Header />
-      <SendERC20Block isSuccess={isSuccess} blockTitleText="Send ERC-20" />
+      <SendERC20Block
+        isTxSuccess={isTxSuccess}
+        setIsTxSuccess={setIsTxSuccess}
+        isTxFormSubmitted={isTxFormSubmitted}
+        setIsTxFormSubmitted={setIssTxFormSubmitted}
+        blockTitleText={isTxFormSubmitted ? 'Tokens has been successfully sent!' : 'Send ERC-20'}
+      />
       {/* <SendERC20Block
           isSuccess={isSuccess}
           blockTitleText={isSuccess ? 'Tokens has been successfully sent!' : 'Something went wrong'}

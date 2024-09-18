@@ -1,3 +1,9 @@
+.blockForm {
+  background-color: #333333;
+  border-radius: 16px;
+  padding: 48px;
+}
+
 .resultForm {
   display: flex;
   align-items: center;
@@ -12,8 +18,10 @@
 
 .transactionValue {
   color: #fff;
-  font-feature-settings: "liga" off, "clig" off;
-  font-family: "Inter", sans-serif;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

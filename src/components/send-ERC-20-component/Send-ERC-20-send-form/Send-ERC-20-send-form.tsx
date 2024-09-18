@@ -4,30 +4,32 @@ import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
 // import USDTLogo from '../../../assets/USDTLogo.svg';
 import ETHLogo from '../../../assets/ETHLogo.svg';
 import arrow_down from '../../../assets/arrow_down.svg';
-import { useSendTransaction } from 'wagmi';
+import { useSendTransaction, useWaitForTransactionReceipt, type BaseError } from 'wagmi';
 import { parseEther } from 'viem';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 
 interface ISendERC20SendFormProps {
-  setIsButtonActive?: (value: boolean) => void;
-  isSuccess: boolean;
+  // setIsButtonActive?: (value: boolean) => void;
+  isTxFormSubmitted: boolean;
+  setIsTxFormSubmitted: (value: boolean) => void;
 }
 
-const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
+const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isTxFormSubmitted, setIsTxFormSubmitted }) => {
   const [inputValue, setInputValue] = useState('0');
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
 
   const [amountError, setAmountError] = useState<string | null>(null);
 
-  const { data: hash, isPending, sendTransaction } = useSendTransaction();
+  // TODO:
+  const { data: hash, isPending, error, sendTransaction } = useSendTransaction();
 
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
 
   const address: `0x${string}` = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
-  const { balance, loading, error } = useBalanceCustom(address);
+  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(address);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // const value = parseFloat(event.target.value);
@@ -59,7 +61,13 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
     const to = formData.get('recipient') as `0x${string}`;
     const value = formData.get('value') as string;
     sendTransaction({ to, value: parseEther(value) });
+    setIsTxFormSubmitted(true);
   };
+
+  // TODO: используй это для отслеживания статуса транзакции
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
 
   useEffect(() => {
     const inputValueNumber = parseFloat(inputValue);
@@ -83,10 +91,10 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
             />
             <div className={style.balance}>
               <div className={style.balanceValue}>
-                {loading ? (
+                {loadingBalanceCustom ? (
                   <span>Loading...</span>
-                ) : error ? (
-                  <span>Error: {error.message}</span>
+                ) : errorBalanceCustom ? (
+                  <span>Error: {errorBalanceCustom.message}</span>
                 ) : (
                   <span>Balance: {balance}</span>
                 )}
@@ -120,11 +128,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
           />
         </div>
         {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>}
-        <SubmitButton
-          disabled={isPending}
-          buttonText={isSuccess ? 'Great!' : 'Start again'}
-          isButtonActive={isButtonActive}
-        />
+        <SubmitButton disabled={isPending} buttonText="Send" isButtonActive={isButtonActive} />
       </form>
     </>
   );

@@ -1,3 +1,9 @@
+.blockForm {
+  background-color: #333333;
+  border-radius: 16px;
+  padding: 48px;
+}
+
 .sender {
   margin-bottom: 24px;
   border-radius: 24px;

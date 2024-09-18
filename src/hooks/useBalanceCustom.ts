@@ -6,19 +6,19 @@ import { formatUnits } from 'viem/utils';
 
 interface IUseBalanceResult {
   balance: string | null;
-  loading: boolean;
-  error: Error | null;
+  loadingBalanceCustom: boolean;
+  errorBalanceCustom: Error | null;
 }
 
 const useBalanceCustom = (address: `0x${string}`): IUseBalanceResult => {
   const [balance, setBalance] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [loadingBalanceCustom, setLoadingBalanceCustom] = useState<boolean>(true);
+  const [errorBalanceCustom, setErrorBalanceCustom] = useState<Error | null>(null);
 
   useEffect(() => {
     const fetchBalance = async () => {
-      setLoading(true);
-      setError(null);
+      setLoadingBalanceCustom(true);
+      setErrorBalanceCustom(null);
       try {
         const balanceData: GetBalanceReturnType = await getBalance(config, {
           address,
@@ -26,17 +26,17 @@ const useBalanceCustom = (address: `0x${string}`): IUseBalanceResult => {
         const balanceInEth = formatUnits(balanceData.value, 18);
         setBalance(balanceInEth);
       } catch (err) {
-        setError(err as Error);
+        setErrorBalanceCustom(err as Error);
         console.error('Error retrieving balance:', err);
       } finally {
-        setLoading(false);
+        setLoadingBalanceCustom(false);
       }
     };
 
     fetchBalance();
   }, [address]);
 
-  return { balance, loading, error };
+  return { balance, loadingBalanceCustom, errorBalanceCustom };
 };
 
 export default useBalanceCustom;

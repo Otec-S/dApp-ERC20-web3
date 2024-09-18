@@ -6,7 +6,7 @@ export const blockData = [
     title: 'Send ERC-20',
     description: 'Send ERC-20 tokens quickly and without fees!',
     text: 'Our product allows you to transfer any amount of tokens directly, without intermediaries or extra costs. Simply select the recipient, specify the amount, and your transaction is instantly completed. Convenient and secure asset management without limitations!',
-    link: '/',
+    link: '/send-ERC20-tokens',
     classname: classes.sendBlock,
     imageSrc: sendErc.default,
   },
