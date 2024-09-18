@@ -1,0 +1,24 @@
+.tokenContainer {
+  max-height: 256px;
+  height: fit-content;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  row-gap: 24px;
+  column-gap: 96px;
+
+  @media screen and (max-width: 1200px) {
+    row-gap: 16px;
+    column-gap: 32px;
+  }
+
+  @media screen and (max-width: 900px) {
+    width: 100%;
+    column-gap: 120px;
+  }
+
+  @media screen and (max-width: 480px) {
+    max-height: fit-content;
+  }
+}

@@ -1,4 +1,5 @@
-import { collection, sendErc, tradeErc } from '../../assets/images';
+import { collection, sendErc, tradeErc } from '@assets/images';
+
 import classes from './Landing.module.css';
 
 export const blockData = [
