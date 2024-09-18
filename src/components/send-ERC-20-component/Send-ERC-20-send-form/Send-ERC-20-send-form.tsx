@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import style from './Send-ERC-20-send-form.module.css';
 import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
-import USDTLogo from '../../../assets/USDTLogo.svg';
+// import USDTLogo from '../../../assets/USDTLogo.svg';
+import ETHLogo from '../../../assets/ETHLogo.svg';
 import arrow_down from '../../../assets/arrow_down.svg';
-import BalanceDisplay from '../../balance-display/balance-display';
 import { useSendTransaction } from 'wagmi';
 import { parseEther } from 'viem';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
+import useBalanceCustom from '../../../hooks/useBalanceCustom';
 
 interface ISendERC20SendFormProps {
   setIsButtonActive?: (value: boolean) => void;
@@ -21,6 +22,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
 
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
+
+  const address: `0x${string}` = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
+  const { balance, loading, error } = useBalanceCustom(address);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // const value = parseFloat(event.target.value);
@@ -59,14 +63,19 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
               name="value"
               className={style.input}
               type="string"
-              // step="any"
               value={inputValue}
               onChange={handleInputChange}
               required
             />
             <div className={style.balance}>
               <div className={style.balanceValue}>
-                Balance <BalanceDisplay />
+                {loading ? (
+                  <span>Loading...</span>
+                ) : error ? (
+                  <span>Error: {error.message}</span>
+                ) : (
+                  <span>Balance: {balance}</span>
+                )}
               </div>
               <img src={balanceMaxSign} alt="Max balance icon" />
             </div>
@@ -74,7 +83,11 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({ isSuccess }) => {
 
           <div className={style.tokenBlock}>
             <div className={style.availableTokensSelector}>
-              <img className={style.availableTokenLogo} src={USDTLogo} alt="Current token icon" />
+              <div className={style.nameOfToken}>
+                <img className={style.availableTokenLogo} src={ETHLogo} alt="Current token icon" />
+                <span>ETH</span>
+              </div>
+
               <img className={style.availableTokenArrowDown} src={arrow_down} alt="Down arrow icon" />
             </div>
 

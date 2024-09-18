@@ -16,9 +16,11 @@
   border: none;
   overflow: hidden;
   color: #fff;
-  font-feature-settings: "liga" off, "clig" off;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
   text-overflow: ellipsis;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -33,8 +35,10 @@
 
 .balanceValue {
   color: #ffffff;
-  font-feature-settings: "liga" off, "clig" off;
-  font-family: "Inter", sans-serif;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -52,19 +56,38 @@
 .availableTokensSelector {
   display: flex;
   justify-content: space-between;
-  cursor: pointer;
+  /* cursor: pointer; */
+}
+
+.nameOfToken {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.availableTokenLogo {
+  width: 24px;
+  height: 24px;
+  margin-right: 3px;
 }
 
 .addCustomToken {
   color: #fff;
-  font-feature-settings: "liga" off, "clig" off;
-  font-family: "Inter", sans-serif;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   opacity: 0.5;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .recipient {
@@ -79,9 +102,11 @@
   width: 100%;
   overflow: hidden;
   color: #fff;
-  font-feature-settings: "liga" off, "clig" off;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
   text-overflow: ellipsis;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;

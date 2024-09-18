@@ -24,7 +24,7 @@ const BalanceDisplay: FC = () => {
     fetchBalance();
   }, [config]);
 
-  return <span>{balance ? <span>{balance}</span> : <span>Loading...</span>}</span>;
+  return <>{balance ? <span>{balance}</span> : <span>Loading...</span>}</>;
 };
 
 export default BalanceDisplay;
