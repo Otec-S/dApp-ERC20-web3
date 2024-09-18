@@ -2,7 +2,7 @@ import React from 'react';
 
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useChainId, useConnections } from 'wagmi';
-import { TokenRow } from '../TokenRow';
+import { TokenRow } from '../TokenRow/TokenRow';
 
 import { getTokens } from './TokensBlock.utils';
 import classes from './TokensBlock.module.css';

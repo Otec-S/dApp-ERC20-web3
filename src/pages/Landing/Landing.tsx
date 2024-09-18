@@ -1,8 +1,10 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 import { landing, tokenBlockImage } from '@src/assets/images';
 import Header from '@src/components/header/Header';
-import { TokensBlock } from '@src/components/TokensBlock';
+import { TokensBlock } from '@src/components/TokensBlock/TokensBlock';
+
 import { blockData, statisticData } from './Landing.constants';
 import classes from './Landing.module.css';
 
