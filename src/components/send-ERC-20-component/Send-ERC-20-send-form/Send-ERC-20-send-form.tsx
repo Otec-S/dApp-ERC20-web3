@@ -4,7 +4,7 @@ import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
 // import USDTLogo from '../../../assets/USDTLogo.svg';
 import ETHLogo from '../../../assets/ETHLogo.svg';
 import arrow_down from '../../../assets/arrow_down.svg';
-import { useSendTransaction, useWaitForTransactionReceipt, type BaseError } from 'wagmi';
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt, type BaseError } from 'wagmi';
 import { parseEther } from 'viem';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
@@ -36,8 +36,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   // const balance = 5800;
   // const formattedBalance = balance.toLocaleString('en-US');
 
-  const address: `0x${string}` = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
-  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(address);
+  const { address } = useAccount();
+  // const address: `0x${string}` = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
+  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(address as `0x${string}`);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // const value = parseFloat(event.target.value);
