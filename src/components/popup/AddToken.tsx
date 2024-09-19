@@ -103,17 +103,14 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             const balance = formatUnits(balanceData.value, 18);
             setTokenBalance(balance ?? undefined);
             setSuccess(true);
-            setShowLoader(false);
           }),
         ])
-          .then(() => {
-            setShowLoader(false);
-          })
-          .catch((error) => {
-            setShowLoader(false);
-            console.error('Error: ' + error);
-            setFormState('errorState');
-          });
+        .catch((error) => {
+          setShowLoader(false);
+          console.error('Error: ' + error);
+          setFormState('errorState');
+        })
+        .finally(()=>setShowLoader(false));
         break;
     }
   }, [formState, tokenAddress, reset]);
