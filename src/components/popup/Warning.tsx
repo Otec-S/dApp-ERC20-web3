@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import WarningIcon from '@assets/images/warning_icon.svg';
+
 import styles from './Warning.module.css';
 
 export interface WarningType {
