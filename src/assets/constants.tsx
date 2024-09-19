@@ -1,3 +1,6 @@
+import { ReactElement } from 'react';
+import { Address } from 'viem';
+
 import ARBIcon from '../assets/icons/arb.svg';
 import DAIIcon from '../assets/icons/dai.svg';
 import DOGEIcon from '../assets/icons/doge.svg';
@@ -8,8 +11,6 @@ import TRXIcon from '../assets/icons/trx.svg';
 import USDCIcon from '../assets/icons/usdc.svg';
 import USDTIcon from '../assets/icons/usdt.svg';
 import WBTSIcon from '../assets/icons/wbtc.svg';
-import { ReactElement } from 'react';
-import { Address } from 'viem';
 
 export const sepoliaId = 11155111;
 export const polygonId = 80002;

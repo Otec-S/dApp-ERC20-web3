@@ -113,6 +113,10 @@
   line-height: normal;
 }
 
+.inputAddressError {
+  background: #FF007A;
+}
+
 .inputName {
   display: flex;
   height: 48px;

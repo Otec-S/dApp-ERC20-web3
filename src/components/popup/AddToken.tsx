@@ -4,6 +4,7 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
 import { getAccount,getBalance } from '@wagmi/core';
+import cn from 'classnames';
 import { Address, formatUnits, isAddress } from 'viem';
 import { useAccount } from 'wagmi';
 import { GetBalanceReturnType, GetTokenReturnType } from 'wagmi/actions';
@@ -21,6 +22,7 @@ export interface ITokenInfo {
   tokenName: string | undefined;
   tokenDecimals: number | undefined;
   tokenBalance: string | undefined;
+  success:boolean;
 }
 
 interface IAddTokenProps {
@@ -47,6 +49,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
   const [tokenName, setTokenName] = useState<string | undefined>(initialTokenName);
   const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
+  const [success, setSuccess] = useState(false);
 
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -67,6 +70,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
         setTokenDecimals(initialTokenDecimals);
         setTokenName(initialTokenName);
         setTokenAddress(undefined);
+        setSuccess(false);
         reset();
         break;
       case 'showTokenNameState':
@@ -86,6 +90,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             }).then((balanceData: GetBalanceReturnType) => {
               const balance = formatUnits(balanceData.value, 18);
               setTokenBalance(balance ?? undefined);
+              setSuccess(true);
               setShowLoader(false);
             });
           })
@@ -131,7 +136,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   };
 
   const handleCloseForm = () => {
-    callback({ tokenAddress, tokenName, tokenDecimals, tokenBalance });
+    callback({ tokenAddress, tokenName, tokenDecimals, tokenBalance, success });
   };
 
   return (
@@ -171,7 +176,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
                   Token contract address
                   <input
                     disabled={formState !== 'initialState'}
-                    className={styles.inputAddress}
+                    className={cn(styles.inputAddress,{[styles.inputAddressError]:errors.tokenId?.type === 'validate'})}
                     defaultValue=""
                     {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
                   />
