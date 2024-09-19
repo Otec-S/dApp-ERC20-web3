@@ -80,8 +80,8 @@
     color: white;
   }
 
-  &::focused {
-    border: none;
+  &:focus {
+    outline: none;
   }
 }
 
@@ -116,6 +116,10 @@
   border-radius: 100px;
   background: #515151;
   box-sizing: border-box;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tokenIcon {
@@ -157,4 +161,8 @@
   padding: 8px 24px;
   display: flex;
   gap: 4px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
