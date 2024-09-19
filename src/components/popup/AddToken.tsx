@@ -1,20 +1,20 @@
-import { Address, formatUnits, isAddress } from 'viem';
 import { CSSProperties, FC, useEffect, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { SubmitHandler,useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { useAccount } from 'wagmi';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
-import { getBalance, getAccount } from '@wagmi/core';
+import { getAccount,getBalance } from '@wagmi/core';
+import { Address, formatUnits, isAddress } from 'viem';
+import { useAccount } from 'wagmi';
 import { GetBalanceReturnType, GetTokenReturnType } from 'wagmi/actions';
 
-import { config } from '../../../wagmiConfig';
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
 
-import styles from './AddToken.module.css';
-import Warning from './Warning';
+import { config } from '../../../wagmiConfig';
 import TokenIcon from './TokenIcon';
+import Warning from './Warning';
+import styles from './AddToken.module.css';
 
 export interface ITokenInfo {
   tokenAddress: Address | undefined;
