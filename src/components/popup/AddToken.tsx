@@ -1,9 +1,9 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
-import { SubmitHandler,useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { getToken } from '@wagmi/core';
-import { getAccount,getBalance } from '@wagmi/core';
+import { getAccount, getBalance } from '@wagmi/core';
 import cn from 'classnames';
 import { Address, formatUnits, isAddress } from 'viem';
 import { useAccount } from 'wagmi';
@@ -22,11 +22,11 @@ export interface ITokenInfo {
   tokenName: string | undefined;
   tokenDecimals: number | undefined;
   tokenBalance: string | undefined;
-  success:boolean;
+  success: boolean;
 }
 
 interface IAddTokenProps {
-  callback: (data:ITokenInfo)=>void;
+  callback: (data: ITokenInfo) => void;
 }
 
 interface IFormInputs {
@@ -75,24 +75,25 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
         break;
       case 'showTokenNameState':
         setShowLoader(true);
-        getToken(config, {
-          address: tokenAddress as Address,
-        })
-          .then((token: GetTokenReturnType) => {
+        Promise.all([
+          getToken(config, {
+            address: tokenAddress as Address,
+          }).then((token: GetTokenReturnType) => {
             setTokenName(token.name ?? undefined);
             setTokenDecimals(token.decimals ?? undefined);
-          })
+          }),
+          getBalance(config, {
+            address: getAccount(config).address as Address,
+            token: tokenAddress,
+          }).then((balanceData: GetBalanceReturnType) => {
+            const balance = formatUnits(balanceData.value, 18);
+            setTokenBalance(balance ?? undefined);
+            setSuccess(true);
+            setShowLoader(false);
+          }),
+        ])
           .then(() => {
-            const account = getAccount(config);
-            getBalance(config, {
-              address: account.address as Address,
-              token: tokenAddress,
-            }).then((balanceData: GetBalanceReturnType) => {
-              const balance = formatUnits(balanceData.value, 18);
-              setTokenBalance(balance ?? undefined);
-              setSuccess(true);
-              setShowLoader(false);
-            });
+            setShowLoader(false);
           })
           .catch((error) => {
             setShowLoader(false);
@@ -159,7 +160,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
           </h5>
           <button className={styles.closeForm} onPointerDown={handleCloseForm}>
-            <ClearIcon/>
+            <ClearIcon />
           </button>
         </div>
       )}
@@ -176,7 +177,9 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
                   Token contract address
                   <input
                     disabled={formState !== 'initialState'}
-                    className={cn(styles.inputAddress,{[styles.inputAddressError]:errors.tokenId?.type === 'validate'})}
+                    className={cn(styles.inputAddress, {
+                      [styles.inputAddressError]: errors.tokenId?.type === 'validate',
+                    })}
                     defaultValue=""
                     {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
                   />
@@ -223,7 +226,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
       {formState === 'readyToAddState' && (
         <>
           <div className={styles.successLogoWrapper}>
-            <SuccessIcon/>
+            <SuccessIcon />
             <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
           </div>
           <button onPointerDown={handleCloseForm} className={styles.button} type="button">

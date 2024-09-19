@@ -10,7 +10,7 @@ export interface WarningType {
 export const Warning: FC<WarningType> = ({ warningMessage }) => {
   return (
     <div className={styles.warning}>
-      <WarningIcon/>
+      <WarningIcon />
       {warningMessage}
     </div>
   );

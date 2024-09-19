@@ -24,7 +24,11 @@ const Header: FC = () => {
           <div className={styles.burgerImage} />
         </button>
       </div>
-      <img className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })} src={logo.default} alt="Project logo" />
+      <img
+        className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
+        src={logo.default}
+        alt="Project logo"
+      />
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink className={styles.navLink} to="/erc20">
