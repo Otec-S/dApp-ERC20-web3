@@ -14,6 +14,7 @@ import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
 
 import { config } from '../../../wagmiConfig';
+import FormButton from '../form-button/FormButton';
 import TokenIcon from './TokenIcon';
 import Warning from './Warning';
 import styles from './AddToken.module.css';
@@ -95,7 +96,6 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             setTokenDecimals(tokenInfo[0]);
             setTokenName(tokenInfo[1]);
           }),
-
           getBalance(config, {
             address: getAccount(config).address as Address,
             token: tokenAddress,
@@ -223,14 +223,9 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           </div>
           <div className={styles.buttonWrapper}>
             {formState !== 'initialState' && (
-              <button onPointerDown={onHandlePreviosButton} className={styles.button} type="button">
-                Back
-              </button>
+              <FormButton buttonText='Back' onPointerDown={onHandlePreviosButton}/>
             )}
-            <button className={styles.button} type="submit">
-              {' '}
-              Next{' '}
-            </button>
+            <FormButton buttonText='Next' type='submit'/>
           </div>
         </form>
       )}
@@ -240,9 +235,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             <SuccessIcon />
             <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
           </div>
-          <button onPointerDown={handleCloseForm} className={styles.button} type="button">
-            Okay
-          </button>
+          <FormButton onPointerDown={handleCloseForm} buttonText='Okay' type='button'/>
         </>
       )}
       {formState === 'errorState' && (
@@ -250,9 +243,7 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           <div className={styles.successLogoWrapper}>
             <h5 className={styles.header}>Something went wrong. Pls check network and token address.</h5>
           </div>
-          <button onPointerDown={onHandleErrorButton} className={styles.button} type="button">
-            Okay
-          </button>
+          <FormButton onPointerDown={onHandleErrorButton} buttonText='Back'/>
         </>
       )}
     </div>
