@@ -106,7 +106,6 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           }),
         ])
         .catch((error) => {
-          setShowLoader(false);
           console.error('Error: ' + error);
           setFormState('errorState');
         })
