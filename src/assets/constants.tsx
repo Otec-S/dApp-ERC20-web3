@@ -12,9 +12,6 @@ import USDCIcon from '../assets/icons/usdc.svg';
 import USDTIcon from '../assets/icons/usdt.svg';
 import WBTSIcon from '../assets/icons/wbtc.svg';
 
-export const sepoliaId = 11155111;
-export const polygonId = 80002;
-
 export interface ITokens {
   id: number;
   name: string;

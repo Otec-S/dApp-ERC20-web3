@@ -2,12 +2,13 @@ import { CSSProperties, FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { getToken } from '@wagmi/core';
 import { getAccount, getBalance } from '@wagmi/core';
+import { readContracts } from '@wagmi/core';
 import cn from 'classnames';
 import { Address, formatUnits, isAddress } from 'viem';
+import { erc20Abi } from 'viem';
 import { useAccount } from 'wagmi';
-import { GetBalanceReturnType, GetTokenReturnType } from 'wagmi/actions';
+import { GetBalanceReturnType } from 'wagmi/actions';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
@@ -76,12 +77,25 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
       case 'showTokenNameState':
         setShowLoader(true);
         Promise.all([
-          getToken(config, {
-            address: tokenAddress as Address,
-          }).then((token: GetTokenReturnType) => {
-            setTokenName(token.name ?? undefined);
-            setTokenDecimals(token.decimals ?? undefined);
+          readContracts(config, {
+            allowFailure: false,
+            contracts: [
+              {
+                address: tokenAddress as Address,
+                abi: erc20Abi,
+                functionName: 'decimals',
+              },
+              {
+                address: tokenAddress as Address,
+                abi: erc20Abi,
+                functionName: 'name',
+              },
+            ],
+          }).then((tokenInfo) => {
+            setTokenDecimals(tokenInfo[0]);
+            setTokenName(tokenInfo[1]);
           }),
+
           getBalance(config, {
             address: getAccount(config).address as Address,
             token: tokenAddress,
