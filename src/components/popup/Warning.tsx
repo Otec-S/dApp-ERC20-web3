@@ -1,14 +1,14 @@
 import { FC } from 'react';
 
-import WarningIcon from '@assets/images/warning_icon.svg';
+import WarningIcon from '@assets/icons/warning_icon.svg';
 
 import styles from './Warning.module.css';
 
-export interface WarningType {
+interface WarningTypeProps {
   warningMessage: string;
 }
 
-export const Warning: FC<WarningType> = ({ warningMessage }) => {
+export const Warning: FC<WarningTypeProps> = ({ warningMessage }) => {
   return (
     <div className={styles.warning}>
       <WarningIcon />

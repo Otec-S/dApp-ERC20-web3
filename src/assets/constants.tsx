@@ -62,7 +62,7 @@ export const tokens: ITokens[] = [
   {
     id: 6,
     name: 'PEPE',
-    sepoliaAddress: '0xd445682a9B9FE0aE4053056E005f9393413407e1',
+    sepoliaAddress: '0x8903FE8C94F3b7db3482d53ccE000998d112cC7d',
     polygonAddress: '0x0c02cb84eEF5f3EA61be9DfeC7F884dffc1fa6c0',
     icon: <PEPEIcon />,
   },
