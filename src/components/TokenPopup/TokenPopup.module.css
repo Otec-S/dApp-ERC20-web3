@@ -1,0 +1,160 @@
+@value colors: "@assets/colors.css";
+@value darkGrey, white from colors;
+@value fonts: "@assets/fonts.css";
+@value inter, openSans from fonts;
+
+.container {
+  position: absolute;
+  width: 370px;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+  background-color: darkGrey;
+  box-sizing: border-box;
+}
+
+.searchBlock {
+  height: 200px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #222;
+}
+
+.searchHead {
+  display: flex;
+  justify-content: space-between;
+}
+
+.searchTitle {
+  color: white;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin: 0;
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid #222;
+  background: #515151;
+  box-sizing: border-box;
+}
+
+.closePopup {
+  cursor: pointer;
+}
+
+.input {
+  height: 36px;
+  width: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: #515151;
+  border: none;
+  color: white;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: white;
+  }
+
+  &::focused {
+    border: none;
+  }
+}
+
+.searchIcon {
+  width: 24px;
+  min-width: 24px;
+  margin-left: 16px;
+  height: 16px;
+}
+
+.inputCLoseIcon {
+  width: 24px;
+  min-width: 24px;
+  margin-right: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.tokensRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  box-sizing: border-box;
+}
+
+.tokenItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  padding: 4px 8px;
+  border-radius: 100px;
+  background: #515151;
+  box-sizing: border-box;
+}
+
+.tokenIcon {
+  height: 20px;
+  width: 20px;
+
+  svg {
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.tokenSymbol {
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.listBlock {
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 1px;
+    background-color: transparent;
+  }
+}
+
+.listItem {
+  height: 36px;
+  width: 100%;
+  box-sizing: border-box;
+  border-bottom: 1px solid #222;
+  padding: 8px 24px;
+  display: flex;
+  gap: 4px;
+}
