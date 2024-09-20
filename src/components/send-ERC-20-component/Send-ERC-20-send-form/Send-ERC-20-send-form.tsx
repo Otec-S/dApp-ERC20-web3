@@ -32,7 +32,12 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const { data: hash, sendTransaction } = useSendTransaction();
 
   const { address } = useAccount();
-  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(address as `0x${string}`);
+
+  // TODO:
+  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
+    address as `0x${string}`,
+    '0x8aC43Ed0652168827FA3906577dD44e4819B11D1',
+  );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;

@@ -10,7 +10,7 @@ interface IUseBalanceResult {
   errorBalanceCustom: Error | null;
 }
 
-const useBalanceCustom = (address: `0x${string}`): IUseBalanceResult => {
+const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`): IUseBalanceResult => {
   const [balance, setBalance] = useState<string | null>(null);
   const [loadingBalanceCustom, setLoadingBalanceCustom] = useState<boolean>(true);
   const [errorBalanceCustom, setErrorBalanceCustom] = useState<Error | null>(null);
@@ -22,8 +22,9 @@ const useBalanceCustom = (address: `0x${string}`): IUseBalanceResult => {
       try {
         const balanceData: GetBalanceReturnType = await getBalance(config, {
           address,
+          token,
         });
-        const balanceInEth = formatUnits(balanceData.value, 18);
+        const balanceInEth = formatUnits(balanceData.value, 6);
         setBalance(balanceInEth);
       } catch (err) {
         setErrorBalanceCustom(err as Error);
@@ -34,7 +35,7 @@ const useBalanceCustom = (address: `0x${string}`): IUseBalanceResult => {
     };
 
     fetchBalance();
-  }, [address]);
+  }, [address, token]);
 
   return { balance, loadingBalanceCustom, errorBalanceCustom };
 };

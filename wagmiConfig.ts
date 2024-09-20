@@ -1,6 +1,6 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { mainnet, polygon, polygonAmoy, sepolia } from 'wagmi/chains';
 import { http } from 'wagmi';
+import { mainnet, polygon, polygonAmoy, sepolia } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
   appName: 'Scrum Team 17 web3 kEthers fans',
