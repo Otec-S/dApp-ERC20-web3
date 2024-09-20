@@ -30,6 +30,7 @@ interface ITokenInfo {
 
 interface Props {
   onClosePopup: (data: ITokenInfo) => void;
+  colorScheme?:'default'|'yellow'
 }
 
 interface IFormInputs {
@@ -41,7 +42,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
+const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
@@ -150,7 +151,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
   };
 
   return (
-    <div className={styles.addToken}>
+    <div className={cn(styles.addToken,{[styles.addTokenYellowScheme]:colorScheme==='yellow'})}>
       {showLoader && (
         <div className={styles.loader}>
           <BeatLoader
@@ -164,7 +165,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
         </div>
       )}
       {formState !== 'errorState' && (
-        <div className={styles.headerWrapper}>
+        <div className={cn(styles.headerWrapper,{[styles.headerWrapperYellow]:colorScheme==='yellow'})}>
           <h5 className={styles.header}>
             {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
           </h5>
@@ -173,12 +174,10 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
           </button>
         </div>
       )}
-      {formState !== 'readyToAddState' && formState !== 'errorState' && (
-        <Warning warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
-      )}
 
       {formState !== 'readyToAddState' && formState !== 'errorState' && (
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={cn(styles.form,{[styles.formYellowScheme]:colorScheme==='yellow'})}>
+          <Warning colorScheme={colorScheme} warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
           <div>
             {formState !== 'showTokenAvatarState' && (
               <>
@@ -187,7 +186,9 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
                   <input
                     disabled={formState !== 'initialState'}
                     className={cn(styles.inputAddress, {
-                      [styles.inputAddressError]: errors.tokenAddress?.type === 'validate',
+                      [styles.inputAddressError]: errors.tokenAddress?.type === 'validate' && colorScheme !== 'yellow',
+                      [styles.inputAddressErrorYellowScheme]: errors.tokenAddress?.type === 'validate'||errors.tokenAddress?.type ==='required' &&  colorScheme === 'yellow',
+                      [styles.inputAddressYellowScheme]: colorScheme === 'yellow' && errors.tokenAddress?.type !== 'validate'
                     })}
                     defaultValue=""
                     {...register('tokenAddress', { required: true, validate: (value) => isAddress(value) })}
@@ -199,12 +200,16 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
                 </label>
                 <label className={styles.inputLabel}>
                   Token contract name
-                  <input type="text" value={tokenName} className={styles.inputName} readOnly />
+                  <input type="text" value={tokenName} className={cn(styles.inputName,{
+                    [styles.inputNameYellowScheme]:colorScheme==='yellow'
+                  })} readOnly />
                 </label>
                 <div>
                   <label className={styles.inputLabel}>
                     Token contract decimals
-                    <input type="text" value={tokenDecimals} className={styles.inputDecimals} readOnly />
+                    <input type="text" value={tokenDecimals} className={cn(styles.inputDecimals,{
+                      [styles.inputDecimalsYellowScheme]:colorScheme==='yellow'
+                    })} readOnly />
                   </label>
                 </div>
               </>
@@ -220,9 +225,9 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
           </div>
           <div className={styles.buttonWrapper}>
             {formState !== 'initialState' && (
-              <FormButton buttonText='Back' onPointerDown={onHandlePreviosButton}/>
+              <FormButton colorScheme={colorScheme} buttonText='Back' onPointerDown={onHandlePreviosButton}/>
             )}
-            <FormButton buttonText='Next' type='submit'/>
+            <FormButton colorScheme={colorScheme} buttonText='Next' type='submit'/>
           </div>
         </form>
       )}
@@ -232,7 +237,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
             <SuccessIcon />
             <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
           </div>
-          <FormButton onPointerDown={handleCloseForm} buttonText='Okay' type='button'/>
+          <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText='Okay' type='button'/>
         </>
       )}
       {formState === 'errorState' && (
@@ -240,7 +245,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
           <div className={styles.successLogoWrapper}>
             <h5 className={styles.header}>Something went wrong. Pls check network and token address.</h5>
           </div>
-          <FormButton onPointerDown={onHandleErrorButton} buttonText='Back'/>
+          <FormButton colorScheme={colorScheme} onPointerDown={onHandleErrorButton} buttonText='Back'/>
         </>
       )}
     </div>
