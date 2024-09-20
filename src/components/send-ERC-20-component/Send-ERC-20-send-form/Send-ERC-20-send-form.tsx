@@ -4,9 +4,8 @@ import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wa
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
+import USDTLogo from '@assets/icons/USDTLogo.svg';
 
-// import arrow_down from '../../../assets/arrow_down.svg';
-import ETHLogo from '../../../assets/ETHLogo.svg';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import style from './Send-ERC-20-send-form.module.css';
@@ -130,8 +129,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           <div className={style.tokenBlock}>
             <div className={style.availableTokensSelector}>
               <div className={style.nameOfToken}>
-                <img className={style.availableTokenLogo} src={ETHLogo} alt="Current token icon" />
-                <span>ETH</span>
+                <div className={style.availableTokenLogo}>
+                  <USDTLogo />
+                </div>
               </div>
 
               <div className={style.availableTokenArrowDown}>
