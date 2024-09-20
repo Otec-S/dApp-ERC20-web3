@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import cn from 'classnames';
 import { Address } from 'viem';
 
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
@@ -10,15 +11,16 @@ interface Props {
   tokenName: string;
   tokenAddress: Address;
   tokenBalance: string;
+  colorScheme?:'default'|'yellow'
 }
 
-export const TokenInfo: FC<Props> = ({ tokenName, tokenAddress, tokenBalance }) => {
+export const TokenInfo: FC<Props> = ({ tokenName, tokenAddress, tokenBalance ,colorScheme='default'}) => {
   return (
     <div className={styles.tokenImgWrapper}>
       {tokens.find((t) => t.polygonAddress === tokenAddress || t.sepoliaAddress === tokenAddress)?.icon ?? (
         <NotFoundTokenLogo />
       )}
-      <div className={styles.imgTextWrapper}>
+      <div className={cn(styles.imgTextWrapper,{[styles.imgTextWrapperYellowScheme]:colorScheme==='yellow'})}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
         <span className={styles.tokenName}>{tokenBalance + ' ' + tokenName}</span>
       </div>

@@ -12,7 +12,6 @@
 }
 
 .tokenNameHeader {
-  color: #fff;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -24,7 +23,6 @@
 }
 
 .tokenName {
-  color: #fff;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -38,4 +36,9 @@
 .imgTextWrapper {
   display: flex;
   flex-direction: column;
+  color: #fff;
+}
+
+.imgTextWrapperYellowScheme {
+  color: black;
 }
