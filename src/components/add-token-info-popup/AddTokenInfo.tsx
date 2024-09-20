@@ -17,7 +17,7 @@ import { config } from '../../../wagmiConfig';
 import FormButton from '../form-button/FormButton';
 import TokenIcon from './TokenIcon';
 import Warning from './Warning';
-import styles from './AddToken.module.css';
+import styles from './AddTokenInfo.module.css';
 
 export interface ITokenInfo {
   tokenAddress: Address | undefined;
@@ -40,7 +40,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
+const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   const initialTokenDecimals = 18;
   const initialTokenName = '0x0000000000000000000000000000000000000000';
   const [formState, setFormState] = useState<
@@ -249,4 +249,4 @@ const AddToken: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   );
 };
 
-export default AddToken;
+export default AddTokenInfo;

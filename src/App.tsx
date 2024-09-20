@@ -5,10 +5,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
 import { config } from '../wagmiConfig';
+import { ERC20send } from './pages/ERC20send/ERC20send';
 import { Landing } from './pages/Landing';
 import './App.module.css';
 import './index.module.css';
-import { ERC20 } from './pages/ERC20/ERC20';
 
 const queryClient = new QueryClient();
 const rainbowtTheme = darkTheme({
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
     element: <Landing />,
   },
   {
-    path: '/erc20',
-    element: <ERC20 />,
+    path: '/erc20send',
+    element: <ERC20send/>,
   },
 ]);
 
