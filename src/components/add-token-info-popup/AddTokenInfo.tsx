@@ -35,6 +35,7 @@ interface Props {
 
 interface IFormInputs {
   tokenAddress: string;
+  tokenName:string;
 }
 
 const override: CSSProperties = {
@@ -62,6 +63,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm<IFormInputs>();
@@ -94,7 +96,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
             ],
           }).then((tokenInfo) => {
             setTokenDecimals(tokenInfo[0]);
-            setTokenName(tokenInfo[1]);
+            setValue('tokenName',tokenInfo[1]);
+            // setTokenName(tokenInfo[1]);
           }),
           getBalance(config, {
             address: getAccount(config).address as Address,
@@ -112,7 +115,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
         .finally(()=>setShowLoader(false));
         break;
     }
-  }, [formState, tokenAddress, reset]);
+  }, [formState, tokenAddress, reset, setValue]);
 
   const onHandlePreviosButton = () => {
     switch (formState) {
@@ -132,6 +135,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   };
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+    console.log(data);
     switch (formState) {
       case 'initialState':
         setTokenAddress(data.tokenAddress as Address);
@@ -169,14 +173,14 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
           <h5 className={styles.header}>
             {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
           </h5>
-          <button className={styles.closeForm} onPointerDown={handleCloseForm}>
+          <button className={cn(styles.closeForm,{[styles.closeFormYellowScheme]:colorScheme==='yellow'})} onPointerDown={handleCloseForm}>
             <ClearIcon />
           </button>
         </div>
       )}
 
       {formState !== 'readyToAddState' && formState !== 'errorState' && (
-        <form onSubmit={handleSubmit(onSubmit)} className={cn(styles.form,{[styles.formYellowScheme]:colorScheme==='yellow'})}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <Warning colorScheme={colorScheme} warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
           <div>
             {formState !== 'showTokenAvatarState' && (
@@ -200,7 +204,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
                 </label>
                 <label className={styles.inputLabel}>
                   Token contract name
-                  <input type="text" value={tokenName} className={cn(styles.inputName,{
+                  <input defaultValue="0x0000000000000000000000000000000000000000"
+                    {...register('tokenName')} type="text" className={cn(styles.inputName,{
                     [styles.inputNameYellowScheme]:colorScheme==='yellow'
                   })} readOnly />
                 </label>
