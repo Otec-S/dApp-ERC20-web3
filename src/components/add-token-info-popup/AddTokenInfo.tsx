@@ -15,24 +15,25 @@ import SuccessIcon from '@assets/icons/success.svg';
 
 import { config } from '../../../wagmiConfig';
 import FormButton from '../form-button/FormButton';
-import TokenIcon from './TokenIcon';
+import { tokenDecimalsInitial, tokenNameInitial } from './AddTokenInfo.constants';
+import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
 
-export interface ITokenInfo {
-  tokenAddress: Address | undefined;
-  tokenName: string | undefined;
-  tokenDecimals: number | undefined;
-  tokenBalance: string | undefined;
-  success: boolean;
+interface ITokenInfo {
+  requestWasSuccessful: boolean;
+  tokenAddress?: Address;
+  tokenName?: string | undefined;
+  tokenDecimals?: number | undefined;
+  tokenBalance?: string | undefined;
 }
 
-interface IAddTokenProps {
-  callback: (data: ITokenInfo) => void;
+interface Props {
+  onClosePopup: (data: ITokenInfo) => void;
 }
 
 interface IFormInputs {
-  tokenId: string;
+  tokenAddress: string;
 }
 
 const override: CSSProperties = {
@@ -40,18 +41,16 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
-  const initialTokenDecimals = 18;
-  const initialTokenName = '0x0000000000000000000000000000000000000000';
+const AddTokenInfo: FC<Props> = ({ onClosePopup }) => {
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
   const [tokenBalance, setTokenBalance] = useState<string | undefined>(undefined);
   const [showLoader, setShowLoader] = useState(false);
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
-  const [tokenName, setTokenName] = useState<string | undefined>(initialTokenName);
-  const [tokenDecimals, setTokenDecimals] = useState(initialTokenDecimals);
-  const [success, setSuccess] = useState(false);
+  const [tokenName, setTokenName] = useState<string>(tokenNameInitial);
+  const [tokenDecimals, setTokenDecimals] = useState<number>(tokenDecimalsInitial);
+  const [requestWasSuccessful, setRequestWasSuccessful] = useState(false);
 
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -69,11 +68,11 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   useEffect(() => {
     switch (formState) {
       case 'initialState':
-        setTokenDecimals(initialTokenDecimals);
-        setTokenName(initialTokenName);
-        setTokenAddress(undefined);
-        setSuccess(false);
         reset();
+        setTokenDecimals(tokenDecimalsInitial);
+        setTokenName(tokenNameInitial);
+        setTokenAddress(undefined);
+        setRequestWasSuccessful(false);
         break;
       case 'showTokenNameState':
         setShowLoader(true);
@@ -102,7 +101,7 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
           }).then((balanceData: GetBalanceReturnType) => {
             const balance = formatUnits(balanceData.value, 18);
             setTokenBalance(balance ?? undefined);
-            setSuccess(true);
+            setRequestWasSuccessful(true);
           }),
         ])
         .catch((error) => {
@@ -134,7 +133,7 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
     switch (formState) {
       case 'initialState':
-        setTokenAddress(data.tokenId as Address);
+        setTokenAddress(data.tokenAddress as Address);
         setFormState('showTokenNameState');
         break;
       case 'showTokenNameState':
@@ -147,7 +146,7 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
   };
 
   const handleCloseForm = () => {
-    callback({ tokenAddress, tokenName, tokenDecimals, tokenBalance, success });
+    onClosePopup({ tokenAddress, tokenName, tokenDecimals, tokenBalance, requestWasSuccessful });
   };
 
   return (
@@ -188,13 +187,13 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
                   <input
                     disabled={formState !== 'initialState'}
                     className={cn(styles.inputAddress, {
-                      [styles.inputAddressError]: errors.tokenId?.type === 'validate',
+                      [styles.inputAddressError]: errors.tokenAddress?.type === 'validate',
                     })}
                     defaultValue=""
-                    {...register('tokenId', { required: true, validate: (value) => isAddress(value) })}
+                    {...register('tokenAddress', { required: true, validate: (value) => isAddress(value) })}
                   />
-                  {errors.tokenId?.type === 'required' && <span className={styles.error}>This field is required</span>}
-                  {errors.tokenId?.type === 'validate' && (
+                  {errors.tokenAddress?.type === 'required' && <span className={styles.error}>This field is required</span>}
+                  {errors.tokenAddress?.type === 'validate' && (
                     <span className={styles.error}>This input is not token address</span>
                   )}
                 </label>
@@ -212,11 +211,10 @@ const AddTokenInfo: FC<IAddTokenProps> = ({ callback }: IAddTokenProps) => {
             )}
 
             {formState === 'showTokenAvatarState' && (
-              <TokenIcon
+              <TokenInfo
                 tokenAddress={tokenAddress as Address}
-                tokenDecimals={tokenDecimals}
-                tokenName={tokenName ?? ''}
-                tokenBalance={tokenBalance}
+                tokenName={tokenName as string}
+                tokenBalance={tokenBalance as string}
               />
             )}
           </div>

@@ -7,7 +7,7 @@ export const ERC20send: FC = () => {
   return (
     <div style={{ background: '#000' }}>
       <Header />
-      <AddTokenInfo callback={() => undefined} />
+      <AddTokenInfo onClosePopup={() => undefined} />
     </div>
   );
 };
