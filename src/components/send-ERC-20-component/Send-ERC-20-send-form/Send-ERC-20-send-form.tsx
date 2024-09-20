@@ -16,6 +16,7 @@ interface ISendERC20SendFormProps {
   setIsTxSuccess: (value: boolean) => void;
   inputValue: string;
   setInputValue: (value: string) => void;
+  token: `0x${string}`;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -23,6 +24,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setIsTxFormSubmitted,
   inputValue,
   setInputValue,
+  token,
 }) => {
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
@@ -36,7 +38,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   // TODO:
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
-    '0x8aC43Ed0652168827FA3906577dD44e4819B11D1',
+    token as `0x${string}`,
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

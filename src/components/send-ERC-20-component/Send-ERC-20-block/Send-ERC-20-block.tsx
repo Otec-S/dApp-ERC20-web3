@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
-import style from './Send-ERC-20-block.module.css';
-import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
+
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
+import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
+import style from './Send-ERC-20-block.module.css';
 
 interface ISendERC20BlockProps {
   blockTitleText: string;
@@ -38,6 +39,8 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setIsTxFormSubmitted={setIsTxFormSubmitted}
           inputValue={inputValue}
           setInputValue={setInputValue}
+          // TODO: FIXME:
+          token="0x8aC43Ed0652168827FA3906577dD44e4819B11D1"
         />
       )}
     </section>
