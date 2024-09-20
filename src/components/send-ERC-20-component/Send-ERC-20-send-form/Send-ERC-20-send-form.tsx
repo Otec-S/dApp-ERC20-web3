@@ -1,12 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import style from './Send-ERC-20-send-form.module.css';
-import balanceMaxSign from '../../../assets/balanceMaxSign.svg';
-import ETHLogo from '../../../assets/ETHLogo.svg';
-import arrow_down from '../../../assets/arrow_down.svg';
-import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther } from 'viem';
-import SubmitButton from '../../../UI/submit-button/Submit-button';
+import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
+
+import ArrowDown from '@assets/icons/arrow_down.svg';
+import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
+
+// import arrow_down from '../../../assets/arrow_down.svg';
+import ETHLogo from '../../../assets/ETHLogo.svg';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
+import SubmitButton from '../../../UI/submit-button/Submit-button';
+import style from './Send-ERC-20-send-form.module.css';
 
 interface ISendERC20SendFormProps {
   isTxFormSubmitted: boolean;
@@ -119,7 +122,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
                   <span>Balance: {balance}</span>
                 )}
               </div>
-              <img src={balanceMaxSign} alt="Max balance icon" />
+              <BalanceMaxSign />
             </div>
             {amountError && <div className={style.balanceExceededError}>{amountError}</div>}
           </div>
@@ -131,7 +134,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
                 <span>ETH</span>
               </div>
 
-              <img className={style.availableTokenArrowDown} src={arrow_down} alt="Down arrow icon" />
+              <div className={style.availableTokenArrowDown}>
+                <ArrowDown />
+              </div>
             </div>
 
             <div className={style.addCustomToken}>+ Add a custom token</div>

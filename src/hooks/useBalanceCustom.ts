@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { GetBalanceReturnType, getBalance } from 'wagmi/actions';
-import { config } from '../../wagmiConfig';
 import { formatUnits } from 'viem/utils';
+import { getBalance, GetBalanceReturnType } from 'wagmi/actions';
+
+import { config } from '../../wagmiConfig';
 
 interface IUseBalanceResult {
   balance: string | null;
