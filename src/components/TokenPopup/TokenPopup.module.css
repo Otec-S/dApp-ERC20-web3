@@ -98,6 +98,10 @@
   margin-right: 2px;
   display: flex;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .tokensRow {

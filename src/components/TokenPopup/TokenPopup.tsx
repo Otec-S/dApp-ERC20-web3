@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react';
 
-import { tokens } from '@assets/constants';
+import { ITokens, tokens } from '@assets/constants';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 
@@ -8,23 +8,30 @@ import styles from './TokenPopup.module.css';
 
 type Props = {
   onCLose: () => void;
-  onSelect: (symbol: string) => void;
+  onSelect: (token: ITokens) => void;
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
-  const allTokens = [...tokens, ...tokens, ...tokens];
+  const allTokens = [...tokens];
 
   const [searchText, setSearchText] = useState('');
 
-  const tokenArr = allTokens.filter((item) => item.symbol.toLowerCase().includes(searchText.toLowerCase()));
+  const tokenArr = allTokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
   const firstTokensGroup = tokenArr.splice(0, 7);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
-  const handleSelectToken = (symbol: string) => () => {
-    onSelect(symbol);
+  const handleSelectToken = (name: string) => () => {
+    const token = tokens.find((item) => item.name === name);
+    if (token) {
+      onSelect(token);
+    }
+  };
+
+  const handleClearInput = () => {
+    setSearchText('');
   };
 
   return (
@@ -40,25 +47,30 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
           <div className={styles.searchIcon}>
             <Search />
           </div>
-          <input className={styles.input} placeholder="Search asset or paste address" onChange={handleChangeInput} />
-          <div className={styles.inputCLoseIcon}>
+          <input
+            value={searchText}
+            className={styles.input}
+            placeholder="Search asset or paste address"
+            onChange={handleChangeInput}
+          />
+          <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
             <Close />
           </div>
         </div>
         <div className={styles.tokensRow}>
           {firstTokensGroup.map((item) => (
-            <div className={styles.tokenItem} onClick={handleSelectToken(item.symbol)}>
+            <div className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
               <div className={styles.tokenIcon}>{item.icon}</div>
-              <div className={styles.tokenSymbol}> {item.symbol}</div>
+              <div className={styles.tokenSymbol}> {item.name}</div>
             </div>
           ))}
         </div>
       </div>
       <div className={styles.listBlock}>
         {tokenArr.map((item) => (
-          <div className={styles.listItem} onClick={handleSelectToken(item.symbol)}>
+          <div className={styles.listItem} onClick={handleSelectToken(item.name)}>
             <div className={styles.tokenIcon}>{item.icon}</div>
-            <div className={styles.tokenSymbol}> {item.symbol}</div>
+            <div className={styles.tokenSymbol}> {item.name}</div>
           </div>
         ))}
       </div>
