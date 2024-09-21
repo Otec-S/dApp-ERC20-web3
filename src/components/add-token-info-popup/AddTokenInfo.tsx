@@ -80,7 +80,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     ],
   });
 
-  const { data: balanceData, isFetched, refetch, status } = useBalance({
+  const { data: balanceData, isFetched, status } = useBalance({
     token: tokenAddress,
     address,
   });
@@ -119,7 +119,6 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
           setValue('tokenDecimals', tokenDecimals as number);
           setTokenName(tokenName);
           setValue('tokenName', tokenName as string);
-          refetch();
         }
         if (balanceLoaded && !contractError ) {
           setRequestWasSuccessful(true);
@@ -137,7 +136,6 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     setTokenBalance,
     tokenName,
     contractError,
-    refetch,
     status,
     balanceLoaded,
   ]);
