@@ -15,7 +15,6 @@ import SuccessIcon from '@assets/icons/success.svg';
 
 import { config } from '../../../wagmiConfig';
 import FormButton from '../form-button/FormButton';
-import { tokenDecimalsInitial, tokenNameInitial } from './AddTokenInfo.constants';
 import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
@@ -36,6 +35,7 @@ interface Props {
 interface IFormInputs {
   tokenAddress: string;
   tokenName:string;
+  tokenDecimals:number;
 }
 
 const override: CSSProperties = {
@@ -50,8 +50,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   const [tokenBalance, setTokenBalance] = useState<string | undefined>(undefined);
   const [showLoader, setShowLoader] = useState(false);
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
-  const [tokenName, setTokenName] = useState<string>(tokenNameInitial);
-  const [tokenDecimals, setTokenDecimals] = useState<number>(tokenDecimalsInitial);
+  const [tokenName, setTokenName] = useState<string|undefined>(undefined);
+  const [tokenDecimals, setTokenDecimals] = useState<number|undefined>(undefined);
   const [requestWasSuccessful, setRequestWasSuccessful] = useState(false);
 
   const { isConnected } = useAccount();
@@ -72,8 +72,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     switch (formState) {
       case 'initialState':
         reset();
-        setTokenDecimals(tokenDecimalsInitial);
-        setTokenName(tokenNameInitial);
+        setTokenDecimals(undefined);
+        setTokenName(undefined);
         setTokenAddress(undefined);
         setRequestWasSuccessful(false);
         break;
@@ -95,9 +95,10 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
               },
             ],
           }).then((tokenInfo) => {
+            setValue('tokenDecimals',tokenInfo[0]);
             setTokenDecimals(tokenInfo[0]);
             setValue('tokenName',tokenInfo[1]);
-            // setTokenName(tokenInfo[1]);
+            setTokenName(tokenInfo[1]);
           }),
           getBalance(config, {
             address: getAccount(config).address as Address,
@@ -130,12 +131,24 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     }
   };
 
+  const onHandleNextButton = () => {
+    switch (formState) {
+      case 'showTokenNameState':
+        setFormState('showTokenAvatarState');
+        reset();
+        break;
+      case 'showTokenAvatarState':
+        setFormState('readyToAddState');
+        reset();
+        break;
+    }
+  }
+
   const onHandleErrorButton = () => {
     setFormState('initialState');
   };
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
-    console.log(data);
     switch (formState) {
       case 'initialState':
         setTokenAddress(data.tokenAddress as Address);
@@ -178,7 +191,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
           </button>
         </div>
       )}
-
+      <div className={cn(styles.formWrapper,{[styles.formWrapperYellowScheme]:colorScheme==='yellow'})}>
       {formState !== 'readyToAddState' && formState !== 'errorState' && (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <Warning colorScheme={colorScheme} warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks" />
@@ -212,7 +225,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
                 <div>
                   <label className={styles.inputLabel}>
                     Token contract decimals
-                    <input type="text" value={tokenDecimals} className={cn(styles.inputDecimals,{
+                    <input type="text" {...register('tokenDecimals')} defaultValue={18} className={cn(styles.inputDecimals,{
                       [styles.inputDecimalsYellowScheme]:colorScheme==='yellow'
                     })} readOnly />
                   </label>
@@ -222,25 +235,31 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
 
             {formState === 'showTokenAvatarState' && (
               <TokenInfo
+                colorScheme={colorScheme}
                 tokenAddress={tokenAddress as Address}
-                tokenName={tokenName as string}
-                tokenBalance={tokenBalance as string}
+                tokenName={tokenName}
+                tokenBalance={tokenBalance}
               />
             )}
           </div>
           <div className={styles.buttonWrapper}>
-            {formState !== 'initialState' && (
+            {formState !== 'initialState' && 
               <FormButton colorScheme={colorScheme} buttonText='Back' onPointerDown={onHandlePreviosButton}/>
-            )}
-            <FormButton colorScheme={colorScheme} buttonText='Next' type='submit'/>
+            }
+            {
+              formState !== 'initialState' && <FormButton onPointerDown={onHandleNextButton}  colorScheme={colorScheme} buttonText='Next' type='button'/>
+            }
+            {
+              formState === 'initialState' && <FormButton colorScheme={colorScheme} buttonText='Next' type='submit'/>
+            }
           </div>
         </form>
       )}
       {formState === 'readyToAddState' && (
         <>
-          <div className={styles.successLogoWrapper}>
+          <div className={cn(styles.successLogoWrapper,{[styles.successLogoWrapperYellowScheme]:colorScheme==='yellow'})}>
             <SuccessIcon />
-            <span className={styles.successLogoText}>{tokenName + ' token has been added'}</span>
+            <span className={cn(styles.successLogoText,{[styles.successLogoTextYellowScheme]:colorScheme==='yellow'})}>{tokenName + ' token has been added'}</span>
           </div>
           <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText='Okay' type='button'/>
         </>
@@ -253,6 +272,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
           <FormButton colorScheme={colorScheme} onPointerDown={onHandleErrorButton} buttonText='Back'/>
         </>
       )}
+    </div>
     </div>
   );
 };

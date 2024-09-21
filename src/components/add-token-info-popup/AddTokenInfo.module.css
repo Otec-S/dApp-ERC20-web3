@@ -10,12 +10,10 @@
   box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.15);
   justify-content: space-between;
   position: relative;
-  padding: 0 48px 48px 48px;
 }
 
 .addTokenYellowScheme {
   background: white;
-  padding: 0 24px 24px 24px;
 }
 
 .loader {
@@ -50,8 +48,6 @@
   flex-direction: row;
   justify-content: space-between;
   width: 100%;
-  position: absolute;
-  left: 0;
   color: white;
 }
 
@@ -104,6 +100,24 @@
   gap: 24px;
   flex-direction: column;
   flex-grow: 1;
+}
+
+.formWrapper {
+  padding: 0 48px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.formWrapperYellowScheme {
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .inputAddress {
@@ -276,7 +290,14 @@
   flex-direction: column;
   gap: 24px;
   align-self: stretch;
+  justify-content: center;
+  flex-grow: 1;
   align-items: center;
+  color: white;
+}
+
+.successLogoWrapperYellowScheme {
+  color: #000;
 }
 
 .successLogoText {
@@ -290,4 +311,8 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+}
+
+.successLogoTextYellowScheme {
+  color: black;
 }

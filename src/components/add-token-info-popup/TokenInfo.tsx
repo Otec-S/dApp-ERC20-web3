@@ -8,9 +8,9 @@ import { tokens } from '../../assets/constants';
 import styles from './TokenInfo.module.css';
 
 interface Props {
-  tokenName: string;
+  tokenName: string|undefined;
   tokenAddress: Address;
-  tokenBalance: string;
+  tokenBalance: string|undefined;
   colorScheme?:'default'|'yellow'
 }
 
