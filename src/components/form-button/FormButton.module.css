@@ -32,9 +32,9 @@
 }
 
 .buttonYellow {
-  background: #FFB800;
+  background: #ffb800;
 }
 
 .inactiveButtonYellow {
-  background: rgba(0, 0, 0, 0.10);
+  background: rgba(0, 0, 0, 0.1);
 }

@@ -8,19 +8,19 @@ import { tokens } from '../../assets/constants';
 import styles from './TokenInfo.module.css';
 
 interface Props {
-  tokenName: string|undefined;
+  tokenName: string | undefined;
   tokenAddress: Address;
-  tokenBalance: string|undefined;
-  colorScheme?:'default'|'yellow'
+  tokenBalance: string | undefined;
+  colorScheme?: 'default' | 'yellow';
 }
 
-export const TokenInfo: FC<Props> = ({ tokenName, tokenAddress, tokenBalance ,colorScheme='default'}) => {
+export const TokenInfo: FC<Props> = ({ tokenName, tokenAddress, tokenBalance, colorScheme = 'default' }) => {
   return (
     <div className={styles.tokenImgWrapper}>
       {tokens.find((t) => t.polygonAddress === tokenAddress || t.sepoliaAddress === tokenAddress)?.icon ?? (
         <NotFoundTokenLogo />
       )}
-      <div className={cn(styles.imgTextWrapper,{[styles.imgTextWrapperYellowScheme]:colorScheme==='yellow'})}>
+      <div className={cn(styles.imgTextWrapper, { [styles.imgTextWrapperYellowScheme]: colorScheme === 'yellow' })}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
         <span className={styles.tokenName}>{tokenBalance + ' ' + tokenName}</span>
       </div>

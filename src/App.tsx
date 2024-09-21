@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/erc20send',
-    element: <ERC20send/>,
+    element: <ERC20send />,
   },
 ]);
 

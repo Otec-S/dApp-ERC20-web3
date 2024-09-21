@@ -7,12 +7,12 @@ import styles from './Warning.module.css';
 
 interface WarningTypeProps {
   warningMessage: string;
-  colorScheme?:'default'|'yellow';
+  colorScheme?: 'default' | 'yellow';
 }
 
 export const Warning: FC<WarningTypeProps> = ({ warningMessage, colorScheme = 'default' }) => {
   return (
-    <div className={cn(styles.warning,{[styles.warningYellowScheme]:colorScheme==='yellow'})}>
+    <div className={cn(styles.warning, { [styles.warningYellowScheme]: colorScheme === 'yellow' })}>
       <WarningIcon />
       {warningMessage}
     </div>

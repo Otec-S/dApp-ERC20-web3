@@ -1,23 +1,26 @@
-import { ButtonHTMLAttributes,FC } from "react";
+import { ButtonHTMLAttributes, FC } from 'react';
 import cn from 'classnames';
 
-import styles from "./FormButton.module.css";
+import styles from './FormButton.module.css';
 
-interface IFormButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
+interface IFormButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isButtonActive?: boolean;
   buttonText: string;
-  colorScheme?:'default' | 'yellow';
+  colorScheme?: 'default' | 'yellow';
 }
 
 const SubmitButton: FC<IFormButtonProps> = ({
   isButtonActive = true,
   buttonText,
-  colorScheme='default',
+  colorScheme = 'default',
   ...rest
 }) => {
   return (
     <button
-      className={cn(styles.formButton,{[styles.inactiveButton]:!isButtonActive,[styles.buttonYellow]:colorScheme==='yellow'})}
+      className={cn(styles.formButton, {
+        [styles.inactiveButton]: !isButtonActive,
+        [styles.buttonYellow]: colorScheme === 'yellow',
+      })}
       disabled={!isButtonActive}
       {...rest}
     >
