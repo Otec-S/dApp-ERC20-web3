@@ -55,6 +55,16 @@
   border: none !important;
 }
 
+.connectButtonWrapperYellowScheme div {
+  background: white !important;
+  color: black !important;
+}
+
+.connectButtonWrapperYellowScheme button {
+  background: white !important;
+  color: black !important;
+}
+
 .nav {
   display: flex;
   gap: 55px;

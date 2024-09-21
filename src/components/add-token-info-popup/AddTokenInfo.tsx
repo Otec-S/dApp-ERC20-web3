@@ -15,7 +15,7 @@ import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
 
-interface ITokenInfo {
+interface TokenInfoProps {
   requestWasSuccessful: boolean;
   tokenAddress?: Address;
   tokenName?: string | undefined;
@@ -23,12 +23,12 @@ interface ITokenInfo {
   tokenBalance?: string | undefined;
 }
 
-interface Props {
-  onClosePopup: (data: ITokenInfo) => void;
+interface AddTokenInfoProps {
+  onClosePopup: (data: TokenInfoProps) => void;
   colorScheme?: 'default' | 'yellow';
 }
 
-interface IFormInputs {
+interface FormInputsProps {
   tokenAddress: string;
   tokenName: string;
   tokenDecimals: number;
@@ -39,7 +39,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
+const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'default' }) => {
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
@@ -63,7 +63,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     getValues,
     reset,
     formState: { errors },
-  } = useForm<IFormInputs>();
+  } = useForm<FormInputsProps>();
 
   const { data: contractData, isLoading: isLoadingContacts, isError:contractError } = useReadContracts({
     contracts: [
@@ -168,7 +168,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     setFormState('initialState');
   };
 
-  const onSubmit: SubmitHandler<IFormInputs> = () => {
+  const onSubmit: SubmitHandler<FormInputsProps> = () => {
     switch (formState) {
       case 'initialState':
         setFormState('showTokenNameState');

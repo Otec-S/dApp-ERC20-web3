@@ -8,7 +8,11 @@ import { logo } from '@assets/images';
 
 import styles from './Header.module.css';
 
-const Header: FC = () => {
+interface Props {
+  colorScheme?:'default'|'yellow'
+}
+
+const Header: FC<Props> = ({colorScheme}) => {
   const [burgerIsOpen, setBurgerIsOpen] = useState(false);
   const handleBurgerClick = () => {
     setBurgerIsOpen((prev) => !prev);
@@ -41,7 +45,9 @@ const Header: FC = () => {
             NFT Collection
           </NavLink>
         </nav>
-        <div className={styles.connectButtonWrapper}>
+        <div className={cn(styles.connectButtonWrapper,{
+          [styles.connectButtonWrapperYellowScheme]:colorScheme === 'yellow'
+        })}>
           <ConnectButton label="Connect wallet" chainStatus={'none'} showBalance={false} accountStatus="address" />
         </div>
       </div>

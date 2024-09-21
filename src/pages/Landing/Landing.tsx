@@ -14,7 +14,7 @@ export const Landing: FC = () => {
   return (
     <div className={classes.container}>
       <div className={classes.header}>
-        <Header />
+        <Header colorScheme='yellow'/>
       </div>
       <div className={classes.imageSection}>
         <img src={landing.default} className={classes.mainImage} alt={'main image'} />
