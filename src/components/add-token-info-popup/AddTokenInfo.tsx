@@ -5,7 +5,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, formatUnits, isAddress } from 'viem';
 import { erc20Abi } from 'viem';
-import { useAccount, useBalance, useReadContracts } from 'wagmi';
+import { useAccount, useReadContracts } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
@@ -17,19 +17,19 @@ import styles from './AddTokenInfo.module.css';
 
 interface TokenInfoProps {
   requestWasSuccessful: boolean;
-  tokenAddress?: Address;
-  tokenName?: string | undefined;
-  tokenDecimals?: number | undefined;
-  tokenBalance?: string | undefined;
+  tokenAddress: Address | undefined;
+  tokenName: string | undefined;
+  tokenDecimals: number | undefined;
+  tokenBalance: string | undefined;
 }
 
-interface AddTokenInfoProps {
+interface Props {
   onClosePopup: (data: TokenInfoProps) => void;
   colorScheme?: 'default' | 'yellow';
 }
 
-interface FormInputsProps {
-  tokenAddress: string;
+interface FormData {
+  tokenAddress: Address;
   tokenName: string;
   tokenDecimals: number;
 }
@@ -39,7 +39,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'default' }) => {
+const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   const [formState, setFormState] = useState<
     'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
   >('initialState');
@@ -50,7 +50,7 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
   const [tokenDecimals, setTokenDecimals] = useState<number | undefined>(undefined);
   const [requestWasSuccessful, setRequestWasSuccessful] = useState(false);
 
-  const { isConnected, address } = useAccount();
+  const { isConnected, address: walletAddress } = useAccount();
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
@@ -63,9 +63,9 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
     getValues,
     reset,
     formState: { errors },
-  } = useForm<FormInputsProps>();
+  } = useForm<FormData>();
 
-  const { data: contractData, isLoading: isLoadingContacts, isError:contractError } = useReadContracts({
+  const { data: contractData, isLoading: isLoadingContacts } = useReadContracts({
     contracts: [
       {
         address: tokenAddress,
@@ -77,21 +77,20 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
         functionName: 'name',
         abi: erc20Abi,
       },
+      {
+        address: tokenAddress,
+        functionName: 'balanceOf',
+        abi: erc20Abi,
+        args: [walletAddress as Address],
+      },
     ],
   });
 
-  const { data: balanceData, isFetched, status } = useBalance({
-    token: tokenAddress,
-    address,
-  });
-
-  const balanceLoaded = isConnected && isFetched;
-
-  useEffect(()=>{
-    if (tokenAddress && balanceData?.decimals) {
-      setTokenBalance(formatUnits(balanceData?.value,18).length>0?formatUnits(balanceData.value,18):'0')
-    }
-  },[balanceData,tokenAddress])
+  useEffect(() => {
+    if (isLoadingContacts) {
+      setShowLoader(true);
+    } else setShowLoader(false);
+  }, [isLoadingContacts]);
 
   useEffect(() => {
     switch (formState) {
@@ -104,26 +103,32 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
         break;
       case 'showTokenNameState':
         if (getValues('tokenAddress')) {
-          setTokenAddress(getValues('tokenAddress') as Address);
+          setTokenAddress(getValues('tokenAddress'));
         }
-        if (isLoadingContacts) {
-          setShowLoader(true);
-        } else setShowLoader(false);
-
-        if (contractData?.[0].status === 'failure') {
-          setFormState('errorState');
-        } else if (contractData?.[0].status === 'success') {
-          const tokenDecimals = contractData?.[0].result;
-          const tokenName = contractData?.[1].result;
-          setTokenDecimals(tokenDecimals);
-          setValue('tokenDecimals', tokenDecimals as number);
-          setTokenName(tokenName);
-          setValue('tokenName', tokenName as string);
+        if (contractData) {
+          if (
+            contractData[0].status === 'success' &&
+            contractData[1].status === 'success' &&
+            contractData[2].status === 'success'
+          ) {
+            const tokenDecimals = contractData?.[0].result;
+            const tokenName = contractData?.[1].result;
+            const tokenBalance =
+              formatUnits(contractData?.[2].result, tokenDecimals).length > 0
+                ? formatUnits(contractData?.[2].result, tokenDecimals)
+                : '0';
+            setTokenDecimals(tokenDecimals);
+            setValue('tokenDecimals', tokenDecimals as number);
+            setTokenName(tokenName);
+            setTokenBalance(tokenBalance);
+            setValue('tokenName', tokenName as string);
+            setRequestWasSuccessful(true);
+          } else {
+            setFormState('errorState');
+            setRequestWasSuccessful(false);
+          }
+          break;
         }
-        if (balanceLoaded && !contractError ) {
-          setRequestWasSuccessful(true);
-        }
-        break;
     }
   }, [
     formState,
@@ -135,20 +140,16 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
     isLoadingContacts,
     setTokenBalance,
     tokenName,
-    contractError,
-    status,
-    balanceLoaded,
   ]);
 
   const onHandlePreviosButton = () => {
     switch (formState) {
       case 'showTokenNameState':
         setFormState('initialState');
-        reset();
         break;
       case 'showTokenAvatarState':
         setFormState('initialState');
-        reset();
+
         break;
     }
   };
@@ -166,9 +167,10 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
 
   const onHandleErrorButton = () => {
     setFormState('initialState');
+    reset();
   };
 
-  const onSubmit: SubmitHandler<FormInputsProps> = () => {
+  const onSubmit: SubmitHandler<FormData> = () => {
     switch (formState) {
       case 'initialState':
         setFormState('showTokenNameState');
@@ -181,6 +183,7 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
         break;
     }
   };
+  console.log(errors);
 
   const handleCloseForm = () => {
     onClosePopup({ tokenAddress, tokenName, tokenDecimals, tokenBalance, requestWasSuccessful });
@@ -228,7 +231,7 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
                     <input
                       disabled={formState !== 'initialState'}
                       className={cn(styles.inputAddress, {
-                        [styles.inputAddressYellowScheme]:colorScheme === 'yellow',
+                        [styles.inputAddressYellowScheme]: colorScheme === 'yellow',
                         [styles.inputAddressError]: errors.tokenAddress,
                         [styles.inputAddressErrorYellowScheme]: errors.tokenAddress && colorScheme === 'yellow',
                       })}
@@ -275,8 +278,8 @@ const AddTokenInfo: FC<AddTokenInfoProps> = ({ onClosePopup, colorScheme = 'defa
                 <TokenInfo
                   colorScheme={colorScheme}
                   tokenAddress={tokenAddress as Address}
-                  tokenName={tokenName}
-                  tokenBalance={tokenBalance}
+                  tokenName={tokenName as string}
+                  tokenBalance={tokenBalance as string}
                 />
               )}
             </div>
