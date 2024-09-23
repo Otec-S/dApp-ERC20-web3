@@ -4,7 +4,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
-import { logo } from '@assets/images';
+import { logo,logoYellowScheme } from '@assets/images';
 
 import styles from './Header.module.css';
 
@@ -22,26 +22,26 @@ const Header: FC<Props> = ({ colorScheme }) => {
       <div className={styles.burgerWrapper}>
         <button
           type="button"
-          className={cn(styles.burger, { [styles.burgerIsOpen]: burgerIsOpen })}
+          className={cn(styles.burger, { [styles.burgerIsOpen]: burgerIsOpen})}
           onClick={handleBurgerClick}
         >
-          <div className={styles.burgerImage} />
+          <div className={cn(styles.burgerImage,{[styles.burgerImageYellowScheme]: colorScheme==='yellow' })} />
         </button>
       </div>
       <img
-        className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
-        src={logo.default}
+        className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen})}
+        src={colorScheme === 'yellow' ? logoYellowScheme.default : logo.default}
         alt="Project logo"
       />
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
-          <NavLink className={styles.navLink} to="/erc20send">
+          <NavLink className={cn(styles.navLink,{[styles.navLinkYellowScheme]:colorScheme === 'yellow'})} to="/erc20send">
             Send ERC-20
           </NavLink>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink className={cn(styles.navLink,{[styles.navLinkYellowScheme]:colorScheme === 'yellow'})} to="/">
             Trade ERC-20
           </NavLink>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink className={cn(styles.navLink,{[styles.navLinkYellowScheme]:colorScheme === 'yellow'})} to="/">
             NFT Collection
           </NavLink>
         </nav>

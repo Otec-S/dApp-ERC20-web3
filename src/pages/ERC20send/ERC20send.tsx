@@ -5,8 +5,8 @@ import Header from '../../components/header/Header';
 
 export const ERC20send: FC = () => {
   return (
-    <div style={{ background: '#000' }}>
-      <Header />
+    <div style={{ background: '#FFEDBE' }}>
+      <Header colorScheme='yellow'/>
       <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => console.log(data)} />
     </div>
   );
