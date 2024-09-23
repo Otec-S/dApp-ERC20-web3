@@ -15,16 +15,16 @@ import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
 
-interface TokenInfoProps {
+interface TokenData {
   requestWasSuccessful: boolean;
-  tokenAddress: Address | undefined;
-  tokenName: string | undefined;
-  tokenDecimals: number | undefined;
-  tokenBalance: string | undefined;
+  tokenAddress?: Address;
+  tokenName?: string;
+  tokenDecimals?: number;
+  tokenBalance?: string;
 }
 
 interface Props {
-  onClosePopup: (data: TokenInfoProps) => void;
+  onClosePopup: (data: TokenData) => void;
   colorScheme?: 'default' | 'yellow';
 }
 
@@ -149,7 +149,6 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
         break;
       case 'showTokenAvatarState':
         setFormState('initialState');
-
         break;
     }
   };
@@ -183,7 +182,6 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
         break;
     }
   };
-  console.log(errors);
 
   const handleCloseForm = () => {
     onClosePopup({ tokenAddress, tokenName, tokenDecimals, tokenBalance, requestWasSuccessful });
@@ -235,7 +233,6 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
                         [styles.inputAddressError]: errors.tokenAddress,
                         [styles.inputAddressErrorYellowScheme]: errors.tokenAddress && colorScheme === 'yellow',
                       })}
-                      defaultValue=""
                       {...register('tokenAddress', { required: true, validate: (value) => isAddress(value) })}
                     />
                     {errors.tokenAddress?.type === 'required' && (
@@ -277,9 +274,9 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
               {formState === 'showTokenAvatarState' && (
                 <TokenInfo
                   colorScheme={colorScheme}
-                  tokenAddress={tokenAddress as Address}
-                  tokenName={tokenName as string}
-                  tokenBalance={tokenBalance as string}
+                  tokenAddress={tokenAddress}
+                  tokenName={tokenName}
+                  tokenBalance={tokenBalance}
                 />
               )}
             </div>
