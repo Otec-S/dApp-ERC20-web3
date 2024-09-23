@@ -4,7 +4,7 @@ import { Address } from 'viem';
 
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 
-import { tokens } from '../../assets/constants';
+import { tokens } from '../../shared/constants';
 import styles from './TokenInfo.module.css';
 
 interface Props {
