@@ -60,8 +60,13 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const { data: contractData, isLoading: isLoadingContacts,isSuccess,isError } = useReadContracts({
-    allowFailure:false,
+  const {
+    data: contractData,
+    isLoading: isLoadingContacts,
+    isSuccess,
+    isError,
+  } = useReadContracts({
+    allowFailure: false,
     contracts: [
       {
         address: tokenAddress,
@@ -91,23 +96,14 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
       case 'showTokenNameState':
         if (isError) {
           setFormState('errorState');
-        } 
+        }
         if (isSuccess) {
           setValue('tokenDecimals', contractData[0]);
           setValue('tokenName', contractData[1]);
         }
         break;
     }
-  }, [
-    formState,
-    tokenAddress,
-    reset,
-    setValue,
-    isError,
-    contractData,
-    getValues,
-    isSuccess,
-  ]);
+  }, [formState, tokenAddress, reset, setValue, isError, contractData, getValues, isSuccess]);
 
   const onHandlePreviosButton = () => {
     switch (formState) {
@@ -151,7 +147,13 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   };
 
   const handleCloseForm = () => {
-    onClosePopup({ tokenAddress, tokenName:contractData?.[1], tokenDecimals:contractData?.[0], tokenBalance:contractData?.[2], requestWasSuccessful:isSuccess });
+    onClosePopup({
+      tokenAddress,
+      tokenName: contractData?.[1],
+      tokenDecimals: contractData?.[0],
+      tokenBalance: contractData?.[2],
+      requestWasSuccessful: isSuccess,
+    });
   };
 
   return (
@@ -239,11 +241,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
               )}
 
               {formState === 'showTokenAvatarState' && (
-                <TokenInfo
-                  colorScheme={colorScheme}
-                  tokenAddress={tokenAddress}
-                  contractData={contractData}
-                />
+                <TokenInfo colorScheme={colorScheme} tokenAddress={tokenAddress} contractData={contractData} />
               )}
             </div>
             <div className={styles.buttonWrapper}>
@@ -274,7 +272,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
                 className={cn(styles.successLogoText, {
                   [styles.successLogoTextYellowScheme]: colorScheme === 'yellow',
                 })}
-              >{getValues('tokenName')+ ' token has been added'}
+              >
+                {getValues('tokenName') + ' token has been added'}
               </span>
             </div>
             <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText="Okay" type="button" />
