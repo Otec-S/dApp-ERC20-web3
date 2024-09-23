@@ -1,8 +1,8 @@
-import style from './Send-ERC-20-result-form.module.css';
-import resultSuccessIcon from '../../../assets/resultSuccessIcon.svg';
 import resultErrorIcon from '../../../assets/resultErrorIcon.png';
+import resultSuccessIcon from '../../../assets/resultSuccessIcon.svg';
 import viewTransactionIcon from '../../../assets/view_tx.svg';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
+import style from './Send-ERC-20-result-form.module.css';
 
 interface ISendERC20ResultFormProps {
   isTxSuccess: boolean;

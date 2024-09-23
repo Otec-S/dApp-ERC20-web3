@@ -27,11 +27,6 @@ const router = createBrowserRouter([
     path: '/send-ERC20-tokens',
     element: <SendERC20 />,
   },
-  // TODO:
-  // {
-  //   path: '/ts',
-  //   element: <TokenSender />,
-  // },
 ]);
 
 const App: FC = () => {
