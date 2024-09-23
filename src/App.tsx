@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
 import { config } from '../wagmiConfig';
-import TokenBalance from './components/tests/token-balance';
 import { Landing } from './pages/Landing';
 import SendERC20 from './pages/SendERC20/send-ERC-20';
 import './App.module.css';
@@ -29,10 +28,10 @@ const router = createBrowserRouter([
     element: <SendERC20 />,
   },
   // TODO:
-  {
-    path: '/bl',
-    element: <TokenBalance address="0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054" />,
-  },
+  // {
+  //   path: '/ts',
+  //   element: <TokenSender />,
+  // },
 ]);
 
 const App: FC = () => {

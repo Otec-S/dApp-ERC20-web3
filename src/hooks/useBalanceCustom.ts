@@ -24,6 +24,7 @@ const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`): IUseBal
           address,
           token,
         });
+        // TODO: проставляй децималы
         const balanceInEth = formatUnits(balanceData.value, 6);
         setBalance(balanceInEth);
       } catch (err) {

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { parseEther } from 'viem';
-import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from 'wagmi';
+import { parseEther, parseUnits } from 'viem';
+import { erc20Abi } from 'viem';
+import { BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
@@ -8,6 +9,7 @@ import USDTLogo from '@assets/icons/USDTLogo.svg';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
+// import { abi } from '../../tests/test-abi';
 import style from './Send-ERC-20-send-form.module.css';
 
 interface ISendERC20SendFormProps {
@@ -31,9 +33,10 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const [amountError, setAmountError] = useState<string | null>(null);
 
-  const { data: hash, sendTransaction } = useSendTransaction();
+  // const { data: hash, sendTransaction } = useSendTransaction();
+  const { data: hash, isPending, error, writeContract } = useWriteContract();
 
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
   // TODO:
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
@@ -56,18 +59,91 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     setRecipientValue(event.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   {
+  //     "constant": false,
+  //     "inputs": [
+  //         {
+  //             "name": "_to",
+  //             "type": "address"
+  //         },
+  //         {
+  //             "name": "_value",
+  //             "type": "uint256"
+  //         }
+  //     ],
+  //     "name": "transfer",
+  //     "outputs": [
+  //         {
+  //             "name": "",
+  //             "type": "bool"
+  //         }
+  //     ],
+  //     "payable": false,
+  //     "stateMutability": "nonpayable",
+  //     "type": "function"
+  // },
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (amountError) {
-      return;
-    }
-
+    // if (amountError) {
+    //   return;
+    // }
     console.log('Form submitted');
+    // const formData = new FormData(e.target as HTMLFormElement);
+    // const to = formData.get('recipient') as `0x${string}`;
+    // const value = formData.get('value') as string;
+    // sendTransaction({ to, value: parseEther(value) });
+
+    // const formData = new FormData(e.target as HTMLFormElement);
+    // const tokenId = formData.get('tokenId') as string;
     const formData = new FormData(e.target as HTMLFormElement);
-    const to = formData.get('recipient') as `0x${string}`;
-    const value = formData.get('value') as string;
-    sendTransaction({ to, value: parseEther(value) });
+    const recipient = formData.get('recipient') as `0x${string}`;
+    const amount = formData.get('value') as string;
+    const tokenAddress = '0x8aC43Ed0652168827FA3906577dD44e4819B11D1';
+
+    // const amountInWei = parseEther(amount);
+    // const amountInWei = BigInt(parseEther(amount));
+    const parsedAmount = parseUnits(amount, 6); // '6' - это количество десятичных знаков для USDT
+
+    // console.log('FormData: ', formData);
+    console.log('Recipient: ', recipient);
+    console.log('Balance: ', balance);
+    console.log('parsedBalance: ', parseUnits(balance, 6));
+    console.log('Amount: ', amount);
+    console.log('Token address: ', tokenAddress);
+    console.log('parsedAmount: ', parsedAmount);
+    console.log('isConnected: ', isConnected);
+
+    // try {
+    //   const response = await writeContract({
+    //     address: token,
+    //     abi: erc20Abi,
+    //     functionName: 'transfer',
+    //     args: [recipient, parsedAmount],
+    //   });
+
+    //   console.log('Write contract response:', response);
+
+    //   // Вы также можете обрабатывать ответ и делать с ним что-то еще
+    // } catch (error) {
+    //   console.error('Error writing contract:', error);
+    // }
+
+    writeContract({
+      // address: '0x8aC43Ed0652168827FA3906577dD44e4819B11D1',
+      address: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
+      abi: erc20Abi,
+      functionName: 'transfer',
+      args: [recipient, parsedAmount],
+    });
+
+    //   writeContract({
+    //     abi: erc20Abi,
+    //     address: tokenAddress,
+    //     functionName: 'transferFrom',
+    //     args: ['0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054', recipient, parsedAmount],
+    //   });
   };
 
   const {
@@ -114,7 +190,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
               name="value"
               className={style.input}
               type="string"
-              value={inputValue}
+              // value={inputValue}
               onChange={handleInputChange}
               required
             />
@@ -154,13 +230,15 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
             name="recipient"
             className={style.recipientInput}
             placeholder="0x0000000000000000000000000000000000000000"
-            value={recipientValue}
+            // value={recipientValue}
             onChange={handleRecipientChange}
             required
           />
         </div>
         {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>}
         <SubmitButton buttonText="Send" isButtonActive={isButtonActive} />
+        {isPending ? <h3 style={{ color: 'blue' }}>'Confirming...'</h3> : <h3 style={{ color: 'green' }}>'Done'</h3>}
+        {error && <h3 style={{ color: 'white' }}>Error: {(error as BaseError).shortMessage || error.message}</h3>}
       </form>
     </>
   );
