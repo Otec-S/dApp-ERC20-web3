@@ -8,10 +8,10 @@ import styles from './NewOfferForm.module.css';
 interface FormData {
   from: number;
   to: number;
-  tokenFrom:Address;
-  tokenTo:Address;
-  rate:string;
-  receiver:string;
+  tokenFrom: Address;
+  tokenTo: Address;
+  rate: string;
+  receiver: string;
 }
 
 const NewOfferForm: FC = () => {
@@ -20,7 +20,7 @@ const NewOfferForm: FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const onSubmit:SubmitHandler<FormData> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
   console.log(errors);
 
   return (
@@ -29,33 +29,33 @@ const NewOfferForm: FC = () => {
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputs}>
-          <label>
-            From
-            <input type="text" placeholder="from" {...register('from', { required: true })} />
-            <select {...register('tokenFrom', { required: true })}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-          </label>
-          <label>
-            To
-            <input type="text" placeholder="to" {...register('to', { required: true })} />
-            <select {...register('tokenTo', { required: true })}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-          </label>
-          <label>
-            <input type="text" placeholder="Rate" {...register('rate', { required: true })} />
-          </label>
-          <label>
-            <input type="text" placeholder="Receiver" {...register('receiver')} />
-          </label>
-          <input type="checkbox" placeholder='Infinite approve' name="infinite" />
+            <label>
+              From
+              <input type="text" placeholder="from" {...register('from', { required: true })} />
+              <select {...register('tokenFrom', { required: true })}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </label>
+            <label>
+              To
+              <input type="text" placeholder="to" {...register('to', { required: true })} />
+              <select {...register('tokenTo', { required: true })}>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </label>
+            <label>
+              <input type="text" placeholder="Rate" {...register('rate', { required: true })} />
+            </label>
+            <label>
+              <input type="text" placeholder="Receiver" {...register('receiver')} />
+            </label>
+            <input type="checkbox" placeholder="Infinite approve" name="infinite" />
           </div>
           <div className={styles.buttons}>
             <input type="submit" />
