@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react';
 
-import { ITokens, tokens } from '@assets/constants';
+import { IToken, tokens } from '@assets/constants';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 
@@ -8,15 +8,13 @@ import styles from './TokenPopup.module.css';
 
 type Props = {
   onCLose: () => void;
-  onSelect: (token: ITokens) => void;
+  onSelect: (token: IToken) => void;
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
-  const allTokens = [...tokens];
-
   const [searchText, setSearchText] = useState('');
 
-  const tokenArr = allTokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
+  const tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
   const firstTokensGroup = tokenArr.splice(0, 7);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {

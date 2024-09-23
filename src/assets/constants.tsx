@@ -12,7 +12,7 @@ import USDCIcon from '../assets/icons/usdc.svg';
 import USDTIcon from '../assets/icons/usdt.svg';
 import WBTSIcon from '../assets/icons/wbtc.svg';
 
-export interface ITokens {
+export interface IToken {
   id: number;
   name: string;
   sepoliaAddress: Address;
@@ -20,7 +20,7 @@ export interface ITokens {
   icon: ReactElement;
 }
 
-export const tokens: ITokens[] = [
+export const tokens: IToken[] = [
   {
     id: 1,
     name: 'ARB',
