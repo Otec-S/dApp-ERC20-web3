@@ -19,7 +19,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   isTxFormSubmitted,
   setIsTxFormSubmitted,
 }) => {
-  const [inputValue, setInputValue] = useState('0');
+  const [inputValue, setInputValue] = useState('');
 
   return (
     <section className={style.block}>
@@ -40,7 +40,9 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           inputValue={inputValue}
           setInputValue={setInputValue}
           // TODO: FIXME:
-          token="0x8aC43Ed0652168827FA3906577dD44e4819B11D1"
+          token="0xf300c9bf1A045844f17B093a6D56BC33685e5D05"
+          // TODO: FIXME:
+          decimals={18}
         />
       )}
     </section>

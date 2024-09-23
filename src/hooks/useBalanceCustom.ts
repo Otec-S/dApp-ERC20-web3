@@ -8,9 +8,10 @@ interface IUseBalanceResult {
   balance: string | null;
   loadingBalanceCustom: boolean;
   errorBalanceCustom: Error | null;
+  decimals: number;
 }
 
-const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`): IUseBalanceResult => {
+const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals: number): IUseBalanceResult => {
   const [balance, setBalance] = useState<string | null>(null);
   const [loadingBalanceCustom, setLoadingBalanceCustom] = useState<boolean>(true);
   const [errorBalanceCustom, setErrorBalanceCustom] = useState<Error | null>(null);
@@ -25,7 +26,7 @@ const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`): IUseBal
           token,
         });
         // TODO: проставляй децималы
-        const balanceInEth = formatUnits(balanceData.value, 6);
+        const balanceInEth = formatUnits(balanceData.value, decimals);
         setBalance(balanceInEth);
       } catch (err) {
         setErrorBalanceCustom(err as Error);
@@ -38,7 +39,7 @@ const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`): IUseBal
     fetchBalance();
   }, [address, token]);
 
-  return { balance, loadingBalanceCustom, errorBalanceCustom };
+  return { balance, decimals, loadingBalanceCustom, errorBalanceCustom };
 };
 
 export default useBalanceCustom;

@@ -18,6 +18,7 @@ interface ISendERC20SendFormProps {
   inputValue: string;
   setInputValue: (value: string) => void;
   token: `0x${string}`;
+  decimals: number;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -26,6 +27,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   inputValue,
   setInputValue,
   token,
+  decimals,
 }) => {
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
@@ -39,6 +41,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
     token as `0x${string}`,
+    decimals as number,
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,11 +64,12 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     console.log('Form submitted');
     const formData = new FormData(e.target as HTMLFormElement);
     const recipient = formData.get('recipient') as `0x${string}`;
-    const amount = formData.get('value') as string;
-    const tokenAddress = '0xf300c9bf1A045844f17B093a6D56BC33685e5D05';
-    const parsedAmount = parseUnits(amount, 6);
+    // const amount = formData.get('value') as string;
+    // const tokenAddress = '0xf300c9bf1A045844f17B093a6D56BC33685e5D05';
+    // TODO: decimals должны сюда передаваться
+    const parsedAmount = parseUnits(inputValue, 18);
     writeContract({
-      address: tokenAddress,
+      address: token,
       abi: erc20Abi,
       functionName: 'transfer',
       args: [recipient, parsedAmount],
@@ -115,8 +119,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
             <input
               name="value"
               className={style.input}
-              type="string"
-              // value={inputValue}
+              type="text"
+              value={inputValue}
+              placeholder="0.00"
               onChange={handleInputChange}
               required
             />
