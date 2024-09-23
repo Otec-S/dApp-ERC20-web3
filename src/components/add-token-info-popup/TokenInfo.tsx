@@ -9,7 +9,7 @@ import styles from './TokenInfo.module.css';
 
 interface Props {
   tokenAddress?: Address;
-  contractData: [number, string, bigint] | undefined;
+  contractData?: [number, string, bigint] | undefined;
   colorScheme?: 'default' | 'yellow';
 }
 
@@ -30,7 +30,7 @@ export const TokenInfo: FC<Props> = ({ tokenAddress, contractData, colorScheme =
       </div>
     );
   }
-  return <span>{tokenAddress}</span>;
+  return null;
 };
 
 export default TokenInfo;
