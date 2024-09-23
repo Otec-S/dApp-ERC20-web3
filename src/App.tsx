@@ -6,6 +6,7 @@ import { WagmiProvider } from 'wagmi';
 
 import { config } from '../wagmiConfig';
 import { ERC20send } from './pages/ERC20send/ERC20send';
+import { ERC20trade } from './pages/ERC20trade/ERC20trade';
 import { Landing } from './pages/Landing';
 import './App.module.css';
 import './index.module.css';
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/erc20send',
     element: <ERC20send />,
+  },
+  {
+    path: '/erc20trade',
+    element: <ERC20trade />,
   },
 ]);
 

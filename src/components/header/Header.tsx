@@ -38,7 +38,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
           <NavLink className={styles.navLink} to="/erc20send">
             Send ERC-20
           </NavLink>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink className={styles.navLink} to="/erc20trade">
             Trade ERC-20
           </NavLink>
           <NavLink className={styles.navLink} to="/">
