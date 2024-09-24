@@ -74,7 +74,28 @@
 
 .availableTokensSelector {
   display: flex;
+  /* flex-direction: row; */
   justify-content: space-between;
+  align-items: center;
+
+  /* all: unset; */
+  /* display: inline-block; */
+  box-sizing: border-box;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  outline: none;
+
+  &:focus-visible {
+    outline: auto;
+  }
 }
 
 .nameOfToken {

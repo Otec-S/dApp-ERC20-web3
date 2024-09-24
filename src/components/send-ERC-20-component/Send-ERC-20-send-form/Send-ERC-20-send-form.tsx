@@ -163,17 +163,16 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           </div>
 
           <div className={style.tokenBlock}>
-            <div className={style.availableTokensSelector}>
+            <button className={style.availableTokensSelector}>
               <div className={style.nameOfToken}>
-                <div className={style.availableTokenLogo}>
-                  <USDTLogo />
-                </div>
+                {/* <div className={style.availableTokenLogo}> */}
+                <USDTLogo />
+                {/* </div> */}
               </div>
-
               <div className={style.availableTokenArrowDown}>
                 <ArrowDown />
               </div>
-            </div>
+            </button>
 
             <div className={style.addCustomToken}>+ Add a custom token</div>
           </div>

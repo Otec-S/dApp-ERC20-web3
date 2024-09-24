@@ -1,9 +1,9 @@
 import { ChangeEvent, FC, useState } from 'react';
 
-import { IToken, tokens } from '@assets/constants';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 
+import { IToken, tokens } from '../../shared/constants';
 import styles from './TokenPopup.module.css';
 
 type Props = {
