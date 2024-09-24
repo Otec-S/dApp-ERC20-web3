@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { set, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { Address } from 'viem';
 
