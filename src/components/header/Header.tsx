@@ -39,7 +39,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/erc20send"
+            to="/send-ERC20-tokens"
           >
             Send ERC-20
           </NavLink>
