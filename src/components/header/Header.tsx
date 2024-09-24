@@ -4,11 +4,15 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
-import { logo } from '@assets/images';
+import { logo, logoLightScheme } from '@assets/images';
 
 import styles from './Header.module.css';
 
-const Header: FC = () => {
+interface Props {
+  colorScheme?: 'darkBackground' | 'lightBackground';
+}
+
+const Header: FC<Props> = ({ colorScheme }) => {
   const [burgerIsOpen, setBurgerIsOpen] = useState(false);
   const handleBurgerClick = () => {
     setBurgerIsOpen((prev) => !prev);
@@ -21,27 +25,42 @@ const Header: FC = () => {
           className={cn(styles.burger, { [styles.burgerIsOpen]: burgerIsOpen })}
           onClick={handleBurgerClick}
         >
-          <div className={styles.burgerImage} />
+          <div
+            className={cn(styles.burgerImage, { [styles.burgerImageYellowScheme]: colorScheme === 'lightBackground' })}
+          />
         </button>
       </div>
       <img
         className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
-        src={logo.default}
+        src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
         alt="Project logo"
       />
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink
+            className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
+            to="/erc20send"
+          >
             Send ERC-20
           </NavLink>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink
+            className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
+            to="/"
+          >
             Trade ERC-20
           </NavLink>
-          <NavLink className={styles.navLink} to="/">
+          <NavLink
+            className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
+            to="/"
+          >
             NFT Collection
           </NavLink>
         </nav>
-        <div className={styles.connectButtonWrapper}>
+        <div
+          className={cn(styles.connectButtonWrapper, {
+            [styles.connectButtonWrapperYellowScheme]: colorScheme === 'lightBackground',
+          })}
+        >
           <ConnectButton label="Connect wallet" chainStatus={'none'} showBalance={false} accountStatus="address" />
         </div>
       </div>

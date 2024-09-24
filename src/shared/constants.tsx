@@ -1,18 +1,18 @@
 import { ReactElement } from 'react';
 import { Address } from 'viem';
 
-import ARBIcon from '../assets/icons/arb.svg';
-import DAIIcon from '../assets/icons/dai.svg';
-import DOGEIcon from '../assets/icons/doge.svg';
-import LINKIcon from '../assets/icons/link.svg';
-import OPIcon from '../assets/icons/op.svg';
-import PEPEIcon from '../assets/icons/pepe.svg';
-import TRXIcon from '../assets/icons/trx.svg';
-import USDCIcon from '../assets/icons/usdc.svg';
-import USDTIcon from '../assets/icons/usdt.svg';
-import WBTSIcon from '../assets/icons/wbtc.svg';
+import ARBIcon from '@assets/icons/arb.svg';
+import DAIIcon from '@assets/icons/dai.svg';
+import DOGEIcon from '@assets/icons/doge.svg';
+import LINKIcon from '@assets/icons/link.svg';
+import OPIcon from '@assets/icons/op.svg';
+import PEPEIcon from '@assets/icons/pepe.svg';
+import TRXIcon from '@assets/icons/trx.svg';
+import USDCIcon from '@assets/icons/usdc.svg';
+import USDTIcon from '@assets/icons/usdt.svg';
+import WBTSIcon from '@assets/icons/wbtc.svg';
 
-export interface IToken {
+export interface ITokens {
   id: number;
   name: string;
   sepoliaAddress: Address;
@@ -20,7 +20,7 @@ export interface IToken {
   icon: ReactElement;
 }
 
-export const tokens: IToken[] = [
+export const tokens: ITokens[] = [
   {
     id: 1,
     name: 'ARB',
@@ -66,7 +66,7 @@ export const tokens: IToken[] = [
   {
     id: 7,
     name: 'TRX',
-    sepoliaAddress: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
+    sepoliaAddress: '0xd445682a9B9FE0aE4053056E005f9393413407e1',
     polygonAddress: '0xEe7356FB1362fD659D03892719d424Bd8D9D8f70',
     icon: <TRXIcon />,
   },

@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
 import { config } from '../wagmiConfig';
+import { ERC20send } from './pages/ERC20send/ERC20send';
 import { Landing } from './pages/Landing';
 import './App.module.css';
 import './index.module.css';
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Landing />,
+  },
+  {
+    path: '/erc20send',
+    element: <ERC20send />,
   },
 ]);
 
