@@ -1,11 +1,12 @@
-import { FC } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FC, useState } from 'react';
+import { set, SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { Address } from 'viem';
 
-import { tokens } from '@src/shared/constants';
+import ArrowDown from '@assets/icons/arrow_down.svg';
 
 import FormButton from '../form-button/FormButton';
+import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { NewOfferFormStages } from './NewOfferFormStages';
 import styles from './NewOfferForm.module.css';
 
@@ -19,6 +20,8 @@ interface FormData {
 }
 
 const NewOfferForm: FC = () => {
+  const [showLeftTokenPopup,setShowLeftTokenPopup] = useState(false);
+  const [showRightTokenPopup,setShowRightTokenPopup] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,6 +29,16 @@ const NewOfferForm: FC = () => {
   } = useForm<FormData>();
   const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
   console.log(errors);
+  const handleLeftTokenPopupOpen = () => {
+    setShowLeftTokenPopup(true);
+  }
+  const handleRightTokenPopupOpen = () => {
+    setShowRightTokenPopup(true);
+  }
+  const handleTokenPopupClose = () => {
+    setShowLeftTokenPopup(false);
+    setShowRightTokenPopup(false);
+  }
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -36,45 +49,44 @@ const NewOfferForm: FC = () => {
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputs}>
-            <label>
-              From
-              <input type="text" placeholder="from" {...register('from', { required: true })} />
-              <select {...register('tokenFrom', { required: true })}>
-                {tokens.map((token) => {
-                  return (
-                    <option key={token.name} value={token.name}>
-                      {token.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-            <label>
-              To
-              <input type="text" placeholder="to" {...register('to', { required: true })} />
-              <select {...register('tokenTo', { required: true })}>
-                {tokens.map((token) => {
-                  return (
-                    <option key={token.sepoliaAddress} value={token.name}>
-                      {token.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
+            <div className={styles.inputsWraper}>
+              <label className={styles.label}>
+                From
+                <input
+                  className={styles.inputQuantity}
+                  type="text"
+                  placeholder="0"
+                  {...register('from', { required: true })}
+                />
+                {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
+                <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
+              </label>
+              <label className={styles.label}>
+                To
+                <input
+                  className={styles.inputQuantity}
+                  type="text"
+                  placeholder="0"
+                  {...register('to', { required: true })}
+                />
+                {showRightTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
+                <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
+              </label>
+            </div>
             <label>
               <input type="text" placeholder="Rate" {...register('rate', { required: true })} />
             </label>
             <label>
               <input type="text" placeholder="Receiver" {...register('receiver')} />
             </label>
-            <label>Infinite approve
+            <label>
+              Infinite approve
               <input type="checkbox" name="infinite" />
             </label>
           </div>
           <div className={styles.buttons}>
-            <FormButton type='button' buttonText='Approve Token' disabled/>
-            <FormButton type='button' buttonText='Create Trade' disabled/>
+            <FormButton type="button" buttonText="Approve Token" disabled />
+            <FormButton type="button" buttonText="Create Trade" disabled />
           </div>
         </form>
       </div>

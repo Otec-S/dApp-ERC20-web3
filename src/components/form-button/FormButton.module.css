@@ -26,6 +26,8 @@
 
 .formButton:disabled {
   cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.4);
 }
 
 .inactiveButton {

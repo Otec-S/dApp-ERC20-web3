@@ -45,7 +45,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/"
+            to="/erc20trade"
           >
             Trade ERC-20
           </NavLink>

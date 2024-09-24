@@ -1,7 +1,25 @@
+.createOffer {
+  width: 840px;
+}
+
 .headerWrapper {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .buttons {
@@ -9,4 +27,74 @@
   flex-direction: row;
   gap: 16px;
   width: 100%;
+}
+
+.inputs {
+  height: 381px;
+  border-radius: 16px 16px 0 0;
+  border: 1px solid red;
+  background: white;
+  padding: 24px 24px 0 24px;
+}
+
+.buttons {
+  border: 1px solid red;
+  background: white;
+  height: 142px;
+  padding: 16px 24px;
+  border-radius: 0 0 16px 16px;
+}
+
+.label {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-grow: 1;
+  position: relative;
+}
+
+.inputQuantity {
+  border-radius: 24px;
+  border: 1px solid #222;
+  background: #fffbf2;
+  max-width: 388px;
+  width: 100%;
+  height: 102px;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px 218px 45px 24px;
+  outline: none;
+}
+
+.inputsWraper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.tokenPopup {
+  position: absolute;
+  right: 24px;
+  cursor: pointer;
+  bottom: 54px;
+  width: 16px;
+  height: 16px;
 }

@@ -1,8 +1,8 @@
 import { ChangeEvent, FC, useState } from 'react';
 
-import { IToken, tokens } from '@assets/constants';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
+import { IToken, tokens } from '@src/shared/constants';
 
 import styles from './TokenPopup.module.css';
 
@@ -57,7 +57,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
         </div>
         <div className={styles.tokensRow}>
           {firstTokensGroup.map((item) => (
-            <div className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
+            <div key={item.polygonAddress} className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
               <div className={styles.tokenIcon}>{item.icon}</div>
               <div className={styles.tokenSymbol}> {item.name}</div>
             </div>

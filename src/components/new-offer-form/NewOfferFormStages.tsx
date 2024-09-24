@@ -14,7 +14,11 @@ export const NewOfferFormStages: FC<Props> = ({ activeStage }) => {
       <h5 className={styles.header}>Approve</h5>
       <div className={styles.wrapper}>
         {stages.map((stage) => {
-          return <div key={stage} className={cn(styles.stage, { [styles.activeStage]: stage === activeStage })}>{stage}</div>;
+          return (
+            <div key={stage} className={cn(styles.stage, { [styles.activeStage]: stage === activeStage })}>
+              {stage}
+            </div>
+          );
         })}
       </div>
     </div>
