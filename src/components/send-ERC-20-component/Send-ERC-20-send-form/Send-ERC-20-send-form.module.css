@@ -34,6 +34,15 @@
   margin-bottom: 13.5px;
 }
 
+/* Убираем стили автозаполнения */
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #515151 inset;
+  box-shadow: 0 0 0px 1000px #515151 inset;
+  -webkit-text-fill-color: #fff;
+}
+
 .balance {
   display: flex;
   align-items: center;
@@ -132,9 +141,9 @@
   -webkit-text-fill-color: #fff;
 }
 
-.transactionHash {
-  color: #fff;
-  font-family: 'Open Sans', sans-serif;
+.inputRecipientError {
+  margin-top: 5px;
+  color: pink;
 }
 
 @media (max-width: 845px) {

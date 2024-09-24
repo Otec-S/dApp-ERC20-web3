@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
-import { BaseError, useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
@@ -32,9 +32,10 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
 
-  const [amountError, setAmountError] = useState<string | null>(null);
+  const [inputValueError, setInputValueError] = useState<string | null>(null);
+  const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
 
-  const { data: hash, isPending, error, writeContract } = useWriteContract();
+  const { data: hash, writeContract } = useWriteContract();
 
   const { address } = useAccount();
 
@@ -46,17 +47,34 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setInputValue(value);
 
-    if (balance && parseFloat(value) > parseFloat(balance)) {
-      setAmountError('The amount exceeds your balance');
+    // Регулярное выражение для проверки числа с точкой
+    const inputValueRegex = /^\d*\.?\d*$/;
+
+    if (inputValueRegex.test(value)) {
+      setInputValue(value);
+
+      if (balance && parseFloat(value) > parseFloat(balance)) {
+        setInputValueError('The amount exceeds your balance');
+      } else {
+        setInputValueError(null);
+      }
     } else {
-      setAmountError(null);
+      setInputValueError('Invalid amount format');
     }
   };
 
   const handleRecipientChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRecipientValue(event.target.value);
+    const recipient = event.target.value;
+
+    const recipientAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+
+    if (recipientAddressRegex.test(recipient)) {
+      setRecipientValue(recipient);
+      setInputRecipientError(null);
+    } else {
+      setInputRecipientError('Invalid Ethereum address format');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -64,8 +82,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     console.log('Form submitted');
     const formData = new FormData(e.target as HTMLFormElement);
     const recipient = formData.get('recipient') as `0x${string}`;
-    // const amount = formData.get('value') as string;
-    // const tokenAddress = '0xf300c9bf1A045844f17B093a6D56BC33685e5D05';
     // TODO: decimals должны сюда передаваться
     const parsedAmount = parseUnits(inputValue, 18);
     writeContract({
@@ -107,9 +123,15 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   useEffect(() => {
     const inputValueNumber = parseFloat(inputValue);
     if (setIsButtonActive) {
-      setIsButtonActive(inputValue.length > 0 && inputValueNumber > 0 && recipientValue.length > 0 && !amountError);
+      setIsButtonActive(
+        inputValue.length > 0 &&
+          inputValueNumber > 0 &&
+          recipientValue.length > 0 &&
+          !inputValueError &&
+          !inputRecipientError,
+      );
     }
-  }, [inputValue, recipientValue, setIsButtonActive, amountError]);
+  }, [inputValue, recipientValue, setIsButtonActive, inputValueError, inputRecipientError]);
 
   return (
     <>
@@ -137,7 +159,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
               </div>
               <BalanceMaxSign />
             </div>
-            {amountError && <div className={style.balanceExceededError}>{amountError}</div>}
+            {inputValueError && <div className={style.balanceExceededError}>{inputValueError}</div>}
           </div>
 
           <div className={style.tokenBlock}>
@@ -161,15 +183,13 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
             name="recipient"
             className={style.recipientInput}
             placeholder="0x0000000000000000000000000000000000000000"
-            // value={recipientValue}
             onChange={handleRecipientChange}
             required
           />
+          {inputRecipientError && <div className={style.inputRecipientError}>{inputRecipientError}</div>}
         </div>
-        {/* {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>} */}
+
         <SubmitButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
-        {/* {isPending ? <h3 style={{ color: 'blue' }}>'Confirming...'</h3> : <h3 style={{ color: 'green' }}>'Done'</h3>} */}
-        {/* {error && <h3 style={{ color: 'white' }}>Error: {(error as BaseError).shortMessage || error.message}</h3>} */}
       </form>
     </>
   );

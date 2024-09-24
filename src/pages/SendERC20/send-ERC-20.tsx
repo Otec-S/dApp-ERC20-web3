@@ -16,7 +16,13 @@ const SendERC20 = () => {
         setIsTxSuccess={setIsTxSuccess}
         isTxFormSubmitted={isTxFormSubmitted}
         setIsTxFormSubmitted={setIssTxFormSubmitted}
-        blockTitleText={isTxFormSubmitted ? 'Tokens has been successfully sent!' : 'Send ERC-20'}
+        blockTitleText={
+          isTxFormSubmitted
+            ? isTxSuccess
+              ? 'Tokens have been successfully sent!'
+              : 'Something went wrong'
+            : 'Send ERC-20'
+        }
       />
     </div>
   );
