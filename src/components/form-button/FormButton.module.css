@@ -20,8 +20,12 @@
   line-height: normal;
 }
 
-.formButton:hover {
+.formButton:hover:enabled {
   opacity: 0.7;
+}
+
+.formButton:disabled {
+  cursor: not-allowed;
 }
 
 .inactiveButton {

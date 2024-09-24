@@ -45,6 +45,7 @@
 
 .img {
   margin-right: 24px;
+  margin-top: 7px;
 }
 
 .connectButtonWrapper div {
@@ -86,9 +87,18 @@
   text-decoration: none;
 }
 
+.navLinkYellowScheme {
+  color: black;
+}
+
 .navLink:hover {
   color: lightgray;
   transform: scale(1.025);
+}
+
+.navLinkYellowScheme:hover {
+  transform: scale(1.025);
+  color: darkblue;
 }
 
 .navLink a.active {
@@ -121,13 +131,11 @@
 }
 
 .burgerIsOpen .burgerImage:before {
-  background: white;
   top: 0;
   transform: rotate(-45deg);
 }
 
 .burgerIsOpen .burgerImage:after {
-  background: white;
   top: 0;
   transform: rotate(45deg);
 }
@@ -158,6 +166,12 @@
   width: 25px;
   height: 3px;
   background: white;
+}
+
+.burgerImageYellowScheme,
+.burgerImageYellowScheme:after,
+.burgerImageYellowScheme:before {
+  background-color: black;
 }
 
 @media (max-width: 1280px) {

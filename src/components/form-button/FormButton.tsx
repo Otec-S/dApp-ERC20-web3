@@ -3,18 +3,13 @@ import cn from 'classnames';
 
 import styles from './FormButton.module.css';
 
-interface IFormButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   isButtonActive?: boolean;
   buttonText: string;
   colorScheme?: 'default' | 'yellow';
 }
 
-const SubmitButton: FC<IFormButtonProps> = ({
-  isButtonActive = true,
-  buttonText,
-  colorScheme = 'default',
-  ...rest
-}) => {
+const SubmitButton: FC<Props> = ({ isButtonActive = true, buttonText, colorScheme = 'default', ...rest }) => {
   return (
     <button
       className={cn(styles.formButton, {
