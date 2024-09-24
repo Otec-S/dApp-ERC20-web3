@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { Address } from 'viem';
 
+import { NewOfferFormStages } from './NewOfferFormStages';
 import styles from './NewOfferForm.module.css';
 
 interface FormData {
@@ -25,7 +26,10 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
-      <h2 className={styles.header}>New offer</h2>
+      <div className={styles.headerWrapper}>
+        <h2 className={styles.header}>New offer</h2>
+        <NewOfferFormStages activeStage={2} />
+      </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputs}>
