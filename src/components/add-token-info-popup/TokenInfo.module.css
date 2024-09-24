@@ -1,0 +1,45 @@
+.tokenImgWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.tokenImg {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.tokenNameHeader {
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.tokenName {
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.imgTextWrapper {
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+}
+
+.imgTextWrapperYellowScheme {
+  color: black;
+}

@@ -1,0 +1,26 @@
+.warning {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  min-height: 38px;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  width: 100%;
+}
+
+.warningYellowScheme {
+  background-color: white;
+  color: black;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+}
