@@ -1,0 +1,100 @@
+@value fonts: "@assets/fonts.css";
+@value montserrat, openSans from fonts;
+
+.container {
+  width: 598px;
+  height: 515px;
+  background-color: #fffbf2;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+.titleBlock {
+  height: 51px;
+  width: 100%;
+  background: #ffe5a1;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.title {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.infoBlock {
+  height: 240px;
+  width: 100%;
+  padding: 48px 24px;
+  box-sizing: border-box;
+  border-top: 2px solid #f5f5f5;
+  border-bottom: 2px solid #f5f5f5;
+}
+
+.tokenRow {
+  display: flex;
+}
+
+.tokenBox {
+  display: flex;
+}
+
+.tokenBoxIcon {
+  height: 48px;
+  width: 48px;
+
+  svg {
+    height: 48px;
+    width: 48px;
+  }
+}
+
+.tokenBoxCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.tokenBoxCount {
+  color: #000;
+  font-family: openSans;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.approveBlock {
+  height: 51;
+  width: 100%;
+  padding: 16px 24px;
+  box-sizing: border-box;
+}
+
+.buttonBlock {
+  width: 100%;
+  padding: 16px 24px;
+  box-sizing: border-box;
+}
+
+.description {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.buttonRow {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 10px 0;
+}
