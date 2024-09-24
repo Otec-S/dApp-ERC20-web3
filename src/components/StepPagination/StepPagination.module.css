@@ -1,13 +1,50 @@
 .stepRow {
   display: flex;
+  gap: 24px;
 }
 
 .step {
   display: flex;
   width: 20px;
   height: 20px;
-  padding: 2px 6px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  border-radius: 100px;
+  position: relative;
+  box-sizing: border-box;
+
+  &:not(:last-child):after {
+    content: '';
+    position: absolute;
+    width: 24px;
+    height: 2px;
+    background-color: #bebebe;
+    left: 18px;
+    top: 8px;
+  }
+}
+
+.stepDark {
+  border: 2px solid #333;
+  background: #333;
+  color: #fff;
+}
+
+.stepLight {
+  border: 2px solid #333;
+}
+
+.stepDisable {
+  border: 2px solid #bebebe;
+  color: #bebebe;
+}
+
+.stepText {
+  text-align: center;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }

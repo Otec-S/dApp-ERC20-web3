@@ -1,6 +1,7 @@
 export enum StepStatus {
-  INITIAL = 'initial',
-  CURRENT = 'current',
+  DISABLED = 'disabled',
+  DARK = 'dark',
+  LIGHT = 'light',
   COMPLETED = 'completed',
 }
 
