@@ -23,6 +23,8 @@ interface TokenData {
   tokenBalance?: bigint;
 }
 
+type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
+
 interface Props {
   onClosePopup: (data: TokenData) => void;
   colorScheme?: 'default' | 'yellow';
@@ -40,9 +42,7 @@ const override: CSSProperties = {
 };
 
 const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
-  const [formState, setFormState] = useState<
-    'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState'
-  >('initialState');
+  const [formState, setFormState] = useState<FormStages>('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
 
   const { isConnected, address: walletAddress } = useAccount();
@@ -67,7 +67,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     isError,
   } = useReadContracts({
     allowFailure: false,
-    contracts: [
+    contracts: walletAddress && [
       {
         address: tokenAddress,
         functionName: 'decimals',
@@ -82,7 +82,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
         address: tokenAddress,
         functionName: 'balanceOf',
         abi: erc20Abi,
-        args: [walletAddress as Address],
+        args: [walletAddress],
       },
     ],
   });
@@ -241,7 +241,13 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
               )}
 
               {formState === 'showTokenAvatarState' && (
-                <TokenInfo colorScheme={colorScheme} tokenAddress={tokenAddress} contractData={contractData} />
+                <TokenInfo
+                  colorScheme={colorScheme}
+                  tokenAddress={tokenAddress}
+                  tokenDecimals={contractData?.[0]}
+                  tokenBalance={contractData?.[2]}
+                  tokenName={contractData?.[1]}
+                />
               )}
             </div>
             <div className={styles.buttonWrapper}>
