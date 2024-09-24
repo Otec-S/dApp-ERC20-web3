@@ -123,6 +123,15 @@
   border: none;
 }
 
+/* Убираем стили автозаполнения */
+.recipientInput:-webkit-autofill,
+.recipientInput:-webkit-autofill:hover,
+.recipientInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #515151 inset;
+  box-shadow: 0 0 0px 1000px #515151 inset;
+  -webkit-text-fill-color: #fff;
+}
+
 .transactionHash {
   color: #fff;
   font-family: 'Open Sans', sans-serif;

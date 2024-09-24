@@ -130,7 +130,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
                 {loadingBalanceCustom ? (
                   <span>Loading...</span>
                 ) : errorBalanceCustom ? (
-                  <span>Error: {errorBalanceCustom.message}</span>
+                  <span>Error getting wallet balance</span>
                 ) : (
                   <span>Balance: {balance}</span>
                 )}
@@ -166,10 +166,10 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
             required
           />
         </div>
-        {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>}
-        <SubmitButton buttonText="Send" isButtonActive={isButtonActive} />
-        {isPending ? <h3 style={{ color: 'blue' }}>'Confirming...'</h3> : <h3 style={{ color: 'green' }}>'Done'</h3>}
-        {error && <h3 style={{ color: 'white' }}>Error: {(error as BaseError).shortMessage || error.message}</h3>}
+        {/* {hash && <p className={style.transactionHash}>Transaction Hash: {hash}</p>} */}
+        <SubmitButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
+        {/* {isPending ? <h3 style={{ color: 'blue' }}>'Confirming...'</h3> : <h3 style={{ color: 'green' }}>'Done'</h3>} */}
+        {/* {error && <h3 style={{ color: 'white' }}>Error: {(error as BaseError).shortMessage || error.message}</h3>} */}
       </form>
     </>
   );

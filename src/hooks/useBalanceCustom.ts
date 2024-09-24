@@ -25,19 +25,19 @@ const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals
           address,
           token,
         });
-        // TODO: проставляй децималы
         const balanceInEth = formatUnits(balanceData.value, decimals);
         setBalance(balanceInEth);
       } catch (err) {
         setErrorBalanceCustom(err as Error);
-        console.error('Error retrieving balance:', err);
+        // console.error('Error retrieving balance:', err);
+        setBalance('Error retrieving balance');
       } finally {
         setLoadingBalanceCustom(false);
       }
     };
 
     fetchBalance();
-  }, [address, token]);
+  }, [address, token, decimals]);
 
   return { balance, decimals, loadingBalanceCustom, errorBalanceCustom };
 };

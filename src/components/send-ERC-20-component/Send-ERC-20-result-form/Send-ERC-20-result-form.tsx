@@ -1,6 +1,6 @@
-import resultErrorIcon from '../../../assets/resultErrorIcon.png';
-import resultSuccessIcon from '../../../assets/resultSuccessIcon.svg';
-import viewTransactionIcon from '../../../assets/view_tx.svg';
+import ViewTransactionIcon from '@assets/icons/view_tx.svg';
+import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
+
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import style from './Send-ERC-20-result-form.module.css';
 
@@ -20,17 +20,24 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsTxFormSubmitted(false);
-    setInputValue('0');
+    setInputValue('');
   };
 
   return (
     <form className={style.blockForm} onSubmit={handleSubmit}>
       <div className={style.resultForm}>
-        <img className={style.resultIcon} src={isTxSuccess ? resultSuccessIcon : resultErrorIcon} alt="Result icon" />
+        <img
+          className={style.resultIcon}
+          src={isTxSuccess ? resultSuccessIcon.default : resultErrorIcon.default}
+          alt="Result icon"
+        />
+        {/* TODO: поправь единицы измерения */}
         <p className={style.transactionValue}>{inputValue} ETH</p>
-        <img className={style.viewTransactionIcon} src={viewTransactionIcon} alt="View transaction icon" />
+        <div className={style.viewTransactionIcon}>
+          <ViewTransactionIcon />
+        </div>
       </div>
-      <SubmitButton buttonText="Great!" />
+      <SubmitButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
     </form>
   );
 };
