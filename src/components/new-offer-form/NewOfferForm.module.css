@@ -3,3 +3,10 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}

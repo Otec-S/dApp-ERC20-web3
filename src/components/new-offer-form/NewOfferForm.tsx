@@ -3,6 +3,9 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
 import { Address } from 'viem';
 
+import { tokens } from '@src/shared/constants';
+
+import FormButton from '../form-button/FormButton';
 import { NewOfferFormStages } from './NewOfferFormStages';
 import styles from './NewOfferForm.module.css';
 
@@ -37,20 +40,26 @@ const NewOfferForm: FC = () => {
               From
               <input type="text" placeholder="from" {...register('from', { required: true })} />
               <select {...register('tokenFrom', { required: true })}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                {tokens.map((token) => {
+                  return (
+                    <option key={token.name} value={token.name}>
+                      {token.name}
+                    </option>
+                  );
+                })}
               </select>
             </label>
             <label>
               To
               <input type="text" placeholder="to" {...register('to', { required: true })} />
               <select {...register('tokenTo', { required: true })}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                {tokens.map((token) => {
+                  return (
+                    <option key={token.sepoliaAddress} value={token.name}>
+                      {token.name}
+                    </option>
+                  );
+                })}
               </select>
             </label>
             <label>
@@ -59,10 +68,13 @@ const NewOfferForm: FC = () => {
             <label>
               <input type="text" placeholder="Receiver" {...register('receiver')} />
             </label>
-            <input type="checkbox" placeholder="Infinite approve" name="infinite" />
+            <label>Infinite approve
+              <input type="checkbox" name="infinite" />
+            </label>
           </div>
           <div className={styles.buttons}>
-            <input type="submit" />
+            <FormButton type='button' buttonText='Approve Token' disabled/>
+            <FormButton type='button' buttonText='Create Trade' disabled/>
           </div>
         </form>
       </div>
