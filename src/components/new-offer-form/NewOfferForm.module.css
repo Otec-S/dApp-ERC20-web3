@@ -65,6 +65,23 @@
   bottom: 15px;
   cursor: pointer;
 }
+.approve {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.approveWrraper {
+  display: flex;
+  flex-direction: row;
+}
 
 .buttons {
   border: 1px solid red;
@@ -127,25 +144,30 @@
   border: none;
   outline: none;
 }
-.inputReceiver,.inputRate {
+.inputReceiver,
+.inputRate {
   overflow: hidden;
-    color: rgba(0, 0, 0, 0.50);
-    font-feature-settings: 'liga' off, 'clig' off;
-    text-overflow: ellipsis;
-    font-family: "Open Sans",sans-serif;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .inputRate::placeholder,
 .inputReceiver::placeholder {
   overflow: hidden;
-  color: rgba(0, 0, 0, 0.50);
-  font-feature-settings: 'liga' off, 'clig' off;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
   text-overflow: ellipsis;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -161,22 +183,18 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  position: relative;
   max-width: 210px;
   width: 100%;
   border-radius: 100px;
   border: 1px solid #333;
-  display: flex;
   width: 210px;
   height: 48px;
   padding: 0px 24px;
-  align-items: center;
 }
 
 .labelReceiver {
   display: flex;
   flex-direction: row;
-  position: relative;
   border-radius: 100px;
   border: 1px solid #333;
   display: flex;
@@ -191,9 +209,11 @@
   flex-shrink: 0;
   overflow: hidden;
   color: #404040;
-  font-feature-settings: 'liga' off, 'clig' off;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
   text-overflow: ellipsis;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;

@@ -17,6 +17,7 @@ interface FormData {
   tokenTo: Address;
   rate: string;
   receiver: string;
+  approve: boolean;
 }
 
 const NewOfferForm: FC = () => {
@@ -84,17 +85,29 @@ const NewOfferForm: FC = () => {
               </label>
             </div>
             <label className={styles.labelRate}>
-              <input className={styles.inputRate} type="text" placeholder="0" {...register('rate', { required: true })} />
+              <input
+                className={styles.inputRate}
+                type="text"
+                placeholder="0"
+                {...register('rate', { required: true })}
+              />
               <span className={styles.labelText}>Rate</span>
             </label>
             <label className={styles.labelReceiver}>
-              <input className={styles.inputReceiver} type="text" placeholder="0x0000000000000000000000000000000000000000" {...register('receiver')} />
+              <input
+                className={styles.inputReceiver}
+                type="text"
+                placeholder="0x0000000000000000000000000000000000000000"
+                {...register('receiver')}
+              />
               <span className={styles.labelText}>Receiver</span>
             </label>
-            <label>
-              Infinite approve
-              <input type="checkbox" name="infinite" />
-            </label>
+            <div className={styles.approveWrraper}>
+              <input type="checkbox" id="infiniteapprove" {...register('approve')} />
+              <label htmlFor="infiniteapprove" className={styles.approve}>
+                Infinite approve
+              </label>
+            </div>
           </div>
           <div className={styles.buttons}>
             <FormButton type="button" buttonText="Approve Token" disabled />
