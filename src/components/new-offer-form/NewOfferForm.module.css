@@ -42,26 +42,28 @@
 
 .buttonAddCustomToken {
   color: #000;
-    font-feature-settings: 'liga' off, 'clig' off;
-    font-family: Inter,sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
-    color: black;
-    border-radius: 100px;
-      background: rgba(0, 0, 0, 0.05);
-      display: flex;
-        padding: 4px 8px;
-        justify-content: center;
-        align-items: center;
-        gap:8px;
-        height: 24px;
-        width: 143px;
-        position: absolute;
-        right: 24px;
-        bottom: 15px;
-        cursor: pointer;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: black;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  width: 143px;
+  position: absolute;
+  right: 24px;
+  bottom: 15px;
+  cursor: pointer;
 }
 
 .buttons {
@@ -109,6 +111,94 @@
   line-height: normal;
   padding: 16px 218px 45px 24px;
   outline: none;
+}
+
+.inputRate {
+  width: 135px;
+  height: 24px;
+  border: none;
+  outline: none;
+}
+
+.inputReceiver {
+  max-width: 460px;
+  width: 100%;
+  height: 24px;
+  border: none;
+  outline: none;
+}
+.inputReceiver,.inputRate {
+  overflow: hidden;
+    color: rgba(0, 0, 0, 0.50);
+    font-feature-settings: 'liga' off, 'clig' off;
+    text-overflow: ellipsis;
+    font-family: "Open Sans",sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inputRate::placeholder,
+.inputReceiver::placeholder {
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.50);
+  font-feature-settings: 'liga' off, 'clig' off;
+  text-overflow: ellipsis;
+  font-family: "Open Sans", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+.inputRate::placeholder {
+  font-size: 24px;
+}
+.inputReceiver::placeholder {
+  font-size: 18px;
+}
+
+.labelRate {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  position: relative;
+  max-width: 210px;
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid #333;
+  display: flex;
+  width: 210px;
+  height: 48px;
+  padding: 0px 24px;
+  align-items: center;
+}
+
+.labelReceiver {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  border-radius: 100px;
+  border: 1px solid #333;
+  display: flex;
+  max-width: 566px;
+  width: 100%;
+  height: 48px;
+  padding: 0px 24px;
+  align-items: center;
+}
+
+.labelText {
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #404040;
+  font-feature-settings: 'liga' off, 'clig' off;
+  text-overflow: ellipsis;
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: inline-block;
 }
 
 .inputsWraper {

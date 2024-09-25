@@ -20,8 +20,8 @@ interface FormData {
 }
 
 const NewOfferForm: FC = () => {
-  const [showLeftTokenPopup,setShowLeftTokenPopup] = useState(false);
-  const [showRightTokenPopup,setShowRightTokenPopup] = useState(false);
+  const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
+  const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
   const {
     register,
     handleSubmit,
@@ -31,14 +31,14 @@ const NewOfferForm: FC = () => {
   console.log(errors);
   const handleLeftTokenPopupOpen = () => {
     setShowLeftTokenPopup(true);
-  }
+  };
   const handleRightTokenPopupOpen = () => {
     setShowRightTokenPopup(true);
-  }
+  };
   const handleTokenPopupClose = () => {
     setShowLeftTokenPopup(false);
     setShowRightTokenPopup(false);
-  }
+  };
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -59,8 +59,12 @@ const NewOfferForm: FC = () => {
                   {...register('from', { required: true })}
                 />
                 {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
-                <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
-                <button className={styles.buttonAddCustomToken} type="button">+ Add a custom token</button>
+                <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}>
+                  <ArrowDown />
+                </div>
+                <button className={styles.buttonAddCustomToken} type="button">
+                  + Add a custom token
+                </button>
               </label>
               <label className={styles.label}>
                 To
@@ -71,15 +75,21 @@ const NewOfferForm: FC = () => {
                   {...register('to', { required: true })}
                 />
                 {showRightTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
-                <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
-                <button className={styles.buttonAddCustomToken} type="button">+ Add a custom token</button>
+                <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}>
+                  <ArrowDown />
+                </div>
+                <button className={styles.buttonAddCustomToken} type="button">
+                  + Add a custom token
+                </button>
               </label>
             </div>
-            <label>
-              <input type="text" placeholder="Rate" {...register('rate', { required: true })} />
+            <label className={styles.labelRate}>
+              <input className={styles.inputRate} type="text" placeholder="0" {...register('rate', { required: true })} />
+              <span className={styles.labelText}>Rate</span>
             </label>
-            <label>
-              <input type="text" placeholder="Receiver" {...register('receiver')} />
+            <label className={styles.labelReceiver}>
+              <input className={styles.inputReceiver} type="text" placeholder="0x0000000000000000000000000000000000000000" {...register('receiver')} />
+              <span className={styles.labelText}>Receiver</span>
             </label>
             <label>
               Infinite approve
