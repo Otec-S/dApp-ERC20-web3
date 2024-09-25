@@ -40,7 +40,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           inputValue={inputValue}
           setInputValue={setInputValue}
           // TODO: FIXME:
-          token="0xf300c9bf1A045844f17B093a6D56BC33685e5D05"
+          // token="0xf300c9bf1A045844f17B093a6D56BC33685e5D05"
           // TODO: FIXME:
           decimals={18}
         />

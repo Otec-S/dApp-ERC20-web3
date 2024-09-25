@@ -3,10 +3,11 @@ import { parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
+import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
-import USDTLogo from '@assets/icons/USDTLogo.svg';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
+import { IToken } from '@src/shared/constants';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
@@ -18,7 +19,7 @@ interface ISendERC20SendFormProps {
   setIsTxSuccess: (value: boolean) => void;
   inputValue: string;
   setInputValue: (value: string) => void;
-  token: `0x${string}`;
+  // token: `0x${string}`;
   decimals: number;
 }
 
@@ -27,9 +28,16 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setIsTxFormSubmitted,
   inputValue,
   setInputValue,
-  token,
+  // token,
   decimals,
 }) => {
+  const [tokenSelected, setTokenSelected] = useState<IToken>({
+    id: 1,
+    name: 'ARB',
+    polygonAddress: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
+    sepoliaAddress: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
+    icon: <ARBIcon />,
+  });
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [inputValueError, setInputValueError] = useState<string | null>(null);
@@ -40,7 +48,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const { address } = useAccount();
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
-    token as `0x${string}`,
+    tokenSelected.sepoliaAddress as `0x${string}`,
     decimals as number,
   );
 
@@ -81,7 +89,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const handleTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log('Token button clicked');
     setIsTokenPopupOpen(true);
   };
 
@@ -89,12 +96,13 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   // Простая функция-заглушка для закрытия попапа
   const handleOnClose = () => {
     setIsTokenPopupOpen(false);
-    console.log('Popup closed');
   };
   // FIXME:
   // Простая функция-заглушка для выбора токена
-  const handleOnSelect = (token) => {
-    console.log('Token selected:', token.name);
+  const handleOnSelect = (tokenSelected: IToken) => {
+    setTokenSelected(tokenSelected);
+    setIsTokenPopupOpen(false);
+    console.log('Token selected:', tokenSelected);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -105,7 +113,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     // TODO: decimals должны сюда передаваться
     const parsedAmount = parseUnits(inputValue, 18);
     writeContract({
-      address: token,
+      address: tokenSelected.sepoliaAddress as `0x${string}`,
       abi: erc20Abi,
       functionName: 'transfer',
       args: [recipient, parsedAmount],
@@ -177,7 +185,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           <div className={style.tokenBlock}>
             <button className={style.availableTokensSelector} onClick={handleTokenButtonClick} type="button">
               <div className={style.nameOfToken}>
-                <USDTLogo />
+                <span>{tokenSelected.icon}</span>
+                <span>{tokenSelected.name}</span>
               </div>
               <div className={style.availableTokenArrowDown}>
                 <ArrowDown />

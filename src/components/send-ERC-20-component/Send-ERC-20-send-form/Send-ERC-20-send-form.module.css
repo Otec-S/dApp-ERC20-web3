@@ -99,6 +99,7 @@
 .nameOfToken {
   display: flex;
   align-items: center;
+  gap: 8px;
   color: #fff;
   font-family: 'Open Sans', sans-serif;
   font-size: 24px;
