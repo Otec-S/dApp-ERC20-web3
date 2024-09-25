@@ -21,7 +21,6 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [tokenName, setTokenName] = useState<string>('ARB');
-  console.log('tokenName:', tokenName);
 
   return (
     <section className={style.block}>
@@ -44,10 +43,6 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           inputValue={inputValue}
           setInputValue={setInputValue}
           setTokenName={setTokenName}
-          // TODO: FIXME:
-          // token="0xf300c9bf1A045844f17B093a6D56BC33685e5D05"
-          // TODO: FIXME:
-          decimals={18}
         />
       )}
     </section>

@@ -28,8 +28,6 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
     setTokenName('ARB');
   };
 
-  console.log('tokenName in RESULT:', tokenName);
-
   return (
     <form className={style.blockForm} onSubmit={handleSubmit}>
       <div className={style.resultForm}>
@@ -38,7 +36,6 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
           src={isTxSuccess ? resultSuccessIcon.default : resultErrorIcon.default}
           alt="Result icon"
         />
-        {/* TODO: поправь единицы измерения */}
         <p className={style.transactionValue}>
           {inputValue} {tokenName}
         </p>

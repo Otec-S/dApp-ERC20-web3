@@ -21,9 +21,6 @@ interface ISendERC20SendFormProps {
   inputValue: string;
   setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
-
-  // token: `0x${string}`;
-  // decimals: number;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -32,8 +29,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   inputValue,
   setInputValue,
   setTokenName,
-  // token,
-  // decimals,
 }) => {
   const [tokenSelected, setTokenSelected] = useState<IToken>({
     id: 1,
@@ -111,7 +106,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     setIsTokenPopupOpen(false);
     setTokenName(tokenSelected.name);
     setDecimals(tokenSelected.decimals);
-    console.log('Token selected:', tokenSelected);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,7 +115,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     const recipient = formData.get('recipient') as `0x${string}`;
     const parsedAmount = parseUnits(inputValue, decimals);
     writeContract({
-      // TODO:
       address: currentTokenAddress as `0x${string}`,
       abi: erc20Abi,
       functionName: 'transfer',
@@ -131,7 +124,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   useEffect(() => {
     let tokenAddress = '';
-
     switch (chainId) {
       case sepolia.id:
         tokenAddress = tokenSelected.sepoliaAddress;
@@ -143,7 +135,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
         tokenAddress = '';
         break;
     }
-
     setCurrentTokenAddress(tokenAddress);
   }, [chainId, tokenSelected]);
 
