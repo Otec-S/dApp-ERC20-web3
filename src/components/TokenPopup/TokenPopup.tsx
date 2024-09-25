@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
@@ -13,6 +13,7 @@ type Props = {
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
   const [searchText, setSearchText] = useState('');
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
   const firstTokensGroup = tokenArr.splice(0, 7);
@@ -32,8 +33,32 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
     setSearchText('');
   };
 
+  // Обработчик закрытия по Esc
+  const handleEscDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onCLose();
+    }
+  };
+
+  // Обработчик закрытия по клику вне попапа
+  const handleClickOutside = (e: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+      onCLose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEscDown);
+    window.addEventListener('click', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscDown);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={popupRef}>
       <div className={styles.searchBlock}>
         <div className={styles.searchHead}>
           <p className={styles.searchTitle}>Select a token</p>

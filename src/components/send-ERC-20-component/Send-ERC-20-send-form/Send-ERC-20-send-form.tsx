@@ -6,6 +6,7 @@ import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagm
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import USDTLogo from '@assets/icons/USDTLogo.svg';
+import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
@@ -31,29 +32,32 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 }) => {
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
-
   const [inputValueError, setInputValueError] = useState<string | null>(null);
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
+  const [isTokenPopupOpen, setIsTokenPopupOpen] = useState(false);
 
   const { data: hash, writeContract } = useWriteContract();
-
   const { address } = useAccount();
-
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
     token as `0x${string}`,
     decimals as number,
   );
 
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError,
+  } = useWaitForTransactionReceipt({
+    hash,
+  });
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-
     // Регулярное выражение для проверки числа с точкой
     const inputValueRegex = /^\d*\.?\d*$/;
-
     if (inputValueRegex.test(value)) {
       setInputValue(value);
-
       if (balance && parseFloat(value) > parseFloat(balance)) {
         setInputValueError('The amount exceeds your balance');
       } else {
@@ -66,15 +70,31 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const handleRecipientChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const recipient = event.target.value;
-
     const recipientAddressRegex = /^0x[a-fA-F0-9]{40}$/;
-
     if (recipientAddressRegex.test(recipient)) {
       setRecipientValue(recipient);
       setInputRecipientError(null);
     } else {
       setInputRecipientError('Invalid Ethereum address format');
     }
+  };
+
+  const handleTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    console.log('Token button clicked');
+    setIsTokenPopupOpen(true);
+  };
+
+  // FIXME:
+  // Простая функция-заглушка для закрытия попапа
+  const handleOnClose = () => {
+    setIsTokenPopupOpen(false);
+    console.log('Popup closed');
+  };
+  // FIXME:
+  // Простая функция-заглушка для выбора токена
+  const handleOnSelect = (token) => {
+    console.log('Token selected:', token.name);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -91,14 +111,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
       args: [recipient, parsedAmount],
     });
   };
-
-  const {
-    isLoading: isConfirming,
-    isSuccess: isConfirmed,
-    isError,
-  } = useWaitForTransactionReceipt({
-    hash,
-  });
 
   useEffect(() => {
     if (isConfirmed) {
@@ -163,11 +175,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           </div>
 
           <div className={style.tokenBlock}>
-            <button className={style.availableTokensSelector}>
+            <button className={style.availableTokensSelector} onClick={handleTokenButtonClick} type="button">
               <div className={style.nameOfToken}>
-                {/* <div className={style.availableTokenLogo}> */}
                 <USDTLogo />
-                {/* </div> */}
               </div>
               <div className={style.availableTokenArrowDown}>
                 <ArrowDown />
@@ -187,8 +197,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           />
           {inputRecipientError && <div className={style.inputRecipientError}>{inputRecipientError}</div>}
         </div>
-
         <SubmitButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
+        {isTokenPopupOpen && <TokenPopup onCLose={handleOnClose} onSelect={handleOnSelect} />}
       </form>
     </>
   );
