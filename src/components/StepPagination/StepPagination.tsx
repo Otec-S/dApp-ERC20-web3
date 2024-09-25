@@ -22,7 +22,7 @@ export const StepPagination: FC<Props> = ({ steps }) => {
           })}
           key={step.value}
         >
-          {step.status === StepStatus.COMPLETED ? <CheckIcon /> : <span>{step.value}</span>}
+          {step.status === StepStatus.COMPLETED ? <CheckIcon /> : <span className={styles.stepText}>{step.value}</span>}
         </div>
       ))}
     </div>

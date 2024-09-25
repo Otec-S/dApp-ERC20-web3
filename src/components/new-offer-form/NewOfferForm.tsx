@@ -9,6 +9,8 @@ import ArrowDown from '@assets/icons/arrow_down.svg';
 import { IToken } from '@src/shared/constants';
 
 import FormButton from '../form-button/FormButton';
+import { StepPagination } from '../StepPagination/StepPagination';
+import { StepStatus } from '../StepPagination/StepPagination.interface';
 import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { NewOfferFormStages } from './NewOfferFormStages';
 import styles from './NewOfferForm.module.css';
@@ -26,8 +28,8 @@ interface FormData {
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
   const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
-  const [tokenFrom,setTokenFrom] = useState<IToken|undefined>(undefined);
-  const [tokenTo,setTokenTo] = useState<IToken|undefined>(undefined);
+  const [tokenFrom, setTokenFrom] = useState<IToken | undefined>(undefined);
+  const [tokenTo, setTokenTo] = useState<IToken | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -35,7 +37,7 @@ const NewOfferForm: FC = () => {
   } = useForm<FormData>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isConnected, address: walletAddress, chainId } = useAccount();
-  console.log(chainId)
+  console.log(chainId);
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
@@ -48,14 +50,14 @@ const NewOfferForm: FC = () => {
   const handleRightTokenPopupOpen = () => {
     setShowRightTokenPopup(true);
   };
-  const handleLeftTokenChoice = (data:IToken)=> {
+  const handleLeftTokenChoice = (data: IToken) => {
     setTokenFrom(data);
     setShowLeftTokenPopup(false);
-  }
-  const handleRightTokenChoice = (data:IToken)=> {
+  };
+  const handleRightTokenChoice = (data: IToken) => {
     setTokenTo(data);
     setShowRightTokenPopup(false);
-  }
+  };
   const handleTokenPopupClose = () => {
     setShowLeftTokenPopup(false);
     setShowRightTokenPopup(false);
@@ -83,7 +85,9 @@ const NewOfferForm: FC = () => {
                 {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleLeftTokenChoice} />}
                 <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}>
                   <div className={styles.tokenIcon}>{tokenFrom?.icon}</div>
-                  <div className={styles.tokenArrow}><ArrowDown /></div>
+                  <div className={styles.tokenArrow}>
+                    <ArrowDown />
+                  </div>
                 </div>
                 <button className={styles.buttonAddCustomToken} type="button">
                   + Add a custom token
@@ -98,10 +102,14 @@ const NewOfferForm: FC = () => {
                   defaultValue={0}
                   {...register('to', { required: true })}
                 />
-                {showRightTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleRightTokenChoice} />}
+                {showRightTokenPopup && (
+                  <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleRightTokenChoice} />
+                )}
                 <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}>
                   <div className={styles.tokenIcon}>{tokenTo?.icon}</div>
-                  <div className={styles.tokenArrow}><ArrowDown /></div>
+                  <div className={styles.tokenArrow}>
+                    <ArrowDown />
+                  </div>
                 </div>
                 <button className={styles.buttonAddCustomToken} type="button">
                   + Add a custom token
@@ -134,8 +142,11 @@ const NewOfferForm: FC = () => {
             </div>
           </div>
           <div className={styles.buttons}>
-            <FormButton colorScheme='yellow' type="submit" buttonText="Approve Token" />
-            <FormButton type="button" buttonText="Create Trade" disabled />
+            <div className={styles.buttonsWrapper}>
+              <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
+              <FormButton type="button" buttonText="Create Trade" disabled />
+            </div>
+            <StepPagination steps={[{value:1,status:StepStatus.DISABLED},{value:2,status:StepStatus.DISABLED}]} />
           </div>
         </form>
       </div>

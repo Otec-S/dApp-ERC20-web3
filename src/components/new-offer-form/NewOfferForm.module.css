@@ -22,13 +22,6 @@
   line-height: normal;
 }
 
-.buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 16px;
-  width: 100%;
-}
-
 .inputs {
   height: 381px;
   border-radius: 16px 16px 0 0;
@@ -90,6 +83,13 @@
   height: 142px;
   padding: 16px 24px;
   border-radius: 0 0 16px 16px;
+}
+
+.buttonsWrapper {
+  display: flex;
+    flex-direction: row;
+    gap: 16px;
+    width: 100%;
 }
 
 .label {
