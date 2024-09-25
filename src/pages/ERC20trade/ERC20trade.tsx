@@ -6,7 +6,7 @@ import NewOfferForm from '@src/components/new-offer-form/NewOfferForm';
 export const ERC20trade: FC = () => {
   return (
     <div style={{ background: '#FFEDBE' }}>
-      <Header colorScheme="yellow" />
+      <Header colorScheme="lightBackground" />
       <NewOfferForm />
     </div>
   );

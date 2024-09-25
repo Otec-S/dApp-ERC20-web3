@@ -65,6 +65,7 @@
   bottom: 15px;
   cursor: pointer;
 }
+
 .approve {
   color: #000;
   font-feature-settings:
@@ -144,6 +145,7 @@
   border: none;
   outline: none;
 }
+
 .inputReceiver,
 .inputRate {
   overflow: hidden;
@@ -160,6 +162,7 @@
 }
 
 .inputRate::placeholder,
+.inputQuantity::placeholder,
 .inputReceiver::placeholder {
   overflow: hidden;
   color: rgba(0, 0, 0, 0.5);
@@ -172,9 +175,11 @@
   font-weight: 400;
   line-height: normal;
 }
+
 .inputRate::placeholder {
   font-size: 24px;
 }
+
 .inputReceiver::placeholder {
   font-size: 18px;
 }
@@ -232,6 +237,18 @@
   right: 24px;
   cursor: pointer;
   bottom: 54px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.tokenIcon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.tokenArrow {
   width: 16px;
   height: 16px;
 }
