@@ -9,6 +9,8 @@ interface ISendERC20ResultFormProps {
   setIsTxFormSubmitted: (value: boolean) => void;
   inputValue: string;
   setInputValue: (value: string) => void;
+  tokenName: string;
+  setTokenName: (value: string) => void;
 }
 
 const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
@@ -16,12 +18,17 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
   setIsTxFormSubmitted,
   inputValue,
   setInputValue,
+  tokenName,
+  setTokenName,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsTxFormSubmitted(false);
     setInputValue('');
+    setTokenName('ARB');
   };
+
+  console.log('tokenName in RESULT:', tokenName);
 
   return (
     <form className={style.blockForm} onSubmit={handleSubmit}>
@@ -32,7 +39,9 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
           alt="Result icon"
         />
         {/* TODO: поправь единицы измерения */}
-        <p className={style.transactionValue}>{inputValue} ETH</p>
+        <p className={style.transactionValue}>
+          {inputValue} {tokenName}
+        </p>
         <div className={style.viewTransactionIcon}>
           <ViewTransactionIcon />
         </div>

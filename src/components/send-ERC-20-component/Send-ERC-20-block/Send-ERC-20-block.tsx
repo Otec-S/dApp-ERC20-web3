@@ -19,7 +19,9 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   isTxFormSubmitted,
   setIsTxFormSubmitted,
 }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [tokenName, setTokenName] = useState<string>('ARB');
+  console.log('tokenName:', tokenName);
 
   return (
     <section className={style.block}>
@@ -31,6 +33,8 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setIsTxFormSubmitted={setIsTxFormSubmitted}
           inputValue={inputValue}
           setInputValue={setInputValue}
+          tokenName={tokenName}
+          setTokenName={setTokenName}
         />
       ) : (
         <SendERC20SendForm
@@ -39,6 +43,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setIsTxFormSubmitted={setIsTxFormSubmitted}
           inputValue={inputValue}
           setInputValue={setInputValue}
+          setTokenName={setTokenName}
           // TODO: FIXME:
           // token="0xf300c9bf1A045844f17B093a6D56BC33685e5D05"
           // TODO: FIXME:

@@ -19,8 +19,10 @@ interface ISendERC20SendFormProps {
   setIsTxSuccess: (value: boolean) => void;
   inputValue: string;
   setInputValue: (value: string) => void;
+  setTokenName: (value: string) => void;
+
   // token: `0x${string}`;
-  decimals: number;
+  // decimals: number;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -28,8 +30,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setIsTxFormSubmitted,
   inputValue,
   setInputValue,
+  setTokenName,
   // token,
-  decimals,
+  // decimals,
 }) => {
   const [tokenSelected, setTokenSelected] = useState<IToken>({
     id: 1,
@@ -37,12 +40,14 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     polygonAddress: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
     sepoliaAddress: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
     icon: <ARBIcon />,
+    decimals: 18,
   });
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [inputValueError, setInputValueError] = useState<string | null>(null);
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
   const [isTokenPopupOpen, setIsTokenPopupOpen] = useState(false);
+  const [decimals, setDecimals] = useState<number>(18);
 
   const { data: hash, writeContract } = useWriteContract();
   const { address } = useAccount();
@@ -92,16 +97,15 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     setIsTokenPopupOpen(true);
   };
 
-  // FIXME:
-  // Простая функция-заглушка для закрытия попапа
   const handleOnClose = () => {
     setIsTokenPopupOpen(false);
   };
-  // FIXME:
-  // Простая функция-заглушка для выбора токена
+
   const handleOnSelect = (tokenSelected: IToken) => {
     setTokenSelected(tokenSelected);
     setIsTokenPopupOpen(false);
+    setTokenName(tokenSelected.name);
+    setDecimals(tokenSelected.decimals);
     console.log('Token selected:', tokenSelected);
   };
 
