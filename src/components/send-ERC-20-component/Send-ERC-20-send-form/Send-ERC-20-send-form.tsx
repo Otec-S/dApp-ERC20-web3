@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { polygonAmoy, sepolia } from 'viem/chains';
+import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
@@ -48,15 +49,17 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
   const [isTokenPopupOpen, setIsTokenPopupOpen] = useState(false);
   const [decimals, setDecimals] = useState<number>(18);
+  const [currentTokenAddress, setCurrentTokenAddress] = useState<string>('');
 
   const { data: hash, writeContract } = useWriteContract();
-  const { address } = useAccount();
+
+  const { address } = useAccount(); // адрес кошелька
+  // console.log('Address:', address);
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
-    tokenSelected.sepoliaAddress as `0x${string}`,
+    currentTokenAddress as `0x${string}`,
     decimals as number,
   );
-
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -64,6 +67,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   } = useWaitForTransactionReceipt({
     hash,
   });
+
+  const chainId = useChainId();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -114,15 +119,33 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     console.log('Form submitted');
     const formData = new FormData(e.target as HTMLFormElement);
     const recipient = formData.get('recipient') as `0x${string}`;
-    // TODO: decimals должны сюда передаваться
-    const parsedAmount = parseUnits(inputValue, 18);
+    const parsedAmount = parseUnits(inputValue, decimals);
     writeContract({
-      address: tokenSelected.sepoliaAddress as `0x${string}`,
+      // TODO:
+      address: currentTokenAddress as `0x${string}`,
       abi: erc20Abi,
       functionName: 'transfer',
       args: [recipient, parsedAmount],
     });
   };
+
+  useEffect(() => {
+    let tokenAddress = '';
+
+    switch (chainId) {
+      case sepolia.id:
+        tokenAddress = tokenSelected.sepoliaAddress;
+        break;
+      case polygonAmoy.id:
+        tokenAddress = tokenSelected.polygonAddress;
+        break;
+      default:
+        tokenAddress = '';
+        break;
+    }
+
+    setCurrentTokenAddress(tokenAddress);
+  }, [chainId, tokenSelected]);
 
   useEffect(() => {
     if (isConfirmed) {
