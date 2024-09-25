@@ -60,6 +60,7 @@ const NewOfferForm: FC = () => {
                 />
                 {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
                 <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
+                <button className={styles.buttonAddCustomToken} type="button">+ Add a custom token</button>
               </label>
               <label className={styles.label}>
                 To
@@ -71,6 +72,7 @@ const NewOfferForm: FC = () => {
                 />
                 {showRightTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleTokenPopupClose} />}
                 <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}><ArrowDown/></div>
+                <button className={styles.buttonAddCustomToken} type="button">+ Add a custom token</button>
               </label>
             </div>
             <label>

@@ -35,6 +35,33 @@
   border: 1px solid red;
   background: white;
   padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buttonAddCustomToken {
+  color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Inter,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    color: black;
+    border-radius: 100px;
+      background: rgba(0, 0, 0, 0.05);
+      display: flex;
+        padding: 4px 8px;
+        justify-content: center;
+        align-items: center;
+        gap:8px;
+        height: 24px;
+        width: 143px;
+        position: absolute;
+        right: 24px;
+        bottom: 15px;
+        cursor: pointer;
 }
 
 .buttons {
