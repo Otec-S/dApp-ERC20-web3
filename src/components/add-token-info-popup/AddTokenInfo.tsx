@@ -15,7 +15,7 @@ import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
 
-interface TokenData {
+interface ITokenData {
   requestWasSuccessful: boolean;
   tokenAddress?: Address;
   tokenName?: string;
@@ -26,22 +26,23 @@ interface TokenData {
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 
 interface Props {
-  onClosePopup: (data: TokenData) => void;
+  onClose: (data: ITokenData) => void;
   colorScheme?: 'default' | 'yellow';
 }
 
-interface FormData {
+interface IFormData {
   tokenAddress: Address;
   tokenName?: string;
   tokenDecimals?: number;
 }
 
+// TODO: разобраться что это
 const override: CSSProperties = {
   display: 'block',
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
+const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default' }) => {
   const [formState, setFormState] = useState<FormStages>('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
 
@@ -58,7 +59,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     getValues,
     reset,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<IFormData>();
 
   const {
     data: contractData,
@@ -131,7 +132,7 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
     setFormState('initialState');
   };
 
-  const onSubmit: SubmitHandler<FormData> = () => {
+  const onSubmit: SubmitHandler<IFormData> = () => {
     setTokenAddress(getValues('tokenAddress'));
     switch (formState) {
       case 'initialState':
@@ -147,7 +148,8 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   };
 
   const handleCloseForm = () => {
-    onClosePopup({
+    // TODO:
+    onClose({
       tokenAddress,
       tokenName: contractData?.[1],
       tokenDecimals: contractData?.[0],
@@ -157,146 +159,150 @@ const AddTokenInfo: FC<Props> = ({ onClosePopup, colorScheme = 'default' }) => {
   };
 
   return (
-    <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
-      {isLoadingContacts && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={isLoadingContacts}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
-      {formState !== 'errorState' && (
-        <div className={cn(styles.headerWrapper, { [styles.headerWrapperYellow]: colorScheme === 'yellow' })}>
-          <h5 className={styles.header}>
-            {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
-          </h5>
-          <button
-            className={cn(styles.closeForm, { [styles.closeFormYellowScheme]: colorScheme === 'yellow' })}
-            onPointerDown={handleCloseForm}
-          >
-            <ClearIcon />
-          </button>
-        </div>
-      )}
-      <div className={cn(styles.formWrapper, { [styles.formWrapperYellowScheme]: colorScheme === 'yellow' })}>
-        {formState !== 'readyToAddState' && formState !== 'errorState' && (
-          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <Warning
-              colorScheme={colorScheme}
-              warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks"
+    <div className="container">
+      <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
+        {isLoadingContacts && (
+          <div className={styles.loader}>
+            <BeatLoader
+              color={'red'}
+              loading={isLoadingContacts}
+              cssOverride={override}
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
             />
-            <div>
-              {formState !== 'showTokenAvatarState' && (
-                <>
-                  <label className={styles.inputLabel}>
-                    Token contract address
-                    <input
-                      disabled={formState !== 'initialState'}
-                      className={cn(styles.inputAddress, {
-                        [styles.inputAddressYellowScheme]: colorScheme === 'yellow',
-                        [styles.inputAddressError]: errors.tokenAddress,
-                        [styles.inputAddressErrorYellowScheme]: errors.tokenAddress && colorScheme === 'yellow',
-                      })}
-                      {...register('tokenAddress', { required: true, validate: (value) => isAddress(value) })}
-                    />
-                    {errors.tokenAddress?.type === 'required' && (
-                      <span className={styles.error}>This field is required</span>
-                    )}
-                    {errors.tokenAddress?.type === 'validate' && (
-                      <span className={styles.error}>This input is not token address</span>
-                    )}
-                  </label>
-                  <label className={styles.inputLabel}>
-                    Token contract name
-                    <input
-                      defaultValue="0x0000000000000000000000000000000000000000"
-                      {...register('tokenName')}
-                      type="text"
-                      className={cn(styles.inputName, {
-                        [styles.inputNameYellowScheme]: colorScheme === 'yellow',
-                      })}
-                      readOnly
-                    />
-                  </label>
-                  <div>
+          </div>
+        )}
+        {formState !== 'errorState' && (
+          <div className={cn(styles.headerWrapper, { [styles.headerWrapperYellow]: colorScheme === 'yellow' })}>
+            <h5 className={styles.header}>
+              {formState !== 'readyToAddState' ? 'Add a custom token' : 'Successful import'}
+            </h5>
+            <button
+              className={cn(styles.closeForm, { [styles.closeFormYellowScheme]: colorScheme === 'yellow' })}
+              onPointerDown={handleCloseForm}
+            >
+              <ClearIcon />
+            </button>
+          </div>
+        )}
+        <div className={cn(styles.formWrapper, { [styles.formWrapperYellowScheme]: colorScheme === 'yellow' })}>
+          {formState !== 'readyToAddState' && formState !== 'errorState' && (
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+              <Warning
+                colorScheme={colorScheme}
+                warningMessage="Anyone can create a token, including creating fake versions of existing tokens. Be aware of scams and security risks"
+              />
+              <div>
+                {formState !== 'showTokenAvatarState' && (
+                  <>
                     <label className={styles.inputLabel}>
-                      Token contract decimals
+                      Token contract address
                       <input
+                        disabled={formState !== 'initialState'}
+                        className={cn(styles.inputAddress, {
+                          [styles.inputAddressYellowScheme]: colorScheme === 'yellow',
+                          [styles.inputAddressError]: errors.tokenAddress,
+                          [styles.inputAddressErrorYellowScheme]: errors.tokenAddress && colorScheme === 'yellow',
+                        })}
+                        {...register('tokenAddress', { required: true, validate: (value) => isAddress(value) })}
+                      />
+                      {errors.tokenAddress?.type === 'required' && (
+                        <span className={styles.error}>This field is required</span>
+                      )}
+                      {errors.tokenAddress?.type === 'validate' && (
+                        <span className={styles.error}>This input is not token address</span>
+                      )}
+                    </label>
+                    <label className={styles.inputLabel}>
+                      Token contract name
+                      <input
+                        defaultValue="0x0000000000000000000000000000000000000000"
+                        {...register('tokenName')}
                         type="text"
-                        {...register('tokenDecimals')}
-                        defaultValue={18}
-                        className={cn(styles.inputDecimals, {
-                          [styles.inputDecimalsYellowScheme]: colorScheme === 'yellow',
+                        className={cn(styles.inputName, {
+                          [styles.inputNameYellowScheme]: colorScheme === 'yellow',
                         })}
                         readOnly
                       />
                     </label>
-                  </div>
-                </>
-              )}
+                    <div>
+                      <label className={styles.inputLabel}>
+                        Token contract decimals
+                        <input
+                          type="text"
+                          {...register('tokenDecimals')}
+                          defaultValue={18}
+                          className={cn(styles.inputDecimals, {
+                            [styles.inputDecimalsYellowScheme]: colorScheme === 'yellow',
+                          })}
+                          readOnly
+                        />
+                      </label>
+                    </div>
+                  </>
+                )}
 
-              {formState === 'showTokenAvatarState' && (
-                <TokenInfo
-                  colorScheme={colorScheme}
-                  tokenAddress={tokenAddress}
-                  tokenDecimals={contractData?.[0]}
-                  tokenBalance={contractData?.[2]}
-                  tokenName={contractData?.[1]}
-                />
-              )}
-            </div>
-            <div className={styles.buttonWrapper}>
-              {formState !== 'initialState' && (
-                <FormButton colorScheme={colorScheme} buttonText="Back" onPointerDown={onHandlePreviosButton} />
-              )}
-              {formState !== 'initialState' && (
-                <FormButton
-                  onPointerDown={onHandleNextButton}
-                  colorScheme={colorScheme}
-                  buttonText="Next"
-                  type="button"
-                />
-              )}
-              {formState === 'initialState' && <FormButton colorScheme={colorScheme} buttonText="Next" type="submit" />}
-            </div>
-          </form>
-        )}
-        {formState === 'readyToAddState' && (
-          <>
-            <div
-              className={cn(styles.successLogoWrapper, {
-                [styles.successLogoWrapperYellowScheme]: colorScheme === 'yellow',
-              })}
-            >
-              <SuccessIcon />
-              <span
-                className={cn(styles.successLogoText, {
-                  [styles.successLogoTextYellowScheme]: colorScheme === 'yellow',
+                {formState === 'showTokenAvatarState' && (
+                  <TokenInfo
+                    colorScheme={colorScheme}
+                    tokenAddress={tokenAddress}
+                    tokenDecimals={contractData?.[0]}
+                    tokenBalance={contractData?.[2]}
+                    tokenName={contractData?.[1]}
+                  />
+                )}
+              </div>
+              <div className={styles.buttonWrapper}>
+                {formState !== 'initialState' && (
+                  <FormButton colorScheme={colorScheme} buttonText="Back" onPointerDown={onHandlePreviosButton} />
+                )}
+                {formState !== 'initialState' && (
+                  <FormButton
+                    onPointerDown={onHandleNextButton}
+                    colorScheme={colorScheme}
+                    buttonText="Next"
+                    type="button"
+                  />
+                )}
+                {formState === 'initialState' && (
+                  <FormButton colorScheme={colorScheme} buttonText="Next" type="submit" />
+                )}
+              </div>
+            </form>
+          )}
+          {formState === 'readyToAddState' && (
+            <>
+              <div
+                className={cn(styles.successLogoWrapper, {
+                  [styles.successLogoWrapperYellowScheme]: colorScheme === 'yellow',
                 })}
               >
-                {getValues('tokenName') + ' token has been added'}
-              </span>
-            </div>
-            <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText="Okay" type="button" />
-          </>
-        )}
-        {formState === 'errorState' && (
-          <>
-            <div
-              className={cn(styles.successLogoWrapper, {
-                [styles.successLogoWrapperYellowScheme]: colorScheme === 'yellow',
-              })}
-            >
-              <h5 className={styles.header}>Something went wrong. Pls check network and token address.</h5>
-            </div>
-            <FormButton colorScheme={colorScheme} onPointerDown={onHandleErrorButton} buttonText="Back" />
-          </>
-        )}
+                <SuccessIcon />
+                <span
+                  className={cn(styles.successLogoText, {
+                    [styles.successLogoTextYellowScheme]: colorScheme === 'yellow',
+                  })}
+                >
+                  {getValues('tokenName') + ' token has been added'}
+                </span>
+              </div>
+              <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText="Okay" type="button" />
+            </>
+          )}
+          {formState === 'errorState' && (
+            <>
+              <div
+                className={cn(styles.successLogoWrapper, {
+                  [styles.successLogoWrapperYellowScheme]: colorScheme === 'yellow',
+                })}
+              >
+                <h5 className={styles.header}>Something went wrong. Pls check network and token address.</h5>
+              </div>
+              <FormButton colorScheme={colorScheme} onPointerDown={onHandleErrorButton} buttonText="Back" />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

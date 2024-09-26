@@ -21,6 +21,7 @@ interface ISendERC20SendFormProps {
   inputValue: string;
   setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
+  setIsCustomTokenPopupOpen: (value: boolean) => void;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -29,6 +30,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   inputValue,
   setInputValue,
   setTokenName,
+  setIsCustomTokenPopupOpen,
 }) => {
   const [tokenSelected, setTokenSelected] = useState<IToken>({
     id: 1,
@@ -42,7 +44,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [inputValueError, setInputValueError] = useState<string | null>(null);
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
-  const [isTokenPopupOpen, setIsTokenPopupOpen] = useState(false);
+  const [isRegularTokenPopupOpen, setIsRegularTokenPopupOpen] = useState(false);
   const [decimals, setDecimals] = useState<number>(18);
   const [currentTokenAddress, setCurrentTokenAddress] = useState<string>('');
 
@@ -92,20 +94,25 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     }
   };
 
-  const handleTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRegularTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    setIsTokenPopupOpen(true);
+    setIsRegularTokenPopupOpen(true);
   };
 
-  const handleOnClose = () => {
-    setIsTokenPopupOpen(false);
+  const handleCloseRegularTokenPopup = () => {
+    setIsRegularTokenPopupOpen(false);
   };
 
   const handleOnSelect = (tokenSelected: IToken) => {
     setTokenSelected(tokenSelected);
-    setIsTokenPopupOpen(false);
+    setIsRegularTokenPopupOpen(false);
     setTokenName(tokenSelected.name);
     setDecimals(tokenSelected.decimals);
+  };
+
+  const handleCustomTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsCustomTokenPopupOpen(true);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -201,7 +208,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           </div>
 
           <div className={style.tokenBlock}>
-            <button className={style.availableTokensSelector} onClick={handleTokenButtonClick} type="button">
+            <button className={style.availableTokensSelector} onClick={handleRegularTokenButtonClick} type="button">
               <div className={style.nameOfToken}>
                 <span>{tokenSelected.icon}</span>
                 <span>{tokenSelected.name}</span>
@@ -211,7 +218,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
               </div>
             </button>
 
-            <div className={style.addCustomToken}>+ Add a custom token</div>
+            <button className={style.addCustomToken} type="button" onClick={handleCustomTokenButtonClick}>
+              + Add a custom token
+            </button>
           </div>
         </div>
         <div className={style.recipient}>
@@ -225,7 +234,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           {inputRecipientError && <div className={style.inputRecipientError}>{inputRecipientError}</div>}
         </div>
         <SubmitButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
-        {isTokenPopupOpen && <TokenPopup onCLose={handleOnClose} onSelect={handleOnSelect} />}
+        {isRegularTokenPopupOpen && <TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} />}
       </form>
     </>
   );
