@@ -283,7 +283,9 @@
   line-height: normal;
   max-width: 129px;
   text-overflow: ellipsis;
+  overflow: hidden;
 }
+
 .tokenBalanceWrapper {
   position: absolute;
   left: 24px;

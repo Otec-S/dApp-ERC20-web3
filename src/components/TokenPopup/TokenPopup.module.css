@@ -35,7 +35,7 @@
 }
 
 .searchBlockLightScheme {
-  background: #FFE5A1;
+  background: #ffe5a1;
   border-bottom: none;
 }
 
@@ -77,6 +77,11 @@
 
 .closePopup {
   cursor: pointer;
+  transition: transform 0.5s ease;
+}
+
+.closePopup:hover {
+  transform: rotate(90deg);
 }
 
 .input {
@@ -126,10 +131,16 @@
   margin-right: 2px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  transition: transform 0.5s ease;
 
   &:hover {
     cursor: pointer;
   }
+}
+
+.inputCLoseIcon:hover {
+  transform: rotate(90deg);
 }
 
 .tokensRow {
@@ -211,8 +222,8 @@
 }
 
 .tokenItemLightScheme {
-  border: 1px solid rgba(0, 0, 0, 0.20);
-  background: #FFEDBE;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #ffedbe;
 }
 
 .tokenSymbolLightScheme {

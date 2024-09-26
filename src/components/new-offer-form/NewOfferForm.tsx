@@ -209,7 +209,7 @@ const NewOfferForm: FC = () => {
           </div>
         </form>
       </div>
-      <TokenPopup colorScheme='light' onCLose={() => undefined} onSelect={() => undefined} />
+      <TokenPopup colorScheme="light" onCLose={() => undefined} onSelect={() => undefined} />
     </section>
   );
 };
