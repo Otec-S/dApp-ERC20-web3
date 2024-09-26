@@ -56,7 +56,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const { data: hash, writeContract } = useWriteContract();
 
   const { address } = useAccount(); // адрес кошелька
-  // console.log('Address:', address);
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
     address as `0x${string}`,
     currentTokenAddress as `0x${string}`,
@@ -183,7 +182,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     }
   }, [inputValue, recipientValue, setIsButtonActive, inputValueError, inputRecipientError]);
 
-  // TODO: сопостовление данных кастомного токена с данными стандартного токена
+  // сопостовление данных кастомного токена с данными стандартного токена
   useEffect(() => {
     if (tokenData) {
       setTokenSelected((prevToken) => ({
@@ -192,7 +191,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
         polygonAddress: tokenData.tokenAddress || prevToken.polygonAddress,
         sepoliaAddress: tokenData.tokenAddress || prevToken.sepoliaAddress,
         decimals: tokenData.tokenDecimals || prevToken.decimals,
-        // TODO:
         icon: <NotFoundTokenLogo />,
       }));
     }

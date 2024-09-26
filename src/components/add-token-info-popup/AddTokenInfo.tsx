@@ -143,7 +143,6 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
   };
 
   const handleCloseForm = () => {
-    // TODO:
     onClose({
       tokenAddress,
       tokenName: contractData?.[1],
@@ -153,7 +152,6 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
     });
   };
 
-  // TODO:
   // Обработчик закрытия по Esc
   const handleEscDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -171,7 +169,6 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
   useEffect(() => {
     window.addEventListener('keydown', handleEscDown);
     window.addEventListener('click', handleClickOutside);
-
     return () => {
       window.removeEventListener('keydown', handleEscDown);
       window.removeEventListener('click', handleClickOutside);

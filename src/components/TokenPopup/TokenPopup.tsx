@@ -50,7 +50,6 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
   useEffect(() => {
     window.addEventListener('keydown', handleEscDown);
     window.addEventListener('click', handleClickOutside);
-
     return () => {
       window.removeEventListener('keydown', handleEscDown);
       window.removeEventListener('click', handleClickOutside);

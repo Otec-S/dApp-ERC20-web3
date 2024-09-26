@@ -17,8 +17,7 @@ const SendERC20 = () => {
   const handleCloseCustomTokenPopup = (data: ITokenData) => {
     setIsCustomTokenPopupOpen(false);
     if (data) {
-      setTokenData(data); // Установите данные токена в состояние
-      console.log('Токен данные:', data); // Вывод данных токена
+      setTokenData(data);
     }
   };
 

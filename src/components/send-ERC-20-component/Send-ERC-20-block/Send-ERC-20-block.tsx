@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { IToken, ITokenData } from '@src/shared/constants';
+import { ITokenData } from '@src/shared/constants';
 
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
