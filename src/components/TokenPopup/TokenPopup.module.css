@@ -13,6 +13,13 @@
   background-color: darkGrey;
   box-sizing: border-box;
   z-index: 5;
+  color: white;
+  border-radius: 16px;
+}
+
+.containerLightScheme {
+  color: black;
+  background: white;
 }
 
 .searchBlock {
@@ -24,6 +31,12 @@
   gap: 16px;
   box-sizing: border-box;
   border-bottom: 1px solid #222;
+  border-radius: 16px 16px 0 0;
+}
+
+.searchBlockLightScheme {
+  background: #FFE5A1;
+  border-bottom: none;
 }
 
 .searchHead {
@@ -32,7 +45,7 @@
 }
 
 .searchTitle {
-  color: white;
+  /* color: white; */
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -54,6 +67,14 @@
   box-sizing: border-box;
 }
 
+.searchRowLightScheme {
+  background: white;
+}
+
+.searchIconLightScheme {
+  color: black;
+}
+
 .closePopup {
   cursor: pointer;
 }
@@ -62,7 +83,7 @@
   height: 36px;
   width: 100%;
   overflow: hidden;
-  color: #fff;
+  color: inherit;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -74,16 +95,19 @@
   line-height: normal;
   background: #515151;
   border: none;
-  color: white;
   box-sizing: border-box;
 
   &::placeholder {
-    color: white;
+    color: inherit;
   }
 
   &:focus {
     outline: none;
   }
+}
+
+.inputLightScheme {
+  background: white;
 }
 
 .searchIcon {
@@ -156,6 +180,7 @@
 
 .listBlock {
   overflow-y: scroll;
+  border-radius: 0 0 16px 16px;
 
   &::-webkit-scrollbar {
     width: 1px;
@@ -175,4 +200,21 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.listItemLIghtScheme {
+  border-bottom: none;
+}
+
+.tokenSymbolLightScheme {
+  color: black;
+}
+
+.tokenItemLightScheme {
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  background: #FFEDBE;
+}
+
+.tokenSymbolLightScheme {
+  color: black;
 }
