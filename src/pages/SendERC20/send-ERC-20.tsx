@@ -9,7 +9,6 @@ import style from './Send-ERC-20.module.css';
 const SendERC20 = () => {
   const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
   const [isTxSuccess, setIsTxSuccess] = useState(true);
-
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
 
   const handleCloseCustomTokenPopup = () => {
@@ -38,7 +37,7 @@ const SendERC20 = () => {
 
       {isCustomTokenPopupOpen && (
         <div className={style.overlay}>
-          <AddTokenInfo onClose={handleCloseCustomTokenPopup} />
+          <AddTokenInfo setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen} onClose={handleCloseCustomTokenPopup} />
         </div>
       )}
     </>

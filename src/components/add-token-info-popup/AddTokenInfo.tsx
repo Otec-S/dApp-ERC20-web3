@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -28,6 +28,7 @@ type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState'
 interface Props {
   onClose: (data: ITokenData) => void;
   colorScheme?: 'default' | 'yellow';
+  setIsCustomTokenPopupOpen: (value: boolean) => void;
 }
 
 interface IFormData {
@@ -42,7 +43,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default' }) => {
+const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustomTokenPopupOpen }) => {
   const [formState, setFormState] = useState<FormStages>('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
 
@@ -51,6 +52,7 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default' }) => {
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -158,8 +160,33 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default' }) => {
     });
   };
 
+  // TODO:
+  // Обработчик закрытия по Esc
+  const handleEscDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setIsCustomTokenPopupOpen(false);
+    }
+  };
+
+  // Обработчик закрытия по клику вне попапа
+  const handleClickOutside = (e: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+      setIsCustomTokenPopupOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEscDown);
+    window.addEventListener('click', handleClickOutside);
+
+    return () => {
+      window.removeEventListener('keydown', handleEscDown);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="container">
+    <div className="container" ref={popupRef}>
       <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
         {isLoadingContacts && (
           <div className={styles.loader}>
