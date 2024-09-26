@@ -1,5 +1,7 @@
 import { FC, useState } from 'react';
 
+import { IToken, ITokenData } from '@src/shared/constants';
+
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
 import style from './Send-ERC-20-block.module.css';
@@ -11,6 +13,7 @@ interface ISendERC20BlockProps {
   isTxFormSubmitted: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
+  tokenData: ITokenData | null;
 }
 
 const SendERC20Block: FC<ISendERC20BlockProps> = ({
@@ -20,6 +23,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   isTxFormSubmitted,
   setIsTxFormSubmitted,
   setIsCustomTokenPopupOpen,
+  tokenData,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [tokenName, setTokenName] = useState<string>('ARB');
@@ -46,6 +50,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setInputValue={setInputValue}
           setTokenName={setTokenName}
           setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen}
+          tokenData={tokenData}
         />
       )}
     </section>

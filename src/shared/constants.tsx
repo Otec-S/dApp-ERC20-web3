@@ -103,3 +103,11 @@ export const tokens: IToken[] = [
     decimals: 8,
   },
 ];
+
+export interface ITokenData {
+  requestWasSuccessful: boolean;
+  tokenAddress?: Address;
+  tokenName?: string;
+  tokenDecimals?: number;
+  tokenBalance?: bigint;
+}

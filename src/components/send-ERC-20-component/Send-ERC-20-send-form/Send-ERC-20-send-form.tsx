@@ -7,8 +7,9 @@ import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract 
 import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
+import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
-import { IToken } from '@src/shared/constants';
+import { IToken, ITokenData } from '@src/shared/constants';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import SubmitButton from '../../../UI/submit-button/Submit-button';
@@ -22,6 +23,7 @@ interface ISendERC20SendFormProps {
   setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
+  tokenData: ITokenData | null;
 }
 
 const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
@@ -31,6 +33,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setInputValue,
   setTokenName,
   setIsCustomTokenPopupOpen,
+  tokenData,
 }) => {
   const [tokenSelected, setTokenSelected] = useState<IToken>({
     id: 1,
@@ -40,6 +43,8 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     icon: <ARBIcon />,
     decimals: 18,
   });
+  // TODO:
+
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [inputValueError, setInputValueError] = useState<string | null>(null);
@@ -177,6 +182,21 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
       );
     }
   }, [inputValue, recipientValue, setIsButtonActive, inputValueError, inputRecipientError]);
+
+  // TODO: сопостовление данных кастомного токена с данными стандартного токена
+  useEffect(() => {
+    if (tokenData) {
+      setTokenSelected((prevToken) => ({
+        ...prevToken,
+        name: tokenData.tokenName || prevToken.name,
+        polygonAddress: tokenData.tokenAddress || prevToken.polygonAddress,
+        sepoliaAddress: tokenData.tokenAddress || prevToken.sepoliaAddress,
+        decimals: tokenData.tokenDecimals || prevToken.decimals,
+        // TODO:
+        icon: <NotFoundTokenLogo />,
+      }));
+    }
+  }, [tokenData]);
 
   return (
     <>

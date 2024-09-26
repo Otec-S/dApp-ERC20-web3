@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import AddTokenInfo from '@src/components/add-token-info-popup/AddTokenInfo';
+import { ITokenData } from '@src/shared/constants';
 
 import Header from '../../components/header/Header';
 import SendERC20Block from '../../components/send-ERC-20-component/Send-ERC-20-block/Send-ERC-20-block';
@@ -11,8 +12,14 @@ const SendERC20 = () => {
   const [isTxSuccess, setIsTxSuccess] = useState(true);
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
 
-  const handleCloseCustomTokenPopup = () => {
+  const [tokenData, setTokenData] = useState<ITokenData | null>(null); // Состояние для хранения данных токена
+
+  const handleCloseCustomTokenPopup = (data: ITokenData) => {
     setIsCustomTokenPopupOpen(false);
+    if (data) {
+      setTokenData(data); // Установите данные токена в состояние
+      console.log('Токен данные:', data); // Вывод данных токена
+    }
   };
 
   return (
@@ -32,6 +39,7 @@ const SendERC20 = () => {
                 : 'Something went wrong'
               : 'Send ERC-20'
           }
+          tokenData={tokenData}
         />
       </div>
 

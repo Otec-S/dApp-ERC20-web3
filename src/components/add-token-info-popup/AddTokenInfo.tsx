@@ -9,19 +9,12 @@ import { useAccount, useReadContracts } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
+import { ITokenData } from '@src/shared/constants';
 
 import FormButton from '../form-button/FormButton';
 import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
-
-interface ITokenData {
-  requestWasSuccessful: boolean;
-  tokenAddress?: Address;
-  tokenName?: string;
-  tokenDecimals?: number;
-  tokenBalance?: bigint;
-}
 
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 
