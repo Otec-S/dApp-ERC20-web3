@@ -5,7 +5,7 @@ export enum StepStatus {
   COMPLETED = 'completed',
 }
 
-export interface IStep {
+export interface Step {
   value: number;
   status: StepStatus;
 }

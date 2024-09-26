@@ -13,6 +13,7 @@
   border-radius: 100px;
   position: relative;
   box-sizing: border-box;
+  padding-top: 2px;
 
   &:not(:last-child):after {
     content: '';

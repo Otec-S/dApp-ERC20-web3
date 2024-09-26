@@ -3,11 +3,11 @@ import cn from 'classnames';
 
 import CheckIcon from '@assets/icons/check_icon.svg';
 
-import { IStep, StepStatus } from './StepPagination.interface';
+import { Step, StepStatus } from './StepPagination.interface';
 import styles from './StepPagination.module.css';
 
 type Props = {
-  steps: IStep[];
+  steps: Step[];
 };
 
 export const StepPagination: FC<Props> = ({ steps }) => {
@@ -22,7 +22,7 @@ export const StepPagination: FC<Props> = ({ steps }) => {
           })}
           key={step.value}
         >
-          {step.status === StepStatus.COMPLETED ? <CheckIcon /> : <span>{step.value}</span>}
+          {step.status === StepStatus.COMPLETED ? <CheckIcon /> : <span className={styles.stepText}>{step.value}</span>}
         </div>
       ))}
     </div>

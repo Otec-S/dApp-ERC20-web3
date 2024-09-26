@@ -120,7 +120,7 @@ export const tokens: Token[] = [
   },
 ];
 
-export const contractAbi = [
+export const tradeContractAbi = [
   {
     inputs: [{ internalType: 'uint256', name: '_feeBasisPoints', type: 'uint256' }],
     payable: false,
