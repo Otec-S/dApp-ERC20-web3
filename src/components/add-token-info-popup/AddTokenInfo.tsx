@@ -15,7 +15,7 @@ import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
 
-interface TokenData {
+export interface TokenData {
   requestWasSuccessful: boolean;
   tokenAddress?: Address;
   tokenName?: string;

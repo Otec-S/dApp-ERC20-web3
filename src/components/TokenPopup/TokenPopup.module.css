@@ -12,7 +12,7 @@
   border-radius: 4px;
   background-color: darkGrey;
   box-sizing: border-box;
-  z-index: 9999;
+  z-index: 5;
 }
 
 .searchBlock {

@@ -1,13 +1,16 @@
-import { FC, useState } from 'react';
+import { CSSProperties, FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address } from 'viem';
-import { useAccount } from 'wagmi';
+import { Address, erc20Abi, formatUnits } from 'viem';
+import { polygonAmoy, sepolia } from 'viem/chains';
+import { useAccount, useReadContracts } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import { IToken } from '@src/shared/constants';
 
+import { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
@@ -25,23 +28,47 @@ interface FormData {
   approve: boolean;
 }
 
+const override: CSSProperties = {
+  display: 'block',
+  margin: '100px auto',
+};
+
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
   const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
-  const [tokenFrom, setTokenFrom] = useState<IToken | undefined>(undefined);
+  const [tokenFrom, setTokenFrom] = useState<IToken | undefined | TokenData>(undefined);
   const [tokenTo, setTokenTo] = useState<IToken | undefined>(undefined);
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { isConnected, address: walletAddress, chainId } = useAccount();
-  console.log(chainId);
+  const { isConnected, chainId, address: walletAddress } = useAccount();
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  //
+  const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
+    allowFailure: false,
+    contracts: walletAddress &&
+      tokenFrom && [
+        {
+          address: (tokenFrom as IToken).sepoliaAddress,
+          functionName: 'decimals',
+          abi: erc20Abi,
+        },
+        {
+          address: (tokenFrom as IToken).sepoliaAddress,
+          functionName: 'balanceOf',
+          abi: erc20Abi,
+          args: [walletAddress],
+        },
+      ],
+  });
   const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
   // console.log(errors);
   const handleLeftTokenPopupOpen = () => {
@@ -62,9 +89,24 @@ const NewOfferForm: FC = () => {
     setShowLeftTokenPopup(false);
     setShowRightTokenPopup(false);
   };
+  const handleSetTokenMaxValue = () => {
+    setValue('from', Number(contractData && formatUnits(contractData?.[1], contractData?.[0])));
+  };
 
   return (
     <section className={cn(styles.createOffer)}>
+      {isLoadingBalance && (
+        <div className={styles.loader}>
+          <BeatLoader
+            color={'red'}
+            loading={isLoadingBalance}
+            cssOverride={override}
+            size={100}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>New offer</h2>
         <NewOfferFormStages activeStage={2} />
@@ -82,6 +124,18 @@ const NewOfferForm: FC = () => {
                   defaultValue={0}
                   {...register('from', { required: true })}
                 />
+                {contractData && (
+                  <div className={styles.tokenBalanceWrapper}>
+                    {}
+                    <span className={styles.tokenBalance}>
+                      {contractData &&
+                        `Balance: ${contractData?.[1] && contractData?.[0] && parseFloat(formatUnits(contractData?.[1], contractData?.[0])).toFixed(2)}`}
+                    </span>
+                    <button onPointerDown={handleSetTokenMaxValue} className={styles.tokenBalanceButton} type="button">
+                      Max
+                    </button>
+                  </div>
+                )}
                 {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleLeftTokenChoice} />}
                 <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}>
                   <div className={styles.tokenIcon}>{tokenFrom?.icon}</div>
@@ -146,7 +200,12 @@ const NewOfferForm: FC = () => {
               <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
               <FormButton type="button" buttonText="Create Trade" disabled />
             </div>
-            <StepPagination steps={[{value:1,status:StepStatus.DISABLED},{value:2,status:StepStatus.DISABLED}]} />
+            <StepPagination
+              steps={[
+                { value: 1, status: StepStatus.DISABLED },
+                { value: 2, status: StepStatus.DISABLED },
+              ]}
+            />
           </div>
         </form>
       </div>
