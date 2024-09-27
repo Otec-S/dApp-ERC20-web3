@@ -8,6 +8,7 @@ import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useReadContracts } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
+import WarningIcon from '@assets/icons/warning_icon.svg';
 import { IToken } from '@src/shared/constants';
 
 import { TokenData } from '../add-token-info-popup/AddTokenInfo';
@@ -50,8 +51,6 @@ const NewOfferForm: FC = () => {
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //
   const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
     allowFailure: false,
     contracts: walletAddress &&
@@ -70,7 +69,6 @@ const NewOfferForm: FC = () => {
       ],
   });
   const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
-  // console.log(errors);
   const handleLeftTokenPopupOpen = () => {
     setShowLeftTokenPopup(true);
   };
@@ -121,12 +119,30 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="text"
                   placeholder="0"
-                  defaultValue={0}
-                  {...register('from', { required: true })}
+                  {...register('from', { required: true, validate: (value) => !Number.isFinite(value) && value > 0 })}
                 />
-                {contractData && (
+                {errors.from?.type === 'required' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Required field'}
+                  </div>
+                )}
+                {errors.from?.type === 'validate' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Unsufficient balance'}
+                  </div>
+                )}
+                { !errors.from && contractData && (
                   <div className={styles.tokenBalanceWrapper}>
-                    {}
                     <span className={styles.tokenBalance}>
                       {contractData &&
                         `Balance: ${contractData?.[1] && contractData?.[0] && parseFloat(formatUnits(contractData?.[1], contractData?.[0])).toFixed(2)}`}
@@ -153,9 +169,28 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="text"
                   placeholder="0"
-                  defaultValue={0}
-                  {...register('to', { required: true })}
+                  {...register('to', { required: true, validate: (value) => !Number.isFinite(value) && value > 0})}
                 />
+                {errors.to?.type === 'required' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Required field'}
+                  </div>
+                )}
+                {errors.to?.type === 'validate' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Unsufficient balance'}
+                  </div>
+                )}
                 {showRightTokenPopup && (
                   <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleRightTokenChoice} />
                 )}
@@ -170,24 +205,26 @@ const NewOfferForm: FC = () => {
                 </button>
               </label>
             </div>
-            <label className={styles.labelRate}>
-              <input
-                className={styles.inputRate}
-                type="text"
-                placeholder="0"
-                {...register('rate', { required: true })}
-              />
-              <span className={styles.labelText}>Rate</span>
-            </label>
-            <label className={styles.labelReceiver}>
-              <input
-                className={styles.inputReceiver}
-                type="text"
-                placeholder="0x0000000000000000000000000000000000000000"
-                {...register('receiver')}
-              />
-              <span className={styles.labelText}>Receiver</span>
-            </label>
+            <div className={styles.additionalInputsWrapper}>
+              <label className={styles.labelRate}>
+                <input
+                  className={styles.inputRate}
+                  type="text"
+                  placeholder="0"
+                  {...register('rate', { required: true })}
+                />
+                <span className={styles.labelText}>Rate</span>
+              </label>
+              <label className={styles.labelReceiver}>
+                <input
+                  className={styles.inputReceiver}
+                  type="text"
+                  placeholder="0x0000000000000000000000000000000000000000"
+                  {...register('receiver')}
+                />
+                <span className={styles.labelText}>Receiver</span>
+              </label>
+            </div>
             <div className={styles.approveWrraper}>
               <input type="checkbox" id="infiniteapprove" {...register('approve')} />
               <label htmlFor="infiniteapprove" className={styles.approve}>
@@ -209,7 +246,6 @@ const NewOfferForm: FC = () => {
           </div>
         </form>
       </div>
-      <TokenPopup colorScheme="light" onCLose={() => undefined} onSelect={() => undefined} />
     </section>
   );
 };

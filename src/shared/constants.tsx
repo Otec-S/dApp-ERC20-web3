@@ -430,3 +430,8 @@ export const tradeContractAbi = [
     type: 'function',
   },
 ];
+
+export const tradeContractAddress = {
+  polygonAddress:'0x30bbAA44F7A80AfC9a5CB1aEEb8247B8E2aDE392',
+  sepolyaAddress: '0x9CE9DFFA60c558E22178172DDa1774234AECAEBd',
+}

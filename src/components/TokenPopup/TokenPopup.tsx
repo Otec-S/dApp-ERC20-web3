@@ -1,13 +1,12 @@
 import { ChangeEvent, FC, useState } from 'react';
 import cn from 'classnames';
+import { isAddress } from 'viem';
 
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 import { IToken, tokens } from '@src/shared/constants';
 
 import styles from './TokenPopup.module.css';
-import { isAddress } from 'viem';
-import { serialize } from 'wagmi';
 
 type Props = {
   onCLose: () => void;
