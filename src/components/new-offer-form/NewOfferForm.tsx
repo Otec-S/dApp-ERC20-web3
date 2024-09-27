@@ -4,14 +4,14 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, erc20Abi, formatUnits } from 'viem';
-import { polygonAmoy, sepolia } from 'viem/chains';
-import { useAccount, useReadContracts } from 'wagmi';
+import { sepolia } from 'viem/chains';
+import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
+import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { IToken } from '@src/shared/constants';
+import { IToken, tokens } from '@src/shared/constants';
 
-import { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
@@ -33,12 +33,23 @@ const override: CSSProperties = {
   display: 'block',
   margin: '100px auto',
 };
+interface TokenDataNewOfferForm {
+  address: Address;
+}
+
+const getTokenIcon = (address: Address) => {
+  const tokenInSupportedTokens = tokens.find(
+    (token) => token.polygonAddress === address || token.sepoliaAddress === address,
+  );
+  if (tokenInSupportedTokens) return tokenInSupportedTokens.icon;
+  return <NotFoundTokenLogo />;
+};
 
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
   const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
-  const [tokenFrom, setTokenFrom] = useState<IToken | undefined | TokenData>(undefined);
-  const [tokenTo, setTokenTo] = useState<IToken | undefined>(undefined);
+  const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
+  const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -46,7 +57,6 @@ const NewOfferForm: FC = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { isConnected, chainId, address: walletAddress } = useAccount();
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
@@ -55,21 +65,38 @@ const NewOfferForm: FC = () => {
   const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
     allowFailure: false,
     contracts: walletAddress &&
+      tokenFrom?.address &&
       tokenFrom && [
         {
-          address: (tokenFrom as IToken).sepoliaAddress,
+          address: tokenFrom.address,
           functionName: 'decimals',
           abi: erc20Abi,
         },
         {
-          address: (tokenFrom as IToken).sepoliaAddress,
+          address: tokenFrom.address,
           functionName: 'balanceOf',
           abi: erc20Abi,
           args: [walletAddress],
         },
       ],
   });
-  const onSubmit: SubmitHandler<FormData> = (data) => console.log(data);
+  const {
+    writeContract,
+    isPending: isApprovalTokenPending,
+    isSuccess: isTokenApprovalSuccess,
+  } = useWriteContract();
+  console.log('isPending' + isApprovalTokenPending);
+  console.log('isSuccess' + isTokenApprovalSuccess);
+  const onSubmit: SubmitHandler<FormData> = () => {
+    if (!errors.from) {
+      writeContract({
+        abi: erc20Abi,
+        address: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
+        functionName: 'approve',
+        args: [walletAddress as Address, BigInt(1)],
+      });
+    }
+  };
   const handleLeftTokenPopupOpen = () => {
     setShowLeftTokenPopup(true);
   };
@@ -77,11 +104,15 @@ const NewOfferForm: FC = () => {
     setShowRightTokenPopup(true);
   };
   const handleLeftTokenChoice = (data: IToken) => {
-    setTokenFrom(data);
+    setTokenFrom({
+      address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
+    });
     setShowLeftTokenPopup(false);
   };
   const handleRightTokenChoice = (data: IToken) => {
-    setTokenTo(data);
+    setTokenTo({
+      address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
+    });
     setShowRightTokenPopup(false);
   };
   const handleTokenPopupClose = () => {
@@ -94,11 +125,11 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
-      {isLoadingBalance && (
+      {(isLoadingBalance || isApprovalTokenPending) && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
-            loading={isLoadingBalance}
+            loading={true}
             cssOverride={override}
             size={100}
             aria-label="Loading Spinner"
@@ -155,7 +186,7 @@ const NewOfferForm: FC = () => {
                 )}
                 {showLeftTokenPopup && <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleLeftTokenChoice} />}
                 <div onPointerDown={handleLeftTokenPopupOpen} className={styles.tokenPopup}>
-                  <div className={styles.tokenIcon}>{tokenFrom?.icon}</div>
+                  <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
                   <div className={styles.tokenArrow}>
                     <ArrowDown />
                   </div>
@@ -196,7 +227,7 @@ const NewOfferForm: FC = () => {
                   <TokenPopup onCLose={handleTokenPopupClose} onSelect={handleRightTokenChoice} />
                 )}
                 <div onPointerDown={handleRightTokenPopupOpen} className={styles.tokenPopup}>
-                  <div className={styles.tokenIcon}>{tokenTo?.icon}</div>
+                  <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
                   <div className={styles.tokenArrow}>
                     <ArrowDown />
                   </div>
@@ -235,11 +266,18 @@ const NewOfferForm: FC = () => {
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonsWrapper}>
-              {watch('from') && watch('from').toString().length > 0 && (
+              {!isTokenApprovalSuccess && watch('from') && watch('from').toString().length > 0 && (
                 <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
               )}
-              {!watch('from') && <FormButton type="submit" buttonText="Approve Token" disabled />}
-              <FormButton type="button" buttonText="Create Trade" disabled />
+              {!isTokenApprovalSuccess && !watch('from') && (
+                <FormButton type="submit" buttonText="Approve Token" disabled />
+              )}
+              <FormButton
+                colorScheme="yellow"
+                type="button"
+                buttonText="Create Trade"
+                disabled={!isTokenApprovalSuccess}
+              />
             </div>
             <StepPagination
               steps={[
