@@ -176,6 +176,18 @@
   font-family: 'Inter', sans-serif;
 }
 
+.loader {
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+  text-align: center;
+  /* padding: 100px; */
+}
+
 @media (max-width: 845px) {
   .block {
     margin-left: 10px;

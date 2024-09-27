@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
+import BeatLoader from 'react-spinners/BeatLoader';
 import { parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
@@ -44,6 +45,11 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const [isRegularTokenPopupOpen, setIsRegularTokenPopupOpen] = useState(false);
   const [decimals, setDecimals] = useState<number>(18);
 
+  const override: CSSProperties = {
+    display: 'block',
+    margin: '100px auto',
+  };
+
   const { data: hash, writeContract } = useWriteContract();
 
   const { address } = useAccount(); // адрес кошелька
@@ -55,6 +61,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   } = useWaitForTransactionReceipt({
     hash,
   });
+
+  console.log('isConfirming', isConfirming);
+  console.log('isConfirmed', isConfirmed);
 
   const chainId = useChainId();
 
@@ -212,6 +221,18 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   return (
     <>
       <form className={style.blockForm} onSubmit={handleSubmit}>
+        {isConfirming && (
+          <div className={style.loader}>
+            <BeatLoader
+              color={'red'}
+              loading={isConfirming}
+              cssOverride={override}
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        )}
         <div className={style.sender}>
           <div className={style.inputBlock}>
             <input
