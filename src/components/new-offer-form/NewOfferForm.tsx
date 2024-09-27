@@ -129,6 +129,7 @@ const NewOfferForm: FC = () => {
   const handleTokenPopupClose = () => {
     setShowLeftTokenPopup(false);
     setShowRightTokenPopup(false);
+    setShowCustomTokenPopup(false)
   };
 
   const handleSetTokenMaxValue = () => {
@@ -145,7 +146,7 @@ const NewOfferForm: FC = () => {
     <section className={cn(styles.createOffer)}>
       <div className={styles.customTokenContainer}>
         {showCustomTokenPopup && (
-          <AddTokenInfo colorScheme="yellow" onClosePopup={() => setShowCustomTokenPopup(false)} />
+          <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />
         )}
       </div>
       {(isLoadingBalance || isApprovalTokenPending) && (
