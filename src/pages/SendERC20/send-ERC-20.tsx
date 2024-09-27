@@ -26,8 +26,10 @@ const SendERC20 = () => {
 
   return (
     <>
-      <div className={style.component}>
+      <div className={style.header}>
         <Header />
+      </div>
+      <div className={style.component}>
         <SendERC20Block
           isTxSuccess={isTxSuccess}
           setIsTxSuccess={setIsTxSuccess}
@@ -47,7 +49,6 @@ const SendERC20 = () => {
           setTokenName={setTokenName}
         />
       </div>
-
       {isCustomTokenPopupOpen && (
         <div className={style.overlay}>
           <AddTokenInfo setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen} onClose={handleCloseCustomTokenPopup} />

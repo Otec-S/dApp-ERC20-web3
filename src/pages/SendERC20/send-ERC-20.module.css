@@ -9,6 +9,13 @@
   background-color: #1e1e1e;
 }
 
+.header {
+  width: 100%;
+  position: fixed;
+  background-color: #1e1e1e;
+  height: fit-content;
+}
+
 .overlay {
   position: fixed;
   top: 0;
