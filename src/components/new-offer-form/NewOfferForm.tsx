@@ -8,9 +8,9 @@ import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
-import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { IToken, tokens } from '@src/shared/constants';
+import { IToken } from '@src/shared/constants';
+import getTokenIcon from '@src/utils/getTokenIcon';
 import isNumber from '@src/utils/isNumber';
 
 import FormButton from '../form-button/FormButton';
@@ -39,14 +39,6 @@ interface TokenDataNewOfferForm {
   address: Address;
   decimals: number;
 }
-
-const getTokenIcon = (address: Address) => {
-  const tokenInSupportedTokens = tokens.find(
-    (token) => token.polygonAddress === address || token.sepoliaAddress === address,
-  );
-  if (tokenInSupportedTokens) return tokenInSupportedTokens.icon;
-  return <NotFoundTokenLogo />;
-};
 
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
