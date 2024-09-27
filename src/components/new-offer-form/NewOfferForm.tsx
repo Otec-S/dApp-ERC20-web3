@@ -43,6 +43,7 @@ const NewOfferForm: FC = () => {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormData>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -141,7 +142,7 @@ const NewOfferForm: FC = () => {
                     {' Unsufficient balance'}
                   </div>
                 )}
-                { !errors.from && contractData && (
+                {!errors.from && contractData && (
                   <div className={styles.tokenBalanceWrapper}>
                     <span className={styles.tokenBalance}>
                       {contractData &&
@@ -169,7 +170,7 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="text"
                   placeholder="0"
-                  {...register('to', { required: true, validate: (value) => !Number.isFinite(value) && value > 0})}
+                  {...register('to', { required: true, validate: (value) => !Number.isFinite(value) && value > 0 })}
                 />
                 {errors.to?.type === 'required' && (
                   <div className={styles.error}>
@@ -234,7 +235,10 @@ const NewOfferForm: FC = () => {
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonsWrapper}>
-              <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
+              {watch('from') && watch('from').toString().length > 0 && (
+                <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
+              )}
+              {!watch('from') && <FormButton type="submit" buttonText="Approve Token" disabled />}
               <FormButton type="button" buttonText="Create Trade" disabled />
             </div>
             <StepPagination
