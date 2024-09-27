@@ -1,19 +1,19 @@
-.component {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-  background-color: #1e1e1e;
-}
-
 .header {
   width: 100%;
   position: fixed;
   background-color: #1e1e1e;
   height: fit-content;
+}
+
+.component {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e;
+  overflow-y: auto;
 }
 
 .overlay {
