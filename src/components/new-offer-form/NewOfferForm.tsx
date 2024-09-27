@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
@@ -11,6 +11,7 @@ import ArrowDown from '@assets/icons/arrow_down.svg';
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
 import { IToken, tokens } from '@src/shared/constants';
+import isNumber from '@src/utils/isNumber';
 
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
@@ -24,7 +25,7 @@ interface FormData {
   to: number;
   tokenFrom: Address;
   tokenTo: Address;
-  rate: number;
+  rate: string;
   receiver: string;
   approve: boolean;
 }
@@ -56,6 +57,7 @@ const NewOfferForm: FC = () => {
     register,
     handleSubmit,
     setValue,
+    getValues,
     watch,
     formState: { errors },
   } = useForm<FormData>();
@@ -83,12 +85,12 @@ const NewOfferForm: FC = () => {
     isSuccess: isTokenApprovalSuccess,
   } = useWriteContract();
   const onSubmit: SubmitHandler<FormData> = () => {
-    if (!errors.from) {
-      writeContract({
+    if (!errors.from && tokenFrom && walletAddress) {
+        writeContract({
         abi: erc20Abi,
-        address: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
+        address: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
         functionName: 'approve',
-        args: [walletAddress as Address, BigInt(1)],
+        args: [walletAddress, parseUnits(getValues('from').toString(),tokenFrom?.decimals)],
       });
     }
   };
@@ -120,7 +122,8 @@ const NewOfferForm: FC = () => {
     setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
   };
   const rate = watch('from')!==0 ? (watch('from') / watch('to')) : 0;
-  setValue('rate',rate);
+  setValue('rate',rate.toString());
+  const showApproveButtonDisabled = watch('from') === undefined || tokenFrom === undefined;
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -142,15 +145,15 @@ const NewOfferForm: FC = () => {
       </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <div className={styles.inputs}>
+          <div className={cn(styles.inputs,{[styles.inputsAfterTokenApproval]:isTokenApprovalSuccess})}>
             <div className={styles.inputsWraper}>
               <label className={styles.label}>
                 From
                 <input
                   className={styles.inputQuantity}
-                  type="number"
+                  type="text"
                   placeholder="0"
-                  {...register('from', { required: true, validate: (value) => value > 0 })}
+                  {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                 />
                 {errors.from?.type === 'required' && (
                   <div className={styles.error}>
@@ -176,7 +179,7 @@ const NewOfferForm: FC = () => {
                   <div className={styles.tokenBalanceWrapper}>
                     <span className={styles.tokenBalance}>
                       {contractData && tokenFrom &&
-                        `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals)).toFixed(2)}`}
+                        `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals))}`}
                     </span>
                     <button onPointerDown={handleSetTokenMaxValue} className={styles.tokenBalanceButton} type="button">
                       Max
@@ -198,9 +201,9 @@ const NewOfferForm: FC = () => {
                 To
                 <input
                   className={styles.inputQuantity}
-                  type="number"
+                  type="text"
                   placeholder="0"
-                  {...register('to', { required: true, validate: (value) => value > 0 })}
+                  {...register('to', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                 />
                 {errors.to?.type === 'required' && (
                   <div className={styles.error}>
@@ -240,7 +243,7 @@ const NewOfferForm: FC = () => {
               <label className={styles.labelRate}>
                 <input
                   className={styles.inputRate}
-                  type="number"
+                  type="text"
                   readOnly={true}
                   placeholder="0"
                   {...register('rate')}
@@ -266,12 +269,8 @@ const NewOfferForm: FC = () => {
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonsWrapper}>
-              {!isTokenApprovalSuccess && watch('from') && watch('from').toString().length > 0 && (
-                <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" />
-              )}
-              {!isTokenApprovalSuccess && !watch('from') && (
-                <FormButton type="submit" buttonText="Approve Token" disabled />
-              )}
+              {!isTokenApprovalSuccess && <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" disabled={showApproveButtonDisabled}/>
+              }
               <FormButton
                 colorScheme="yellow"
                 type="button"

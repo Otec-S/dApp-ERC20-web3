@@ -282,6 +282,9 @@
   max-width: 129px;
   text-overflow: ellipsis;
   overflow: hidden;
+  height: 16px;
+  display: block;
+  white-space: nowrap;
 }
 
 .error {
@@ -341,14 +344,6 @@
   gap: 16px;
 }
 
-.inputRate::-webkit-outer-spin-button,
-.inputRate::-webkit-inner-spin-button,
-.inputQuantity::-webkit-outer-spin-button,
-.inputQuantity::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
+.inputsAfterTokenApproval {
+  background: #FFFBF2;
 }
