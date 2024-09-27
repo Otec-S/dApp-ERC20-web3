@@ -1,8 +1,8 @@
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
 import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
+import FormButton from '@src/components/form-button/FormButton';
 import { ITokenData } from '@src/shared/constants';
 
-import SubmitButton from '../../../UI/submit-button/Submit-button';
 import style from './Send-ERC-20-result-form.module.css';
 
 interface ISendERC20ResultFormProps {
@@ -47,7 +47,7 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
           <ViewTransactionIcon />
         </div>
       </div>
-      <SubmitButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
+      <FormButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
     </form>
   );
 };

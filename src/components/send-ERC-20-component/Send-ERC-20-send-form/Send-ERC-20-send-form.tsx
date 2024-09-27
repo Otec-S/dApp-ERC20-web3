@@ -9,11 +9,11 @@ import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
+import FormButton from '@src/components/form-button/FormButton';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
 import { IToken, ITokenData } from '@src/shared/constants';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
-import SubmitButton from '../../../UI/submit-button/Submit-button';
 import style from './Send-ERC-20-send-form.module.css';
 
 interface ISendERC20SendFormProps {
@@ -51,7 +51,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   };
 
   const { data: hash, error: isError, writeContract } = useWriteContract();
-  console.log('isError', isError);
 
   const { address } = useAccount(); // адрес кошелька
 
@@ -290,7 +289,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
           />
           {inputRecipientError && <div className={style.inputRecipientError}>{inputRecipientError}</div>}
         </div>
-        <SubmitButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
+        <FormButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
         {isRegularTokenPopupOpen && <TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} />}
       </form>
     </>
