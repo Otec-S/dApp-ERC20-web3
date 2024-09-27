@@ -150,7 +150,7 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="number"
                   placeholder="0"
-                  {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
+                  {...register('from', { required: true, validate: (value) => value > 0 })}
                 />
                 {errors.from?.type === 'required' && (
                   <div className={styles.error}>
