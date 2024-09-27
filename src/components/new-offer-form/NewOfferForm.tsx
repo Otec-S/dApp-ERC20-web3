@@ -24,7 +24,7 @@ interface FormData {
   to: number;
   tokenFrom: Address;
   tokenTo: Address;
-  rate: string;
+  rate: number;
   receiver: string;
   approve: boolean;
 }
@@ -33,8 +33,10 @@ const override: CSSProperties = {
   display: 'block',
   margin: '100px auto',
 };
+
 interface TokenDataNewOfferForm {
   address: Address;
+  decimals:number;
 }
 
 const getTokenIcon = (address: Address) => {
@@ -69,11 +71,6 @@ const NewOfferForm: FC = () => {
       tokenFrom && [
         {
           address: tokenFrom.address,
-          functionName: 'decimals',
-          abi: erc20Abi,
-        },
-        {
-          address: tokenFrom.address,
           functionName: 'balanceOf',
           abi: erc20Abi,
           args: [walletAddress],
@@ -104,12 +101,14 @@ const NewOfferForm: FC = () => {
   const handleLeftTokenChoice = (data: IToken) => {
     setTokenFrom({
       address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
+      decimals:data.decimals,
     });
     setShowLeftTokenPopup(false);
   };
   const handleRightTokenChoice = (data: IToken) => {
     setTokenTo({
       address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
+      decimals:data.decimals,
     });
     setShowRightTokenPopup(false);
   };
@@ -118,8 +117,10 @@ const NewOfferForm: FC = () => {
     setShowRightTokenPopup(false);
   };
   const handleSetTokenMaxValue = () => {
-    setValue('from', Number(contractData && formatUnits(contractData?.[1], contractData?.[0])));
+    setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
   };
+  const rate = watch('from')!==0 ? (watch('from') / watch('to')) : 0;
+  setValue('rate',rate);
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -147,9 +148,9 @@ const NewOfferForm: FC = () => {
                 From
                 <input
                   className={styles.inputQuantity}
-                  type="text"
+                  type="number"
                   placeholder="0"
-                  {...register('from', { required: true, validate: (value) => !Number.isFinite(value) && value > 0 })}
+                  {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                 />
                 {errors.from?.type === 'required' && (
                   <div className={styles.error}>
@@ -174,8 +175,8 @@ const NewOfferForm: FC = () => {
                 {!errors.from && contractData && (
                   <div className={styles.tokenBalanceWrapper}>
                     <span className={styles.tokenBalance}>
-                      {contractData &&
-                        `Balance: ${contractData?.[1] && contractData?.[0] && parseFloat(formatUnits(contractData?.[1], contractData?.[0])).toFixed(2)}`}
+                      {contractData && tokenFrom &&
+                        `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals)).toFixed(2)}`}
                     </span>
                     <button onPointerDown={handleSetTokenMaxValue} className={styles.tokenBalanceButton} type="button">
                       Max
@@ -197,9 +198,9 @@ const NewOfferForm: FC = () => {
                 To
                 <input
                   className={styles.inputQuantity}
-                  type="text"
+                  type="number"
                   placeholder="0"
-                  {...register('to', { required: true, validate: (value) => !Number.isFinite(value) && value > 0 })}
+                  {...register('to', { required: true, validate: (value) => value > 0 })}
                 />
                 {errors.to?.type === 'required' && (
                   <div className={styles.error}>
@@ -239,9 +240,10 @@ const NewOfferForm: FC = () => {
               <label className={styles.labelRate}>
                 <input
                   className={styles.inputRate}
-                  type="text"
+                  type="number"
+                  readOnly={true}
                   placeholder="0"
-                  {...register('rate', { required: true })}
+                  {...register('rate')}
                 />
                 <span className={styles.labelText}>Rate</span>
               </label>

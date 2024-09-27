@@ -340,3 +340,15 @@
   flex-direction: row;
   gap: 16px;
 }
+
+.inputRate::-webkit-outer-spin-button,
+.inputRate::-webkit-inner-spin-button,
+.inputQuantity::-webkit-outer-spin-button,
+.inputQuantity::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
