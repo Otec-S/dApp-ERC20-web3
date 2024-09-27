@@ -92,7 +92,7 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to'|'customFrom'|'customTo') => {
+  const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
       case 'from':
         setShowLeftTokenPopup(true);
@@ -103,9 +103,9 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const handleCustomTokenPopupOpen = ()=>{
-    setShowCustomTokenPopup (true);
-  }
+  const handleCustomTokenPopupOpen = () => {
+    setShowCustomTokenPopup(true);
+  };
 
   const handleDefaultTokenChoice = (token: IToken, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -143,11 +143,11 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
-                     <div className={styles.customTokenContainer}>
-                {showCustomTokenPopup && (
-                  <AddTokenInfo colorScheme='yellow' onClosePopup={()=>setShowCustomTokenPopup(false)}/>
-                )}
-                </div>
+      <div className={styles.customTokenContainer}>
+        {showCustomTokenPopup && (
+          <AddTokenInfo colorScheme="yellow" onClosePopup={() => setShowCustomTokenPopup(false)} />
+        )}
+      </div>
       {(isLoadingBalance || isApprovalTokenPending) && (
         <div className={styles.loader}>
           <BeatLoader
@@ -212,7 +212,7 @@ const NewOfferForm: FC = () => {
                   <TokenPopup
                     onCLose={handleTokenPopupClose}
                     onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
-                    colorScheme='light'
+                    colorScheme="light"
                   />
                 )}
                 <div onPointerDown={() => handleTokenPopupOpen('from')} className={styles.tokenPopup}>
@@ -221,7 +221,11 @@ const NewOfferForm: FC = () => {
                     <ArrowDown />
                   </div>
                 </div>
-                <button onPointerDown={handleCustomTokenPopupOpen} className={styles.buttonAddCustomToken} type="button">
+                <button
+                  onPointerDown={handleCustomTokenPopupOpen}
+                  className={styles.buttonAddCustomToken}
+                  type="button"
+                >
                   + Add a custom token
                 </button>
               </label>
@@ -257,7 +261,7 @@ const NewOfferForm: FC = () => {
                   <TokenPopup
                     onCLose={handleTokenPopupClose}
                     onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
-                    colorScheme='light'
+                    colorScheme="light"
                   />
                 )}
                 <div onPointerDown={() => handleTokenPopupOpen('to')} className={styles.tokenPopup}>
@@ -266,7 +270,11 @@ const NewOfferForm: FC = () => {
                     <ArrowDown />
                   </div>
                 </div>
-                <button onPointerDown={handleCustomTokenPopupOpen} className={styles.buttonAddCustomToken} type="button">
+                <button
+                  onPointerDown={handleCustomTokenPopupOpen}
+                  className={styles.buttonAddCustomToken}
+                  type="button"
+                >
                   + Add a custom token
                 </button>
               </label>
