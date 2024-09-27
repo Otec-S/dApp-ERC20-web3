@@ -85,8 +85,6 @@ const NewOfferForm: FC = () => {
     isPending: isApprovalTokenPending,
     isSuccess: isTokenApprovalSuccess,
   } = useWriteContract();
-  console.log('isPending' + isApprovalTokenPending);
-  console.log('isSuccess' + isTokenApprovalSuccess);
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from) {
       writeContract({
