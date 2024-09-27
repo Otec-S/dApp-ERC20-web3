@@ -35,14 +35,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setIsCustomTokenPopupOpen,
   tokenData,
 }) => {
-  const [tokenSelected, setTokenSelected] = useState<IToken>({
-    id: 1,
-    name: 'ARB',
-    polygonAddress: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
-    sepoliaAddress: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
-    icon: <ARBIcon />,
-    decimals: 18,
-  });
   // TODO:
 
   const [recipientValue, setRecipientValue] = useState('');
@@ -51,16 +43,11 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
   const [isRegularTokenPopupOpen, setIsRegularTokenPopupOpen] = useState(false);
   const [decimals, setDecimals] = useState<number>(18);
-  const [currentTokenAddress, setCurrentTokenAddress] = useState<string>('');
 
   const { data: hash, writeContract } = useWriteContract();
 
   const { address } = useAccount(); // адрес кошелька
-  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
-    address as `0x${string}`,
-    currentTokenAddress as `0x${string}`,
-    decimals as number,
-  );
+
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -70,6 +57,32 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   });
 
   const chainId = useChainId();
+
+  const [tokenSelected, setTokenSelected] = useState<IToken>({
+    id: 1,
+    name: 'ARB',
+    polygonAddress: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
+    sepoliaAddress: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
+    icon: <ARBIcon />,
+    decimals: 18,
+  });
+
+  const [currentTokenAddress, setCurrentTokenAddress] = useState<string>(() => {
+    switch (chainId) {
+      case sepolia.id:
+        return tokenSelected.sepoliaAddress;
+      case polygonAmoy.id:
+        return tokenSelected.polygonAddress;
+      default:
+        return '';
+    }
+  });
+
+  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
+    address as `0x${string}`,
+    currentTokenAddress as `0x${string}`,
+    decimals as number,
+  );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
