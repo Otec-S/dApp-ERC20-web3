@@ -37,7 +37,7 @@ const override: CSSProperties = {
 
 interface TokenDataNewOfferForm {
   address: Address;
-  decimals:number;
+  decimals: number;
 }
 
 const getTokenIcon = (address: Address) => {
@@ -67,6 +67,9 @@ const NewOfferForm: FC = () => {
     openConnectModal();
   }
   const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
+    query:{
+      refetchInterval: 30 * 1000 //30 sec 
+    },
     allowFailure: false,
     contracts: walletAddress &&
       tokenFrom?.address &&
@@ -79,18 +82,14 @@ const NewOfferForm: FC = () => {
         },
       ],
   });
-  const {
-    writeContract,
-    isPending: isApprovalTokenPending,
-    isSuccess: isTokenApprovalSuccess,
-  } = useWriteContract();
+  const { writeContract, isPending: isApprovalTokenPending, isSuccess: isTokenApprovalSuccess } = useWriteContract();
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress) {
-        writeContract({
+      writeContract({
         abi: erc20Abi,
-        address: '0xf300c9bf1A045844f17B093a6D56BC33685e5D05',
+        address: tokenFrom.address,
         functionName: 'approve',
-        args: [walletAddress, parseUnits(getValues('from').toString(),tokenFrom?.decimals)],
+        args: [walletAddress, parseUnits(getValues('from').toString(), tokenFrom?.decimals)],
       });
     }
   };
@@ -103,14 +102,14 @@ const NewOfferForm: FC = () => {
   const handleLeftTokenChoice = (data: IToken) => {
     setTokenFrom({
       address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
-      decimals:data.decimals,
+      decimals: data.decimals,
     });
     setShowLeftTokenPopup(false);
   };
   const handleRightTokenChoice = (data: IToken) => {
     setTokenTo({
       address: chainId === sepolia.id ? data.sepoliaAddress : data.polygonAddress,
-      decimals:data.decimals,
+      decimals: data.decimals,
     });
     setShowRightTokenPopup(false);
   };
@@ -121,8 +120,8 @@ const NewOfferForm: FC = () => {
   const handleSetTokenMaxValue = () => {
     setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
   };
-  const rate = watch('from')!==0 ? (watch('from') / watch('to')) : 0;
-  setValue('rate',rate.toString());
+  const rate =isNumber(watch('from')) && isNumber(watch('to')) && watch('from') !== 0 ? watch('from') / watch('to') : 0;
+  setValue('rate', rate.toString());
   const showApproveButtonDisabled = watch('from') === undefined || tokenFrom === undefined;
 
   return (
@@ -145,7 +144,7 @@ const NewOfferForm: FC = () => {
       </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <div className={cn(styles.inputs,{[styles.inputsAfterTokenApproval]:isTokenApprovalSuccess})}>
+          <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isTokenApprovalSuccess })}>
             <div className={styles.inputsWraper}>
               <label className={styles.label}>
                 From
@@ -178,7 +177,8 @@ const NewOfferForm: FC = () => {
                 {!errors.from && contractData && (
                   <div className={styles.tokenBalanceWrapper}>
                     <span className={styles.tokenBalance}>
-                      {contractData && tokenFrom &&
+                      {contractData &&
+                        tokenFrom &&
                         `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals))}`}
                     </span>
                     <button onPointerDown={handleSetTokenMaxValue} className={styles.tokenBalanceButton} type="button">
@@ -241,13 +241,7 @@ const NewOfferForm: FC = () => {
             </div>
             <div className={styles.additionalInputsWrapper}>
               <label className={styles.labelRate}>
-                <input
-                  className={styles.inputRate}
-                  type="text"
-                  readOnly={true}
-                  placeholder="0"
-                  {...register('rate')}
-                />
+                <input className={styles.inputRate} type="text" readOnly={true} placeholder="0" {...register('rate')} />
                 <span className={styles.labelText}>Rate</span>
               </label>
               <label className={styles.labelReceiver}>
@@ -269,8 +263,14 @@ const NewOfferForm: FC = () => {
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonsWrapper}>
-              {!isTokenApprovalSuccess && <FormButton colorScheme="yellow" type="submit" buttonText="Approve Token" disabled={showApproveButtonDisabled}/>
-              }
+              {!isTokenApprovalSuccess && (
+                <FormButton
+                  colorScheme="yellow"
+                  type="submit"
+                  buttonText="Approve Token"
+                  disabled={showApproveButtonDisabled}
+                />
+              )}
               <FormButton
                 colorScheme="yellow"
                 type="button"

@@ -18,7 +18,7 @@ export interface IToken {
   sepoliaAddress: Address;
   polygonAddress: Address;
   icon: ReactElement;
-  decimals:number;
+  decimals: number;
 }
 
 export const tokens: IToken[] = [
