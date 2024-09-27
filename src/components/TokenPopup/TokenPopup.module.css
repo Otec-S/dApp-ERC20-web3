@@ -58,6 +58,13 @@
 
 .closePopup {
   cursor: pointer;
+  transition: transform 0.5s ease;
+  transform-origin: center;
+  border: 1px solid white;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
 }
 
 .input {
@@ -96,14 +103,16 @@
 }
 
 .inputCLoseIcon {
-  width: 24px;
-  min-width: 24px;
-  margin-right: 2px;
+  width: 21px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+  transform-origin: center;
 
   &:hover {
-    cursor: pointer;
+    transform: rotate(90deg);
   }
 }
 
