@@ -14,6 +14,7 @@ interface ISendERC20BlockProps {
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
   tokenData: ITokenData | null;
+  setTokenData: (value: ITokenData | null) => void;
   tokenName: string;
   setTokenName: (value: string) => void;
 }
@@ -26,6 +27,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   setIsTxFormSubmitted,
   setIsCustomTokenPopupOpen,
   tokenData,
+  setTokenData,
   tokenName,
   setTokenName,
 }) => {
@@ -43,6 +45,7 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
           setInputValue={setInputValue}
           tokenName={tokenName}
           setTokenName={setTokenName}
+          setTokenData={setTokenData}
         />
       ) : (
         <SendERC20SendForm

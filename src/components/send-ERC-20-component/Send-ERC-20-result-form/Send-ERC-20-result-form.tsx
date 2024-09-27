@@ -1,5 +1,6 @@
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
 import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
+import { ITokenData } from '@src/shared/constants';
 
 import SubmitButton from '../../../UI/submit-button/Submit-button';
 import style from './Send-ERC-20-result-form.module.css';
@@ -11,6 +12,7 @@ interface ISendERC20ResultFormProps {
   setInputValue: (value: string) => void;
   tokenName: string;
   setTokenName: (value: string) => void;
+  setTokenData: (value: ITokenData | null) => void;
 }
 
 const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
@@ -20,13 +22,14 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
   setInputValue,
   tokenName,
   setTokenName,
+  setTokenData,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsTxFormSubmitted(false);
     setInputValue('');
     setTokenName('ARB');
-    // FIXME: делай стейт tokenData равным null
+    setTokenData(null);
   };
 
   return (
