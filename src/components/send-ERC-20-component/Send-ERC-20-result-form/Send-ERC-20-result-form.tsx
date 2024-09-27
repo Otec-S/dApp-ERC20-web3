@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
 import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
 import FormButton from '@src/components/form-button/FormButton';
@@ -5,7 +7,7 @@ import { ITokenData } from '@src/shared/constants';
 
 import style from './Send-ERC-20-result-form.module.css';
 
-interface ISendERC20ResultFormProps {
+interface Props {
   isTxSuccess: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   inputValue: string;
@@ -15,7 +17,7 @@ interface ISendERC20ResultFormProps {
   setTokenData: (value: ITokenData | null) => void;
 }
 
-const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
+const SendERC20ResultForm: FC<Props> = ({
   isTxSuccess,
   setIsTxFormSubmitted,
   inputValue,

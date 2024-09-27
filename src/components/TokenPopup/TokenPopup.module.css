@@ -60,7 +60,6 @@
   cursor: pointer;
   transition: transform 0.5s ease;
   transform-origin: center;
-  border: 1px solid white;
 
   &:hover {
     transform: rotate(90deg);

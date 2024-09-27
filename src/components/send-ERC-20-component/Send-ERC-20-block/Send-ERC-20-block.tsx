@@ -6,7 +6,7 @@ import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-f
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
 import style from './Send-ERC-20-block.module.css';
 
-interface ISendERC20BlockProps {
+interface Props {
   blockTitleText: string;
   isTxSuccess: boolean;
   setIsTxSuccess: (value: boolean) => void;
@@ -19,7 +19,7 @@ interface ISendERC20BlockProps {
   setTokenName: (value: string) => void;
 }
 
-const SendERC20Block: FC<ISendERC20BlockProps> = ({
+const SendERC20Block: FC<Props> = ({
   blockTitleText,
   isTxSuccess,
   setIsTxSuccess,

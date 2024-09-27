@@ -16,7 +16,7 @@ import { IToken, ITokenData } from '@src/shared/constants';
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import style from './Send-ERC-20-send-form.module.css';
 
-interface ISendERC20SendFormProps {
+interface Props {
   isTxFormSubmitted: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsTxSuccess: (value: boolean) => void;
@@ -27,7 +27,7 @@ interface ISendERC20SendFormProps {
   tokenData: ITokenData | null;
 }
 
-const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
+const SendERC20SendForm: FC<Props> = ({
   setIsTxSuccess,
   setIsTxFormSubmitted,
   inputValue,
@@ -36,8 +36,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   setIsCustomTokenPopupOpen,
   tokenData,
 }) => {
-  // TODO:
-
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [inputValueError, setInputValueError] = useState<string | null>(null);
@@ -54,17 +52,9 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const { address } = useAccount(); // адрес кошелька
 
-  const {
-    isLoading: isConfirming,
-    isSuccess: isConfirmed,
-    // isError: isError,
-  } = useWaitForTransactionReceipt({
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   });
-
-  // console.log('isConfirming', isConfirming);
-  // console.log('isConfirmed', isConfirmed);
-  // console.log('isError', isError);
 
   const chainId = useChainId();
 
@@ -96,7 +86,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // Регулярное выражение для проверки числа с точкой
+    // Проверка числа с точкой
     const inputValueRegex = /^\d*\.?\d*$/;
     if (inputValueRegex.test(value)) {
       setInputValue(value);
@@ -144,7 +134,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted');
     const formData = new FormData(e.target as HTMLFormElement);
     const recipient = formData.get('recipient') as `0x${string}`;
     const parsedAmount = parseUnits(inputValue, decimals);
@@ -188,8 +177,6 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
 
   useEffect(() => {
     if (isError !== null) {
-      console.log('Error: ', isError);
-      // TODO:
       setIsTxFormSubmitted(true);
       setIsTxSuccess(false);
     }

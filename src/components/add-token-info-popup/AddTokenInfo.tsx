@@ -30,7 +30,6 @@ interface IFormData {
   tokenDecimals?: number;
 }
 
-// TODO: разобраться что это
 const override: CSSProperties = {
   display: 'block',
   margin: '100px auto',
@@ -152,14 +151,12 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
     });
   };
 
-  // Обработчик закрытия по Esc
   const handleEscDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       setIsCustomTokenPopupOpen(false);
     }
   };
 
-  // Обработчик закрытия по клику вне попапа
   const handleClickOutside = (e: MouseEvent) => {
     if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
       setIsCustomTokenPopupOpen(false);

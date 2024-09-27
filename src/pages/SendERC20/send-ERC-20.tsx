@@ -11,9 +11,7 @@ const SendERC20 = () => {
   const [isTxFormSubmitted, setIsTxFormSubmitted] = useState(false);
   const [isTxSuccess, setIsTxSuccess] = useState(true);
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
-
   const [tokenData, setTokenData] = useState<ITokenData | null>(null); // Состояние для хранения данных токена
-
   const [tokenName, setTokenName] = useState<string>('ARB');
 
   const handleCloseCustomTokenPopup = (data: ITokenData) => {

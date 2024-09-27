@@ -63,13 +63,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
             [styles.connectButtonWrapperYellowScheme]: colorScheme === 'lightBackground',
           })}
         >
-          <ConnectButton
-            label="Connect wallet"
-            // TODO:
-            // chainStatus={'none'}
-            showBalance={false}
-            accountStatus="address"
-          />
+          <ConnectButton label="Connect wallet" showBalance={false} accountStatus="address" />
         </div>
       </div>
     </header>

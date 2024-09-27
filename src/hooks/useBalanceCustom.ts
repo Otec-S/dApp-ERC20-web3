@@ -29,7 +29,6 @@ const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals
         setBalance(balanceInEth);
       } catch (err) {
         setErrorBalanceCustom(err as Error);
-        // console.error('Error retrieving balance:', err);
         setBalance('Error retrieving balance');
       } finally {
         setLoadingBalanceCustom(false);

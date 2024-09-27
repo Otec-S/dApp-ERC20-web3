@@ -33,14 +33,12 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
     setSearchText('');
   };
 
-  // Обработчик закрытия по Esc
   const handleEscDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onCLose();
     }
   };
 
-  // Обработчик закрытия по клику вне попапа
   const handleClickOutside = (e: MouseEvent) => {
     if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
       onCLose();
