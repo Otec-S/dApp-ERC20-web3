@@ -1,5 +1,7 @@
 .createOffer {
   width: 840px;
+  position: relative;
+  height: 561px;
 }
 
 .headerWrapper {
@@ -346,4 +348,11 @@
 
 .inputsAfterTokenApproval {
   background: #fffbf2;
+}
+
+.customTokenContainer {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  z-index: 10;
 }
