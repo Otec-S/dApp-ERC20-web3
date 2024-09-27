@@ -8,7 +8,7 @@ import SendERC20Block from '../../components/send-ERC-20-component/Send-ERC-20-b
 import style from './Send-ERC-20.module.css';
 
 const SendERC20 = () => {
-  const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
+  const [isTxFormSubmitted, setIsTxFormSubmitted] = useState(false);
   const [isTxSuccess, setIsTxSuccess] = useState(true);
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
 
@@ -34,7 +34,7 @@ const SendERC20 = () => {
           isTxSuccess={isTxSuccess}
           setIsTxSuccess={setIsTxSuccess}
           isTxFormSubmitted={isTxFormSubmitted}
-          setIsTxFormSubmitted={setIssTxFormSubmitted}
+          setIsTxFormSubmitted={setIsTxFormSubmitted}
           setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen}
           blockTitleText={
             isTxFormSubmitted

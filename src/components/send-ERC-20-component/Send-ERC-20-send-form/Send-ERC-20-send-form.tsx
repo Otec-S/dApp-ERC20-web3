@@ -50,20 +50,22 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     margin: '100px auto',
   };
 
-  const { data: hash, writeContract } = useWriteContract();
+  const { data: hash, error: isError, writeContract } = useWriteContract();
+  console.log('isError', isError);
 
   const { address } = useAccount(); // адрес кошелька
 
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
-    isError,
+    // isError: isError,
   } = useWaitForTransactionReceipt({
     hash,
   });
 
-  console.log('isConfirming', isConfirming);
-  console.log('isConfirmed', isConfirmed);
+  // console.log('isConfirming', isConfirming);
+  // console.log('isConfirmed', isConfirmed);
+  // console.log('isError', isError);
 
   const chainId = useChainId();
 
@@ -175,6 +177,7 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
     if (isConfirmed) {
       setIsTxFormSubmitted(true);
       setIsButtonActive(true);
+      setIsTxSuccess(true);
     }
   }, [isConfirmed]);
 
@@ -185,8 +188,10 @@ const SendERC20SendForm: FC<ISendERC20SendFormProps> = ({
   }, [isConfirming]);
 
   useEffect(() => {
-    if (isError) {
+    if (isError !== null) {
       console.log('Error: ', isError);
+      // TODO:
+      setIsTxFormSubmitted(true);
       setIsTxSuccess(false);
     }
   }, [isError]);
