@@ -6,6 +6,7 @@ import { ITokenData } from '@src/shared/constants';
 import Header from '../../components/header/Header';
 import SendERC20Block from '../../components/send-ERC-20-component/Send-ERC-20-block/Send-ERC-20-block';
 import style from './Send-ERC-20.module.css';
+import { set } from 'react-hook-form';
 
 const SendERC20 = () => {
   const [isTxFormSubmitted, setIssTxFormSubmitted] = useState(false);
@@ -14,10 +15,13 @@ const SendERC20 = () => {
 
   const [tokenData, setTokenData] = useState<ITokenData | null>(null); // Состояние для хранения данных токена
 
+  const [tokenName, setTokenName] = useState<string>('ARB');
+
   const handleCloseCustomTokenPopup = (data: ITokenData) => {
     setIsCustomTokenPopupOpen(false);
-    if (data) {
+    if (data && data.tokenName) {
       setTokenData(data);
+      setTokenName(data.tokenName);
     }
   };
 
@@ -39,6 +43,8 @@ const SendERC20 = () => {
               : 'Send ERC-20'
           }
           tokenData={tokenData}
+          tokenName={tokenName}
+          setTokenName={setTokenName}
         />
       </div>
 

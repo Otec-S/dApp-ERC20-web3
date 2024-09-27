@@ -14,6 +14,8 @@ interface ISendERC20BlockProps {
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
   tokenData: ITokenData | null;
+  tokenName: string;
+  setTokenName: (value: string) => void;
 }
 
 const SendERC20Block: FC<ISendERC20BlockProps> = ({
@@ -24,9 +26,10 @@ const SendERC20Block: FC<ISendERC20BlockProps> = ({
   setIsTxFormSubmitted,
   setIsCustomTokenPopupOpen,
   tokenData,
+  tokenName,
+  setTokenName,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [tokenName, setTokenName] = useState<string>('ARB');
 
   return (
     <section className={style.block}>

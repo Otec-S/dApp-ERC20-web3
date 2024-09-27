@@ -65,6 +65,7 @@
 
 .balanceExceededError {
   color: pink;
+  font-family: 'Inter', sans-serif;
 }
 
 .tokenBlock {
@@ -172,6 +173,7 @@
 .inputRecipientError {
   margin-top: 5px;
   color: pink;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (max-width: 845px) {

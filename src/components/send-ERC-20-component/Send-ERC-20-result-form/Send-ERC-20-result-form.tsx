@@ -26,6 +26,7 @@ const SendERC20ResultForm: React.FC<ISendERC20ResultFormProps> = ({
     setIsTxFormSubmitted(false);
     setInputValue('');
     setTokenName('ARB');
+    // FIXME: делай стейт tokenData равным null
   };
 
   return (
