@@ -9,7 +9,7 @@ import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { IToken } from '@src/shared/constants';
+import { IToken, tradeContractAbi, tradeContractAddress } from '@src/shared/constants';
 import getTokenIcon from '@src/utils/getTokenIcon';
 import isNumber from '@src/utils/isNumber';
 
@@ -75,6 +75,17 @@ const NewOfferForm: FC = () => {
           functionName: 'balanceOf',
           abi: erc20Abi,
           args: [walletAddress],
+        },
+      ],
+  });
+
+  const { data: feeData } = useReadContracts({
+    allowFailure: false,
+    contracts: [
+        {
+          address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+          functionName: 'feeBasisPoints',
+          abi: tradeContractAbi,
         },
       ],
   });
@@ -236,7 +247,7 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="text"
                   placeholder="0"
-                  {...register('to', { required: true, validate: (value) => isNumber(value) && value > 0 })}
+                  {...register('to', isTokenApprovalSuccess ? { required: true, validate: (value) => isNumber(value) && value > 0 } : undefined)}
                 />
                 {errors.to?.type === 'required' && (
                   <div className={styles.error}>
