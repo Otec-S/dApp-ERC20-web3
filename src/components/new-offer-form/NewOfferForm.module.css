@@ -75,7 +75,9 @@
 
 .approveWrraper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  padding: 24px;
+  gap: 16px;
 }
 
 .buttons {
@@ -355,4 +357,16 @@
   left: 100px;
   top: 100px;
   z-index: 10;
+}
+
+.fee {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

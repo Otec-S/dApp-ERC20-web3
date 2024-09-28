@@ -440,7 +440,7 @@ export const tradeContractAbi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-];
+] as const;
 
 export const tradeContractAddress = {
   polygonAddress: '0x30bbAA44F7A80AfC9a5CB1aEEb8247B8E2aDE392',

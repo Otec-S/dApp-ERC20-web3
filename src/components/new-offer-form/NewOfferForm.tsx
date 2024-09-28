@@ -79,16 +79,17 @@ const NewOfferForm: FC = () => {
       ],
   });
 
-  const { data: feeData } = useReadContracts({
+  const { data: feeBasis } = useReadContracts({
     allowFailure: false,
     contracts: [
-        {
-          address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
-          functionName: 'feeBasisPoints',
-          abi: tradeContractAbi,
-        },
-      ],
+      {
+        address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+        functionName: 'feeBasisPoints',
+        abi: tradeContractAbi,
+      },
+    ],
   });
+  const fee = feeBasis && formatUnits(feeBasis[0],2);
 
   const { writeContract, isPending: isApprovalTokenPending, isSuccess: isTokenApprovalSuccess } = useWriteContract();
 
@@ -140,7 +141,7 @@ const NewOfferForm: FC = () => {
   const handleTokenPopupClose = () => {
     setShowLeftTokenPopup(false);
     setShowRightTokenPopup(false);
-    setShowCustomTokenPopup(false)
+    setShowCustomTokenPopup(false);
   };
 
   const handleSetTokenMaxValue = () => {
@@ -156,9 +157,7 @@ const NewOfferForm: FC = () => {
   return (
     <section className={cn(styles.createOffer)}>
       <div className={styles.customTokenContainer}>
-        {showCustomTokenPopup && (
-          <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />
-        )}
+        {showCustomTokenPopup && <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />}
       </div>
       {(isLoadingBalance || isApprovalTokenPending) && (
         <div className={styles.loader}>
@@ -247,7 +246,12 @@ const NewOfferForm: FC = () => {
                   className={styles.inputQuantity}
                   type="text"
                   placeholder="0"
-                  {...register('to', isTokenApprovalSuccess ? { required: true, validate: (value) => isNumber(value) && value > 0 } : undefined)}
+                  {...register(
+                    'to',
+                    isTokenApprovalSuccess
+                      ? { required: true, validate: (value) => isNumber(value) && value > 0 }
+                      : undefined,
+                  )}
                 />
                 {errors.to?.type === 'required' && (
                   <div className={styles.error}>
@@ -307,10 +311,13 @@ const NewOfferForm: FC = () => {
               </label>
             </div>
             <div className={styles.approveWrraper}>
-              <input type="checkbox" id="infiniteapprove" {...register('approve')} />
-              <label htmlFor="infiniteapprove" className={styles.approve}>
-                Infinite approve
-              </label>
+              <span className={styles.fee}>{fee && `Service fee ${fee}%`}</span>
+              <div>
+                <input type="checkbox" id="infiniteapprove" {...register('approve')} />
+                <label htmlFor="infiniteapprove" className={styles.approve}>
+                  Infinite approve
+                </label>
+              </div>
             </div>
           </div>
           <div className={styles.buttons}>
