@@ -15,7 +15,7 @@ import WBTSIcon from '@assets/icons/wbtc.svg';
 
 import { polygonAddress, sepoliaAddress } from './TokensBlock.constants';
 
-type TokensType = {
+export type TokensType = {
   symbol: string;
   address: Address;
   icon: ReactElement;
