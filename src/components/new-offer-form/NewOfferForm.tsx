@@ -39,6 +39,7 @@ const override: CSSProperties = {
 interface TokenDataNewOfferForm {
   address: Address;
   decimals: number;
+  name:string;
 }
 
 const NewOfferForm: FC = () => {
@@ -90,6 +91,8 @@ const NewOfferForm: FC = () => {
     ],
   });
   const fee = feeBasis && formatUnits(feeBasis[0],2);
+  const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from')*Number(fee);
+  const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && (getValues('from') - tokenAmountIsTaken);
 
   const { writeContract, isPending: isApprovalTokenPending, isSuccess: isTokenApprovalSuccess } = useWriteContract();
 
@@ -125,6 +128,7 @@ const NewOfferForm: FC = () => {
         setTokenFrom({
           address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
           decimals: token.decimals,
+          name:token.name
         });
         setShowLeftTokenPopup(false);
         break;
@@ -132,6 +136,7 @@ const NewOfferForm: FC = () => {
         setTokenTo({
           address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
           decimals: token.decimals,
+          name:token.name
         });
         setShowRightTokenPopup(false);
         break;
@@ -311,7 +316,7 @@ const NewOfferForm: FC = () => {
               </label>
             </div>
             <div className={styles.approveWrraper}>
-              <span className={styles.fee}>{fee && `Service fee ${fee}%`}</span>
+              <span className={styles.fee}>{fee && `Service fee ${fee}% `}{tokenFrom && tokenAmountIsTaken && `(${tokenAmountIsTaken} ${tokenFrom.name})`}{'.'}{tokenFrom && getValues('from') && isNumber( getValues('from')) && `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}</span>
               <div>
                 <input type="checkbox" id="infiniteapprove" {...register('approve')} />
                 <label htmlFor="infiniteapprove" className={styles.approve}>
