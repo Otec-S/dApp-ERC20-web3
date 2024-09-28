@@ -178,7 +178,7 @@ const NewOfferForm: FC = () => {
       )}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>New offer</h2>
-        <NewOfferFormStages activeStage={2} />
+        <NewOfferFormStages description={isTokenApprovalSuccess ? 'Create':'Approve'} activeStage={isTokenApprovalSuccess ? 2:1} />
       </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
