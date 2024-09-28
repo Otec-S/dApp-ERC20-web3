@@ -42,7 +42,7 @@ interface TokenDataNewOfferForm {
   name: string;
 }
 
-type FormStages = 'approveToken' | 'createTrade';
+type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
 
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
@@ -97,7 +97,13 @@ const NewOfferForm: FC = () => {
   const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
 
-  const { writeContract, isPending: isApprovalTokenPending, isSuccess: isTokenApprovalSuccess } = useWriteContract();
+  const {
+    writeContract,
+    isPending: isWriteContractPending,
+    isSuccess: isWriteContractSuccess,
+    data: transactionHash,
+  } = useWriteContract();
+  console.log(transactionHash);
 
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
@@ -105,16 +111,33 @@ const NewOfferForm: FC = () => {
         abi: erc20Abi,
         address: tokenFrom.address,
         functionName: 'approve',
-        args: [walletAddress, parseUnits(getValues('from').toString(), tokenFrom?.decimals)],
+        args: [
+          chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+          parseUnits(getValues('from').toString(), tokenFrom?.decimals),
+        ],
       });
-    } else console.log('inside create trade');
+    } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
+      writeContract({
+        abi: tradeContractAbi,
+
+        address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+        functionName: 'initiateTrade',
+        args: [
+          tokenFrom.address,
+          tokenTo.address,
+          parseUnits(getValues('from').toString(), tokenFrom.decimals),
+          parseUnits(getValues('to').toString(), tokenTo.decimals),
+          walletAddress,
+        ],
+      });
+    }
   };
 
   useEffect(() => {
-    if (formStage === 'approveToken' && isTokenApprovalSuccess) {
+    if (formStage === 'approveToken' && isWriteContractSuccess) {
       setFormStage('createTrade');
     }
-  }, [formStage, setFormStage, isTokenApprovalSuccess]);
+  }, [formStage, setFormStage, isWriteContractSuccess]);
 
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
@@ -173,7 +196,7 @@ const NewOfferForm: FC = () => {
       <div className={styles.customTokenContainer}>
         {showCustomTokenPopup && <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />}
       </div>
-      {(isLoadingBalance || isApprovalTokenPending) && (
+      {(isLoadingBalance || isWriteContractPending) && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
@@ -194,7 +217,7 @@ const NewOfferForm: FC = () => {
       </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isTokenApprovalSuccess })}>
+          <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isWriteContractSuccess })}>
             <div className={styles.inputsWraper}>
               <label className={styles.label}>
                 From
@@ -265,7 +288,7 @@ const NewOfferForm: FC = () => {
                   placeholder="0"
                   {...register(
                     'to',
-                    isTokenApprovalSuccess
+                    isWriteContractSuccess
                       ? { required: true, validate: (value) => isNumber(value) && value > 0 }
                       : undefined,
                   )}
@@ -347,7 +370,7 @@ const NewOfferForm: FC = () => {
           </div>
           <div className={styles.buttons}>
             <div className={styles.buttonsWrapper}>
-              {!isTokenApprovalSuccess && (
+              {formStage === 'approveToken' && (
                 <FormButton
                   colorScheme="yellow"
                   type="submit"
@@ -359,7 +382,7 @@ const NewOfferForm: FC = () => {
                 colorScheme="yellow"
                 type="submit"
                 buttonText="Create Trade"
-                disabled={!isTokenApprovalSuccess}
+                disabled={formStage !== 'createTrade' && (tokenFrom === undefined || tokenTo === undefined)}
               />
             </div>
             <StepPagination
