@@ -5,7 +5,7 @@ import styles from './NewOfferFormStages.module.css';
 
 interface Props {
   activeStage: 1 | 2 | 3;
-  description:string;
+  description: string;
 }
 
 export const NewOfferFormStages: FC<Props> = ({ activeStage, description }) => {

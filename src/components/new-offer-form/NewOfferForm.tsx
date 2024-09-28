@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -39,13 +39,16 @@ const override: CSSProperties = {
 interface TokenDataNewOfferForm {
   address: Address;
   decimals: number;
-  name:string;
+  name: string;
 }
+
+type FormStages = 'approveToken' | 'createTrade';
 
 const NewOfferForm: FC = () => {
   const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
   const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
   const [showCustomTokenPopup, setShowCustomTokenPopup] = useState(false);
+  const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
@@ -90,22 +93,28 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
-  const fee = feeBasis && formatUnits(feeBasis[0],2);
-  const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from')*Number(fee);
-  const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && (getValues('from') - tokenAmountIsTaken);
+  const fee = feeBasis && formatUnits(feeBasis[0], 2);
+  const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
+  const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
 
   const { writeContract, isPending: isApprovalTokenPending, isSuccess: isTokenApprovalSuccess } = useWriteContract();
 
   const onSubmit: SubmitHandler<FormData> = () => {
-    if (!errors.from && tokenFrom && walletAddress) {
+    if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
       writeContract({
         abi: erc20Abi,
         address: tokenFrom.address,
         functionName: 'approve',
         args: [walletAddress, parseUnits(getValues('from').toString(), tokenFrom?.decimals)],
       });
-    }
+    } else console.log('inside create trade');
   };
+
+  useEffect(() => {
+    if (formStage === 'approveToken' && isTokenApprovalSuccess) {
+      setFormStage('createTrade');
+    }
+  }, [formStage, setFormStage, isTokenApprovalSuccess]);
 
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
@@ -128,7 +137,7 @@ const NewOfferForm: FC = () => {
         setTokenFrom({
           address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
           decimals: token.decimals,
-          name:token.name
+          name: token.name,
         });
         setShowLeftTokenPopup(false);
         break;
@@ -136,7 +145,7 @@ const NewOfferForm: FC = () => {
         setTokenTo({
           address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
           decimals: token.decimals,
-          name:token.name
+          name: token.name,
         });
         setShowRightTokenPopup(false);
         break;
@@ -178,7 +187,10 @@ const NewOfferForm: FC = () => {
       )}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>New offer</h2>
-        <NewOfferFormStages description={isTokenApprovalSuccess ? 'Create':'Approve'} activeStage={isTokenApprovalSuccess ? 2:1} />
+        <NewOfferFormStages
+          description={formStage === 'createTrade' ? 'Create' : 'Approve'}
+          activeStage={formStage === 'createTrade' ? 2 : 1}
+        />
       </div>
       <div className={cn(styles.formWrapper)}>
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
@@ -316,7 +328,15 @@ const NewOfferForm: FC = () => {
               </label>
             </div>
             <div className={styles.approveWrraper}>
-              <span className={styles.fee}>{fee && `Service fee ${fee}% `}{tokenFrom && tokenAmountIsTaken && `(${tokenAmountIsTaken} ${tokenFrom.name})`}{'.'}{tokenFrom && getValues('from') && isNumber( getValues('from')) && `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}</span>
+              <span className={styles.fee}>
+                {fee && `Service fee ${fee}% `}
+                {tokenFrom && tokenAmountIsTaken && `(${tokenAmountIsTaken} ${tokenFrom.name})`}
+                {'.'}
+                {tokenFrom &&
+                  getValues('from') &&
+                  isNumber(getValues('from')) &&
+                  `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}
+              </span>
               <div>
                 <input type="checkbox" id="infiniteapprove" {...register('approve')} />
                 <label htmlFor="infiniteapprove" className={styles.approve}>
@@ -337,16 +357,23 @@ const NewOfferForm: FC = () => {
               )}
               <FormButton
                 colorScheme="yellow"
-                type="button"
+                type="submit"
                 buttonText="Create Trade"
                 disabled={!isTokenApprovalSuccess}
               />
             </div>
             <StepPagination
-              steps={[
-                { value: 1, status: StepStatus.DISABLED },
-                { value: 2, status: StepStatus.DISABLED },
-              ]}
+              steps={
+                showApproveButtonDisabled
+                  ? [
+                      { value: 1, status: StepStatus.DISABLED },
+                      { value: 2, status: StepStatus.DISABLED },
+                    ]
+                  : [
+                      { value: 1, status: StepStatus.COMPLETED },
+                      { value: 2, status: StepStatus.DISABLED },
+                    ]
+              }
             />
           </div>
         </form>
