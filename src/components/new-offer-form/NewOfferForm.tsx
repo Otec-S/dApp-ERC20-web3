@@ -27,7 +27,7 @@ interface FormData {
   to: number;
   tokenFrom: Address;
   tokenTo: Address;
-  rate: string;
+  rate: number;
   optionalTaker: Address;
   approve: boolean;
 }
@@ -194,10 +194,8 @@ const NewOfferForm: FC = () => {
   const handleSetTokenMaxValue = () => {
     setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
   };
-
-  const rate =
-    isNumber(watch('from')) && isNumber(watch('to')) && watch('from') !== 0 ? watch('from') / watch('to') : 0;
-  setValue('rate', rate.toString());
+  const rate = watch('from') >0 ? watch('to') / watch('from') : 0;
+  setValue('rate', rate);
 
   const showApproveButtonDisabled = tokenFrom === undefined;
 
@@ -304,7 +302,7 @@ const NewOfferForm: FC = () => {
                     className={styles.inputQuantity}
                     type="number"
                     step="0.000000000000000001"
-                    placeholder="0"
+                    defaultValue={0}
                     {...register(
                       'to',
                       isWriteContractSuccess
@@ -417,7 +415,7 @@ const NewOfferForm: FC = () => {
                   colorScheme="yellow"
                   type="submit"
                   buttonText="Create Trade"
-                  disabled={formStage !== 'createTrade' && (tokenFrom === undefined || tokenTo === undefined)}
+                  disabled={formStage !== 'createTrade' || tokenFrom === undefined || tokenTo === undefined}
                 />
               </div>
               <StepPagination
