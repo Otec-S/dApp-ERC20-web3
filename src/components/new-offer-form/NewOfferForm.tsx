@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, isAddress, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
@@ -27,7 +27,7 @@ interface FormData {
   tokenFrom: Address;
   tokenTo: Address;
   rate: string;
-  receiver: string;
+  optionalTaker: Address;
   approve: boolean;
 }
 
@@ -223,7 +223,8 @@ const NewOfferForm: FC = () => {
                 From
                 <input
                   className={styles.inputQuantity}
-                  type="text"
+                  type="number"
+                  step='0.000000000000000001'
                   placeholder="0"
                   {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                 />
@@ -284,7 +285,8 @@ const NewOfferForm: FC = () => {
                 To
                 <input
                   className={styles.inputQuantity}
-                  type="text"
+                  type="number"
+                  step='0.000000000000000001'
                   placeholder="0"
                   {...register(
                     'to',
@@ -345,9 +347,19 @@ const NewOfferForm: FC = () => {
                   className={styles.inputReceiver}
                   type="text"
                   placeholder="0x0000000000000000000000000000000000000000"
-                  {...register('receiver')}
+                  {...register('optionalTaker', { validate: (value) => isAddress(value) })}
                 />
                 <span className={styles.labelText}>Receiver</span>
+                {errors.optionalTaker?.type === 'validate' && (
+                  <div className={styles.optionalTakerError}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Please input address'}
+                  </div>
+                )}
               </label>
             </div>
             <div className={styles.approveWrraper}>
