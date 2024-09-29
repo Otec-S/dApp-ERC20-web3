@@ -1,4 +1,5 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -56,6 +57,7 @@ const NewOfferForm: FC = () => {
     handleSubmit,
     setValue,
     getValues,
+    reset,
     watch,
     formState: { errors },
   } = useForm<FormData>();
@@ -65,6 +67,12 @@ const NewOfferForm: FC = () => {
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
+
+  useEffect(() => {
+    reset();
+    setTokenFrom(undefined);
+    setTokenTo(undefined);
+  }, [chainId, reset]);
 
   const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
     query: {
@@ -99,11 +107,11 @@ const NewOfferForm: FC = () => {
 
   const {
     writeContract,
-    isPending: isWriteContractPending,
+    isPending: isWriteApprovePending,
     isSuccess: isWriteContractSuccess,
     data: transactionHash,
+    variables: contractVariables,
   } = useWriteContract();
-  console.log(transactionHash);
 
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
@@ -119,7 +127,6 @@ const NewOfferForm: FC = () => {
     } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
       writeContract({
         abi: tradeContractAbi,
-
         address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
         functionName: 'initiateTrade',
         args: [
@@ -137,7 +144,10 @@ const NewOfferForm: FC = () => {
     if (formStage === 'approveToken' && isWriteContractSuccess) {
       setFormStage('createTrade');
     }
-  }, [formStage, setFormStage, isWriteContractSuccess]);
+    if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade') {
+      setFormStage('tradeCreated');
+    }
+  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables]);
 
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
@@ -189,14 +199,14 @@ const NewOfferForm: FC = () => {
     isNumber(watch('from')) && isNumber(watch('to')) && watch('from') !== 0 ? watch('from') / watch('to') : 0;
   setValue('rate', rate.toString());
 
-  const showApproveButtonDisabled = watch('from') === undefined || tokenFrom === undefined;
+  const showApproveButtonDisabled = tokenFrom === undefined;
 
   return (
     <section className={cn(styles.createOffer)}>
       <div className={styles.customTokenContainer}>
         {showCustomTokenPopup && <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />}
       </div>
-      {(isLoadingBalance || isWriteContractPending) && (
+      {(isLoadingBalance || isWriteApprovePending) && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
@@ -209,210 +219,238 @@ const NewOfferForm: FC = () => {
         </div>
       )}
       <div className={styles.headerWrapper}>
-        <h2 className={styles.header}>New offer</h2>
-        <NewOfferFormStages
-          description={formStage === 'createTrade' ? 'Create' : 'Approve'}
-          activeStage={formStage === 'createTrade' ? 2 : 1}
-        />
+        <h2 className={styles.header}>{formStage !== 'tradeCreated' ? 'New offer' : 'New offer has been created!'}</h2>
+        {formStage !== 'tradeCreated' && (
+          <NewOfferFormStages
+            description={formStage === 'createTrade' ? 'Create' : 'Approve'}
+            activeStage={formStage === 'createTrade' ? 2 : 1}
+          />
+        )}
       </div>
-      <div className={cn(styles.formWrapper)}>
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-          <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isWriteContractSuccess })}>
-            <div className={styles.inputsWraper}>
-              <label className={styles.label}>
-                From
-                <input
-                  className={styles.inputQuantity}
-                  type="number"
-                  step="0.000000000000000001"
-                  placeholder="0"
-                  {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
-                />
-                {errors.from?.type === 'required' && (
-                  <div className={styles.error}>
-                    {
-                      <div className={styles.warningIcon}>
-                        <WarningIcon />
-                      </div>
-                    }
-                    {' Required field'}
-                  </div>
-                )}
-                {errors.from?.type === 'validate' && (
-                  <div className={styles.error}>
-                    {
-                      <div className={styles.warningIcon}>
-                        <WarningIcon />
-                      </div>
-                    }
-                    {' Unsufficient balance'}
-                  </div>
-                )}
-                {!errors.from && contractData && (
-                  <div className={styles.tokenBalanceWrapper}>
-                    <span className={styles.tokenBalance}>
-                      {contractData &&
-                        tokenFrom &&
-                        `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals))}`}
-                    </span>
-                    <button onPointerDown={handleSetTokenMaxValue} className={styles.tokenBalanceButton} type="button">
-                      Max
-                    </button>
-                  </div>
-                )}
-                {showLeftTokenPopup && (
-                  <TokenPopup
-                    onCLose={handleTokenPopupClose}
-                    onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
-                    colorScheme="light"
+      {formStage !== 'tradeCreated' && (
+        <div className={cn(styles.formWrapper)}>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+            <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isWriteContractSuccess })}>
+              <div className={styles.inputsWraper}>
+                <label className={styles.label}>
+                  From
+                  <input
+                    className={styles.inputQuantity}
+                    type="number"
+                    step="0.000000000000000001"
+                    defaultValue={0}
+                    {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                   />
-                )}
-                <div onPointerDown={() => handleTokenPopupOpen('from')} className={styles.tokenPopup}>
-                  <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
-                  <div className={styles.tokenArrow}>
-                    <ArrowDown />
-                  </div>
-                </div>
-                <button
-                  onPointerDown={handleCustomTokenPopupOpen}
-                  className={styles.buttonAddCustomToken}
-                  type="button"
-                >
-                  + Add a custom token
-                </button>
-              </label>
-              <label className={styles.label}>
-                To
-                <input
-                  className={styles.inputQuantity}
-                  type="number"
-                  step="0.000000000000000001"
-                  placeholder="0"
-                  {...register(
-                    'to',
-                    isWriteContractSuccess
-                      ? { required: true, validate: (value) => isNumber(value) && value > 0 }
-                      : undefined,
+                  {errors.from?.type === 'required' && (
+                    <div className={styles.error}>
+                      {
+                        <div className={styles.warningIcon}>
+                          <WarningIcon />
+                        </div>
+                      }
+                      {' Required field'}
+                    </div>
                   )}
-                />
-                {errors.to?.type === 'required' && (
-                  <div className={styles.error}>
-                    {
-                      <div className={styles.warningIcon}>
-                        <WarningIcon />
-                      </div>
-                    }
-                    {' Required field'}
+                  {errors.from?.type === 'validate' && (
+                    <div className={styles.error}>
+                      {
+                        <div className={styles.warningIcon}>
+                          <WarningIcon />
+                        </div>
+                      }
+                      {' Unsufficient balance'}
+                    </div>
+                  )}
+                  {!errors.from && contractData && (
+                    <div className={styles.tokenBalanceWrapper}>
+                      <span className={styles.tokenBalance}>
+                        {contractData &&
+                          tokenFrom &&
+                          `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals))}`}
+                      </span>
+                      <button
+                        onPointerDown={handleSetTokenMaxValue}
+                        className={styles.tokenBalanceButton}
+                        type="button"
+                      >
+                        Max
+                      </button>
+                    </div>
+                  )}
+                  {showLeftTokenPopup && (
+                    <TokenPopup
+                      onCLose={handleTokenPopupClose}
+                      onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
+                      colorScheme="light"
+                    />
+                  )}
+                  <div onPointerDown={() => handleTokenPopupOpen('from')} className={styles.tokenPopup}>
+                    <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
+                    <div className={styles.tokenArrow}>
+                      <ArrowDown />
+                    </div>
                   </div>
-                )}
-                {errors.to?.type === 'validate' && (
-                  <div className={styles.error}>
-                    {
-                      <div className={styles.warningIcon}>
-                        <WarningIcon />
-                      </div>
-                    }
-                    {' Unsufficient balance'}
-                  </div>
-                )}
-                {showRightTokenPopup && (
-                  <TokenPopup
-                    onCLose={handleTokenPopupClose}
-                    onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
-                    colorScheme="light"
+                  <button
+                    onPointerDown={handleCustomTokenPopupOpen}
+                    className={styles.buttonAddCustomToken}
+                    type="button"
+                  >
+                    + Add a custom token
+                  </button>
+                </label>
+                <label className={styles.label}>
+                  To
+                  <input
+                    className={styles.inputQuantity}
+                    type="number"
+                    step="0.000000000000000001"
+                    placeholder="0"
+                    {...register(
+                      'to',
+                      isWriteContractSuccess
+                        ? { required: true, validate: (value) => isNumber(value) && value > 0 }
+                        : undefined,
+                    )}
                   />
-                )}
-                <div onPointerDown={() => handleTokenPopupOpen('to')} className={styles.tokenPopup}>
-                  <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
-                  <div className={styles.tokenArrow}>
-                    <ArrowDown />
+                  {errors.to?.type === 'required' && (
+                    <div className={styles.error}>
+                      {
+                        <div className={styles.warningIcon}>
+                          <WarningIcon />
+                        </div>
+                      }
+                      {' Required field'}
+                    </div>
+                  )}
+                  {errors.to?.type === 'validate' && (
+                    <div className={styles.error}>
+                      {
+                        <div className={styles.warningIcon}>
+                          <WarningIcon />
+                        </div>
+                      }
+                      {' Unsufficient balance'}
+                    </div>
+                  )}
+                  {showRightTokenPopup && (
+                    <TokenPopup
+                      onCLose={handleTokenPopupClose}
+                      onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
+                      colorScheme="light"
+                    />
+                  )}
+                  <div onPointerDown={() => handleTokenPopupOpen('to')} className={styles.tokenPopup}>
+                    <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
+                    <div className={styles.tokenArrow}>
+                      <ArrowDown />
+                    </div>
                   </div>
-                </div>
-                <button
-                  onPointerDown={handleCustomTokenPopupOpen}
-                  className={styles.buttonAddCustomToken}
-                  type="button"
-                >
-                  + Add a custom token
-                </button>
-              </label>
-            </div>
-            <div className={styles.additionalInputsWrapper}>
-              <label className={styles.labelRate}>
-                <input className={styles.inputRate} type="text" readOnly={true} placeholder="0" {...register('rate')} />
-                <span className={styles.labelText}>Rate</span>
-              </label>
-              <label className={styles.labelReceiver}>
-                <input
-                  className={styles.inputReceiver}
-                  type="text"
-                  defaultValue="0x0000000000000000000000000000000000000000"
-                  {...register('optionalTaker', { validate: (value) => isAddress(value) })}
-                />
-                <span className={styles.labelText}>Receiver</span>
-                {errors.optionalTaker?.type === 'validate' && (
-                  <div className={styles.optionalTakerError}>
-                    {
-                      <div className={styles.warningIcon}>
-                        <WarningIcon />
-                      </div>
-                    }
-                    {' Please input address'}
-                  </div>
-                )}
-              </label>
-            </div>
-            <div className={styles.approveWrraper}>
-              <span className={styles.fee}>
-                {fee && `Service fee ${fee}% `}
-                {tokenFrom && tokenAmountIsTaken && `(${tokenAmountIsTaken} ${tokenFrom.name})`}
-                {'.'}
-                {tokenFrom &&
-                  getValues('from') &&
-                  isNumber(getValues('from')) &&
-                  `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}
-              </span>
-              <div>
-                <input type="checkbox" id="infiniteapprove" {...register('approve')} />
-                <label htmlFor="infiniteapprove" className={styles.approve}>
-                  Infinite approve
+                  <button
+                    onPointerDown={handleCustomTokenPopupOpen}
+                    className={styles.buttonAddCustomToken}
+                    type="button"
+                  >
+                    + Add a custom token
+                  </button>
                 </label>
               </div>
+              <div className={styles.additionalInputsWrapper}>
+                <label className={styles.labelRate}>
+                  <input
+                    className={styles.inputRate}
+                    type="text"
+                    readOnly={true}
+                    placeholder="0"
+                    {...register('rate')}
+                  />
+                  <span className={styles.labelText}>Rate</span>
+                </label>
+                <label className={styles.labelReceiver}>
+                  <input
+                    className={styles.inputReceiver}
+                    type="text"
+                    defaultValue="0x0000000000000000000000000000000000000000"
+                    {...register('optionalTaker', { validate: (value) => isAddress(value) })}
+                  />
+                  <span className={styles.labelText}>Receiver</span>
+                  {errors.optionalTaker?.type === 'validate' && (
+                    <div className={styles.optionalTakerError}>
+                      {
+                        <div className={styles.warningIcon}>
+                          <WarningIcon />
+                        </div>
+                      }
+                      {' Please input address'}
+                    </div>
+                  )}
+                </label>
+              </div>
+              <div className={styles.approveWrraper}>
+                <span className={styles.fee}>
+                  {fee && `Service fee ${fee}% `}
+                  {tokenFrom && tokenAmountIsTaken && `(${tokenAmountIsTaken} ${tokenFrom.name})`}
+                  {'.'}
+                  {tokenFrom &&
+                    getValues('from') &&
+                    isNumber(getValues('from')) &&
+                    `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}
+                </span>
+                <div>
+                  <input type="checkbox" id="infiniteapprove" {...register('approve')} />
+                  <label htmlFor="infiniteapprove" className={styles.approve}>
+                    Infinite approve
+                  </label>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className={styles.buttons}>
-            <div className={styles.buttonsWrapper}>
-              {formStage === 'approveToken' && (
+            <div className={styles.buttons}>
+              <div className={styles.buttonsWrapper}>
+                {formStage === 'approveToken' && (
+                  <FormButton
+                    colorScheme="yellow"
+                    type="submit"
+                    buttonText="Approve Token"
+                    disabled={showApproveButtonDisabled}
+                  />
+                )}
                 <FormButton
                   colorScheme="yellow"
                   type="submit"
-                  buttonText="Approve Token"
-                  disabled={showApproveButtonDisabled}
+                  buttonText="Create Trade"
+                  disabled={formStage !== 'createTrade' && (tokenFrom === undefined || tokenTo === undefined)}
                 />
-              )}
-              <FormButton
-                colorScheme="yellow"
-                type="submit"
-                buttonText="Create Trade"
-                disabled={formStage !== 'createTrade' && (tokenFrom === undefined || tokenTo === undefined)}
+              </div>
+              <StepPagination
+                steps={
+                  showApproveButtonDisabled
+                    ? [
+                        { value: 1, status: StepStatus.DISABLED },
+                        { value: 2, status: StepStatus.DISABLED },
+                      ]
+                    : [
+                        { value: 1, status: StepStatus.COMPLETED },
+                        { value: 2, status: StepStatus.DISABLED },
+                      ]
+                }
               />
             </div>
-            <StepPagination
-              steps={
-                showApproveButtonDisabled
-                  ? [
-                      { value: 1, status: StepStatus.DISABLED },
-                      { value: 2, status: StepStatus.DISABLED },
-                    ]
-                  : [
-                      { value: 1, status: StepStatus.COMPLETED },
-                      { value: 2, status: StepStatus.DISABLED },
-                    ]
-              }
-            />
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
+      {formStage === 'tradeCreated' && (
+        <div className={styles.clipboard}>
+          <h5 className={styles.clipboardHeader}>Share link</h5>
+          <CopyToClipboard
+            text={
+              chainId === sepolia.id
+                ? `https://sepolia.etherscan.io/tx/${transactionHash}`
+                : `https://www.oklink.com/ru/amoy/tx/${transactionHash}`
+            }
+          >
+            <div className={styles.clipboardLink}>Copy link</div>
+          </CopyToClipboard>
+        </div>
+      )}
     </section>
   );
 };

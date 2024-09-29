@@ -381,3 +381,42 @@
   font-weight: 400;
   line-height: normal;
 }
+
+.clipboardLink {
+  border-radius: 100px;
+  background: #ffb800;
+  display: flex;
+  height: 38px;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 95px;
+  cursor: pointer;
+}
+
+.clipboardHeader {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 8px;
+}
+
+.clipboard {
+  background: white;
+  padding: 24px;
+}
