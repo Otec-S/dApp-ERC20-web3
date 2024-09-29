@@ -164,6 +164,8 @@ const NewOfferForm: FC = () => {
     setShowCustomTokenPopup(true);
   };
 
+  const balanceOfTokenFrom = tokenFrom && contractData && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals));
+
   const handleDefaultTokenChoice = (token: IToken, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
       case 'from':
@@ -237,7 +239,9 @@ const NewOfferForm: FC = () => {
                     type="number"
                     step="0.000000000000000001"
                     defaultValue={0}
-                    {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
+                    {...register('from', { required: true, validate: (value) => {
+                      if (balanceOfTokenFrom) return value >0 && value <= balanceOfTokenFrom
+                      return isNumber(value) && value > 0 } })}
                   />
                   {errors.from?.type === 'required' && (
                     <div className={styles.error}>
@@ -262,9 +266,7 @@ const NewOfferForm: FC = () => {
                   {!errors.from && contractData && (
                     <div className={styles.tokenBalanceWrapper}>
                       <span className={styles.tokenBalance}>
-                        {contractData &&
-                          tokenFrom &&
-                          `Balance: ${contractData?.[0] && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals))}`}
+                        {`Balance: ${balanceOfTokenFrom}`}
                       </span>
                       <button
                         onPointerDown={handleSetTokenMaxValue}
