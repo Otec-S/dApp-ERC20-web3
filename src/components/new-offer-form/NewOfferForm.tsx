@@ -233,7 +233,7 @@ const NewOfferForm: FC = () => {
                 <label className={styles.label}>
                   From
                   <input
-                    className={styles.inputQuantity}
+                    className={cn(styles.inputQuantity,{[styles.inputQuantityError]:errors.from?.type === 'validate'})}
                     type="number"
                     step="0.000000000000000001"
                     defaultValue={0}
