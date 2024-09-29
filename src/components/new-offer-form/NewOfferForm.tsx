@@ -60,7 +60,9 @@ const NewOfferForm: FC = () => {
     reset,
     watch,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    mode:'onChange'
+  });
 
   const { isConnected, chainId, address: walletAddress } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -238,10 +240,8 @@ const NewOfferForm: FC = () => {
                     className={cn(styles.inputQuantity,{[styles.inputQuantityError]:errors.from?.type === 'validate'})}
                     type="number"
                     step="0.000000000000000001"
-                    defaultValue={0}
-                    {...register('from', { required: true, validate: (value) => {
-                      if (balanceOfTokenFrom) return value >0 && value <= balanceOfTokenFrom
-                      return isNumber(value) && value > 0 } })}
+                    placeholder='0'
+                    {...register('from', { required: true, validate: (value) =>  balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0 })}
                   />
                   {errors.from?.type === 'required' && (
                     <div className={styles.error}>
@@ -304,7 +304,7 @@ const NewOfferForm: FC = () => {
                     className={styles.inputQuantity}
                     type="number"
                     step="0.000000000000000001"
-                    defaultValue={0}
+                    placeholder='0'
                     {...register(
                       'to',
                       isWriteContractSuccess
