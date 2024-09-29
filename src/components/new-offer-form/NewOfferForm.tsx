@@ -66,8 +66,6 @@ const NewOfferForm: FC = () => {
     openConnectModal();
   }
 
-  console.log(errors.optionalTaker?.type)
-
   const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
     query: {
       refetchInterval: 30 * 1000, //30 sec
@@ -226,7 +224,7 @@ const NewOfferForm: FC = () => {
                 <input
                   className={styles.inputQuantity}
                   type="number"
-                  step='0.000000000000000001'
+                  step="0.000000000000000001"
                   placeholder="0"
                   {...register('from', { required: true, validate: (value) => isNumber(value) && value > 0 })}
                 />
@@ -288,7 +286,7 @@ const NewOfferForm: FC = () => {
                 <input
                   className={styles.inputQuantity}
                   type="number"
-                  step='0.000000000000000001'
+                  step="0.000000000000000001"
                   placeholder="0"
                   {...register(
                     'to',
@@ -349,7 +347,7 @@ const NewOfferForm: FC = () => {
                   className={styles.inputReceiver}
                   type="text"
                   defaultValue="0x0000000000000000000000000000000000000000"
-                  {...register('optionalTaker', {validate: (value) => isAddress(value)})}
+                  {...register('optionalTaker', { validate: (value) => isAddress(value) })}
                 />
                 <span className={styles.labelText}>Receiver</span>
                 {errors.optionalTaker?.type === 'validate' && (
