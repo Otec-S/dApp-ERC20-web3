@@ -61,7 +61,7 @@ const NewOfferForm: FC = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>({
-    mode:'onChange'
+    mode: 'onChange',
   });
 
   const { isConnected, chainId, address: walletAddress } = useAccount();
@@ -166,7 +166,8 @@ const NewOfferForm: FC = () => {
     setShowCustomTokenPopup(true);
   };
 
-  const balanceOfTokenFrom = tokenFrom && contractData && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals));
+  const balanceOfTokenFrom =
+    tokenFrom && contractData && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals));
 
   const handleDefaultTokenChoice = (token: IToken, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -198,7 +199,7 @@ const NewOfferForm: FC = () => {
   const handleSetTokenMaxValue = () => {
     setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
   };
-  const rate = watch('from') >0 ? watch('to') / watch('from') : 0;
+  const rate = watch('from') > 0 ? watch('to') / watch('from') : 0;
   setValue('rate', rate);
 
   const showApproveButtonDisabled = tokenFrom === undefined;
@@ -237,11 +238,16 @@ const NewOfferForm: FC = () => {
                 <label className={styles.label}>
                   From
                   <input
-                    className={cn(styles.inputQuantity,{[styles.inputQuantityError]:errors.from?.type === 'validate'})}
+                    className={cn(styles.inputQuantity, {
+                      [styles.inputQuantityError]: errors.from?.type === 'validate',
+                    })}
                     type="number"
                     step="0.000000000000000001"
-                    placeholder='0'
-                    {...register('from', { required: true, validate: (value) =>  balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0 })}
+                    placeholder="0"
+                    {...register('from', {
+                      required: true,
+                      validate: (value) => (balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0),
+                    })}
                   />
                   {errors.from?.type === 'required' && (
                     <div className={styles.error}>
@@ -265,9 +271,7 @@ const NewOfferForm: FC = () => {
                   )}
                   {!errors.from && contractData && (
                     <div className={styles.tokenBalanceWrapper}>
-                      <span className={styles.tokenBalance}>
-                        {`Balance: ${balanceOfTokenFrom}`}
-                      </span>
+                      <span className={styles.tokenBalance}>{`Balance: ${balanceOfTokenFrom}`}</span>
                       <button
                         onPointerDown={handleSetTokenMaxValue}
                         className={styles.tokenBalanceButton}
@@ -304,7 +308,7 @@ const NewOfferForm: FC = () => {
                     className={styles.inputQuantity}
                     type="number"
                     step="0.000000000000000001"
-                    placeholder='0'
+                    placeholder="0"
                     {...register(
                       'to',
                       isWriteContractSuccess
