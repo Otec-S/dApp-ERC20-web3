@@ -194,3 +194,44 @@
     cursor: pointer;
   }
 }
+
+.successLogoWrapper {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-self: stretch;
+  justify-content: center;
+  flex-grow: 1;
+  align-items: center;
+  color: #000;
+}
+
+.errorWrap {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  left: 0;
+  backdrop-filter: blur(10px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.errorContainer {
+  height: 280px;
+  width: 420px;
+  border: 1px solid orange;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: openSans;
+}
