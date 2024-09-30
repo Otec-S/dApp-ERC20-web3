@@ -55,6 +55,7 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
     formState: { errors },
   } = useForm<FormData>();
 
+  // TODO:
   const {
     data: contractData,
     isLoading: isLoadingContacts,

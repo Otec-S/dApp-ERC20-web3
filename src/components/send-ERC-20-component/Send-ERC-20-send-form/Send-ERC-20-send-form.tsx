@@ -1,9 +1,9 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { Address, parseUnits } from 'viem';
+import { Address, formatUnits, parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
-import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
@@ -13,7 +13,6 @@ import FormButton from '@src/components/form-button/FormButton';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
 import { Token, TokenData } from '@src/shared/constants';
 
-import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import style from './Send-ERC-20-send-form.module.css';
 
 interface Props {
@@ -48,7 +47,7 @@ const SendERC20SendForm: FC<Props> = ({
     margin: '100px auto',
   };
 
-  const { data: hash, error: isError, writeContract } = useWriteContract();
+  const { data: hash, error: isWriteError, writeContract } = useWriteContract();
 
   const { address } = useAccount(); // адрес кошелька
 
@@ -78,19 +77,27 @@ const SendERC20SendForm: FC<Props> = ({
     }
   });
 
-  const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
-    address as Address,
-    currentTokenAddress as `0x${string}`,
-    decimals as number,
-  );
+  // получение баланса кошелька
+  const {
+    data: balanceData,
+    isLoading: isLoadingBalance,
+    isError: errorBalance,
+  } = useReadContract({
+    abi: erc20Abi,
+    address: currentTokenAddress as Address,
+    functionName: 'balanceOf',
+    args: [address as Address],
+  });
+
+  const balanceWithDecimals = formatUnits(BigInt(balanceData ?? 0), decimals);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // Проверка числа с точкой
+    // Валидация поля ввода
     const inputValueRegex = /^\d*\.?\d*$/;
     if (inputValueRegex.test(value)) {
       setInputValue(value);
-      if (balance && parseFloat(value) > parseFloat(balance)) {
+      if (balanceWithDecimals && parseFloat(value) > parseFloat(balanceWithDecimals)) {
         setInputValueError('The amount exceeds your balance');
       } else {
         setInputValueError(null);
@@ -176,11 +183,11 @@ const SendERC20SendForm: FC<Props> = ({
   }, [isConfirming]);
 
   useEffect(() => {
-    if (isError !== null) {
+    if (isWriteError !== null) {
       setIsTxFormSubmitted(true);
       setIsTxSuccess(false);
     }
-  }, [isError]);
+  }, [isWriteError]);
 
   useEffect(() => {
     const inputValueNumber = parseFloat(inputValue);
@@ -237,12 +244,12 @@ const SendERC20SendForm: FC<Props> = ({
             />
             <div className={style.balance}>
               <div className={style.balanceValue}>
-                {loadingBalanceCustom ? (
+                {isLoadingBalance ? (
                   <span>Loading...</span>
-                ) : errorBalanceCustom ? (
+                ) : errorBalance ? (
                   <span>Error getting wallet balance</span>
                 ) : (
-                  <span>Balance: {balance}</span>
+                  <span>Balance: {balanceWithDecimals}</span>
                 )}
               </div>
               <BalanceMaxSign />
