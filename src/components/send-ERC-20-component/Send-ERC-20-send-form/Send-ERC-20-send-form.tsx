@@ -142,10 +142,10 @@ const SendERC20SendForm: FC<Props> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const recipient = formData.get('recipient') as `0x${string}`;
+    const recipient = formData.get('recipient') as Address;
     const parsedAmount = parseUnits(inputValue, decimals);
     writeContract({
-      address: currentTokenAddress as `0x${string}`,
+      address: currentTokenAddress as Address,
       abi: erc20Abi,
       functionName: 'transfer',
       args: [recipient, parsedAmount],
