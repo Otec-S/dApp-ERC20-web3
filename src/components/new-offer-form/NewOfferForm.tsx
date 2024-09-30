@@ -93,7 +93,7 @@ const NewOfferForm: FC = () => {
       ],
   });
 
-  const { data: feeBasis } = useReadContracts({
+  const { data: feeBasis, isLoading: isLoadingFee } = useReadContracts({
     allowFailure: false,
     contracts: [
       {
@@ -103,7 +103,7 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
-  const { data: tokensAllowed } = useReadContracts({
+  const { data: tokensAllowed, isLoading: isLoadingAllowance } = useReadContracts({
     allowFailure: false,
     contracts: [
       {
@@ -229,13 +229,14 @@ const NewOfferForm: FC = () => {
   setValue('rate', rate);
 
   const showApproveButtonDisabled = tokenFrom === undefined;
+  const dataFromNetworkIsLoading = isLoadingBalance || isWriteApprovePending || isLoadingFee || isLoadingAllowance;
 
   return (
     <section className={cn(styles.createOffer)}>
       <div className={styles.customTokenContainer}>
         {showCustomTokenPopup && <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />}
       </div>
-      {(isLoadingBalance || isWriteApprovePending) && (
+      {dataFromNetworkIsLoading && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
