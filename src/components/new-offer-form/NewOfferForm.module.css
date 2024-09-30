@@ -424,3 +424,13 @@
   background: white;
   padding: 24px;
 }
+
+.helpText {
+  color: #000;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: "Open Sans",sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}

@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, isAddress, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
@@ -408,6 +408,7 @@ const NewOfferForm: FC = () => {
               </div>
             </div>
             <div className={styles.buttons}>
+              <span className={styles.helpText}>{formStage === 'approveToken' ? 'To create an offer, you will have to sign two transactions: Approve and Create' : 'You approved token allowance. Now you’re one click away from Create Trade'}</span>
               <div className={styles.buttonsWrapper}>
                 {formStage === 'approveToken' && (
                   <FormButton
