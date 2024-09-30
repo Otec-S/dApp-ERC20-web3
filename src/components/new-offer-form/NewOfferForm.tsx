@@ -103,12 +103,29 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
+  const { data: tokensAllowed } = useReadContracts({
+    allowFailure: false,
+    contracts: [
+      {
+        address: tokenFrom?.address,
+        functionName: 'allowance',
+        abi: erc20Abi,
+        args: walletAddress && [
+          walletAddress,
+          chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+        ],
+      },
+    ],
+  });
   const fee = feeBasis && formatUnits(feeBasis[0], 2);
   const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   let serviceFee = fee && `Service fee ${fee}% `;
-  serviceFee = (tokenFrom && tokenAmountIsTaken) ? (serviceFee + `(${tokenAmountIsTaken} ${tokenFrom.name}).`): serviceFee;
-  serviceFee = (tokenFrom && getValues('from') && isNumber(getValues('from'))) ? (serviceFee + `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`):serviceFee; 
+  serviceFee = tokenFrom && tokenAmountIsTaken ? serviceFee + `(${tokenAmountIsTaken} ${tokenFrom.name}).` : serviceFee;
+  serviceFee =
+    tokenFrom && getValues('from') && isNumber(getValues('from'))
+      ? serviceFee + `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`
+      : serviceFee;
 
   const {
     writeContract,
@@ -120,15 +137,21 @@ const NewOfferForm: FC = () => {
 
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
-      writeContract({
-        abi: erc20Abi,
-        address: tokenFrom.address,
-        functionName: 'approve',
-        args: [
-          chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
-          getValues('infiniteApprove') ? maxUint256 : parseUnits(getValues('from').toString(), tokenFrom?.decimals),
-        ],
-      });
+      const tokensToSpend = getValues('infiniteApprove')
+        ? maxUint256
+        : parseUnits(getValues('from').toString(), tokenFrom.decimals);
+      const tokensAllowedToSpend = tokensAllowed && tokensAllowed[0];
+      if (tokensAllowedToSpend && tokensToSpend > tokensAllowedToSpend) {
+        writeContract({
+          abi: erc20Abi,
+          address: tokenFrom.address,
+          functionName: 'approve',
+          args: [
+            chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+            tokensToSpend,
+          ],
+        });
+      } else setFormStage('createTrade');
     } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
       writeContract({
         abi: tradeContractAbi,
