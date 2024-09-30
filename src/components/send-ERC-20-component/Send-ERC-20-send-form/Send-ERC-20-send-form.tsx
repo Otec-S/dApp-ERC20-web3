@@ -211,6 +211,7 @@ const SendERC20SendForm: FC<Props> = ({
         polygonAddress: tokenData.tokenAddress || prevToken.polygonAddress,
         sepoliaAddress: tokenData.tokenAddress || prevToken.sepoliaAddress,
         decimals: tokenData.tokenDecimals || prevToken.decimals,
+        // TODO:
         icon: <NotFoundTokenLogo />,
       }));
     }
