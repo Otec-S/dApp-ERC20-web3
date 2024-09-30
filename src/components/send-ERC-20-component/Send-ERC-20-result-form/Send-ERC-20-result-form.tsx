@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
+import FailureIcon from '@assets/icons/failure.svg';
+import SuccessIcon from '@assets/icons/success.svg';
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
-import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
 import FormButton from '@src/components/form-button/FormButton';
 import { TokenData } from '@src/shared/constants';
 
@@ -37,11 +38,13 @@ const SendERC20ResultForm: FC<Props> = ({
   return (
     <form className={style.blockForm} onSubmit={handleSubmit}>
       <div className={style.resultForm}>
-        <img
+        {/* TODO: */}
+        {/* <img
           className={style.resultIcon}
           src={isTxSuccess ? resultSuccessIcon.default : resultErrorIcon.default}
           alt="Result icon"
-        />
+        /> */}
+        <div className={style.resultIcon}>{isTxSuccess ? <SuccessIcon /> : <FailureIcon />}</div>
         <p className={style.transactionValue}>
           {inputValue} {tokenName}
         </p>
