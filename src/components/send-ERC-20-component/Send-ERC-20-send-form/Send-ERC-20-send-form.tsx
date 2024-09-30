@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { parseUnits } from 'viem';
+import { Address, parseUnits } from 'viem';
 import { erc20Abi } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
@@ -11,7 +11,7 @@ import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import FormButton from '@src/components/form-button/FormButton';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
-import { IToken, ITokenData } from '@src/shared/constants';
+import { Token, TokenData } from '@src/shared/constants';
 
 import useBalanceCustom from '../../../hooks/useBalanceCustom';
 import style from './Send-ERC-20-send-form.module.css';
@@ -24,7 +24,7 @@ interface Props {
   setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
-  tokenData: ITokenData | null;
+  tokenData: TokenData | null;
 }
 
 const SendERC20SendForm: FC<Props> = ({
@@ -58,7 +58,7 @@ const SendERC20SendForm: FC<Props> = ({
 
   const chainId = useChainId();
 
-  const [tokenSelected, setTokenSelected] = useState<IToken>({
+  const [tokenSelected, setTokenSelected] = useState<Token>({
     id: 1,
     name: 'ARB',
     polygonAddress: '0x34cd8b477eb916c1c4224b2FFA80DE015cCC671b',
@@ -79,7 +79,7 @@ const SendERC20SendForm: FC<Props> = ({
   });
 
   const { balance, loadingBalanceCustom, errorBalanceCustom } = useBalanceCustom(
-    address as `0x${string}`,
+    address as Address,
     currentTokenAddress as `0x${string}`,
     decimals as number,
   );
@@ -120,7 +120,7 @@ const SendERC20SendForm: FC<Props> = ({
     setIsRegularTokenPopupOpen(false);
   };
 
-  const handleOnSelect = (tokenSelected: IToken) => {
+  const handleOnSelect = (tokenSelected: Token) => {
     setTokenSelected(tokenSelected);
     setIsRegularTokenPopupOpen(false);
     setTokenName(tokenSelected.name);

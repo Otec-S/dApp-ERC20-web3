@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Address } from 'viem';
 import { formatUnits } from 'viem/utils';
 import { getBalance, GetBalanceReturnType } from 'wagmi/actions';
 
@@ -11,7 +12,7 @@ interface Props {
   decimals: number;
 }
 
-const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals: number): Props => {
+const useBalanceCustom = (address: Address, token: `0x${string}`, decimals: number): Props => {
   const [balance, setBalance] = useState<string | null>(null);
   const [loadingBalanceCustom, setLoadingBalanceCustom] = useState<boolean>(true);
   const [errorBalanceCustom, setErrorBalanceCustom] = useState<Error | null>(null);

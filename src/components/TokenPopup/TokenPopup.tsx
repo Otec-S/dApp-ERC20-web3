@@ -3,12 +3,12 @@ import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 
-import { IToken, tokens } from '../../shared/constants';
+import { Token, tokens } from '../../shared/constants';
 import styles from './TokenPopup.module.css';
 
 type Props = {
   onCLose: () => void;
-  onSelect: (token: IToken) => void;
+  onSelect: (token: Token) => void;
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {

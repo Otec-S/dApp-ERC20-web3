@@ -3,7 +3,7 @@ import { FC } from 'react';
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
 import { resultErrorIcon, resultSuccessIcon } from '@assets/images';
 import FormButton from '@src/components/form-button/FormButton';
-import { ITokenData } from '@src/shared/constants';
+import { TokenData } from '@src/shared/constants';
 
 import style from './Send-ERC-20-result-form.module.css';
 
@@ -14,7 +14,7 @@ interface Props {
   setInputValue: (value: string) => void;
   tokenName: string;
   setTokenName: (value: string) => void;
-  setTokenData: (value: ITokenData | null) => void;
+  setTokenData: (value: TokenData | null) => void;
 }
 
 const SendERC20ResultForm: FC<Props> = ({

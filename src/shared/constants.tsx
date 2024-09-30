@@ -12,7 +12,7 @@ import USDCIcon from '@assets/icons/usdc.svg';
 import USDTIcon from '@assets/icons/usdt.svg';
 import WBTSIcon from '@assets/icons/wbtc.svg';
 
-export interface IToken {
+export interface Token {
   id: number;
   name: string;
   sepoliaAddress: Address;
@@ -21,7 +21,7 @@ export interface IToken {
   decimals: number;
 }
 
-export const tokens: IToken[] = [
+export const tokens: Token[] = [
   {
     id: 1,
     name: 'ARB',
@@ -104,7 +104,7 @@ export const tokens: IToken[] = [
   },
 ];
 
-export interface ITokenData {
+export interface TokenData {
   requestWasSuccessful: boolean;
   tokenAddress?: Address;
   tokenName?: string;

@@ -9,7 +9,7 @@ import { useAccount, useReadContracts } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
-import { ITokenData } from '@src/shared/constants';
+import { TokenData } from '@src/shared/constants';
 
 import FormButton from '../form-button/FormButton';
 import TokenInfo from './TokenInfo';
@@ -19,7 +19,7 @@ import styles from './AddTokenInfo.module.css';
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 
 interface Props {
-  onClose: (data: ITokenData) => void;
+  onClose: (data: TokenData) => void;
   colorScheme?: 'default' | 'yellow';
   setIsCustomTokenPopupOpen: (value: boolean) => void;
 }

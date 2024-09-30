@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { ITokenData } from '@src/shared/constants';
+import { TokenData } from '@src/shared/constants';
 
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
@@ -13,8 +13,8 @@ interface Props {
   isTxFormSubmitted: boolean;
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
-  tokenData: ITokenData | null;
-  setTokenData: (value: ITokenData | null) => void;
+  tokenData: TokenData | null;
+  setTokenData: (value: TokenData | null) => void;
   tokenName: string;
   setTokenName: (value: string) => void;
 }
