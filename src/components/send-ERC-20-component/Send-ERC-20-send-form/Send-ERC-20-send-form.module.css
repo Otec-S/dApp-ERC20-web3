@@ -68,6 +68,17 @@
   font-family: 'Inter', sans-serif;
 }
 
+.balanceMax {
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
 .tokenBlock {
   padding: 1px 11px 7px 0;
   display: flex;

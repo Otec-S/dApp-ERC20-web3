@@ -87,6 +87,8 @@ const SendERC20SendForm: FC<Props> = ({
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
+    // FIXME:
+    // refetchInterval: 60000,
   });
 
   const balanceWithDecimals = formatUnits(BigInt(balanceData ?? 0), decimals);
@@ -137,6 +139,11 @@ const SendERC20SendForm: FC<Props> = ({
   const handleCustomTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setIsCustomTokenPopupOpen(true);
+  };
+
+  // TODO:
+  const handleBalanceMaxClick = () => {
+    setInputValue(balanceWithDecimals);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -253,7 +260,9 @@ const SendERC20SendForm: FC<Props> = ({
                   <span>Balance: {balanceWithDecimals}</span>
                 )}
               </div>
-              <BalanceMaxSign />
+              <button className={style.balanceMax} type="button" onClick={handleBalanceMaxClick}>
+                <BalanceMaxSign />
+              </button>
             </div>
             {inputValueError && <div className={style.balanceExceededError}>{inputValueError}</div>}
           </div>
