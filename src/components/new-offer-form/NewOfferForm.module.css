@@ -27,7 +27,7 @@
 .inputs {
   height: 381px;
   border-radius: 16px 16px 0 0;
-  background: white;
+  background: #fffbf2;
   padding: 24px 24px 0 24px;
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@
 }
 
 .buttons {
-  background: white;
+  background: #fffbf2;
   height: 142px;
   padding: 16px 24px;
   border-radius: 0 0 16px 16px;
@@ -89,6 +89,10 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
+}
+
+.buttonsAfterTokenApproval {
+  background: #fffbf2;
 }
 
 .buttonsWrapper {
@@ -363,10 +367,6 @@
   gap: 16px;
 }
 
-.inputsAfterTokenApproval {
-  background: #fffbf2;
-}
-
 .customTokenContainer {
   position: absolute;
   left: 100px;
@@ -427,10 +427,12 @@
 
 .helpText {
   color: #000;
-    font-feature-settings: 'liga' off, 'clig' off;
-    font-family: "Open Sans",sans-serif;
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

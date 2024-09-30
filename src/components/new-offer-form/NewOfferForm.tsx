@@ -29,7 +29,7 @@ interface FormData {
   tokenTo: Address;
   rate: number;
   optionalTaker: Address;
-  approve: boolean;
+  infiniteApprove: boolean;
 }
 
 const override: CSSProperties = {
@@ -123,7 +123,7 @@ const NewOfferForm: FC = () => {
         functionName: 'approve',
         args: [
           chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
-          parseUnits(getValues('from').toString(), tokenFrom?.decimals),
+          getValues('infiniteApprove') ? maxUint256 : parseUnits(getValues('from').toString(), tokenFrom?.decimals),
         ],
       });
     } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
@@ -233,7 +233,7 @@ const NewOfferForm: FC = () => {
       {formStage !== 'tradeCreated' && (
         <div className={cn(styles.formWrapper)}>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div className={cn(styles.inputs, { [styles.inputsAfterTokenApproval]: isWriteContractSuccess })}>
+            <div className={styles.inputs}>
               <div className={styles.inputsWraper}>
                 <label className={styles.label}>
                   From
@@ -400,15 +400,19 @@ const NewOfferForm: FC = () => {
                     `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`}
                 </span>
                 <div>
-                  <input type="checkbox" id="infiniteapprove" {...register('approve')} />
+                  <input type="checkbox" id="infiniteapprove" {...register('infiniteApprove')} />
                   <label htmlFor="infiniteapprove" className={styles.approve}>
                     Infinite approve
                   </label>
                 </div>
               </div>
             </div>
-            <div className={styles.buttons}>
-              <span className={styles.helpText}>{formStage === 'approveToken' ? 'To create an offer, you will have to sign two transactions: Approve and Create' : 'You approved token allowance. Now you’re one click away from Create Trade'}</span>
+            <div className={cn(styles.buttons, { [styles.buttonsAfterTokenApproval]: formStage === 'createTrade' })}>
+              <span className={styles.helpText}>
+                {formStage === 'approveToken'
+                  ? 'To create an offer, you will have to sign two transactions: Approve and Create'
+                  : 'You approved token allowance. Now you’re one click away from Create Trade'}
+              </span>
               <div className={styles.buttonsWrapper}>
                 {formStage === 'approveToken' && (
                   <FormButton
