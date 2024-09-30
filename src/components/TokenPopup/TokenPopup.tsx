@@ -78,8 +78,8 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
           </div>
         </div>
         <div className={styles.tokensRow}>
-          {firstTokensGroup.map((item, index) => (
-            <div key={index} className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
+          {firstTokensGroup.map((item) => (
+            <div key={item.id} className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
               <div className={styles.tokenIcon}>{item.icon}</div>
               <div className={styles.tokenSymbol}> {item.name}</div>
             </div>
@@ -87,8 +87,8 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
         </div>
       </div>
       <div className={styles.listBlock}>
-        {tokenArr.map((item, index) => (
-          <div key={index} className={styles.listItem} onClick={handleSelectToken(item.name)}>
+        {tokenArr.map((item) => (
+          <div key={item.id} className={styles.listItem} onClick={handleSelectToken(item.name)}>
             <div className={styles.tokenIcon}>{item.icon}</div>
             <div className={styles.tokenSymbol}> {item.name}</div>
           </div>

@@ -24,7 +24,7 @@ interface Props {
   setIsCustomTokenPopupOpen: (value: boolean) => void;
 }
 
-interface IFormData {
+interface FormData {
   tokenAddress: Address;
   tokenName?: string;
   tokenDecimals?: number;
@@ -53,7 +53,7 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
     getValues,
     reset,
     formState: { errors },
-  } = useForm<IFormData>();
+  } = useForm<FormData>();
 
   const {
     data: contractData,
@@ -126,7 +126,7 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
     setFormState('initialState');
   };
 
-  const onSubmit: SubmitHandler<IFormData> = () => {
+  const onSubmit: SubmitHandler<FormData> = () => {
     setTokenAddress(getValues('tokenAddress'));
     switch (formState) {
       case 'initialState':

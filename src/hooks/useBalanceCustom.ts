@@ -4,14 +4,14 @@ import { getBalance, GetBalanceReturnType } from 'wagmi/actions';
 
 import { config } from '../../wagmiConfig';
 
-interface IUseBalanceResult {
+interface Props {
   balance: string | null;
   loadingBalanceCustom: boolean;
   errorBalanceCustom: Error | null;
   decimals: number;
 }
 
-const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals: number): IUseBalanceResult => {
+const useBalanceCustom = (address: `0x${string}`, token: `0x${string}`, decimals: number): Props => {
   const [balance, setBalance] = useState<string | null>(null);
   const [loadingBalanceCustom, setLoadingBalanceCustom] = useState<boolean>(true);
   const [errorBalanceCustom, setErrorBalanceCustom] = useState<Error | null>(null);
