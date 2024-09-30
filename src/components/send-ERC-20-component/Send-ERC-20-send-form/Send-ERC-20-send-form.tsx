@@ -87,8 +87,7 @@ const SendERC20SendForm: FC<Props> = ({
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
-    // FIXME:
-    // refetchInterval: 60000,
+    query: { refetchInterval: 600000 },
   });
 
   const balanceWithDecimals = formatUnits(BigInt(balanceData ?? 0), decimals);
@@ -141,7 +140,6 @@ const SendERC20SendForm: FC<Props> = ({
     setIsCustomTokenPopupOpen(true);
   };
 
-  // TODO:
   const handleBalanceMaxClick = () => {
     setInputValue(balanceWithDecimals);
   };
