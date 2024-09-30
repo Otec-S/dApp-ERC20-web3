@@ -24,6 +24,7 @@ interface Props {
   setTokenName: (value: string) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
   tokenData: TokenData | null;
+  setTxHash: (value: Address) => void;
 }
 
 const SendERC20SendForm: FC<Props> = ({
@@ -34,6 +35,7 @@ const SendERC20SendForm: FC<Props> = ({
   setTokenName,
   setIsCustomTokenPopupOpen,
   tokenData,
+  setTxHash,
 }) => {
   const [recipientValue, setRecipientValue] = useState('');
   const [isButtonActive, setIsButtonActive] = useState(true);
@@ -48,7 +50,6 @@ const SendERC20SendForm: FC<Props> = ({
   };
 
   const { data: hash, error: isWriteError, writeContract } = useWriteContract();
-
   const { address } = useAccount(); // адрес кошелька
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
@@ -87,6 +88,7 @@ const SendERC20SendForm: FC<Props> = ({
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
+    // polling - опрос сервера через каждые 10 минут
     query: { refetchInterval: 600000 },
   });
 
@@ -195,6 +197,12 @@ const SendERC20SendForm: FC<Props> = ({
   }, [isWriteError]);
 
   useEffect(() => {
+    if (hash) {
+      setTxHash(hash);
+    }
+  }, [hash]);
+
+  useEffect(() => {
     const inputValueNumber = parseFloat(inputValue);
     if (setIsButtonActive) {
       setIsButtonActive(
@@ -293,6 +301,8 @@ const SendERC20SendForm: FC<Props> = ({
         </div>
         <FormButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
         {isRegularTokenPopupOpen && <TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} />}
+        {/* TODO: */}
+        {hash && <div className={style.txHash}>{hash}</div>}
       </form>
     </>
   );

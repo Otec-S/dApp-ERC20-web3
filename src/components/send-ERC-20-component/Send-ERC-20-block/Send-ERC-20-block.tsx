@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { Address } from 'viem';
 
 import { TokenData } from '@src/shared/constants';
 
@@ -32,6 +33,8 @@ const SendERC20Block: FC<Props> = ({
   setTokenName,
 }) => {
   const [inputValue, setInputValue] = useState<string>('');
+  const [txHash, setTxHash] = useState<Address>('0x0');
+  console.log('txHash:', txHash);
 
   return (
     <section className={style.block}>
@@ -46,6 +49,7 @@ const SendERC20Block: FC<Props> = ({
           tokenName={tokenName}
           setTokenName={setTokenName}
           setTokenData={setTokenData}
+          txHash={txHash}
         />
       ) : (
         <SendERC20SendForm
@@ -57,6 +61,7 @@ const SendERC20Block: FC<Props> = ({
           setTokenName={setTokenName}
           setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen}
           tokenData={tokenData}
+          setTxHash={setTxHash}
         />
       )}
     </section>

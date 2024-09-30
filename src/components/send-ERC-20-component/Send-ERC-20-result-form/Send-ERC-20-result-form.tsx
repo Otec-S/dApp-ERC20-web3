@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Address } from 'viem';
 
 import FailureIcon from '@assets/icons/failure.svg';
 import SuccessIcon from '@assets/icons/success.svg';
@@ -16,6 +17,7 @@ interface Props {
   tokenName: string;
   setTokenName: (value: string) => void;
   setTokenData: (value: TokenData | null) => void;
+  txHash: Address;
 }
 
 const SendERC20ResultForm: FC<Props> = ({
@@ -26,6 +28,7 @@ const SendERC20ResultForm: FC<Props> = ({
   tokenName,
   setTokenName,
   setTokenData,
+  txHash,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,6 +36,12 @@ const SendERC20ResultForm: FC<Props> = ({
     setInputValue('');
     setTokenName('ARB');
     setTokenData(null);
+  };
+
+  const handleViewTransactionIconClick = () => {
+    console.log('View transaction');
+    const url = `https://amoy.polygonscan.com/tx/${txHash}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -48,9 +57,9 @@ const SendERC20ResultForm: FC<Props> = ({
         <p className={style.transactionValue}>
           {inputValue} {tokenName}
         </p>
-        <div className={style.viewTransactionIcon}>
+        <button className={style.viewTransactionIcon} onClick={handleViewTransactionIconClick} type="button">
           <ViewTransactionIcon />
-        </div>
+        </button>
       </div>
       <FormButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
     </form>

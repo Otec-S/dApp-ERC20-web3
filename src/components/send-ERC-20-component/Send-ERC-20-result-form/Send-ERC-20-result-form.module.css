@@ -29,6 +29,9 @@
 }
 
 .viewTransactionIcon {
+  background: none;
+  border: none;
+  box-shadow: none;
   margin-bottom: 24px;
   cursor: pointer;
 }
