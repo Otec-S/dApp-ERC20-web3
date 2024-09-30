@@ -4,12 +4,12 @@ import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, isAddress } from 'viem';
-import { erc20Abi } from 'viem';
 import { useAccount, useReadContracts } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
 import { TokenData } from '@src/shared/constants';
+import { erc20abiExtended } from '@src/shared/erc20abi-extended';
 
 import FormButton from '../form-button/FormButton';
 import TokenInfo from './TokenInfo';
@@ -67,17 +67,17 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
       {
         address: tokenAddress,
         functionName: 'decimals',
-        abi: erc20Abi,
+        abi: erc20abiExtended,
       },
       {
         address: tokenAddress,
         functionName: 'name',
-        abi: erc20Abi,
+        abi: erc20abiExtended,
       },
       {
         address: tokenAddress,
         functionName: 'balanceOf',
-        abi: erc20Abi,
+        abi: erc20abiExtended,
         args: [walletAddress],
       },
     ],

@@ -1,7 +1,6 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { Address, formatUnits, parseUnits } from 'viem';
-import { erc20Abi } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
@@ -12,6 +11,7 @@ import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import FormButton from '@src/components/form-button/FormButton';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
 import { Token, TokenData } from '@src/shared/constants';
+import { erc20abiExtended } from '@src/shared/erc20abi-extended';
 
 import style from './Send-ERC-20-send-form.module.css';
 
@@ -83,7 +83,7 @@ const SendERC20SendForm: FC<Props> = ({
     isLoading: isLoadingBalance,
     isError: errorBalance,
   } = useReadContract({
-    abi: erc20Abi,
+    abi: erc20abiExtended,
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
@@ -146,7 +146,7 @@ const SendERC20SendForm: FC<Props> = ({
     const parsedAmount = parseUnits(inputValue, decimals);
     writeContract({
       address: currentTokenAddress as Address,
-      abi: erc20Abi,
+      abi: erc20abiExtended,
       functionName: 'transfer',
       args: [recipient, parsedAmount],
     });
