@@ -163,7 +163,7 @@ const NewOfferForm: FC = () => {
           tokenTo.address,
           parseUnits(getValues('from').toString(), tokenFrom.decimals),
           parseUnits(getValues('to').toString(), tokenTo.decimals),
-          walletAddress,
+          getValues('optionalTaker'),
         ],
       });
     }
