@@ -17,6 +17,7 @@ import isNumber from '@src/utils/isNumber';
 
 import AddTokenInfo, { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
+import Snackbar from '../snackbar/Snackbar';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
 import { TokenPopup } from '../TokenPopup/TokenPopup';
@@ -51,6 +52,7 @@ const NewOfferForm: FC = () => {
   const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
   const [showCustomTokenPopupFrom, setShowCustomTokenPopupFrom] = useState(false);
   const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
+  const [showCopyOfClipboard, setShowCopyOfClipboard] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
@@ -184,7 +186,9 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const balanceOfTokenFrom = tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
+  const handleSnackbarClose = () => {
+    setShowCopyOfClipboard(false);
+  }
 
   const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -238,8 +242,10 @@ const NewOfferForm: FC = () => {
   const handleSetTokenMaxValue = () => {
     setValue('from', Number(balanceData && tokenFrom && formatUnits(balanceData, tokenFrom?.decimals)));
   };
+
   const rate = watch('from') > 0 ? watch('to') / watch('from') : 0;
   setValue('rate', rate);
+  const balanceOfTokenFrom = tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
 
   const showApproveButtonDisabled = tokenFrom === undefined;
   const isDataFromNetworkLoading = isLoadingBalance || isWriteApprovePending || isLoadingContractData;
@@ -489,9 +495,10 @@ const NewOfferForm: FC = () => {
       {formStage === 'tradeCreated' && (
         <div className={styles.clipboard}>
           <h5 className={styles.clipboardHeader}>Share link</h5>
-          <CopyToClipboard text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}>
+          <CopyToClipboard onCopy={()=>setShowCopyOfClipboard(true)} text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}>
             <div className={styles.clipboardLink}>Copy link</div>
           </CopyToClipboard>
+          {showCopyOfClipboard && <Snackbar type='success' onClose={handleSnackbarClose} description='Link copied successfully'/>}
         </div>
       )}
     </section>
