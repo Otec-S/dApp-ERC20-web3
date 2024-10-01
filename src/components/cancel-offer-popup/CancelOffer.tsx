@@ -53,7 +53,13 @@ const CancelOffer: FC<Props> = ({ tradeId }) => {
           <ClearIcon />
         </div>
       </div>
-      <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
+      <div className={styles.body}>
+        <span className={styles.info}>{`You are about to cancel the following offer: 16.56 MKR to 18.0000 WETH.`}</span>
+        <span className={styles.info}>{`After cancelling, MKR tokens will be send back to your wallet.`}</span>
+      </div>
+      <div className={styles.footer}>
+        <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
+      </div>
     </form>
   );
 };
