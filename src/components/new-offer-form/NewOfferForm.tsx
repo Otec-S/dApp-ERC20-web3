@@ -249,7 +249,7 @@ const NewOfferForm: FC = () => {
   setValue('rate', rate);
 
   const showApproveButtonDisabled = tokenFrom === undefined;
-  const dataFromNetworkIsLoading = isLoadingBalance || isWriteApprovePending || isLoadingContractData;
+  const isDataFromNetworkLoading = isLoadingBalance || isWriteApprovePending || isLoadingContractData;
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -264,7 +264,7 @@ const NewOfferForm: FC = () => {
           <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'from')} />
         </div>
       )}
-      {dataFromNetworkIsLoading && (
+      {isDataFromNetworkLoading && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
