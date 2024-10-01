@@ -1,12 +1,13 @@
-import { FC, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSearchParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { BarLoader } from 'react-spinners';
-import { Address, erc20Abi, formatUnits } from 'viem';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { Address, erc20Abi, formatUnits, maxUint256 } from 'viem';
 import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
-import { ArrowRightIcon, NewWindowIcon, NotFoundIcon, SuccessIcon } from '@src/assets/icons';
+import { ArrowRightIcon, NewWindowIcon, NotFoundIcon, SuccessIcon, WarningIcon } from '@src/assets/icons';
 import { tradeContractAbi } from '@src/shared/constants';
 import { useChainDependentValues } from '@src/shared/hooks';
 
@@ -15,47 +16,58 @@ import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
 import styles from './IncomingOfferBlock.module.css';
 
+interface FormData {
+  infiniteApprove: boolean;
+}
+
+// todo удалить, сслыка для теста tradeId может быть другим
 // const link = 'http://localhost:5173/offer?tradeId=4';
 
 export const IncomingOfferBlock: FC = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { address: walletAddress } = useAccount();
-  const { handleSubmit } = useForm();
+  const { watch, register } = useForm<FormData>();
+  const { openConnectModal } = useConnectModal();
+  const { address: walletAddress, isConnected } = useAccount();
   const { contractAddress, tokens, website } = useChainDependentValues();
 
-  const tradeId = searchParams.get('tradeId');
+  if (!isConnected && openConnectModal) {
+    openConnectModal();
+  }
 
-  const [isErrorShown, setIsErrorShown] = useState(false);
+  const isInfiniteApprove = watch('infiniteApprove');
+  const tradeId = searchParams.get('tradeId') as unknown as bigint;
 
   const {
     writeContract: approveTrade,
     isPending: isApprovePending,
     isSuccess: isApproveSuccess,
-    isError: isApproveError,
+    error: approveError,
   } = useWriteContract();
 
   const {
     writeContract: acceptTrade,
     data: acceptedTradeHash,
     isPending: isAcceptPending,
-    isError: isAcceptError,
+    error: acceptError,
+    isSuccess: isAcceptSuccess,
   } = useWriteContract();
 
   const {
     data: offerData,
     isPending: isOfferDataPending,
-    isError: isOfferDataError,
+    error: offerDataError,
   } = useReadContract({
     abi: tradeContractAbi,
     address: contractAddress,
     functionName: 'getOfferDetails',
     args: [tradeId],
+    query: { refetchInterval: 60000 },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [tokenFrom, tokenTo, amountFrom, amountTo, creator, fee, optionalTaker, active, completed] = offerData || [];
+  const [tokenFrom, tokenTo, amountFrom, amountTo, , , optionalTaker, , completed] = offerData || [];
 
-  const { data: tokenFromData } = useReadContracts({
+  const { data: tokensData } = useReadContracts({
     allowFailure: false,
     contracts: tokenFrom &&
       tokenTo &&
@@ -68,12 +80,14 @@ export const IncomingOfferBlock: FC = () => {
       ],
   });
 
-  const [tokenFromDecimals, tokenFromName, tokenToDecimals, tokenToName, allowance] = tokenFromData || [];
-  const isApproved = allowance || isApproveSuccess;
+  const [tokenFromDecimals, tokenFromName, tokenToDecimals, tokenToName, allowance] = tokensData || [];
 
   useEffect(() => {
-    setIsErrorShown(isOfferDataError || isApproveError || isAcceptError);
-  }, [isAcceptError, isApproveError, isOfferDataError]);
+    const error = offerDataError || approveError || acceptError;
+    if (error) {
+      toast.error(error.name);
+    }
+  }, [acceptError, approveError, offerDataError]);
 
   if (isOfferDataPending || isAcceptPending || isApprovePending) return <BarLoader />;
 
@@ -84,19 +98,20 @@ export const IncomingOfferBlock: FC = () => {
     { value: 1, status: isApproveSuccess ? StepStatus.COMPLETED : StepStatus.DARK },
     { value: 2, status: isApproveSuccess ? StepStatus.LIGHT : StepStatus.DISABLED },
   ];
+  const isApproved = (allowance && amountTo && allowance >= amountTo) || isApproveSuccess;
+  const hasWarning = tokens.every((item) => item.address !== tokenFrom);
 
   const handleApproveTrade = () => {
-    if (amountTo && tokenTo) {
+    const amount = isInfiniteApprove ? maxUint256 : amountTo;
+    if (amount && tokenTo) {
       approveTrade({
         abi: erc20Abi,
         address: tokenTo,
         functionName: 'approve',
-        args: [contractAddress, amountTo],
+        args: [contractAddress, amount],
       });
     }
   };
-
-  console.log(contractAddress, tradeId);
 
   const handleAcceptTrade = () => {
     acceptTrade({
@@ -105,10 +120,6 @@ export const IncomingOfferBlock: FC = () => {
       functionName: 'take',
       args: [tradeId],
     });
-  };
-
-  const handleViewTransaction = () => {
-    window.open(`https://${website}/tx/${acceptedTradeHash}`, '_blank');
   };
 
   const renderToken = ({
@@ -154,11 +165,20 @@ export const IncomingOfferBlock: FC = () => {
             <p className={styles.infoText}>{rate}</p>
           </div>
           {acceptedTradeHash && (
-            <button type="button" className={styles.newWindowButton} onClick={handleViewTransaction}>
-              View transaction <NewWindowIcon />
-            </button>
+            <Link to={`https://${website}/tx/${acceptedTradeHash}`} target="_blank">
+              <div className={styles.newWindowButton}>
+                View transaction <NewWindowIcon />
+              </div>
+            </Link>
           )}
-          <FormButton colorScheme="yellow" type="button" buttonText="Great!" className={styles.greatButton} />
+          <FormButton
+            colorScheme="yellow"
+            type="button"
+            buttonText="Great!"
+            className={styles.greatButton}
+            // todo заменить потом на страницу с таблицей офферов
+            onClick={() => navigate('/')}
+          />
         </div>
       );
     }
@@ -199,9 +219,23 @@ export const IncomingOfferBlock: FC = () => {
               <p className={styles.infoDescription}>Receiver</p>
             </div>
           </div>
+          {hasWarning && (
+            <div className={styles.warningBox}>
+              <div className={styles.warningIcon}>
+                <WarningIcon />
+              </div>
+              <div className={styles.warningTextCol}>
+                <p className={styles.warningText}>
+                  The {tokenFromName} token you receive is a custom one. Please check the token’s address and make sure
+                  it’s correct
+                </p>
+                <p className={styles.warningAddress}>{tokenFrom}</p>
+              </div>
+            </div>
+          )}
         </div>
         <div className={styles.approveBlock}>
-          <input type="checkbox" name="infiniteApprove" />
+          <input type="checkbox" {...register('infiniteApprove')} />
           <label htmlFor="infiniteApprove" className={styles.approveText}>
             Infinite approve
           </label>
@@ -211,6 +245,7 @@ export const IncomingOfferBlock: FC = () => {
           {isApproved ? (
             <div className={styles.buttonRow}>
               <FormButton
+                type="button"
                 colorScheme="yellow"
                 buttonText="Accept Trade"
                 className={styles.button}
@@ -220,6 +255,7 @@ export const IncomingOfferBlock: FC = () => {
           ) : (
             <div className={styles.buttonRow}>
               <FormButton
+                type="button"
                 colorScheme="yellow"
                 buttonText="Approve Token"
                 className={styles.button}
@@ -237,27 +273,18 @@ export const IncomingOfferBlock: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleAcceptTrade)}>
-      <div className={styles.container}>
-        <div className={styles.titleBlock}>
-          <h3 className={styles.title}>
-            {completed ? 'Offer has been successfully accepted!' : `Offer ID ${tradeId}`}
-          </h3>
+    <>
+      <form>
+        <div className={styles.container}>
+          <div className={styles.titleBlock}>
+            <h3 className={styles.title}>
+              {completed && isAcceptSuccess ? 'Offer has been successfully accepted!' : `Offer ID ${tradeId}`}
+            </h3>
+          </div>
+          {completed && isAcceptSuccess ? renderSuccessDialog() : renderForm()}
         </div>
-        {completed ? renderSuccessDialog() : renderForm()}
-        {isErrorShown &&
-          ReactDOM.createPortal(
-            <div className={styles.errorWrap}>
-              <div className={styles.errorContainer}>
-                <div className={styles.successLogoWrapper}>
-                  <h5 className={styles.header}>{'Something went wrong'}</h5>
-                </div>
-                <FormButton colorScheme={'yellow'} onPointerDown={() => setIsErrorShown(false)} buttonText="Back" />
-              </div>
-            </div>,
-            document.getElementsByClassName('app')[0],
-          )}
-      </div>
-    </form>
+      </form>
+      <Toaster />
+    </>
   );
 };
