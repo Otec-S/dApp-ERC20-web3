@@ -227,7 +227,6 @@ const NewOfferForm: FC = () => {
             decimals: token.tokenDecimals,
             name: token.tokenName,
           });
-          setShowCustomTokenPopupFrom(false);
           break;
         case 'to':
           setTokenTo({
@@ -235,10 +234,11 @@ const NewOfferForm: FC = () => {
             decimals: token.tokenDecimals,
             name: token.tokenName,
           });
-          setShowCustomTokenPopupTo(false);
           break;
       }
     }
+    setShowCustomTokenPopupTo(false);
+    setShowCustomTokenPopupFrom(false);
   };
 
   const handleSetTokenMaxValue = () => {
