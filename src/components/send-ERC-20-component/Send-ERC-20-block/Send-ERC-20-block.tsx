@@ -8,11 +8,6 @@ import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
 import style from './Send-ERC-20-block.module.css';
 
 interface Props {
-  blockTitleText: string;
-  isTxSuccess: boolean;
-  setIsTxSuccess: (value: boolean) => void;
-  isTxFormSubmitted: boolean;
-  setIsTxFormSubmitted: (value: boolean) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
   tokenData: TokenData | null;
   setTokenData: (value: TokenData | null) => void;
@@ -20,25 +15,33 @@ interface Props {
   setTokenName: (value: string) => void;
 }
 
-const SendERC20Block: FC<Props> = ({
-  blockTitleText,
-  isTxSuccess,
-  setIsTxSuccess,
-  isTxFormSubmitted,
-  setIsTxFormSubmitted,
-  setIsCustomTokenPopupOpen,
-  tokenData,
-  setTokenData,
-  tokenName,
-  setTokenName,
-}) => {
+const SendERC20Block: FC<Props> = ({ setIsCustomTokenPopupOpen, tokenData, setTokenData, tokenName, setTokenName }) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [txHash, setTxHash] = useState<Address>('0x0');
   console.log('txHash:', txHash);
 
+  const [isTxSuccess, setIsTxSuccess] = useState(true);
+  const [isTxFormSubmitted, setIsTxFormSubmitted] = useState(false);
+
+  // TODO:
+
+  {
+    /* <div className=" стили с position:relative например чтобы popup с position:absolute показывался внутри него. У нас у всех popup вроде position:absolute установлено сразу в стилях">
+{
+isCustomTokenPopupOpen && <AddTokenInfo  onClosePopup = {твой хендлер чтобы получить из popup сведения} >
+}
+</div> */
+  }
+
   return (
     <section className={style.block}>
-      <div className={style.blockTitle}>{blockTitleText}</div>
+      <div className={style.blockTitle}>
+        {isTxFormSubmitted
+          ? isTxSuccess
+            ? 'Tokens have been successfully sent!'
+            : 'Something went wrong'
+          : 'Send ERC-20'}
+      </div>
 
       {isTxFormSubmitted ? (
         <SendERC20ResultForm

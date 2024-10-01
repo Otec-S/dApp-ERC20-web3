@@ -8,8 +8,6 @@ import SendERC20Block from '../../components/send-ERC-20-component/Send-ERC-20-b
 import style from './Send-ERC-20.module.css';
 
 const SendERC20 = () => {
-  const [isTxFormSubmitted, setIsTxFormSubmitted] = useState(false);
-  const [isTxSuccess, setIsTxSuccess] = useState(true);
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
   const [tokenData, setTokenData] = useState<TokenData | null>(null); // Состояние для хранения данных токена
   const [tokenName, setTokenName] = useState<string>('ARB');
@@ -29,22 +27,11 @@ const SendERC20 = () => {
       </div>
       <div className={style.component}>
         <SendERC20Block
-          isTxSuccess={isTxSuccess}
-          setIsTxSuccess={setIsTxSuccess}
-          isTxFormSubmitted={isTxFormSubmitted}
-          setIsTxFormSubmitted={setIsTxFormSubmitted}
           setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen}
-          blockTitleText={
-            isTxFormSubmitted
-              ? isTxSuccess
-                ? 'Tokens have been successfully sent!'
-                : 'Something went wrong'
-              : 'Send ERC-20'
-          }
-          tokenData={tokenData}
-          setTokenData={setTokenData}
-          tokenName={tokenName}
-          setTokenName={setTokenName}
+          tokenData={tokenData} //6
+          setTokenData={setTokenData} //7
+          tokenName={tokenName} //8
+          setTokenName={setTokenName} //9
         />
       </div>
       {isCustomTokenPopupOpen && (
