@@ -24,16 +24,6 @@ import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { NewOfferFormStages } from './NewOfferFormStages';
 import styles from './NewOfferForm.module.css';
 
-interface FormData {
-  from: number;
-  to: number;
-  tokenFrom: Address;
-  tokenTo: Address;
-  rate: number;
-  optionalTaker: Address;
-  infiniteApprove: boolean;
-}
-
 const override: CSSProperties = {
   display: 'block',
   margin: '100px auto',
@@ -43,6 +33,16 @@ interface TokenDataNewOfferForm {
   address: Address;
   decimals: number;
   name: string;
+}
+
+interface FormData {
+  from: number;
+  to: number;
+  tokenFrom: Address;
+  tokenTo: Address;
+  rate: number;
+  optionalTaker: Address;
+  infiniteApprove: boolean;
 }
 
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
