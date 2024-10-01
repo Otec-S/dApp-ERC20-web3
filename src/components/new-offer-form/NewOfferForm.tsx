@@ -80,7 +80,7 @@ const NewOfferForm: FC = () => {
 
   const { data: balanceData, isLoading: isLoadingBalance } = useReadContract({
     query: {
-      refetchInterval: 30 * 1000, //30 sec
+      refetchInterval: 60 * 10 * 1000, //10 minutes
     },
     abi:erc20Abi,
     functionName:'balanceOf',
