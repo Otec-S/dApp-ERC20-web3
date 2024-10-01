@@ -111,11 +111,11 @@ const NewOfferForm: FC = () => {
   const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   let serviceFee = fee && `Service fee ${fee}% `;
-  serviceFee = tokenFrom && tokenAmountIsTaken ? serviceFee + `(${tokenAmountIsTaken} ${tokenFrom.name}).` : serviceFee;
+  serviceFee = tokenFrom && tokenAmountIsTaken ? `${serviceFee}(${tokenAmountIsTaken} ${tokenFrom.name}).` : serviceFee;
   serviceFee =
     tokenFrom && getValues('from') && isNumber(getValues('from'))
-      ? serviceFee + `Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`
-      : serviceFee;
+      ? `${serviceFee}Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`
+      : `${serviceFee}`;
 
   const {
     writeContract,
@@ -165,7 +165,7 @@ const NewOfferForm: FC = () => {
       setFormStage('tradeCreated');
     }
     if (writeContractError) {
-      toast.error('Error ' + writeContractError.name);
+      toast.error(`Error: ${writeContractError.name}`);
     }
   }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError]);
 
