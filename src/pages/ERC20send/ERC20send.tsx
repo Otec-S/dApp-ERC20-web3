@@ -8,7 +8,7 @@ export const ERC20send: FC = () => {
   return (
     <div style={{ background: '#FFEDBE' }}>
       <Header colorScheme="lightBackground" />
-      <CancelOffer />
+      <CancelOffer tradeId={BigInt(15)} />
     </div>
   );
 };
