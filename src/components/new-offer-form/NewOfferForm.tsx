@@ -66,7 +66,7 @@ const NewOfferForm: FC = () => {
     mode: 'onChange',
   });
 
-  const { isConnected, chainId, address: walletAddress } = useAccount();
+  const { isConnected, chainId, address: walletAddress, chain } = useAccount();
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
@@ -80,7 +80,7 @@ const NewOfferForm: FC = () => {
 
   const { data: balanceData, isLoading: isLoadingBalance } = useReadContract({
     query: {
-      refetchInterval: 60 * 10 * 1000, //10 minutes
+      refetchInterval: 60 * 10 * 1000,
     },
     abi: erc20Abi,
     functionName: 'balanceOf',
@@ -92,7 +92,7 @@ const NewOfferForm: FC = () => {
     allowFailure: false,
     contracts: [
       {
-        address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+        address: tradeContractAddress[`${chainId}`],
         functionName: 'feeBasisPoints',
         abi: tradeContractAbi,
       },
@@ -100,10 +100,7 @@ const NewOfferForm: FC = () => {
         address: tokenFrom?.address,
         functionName: 'allowance',
         abi: erc20Abi,
-        args: walletAddress && [
-          walletAddress,
-          chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
-        ],
+        args: walletAddress && [walletAddress, tradeContractAddress[`${chainId}`]],
       },
     ],
   });
@@ -139,16 +136,13 @@ const NewOfferForm: FC = () => {
           abi: erc20Abi,
           address: tokenFrom.address,
           functionName: 'approve',
-          args: [
-            chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
-            tokensToSpend,
-          ],
+          args: [tradeContractAddress[`${chainId}`], tokensToSpend],
         });
       } else setFormStage('createTrade');
     } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
       writeContract({
         abi: tradeContractAbi,
-        address: chainId === sepolia.id ? tradeContractAddress.sepolyaAddress : tradeContractAddress.polygonAddress,
+        address: tradeContractAddress[`${chainId}`],
         functionName: 'initiateTrade',
         args: [
           tokenFrom.address,
@@ -495,13 +489,7 @@ const NewOfferForm: FC = () => {
       {formStage === 'tradeCreated' && (
         <div className={styles.clipboard}>
           <h5 className={styles.clipboardHeader}>Share link</h5>
-          <CopyToClipboard
-            text={
-              chainId === sepolia.id
-                ? `https://sepolia.etherscan.io/tx/${transactionHash}`
-                : `https://www.oklink.com/ru/amoy/tx/${transactionHash}`
-            }
-          >
+          <CopyToClipboard text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}>
             <div className={styles.clipboardLink}>Copy link</div>
           </CopyToClipboard>
         </div>

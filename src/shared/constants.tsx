@@ -1,5 +1,6 @@
 import { ReactElement } from 'react';
 import { Address } from 'viem';
+import { polygonAmoy, sepolia } from 'viem/chains';
 
 import ARBIcon from '@assets/icons/arb.svg';
 import DAIIcon from '@assets/icons/dai.svg';
@@ -442,7 +443,7 @@ export const tradeContractAbi = [
   },
 ] as const;
 
-export const tradeContractAddress = {
-  polygonAddress: '0x30bbAA44F7A80AfC9a5CB1aEEb8247B8E2aDE392',
-  sepolyaAddress: '0x9CE9DFFA60c558E22178172DDa1774234AECAEBd',
-} as const;
+export const tradeContractAddress: Record<string, Address> = {
+  [`${polygonAmoy.id}`]: '0x30bbAA44F7A80AfC9a5CB1aEEb8247B8E2aDE392',
+  [`${sepolia.id}`]: '0x9CE9DFFA60c558E22178172DDa1774234AECAEBd',
+};
