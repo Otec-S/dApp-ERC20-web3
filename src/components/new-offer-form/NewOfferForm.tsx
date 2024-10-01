@@ -188,7 +188,7 @@ const NewOfferForm: FC = () => {
 
   const handleSnackbarClose = () => {
     setShowCopyOfClipboard(false);
-  }
+  };
 
   const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -495,10 +495,15 @@ const NewOfferForm: FC = () => {
       {formStage === 'tradeCreated' && (
         <div className={styles.clipboard}>
           <h5 className={styles.clipboardHeader}>Share link</h5>
-          <CopyToClipboard onCopy={()=>setShowCopyOfClipboard(true)} text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}>
+          <CopyToClipboard
+            onCopy={() => setShowCopyOfClipboard(true)}
+            text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}
+          >
             <div className={styles.clipboardLink}>Copy link</div>
           </CopyToClipboard>
-          {showCopyOfClipboard && <Snackbar type='success' onClose={handleSnackbarClose} description='Link copied successfully'/>}
+          {showCopyOfClipboard && (
+            <Snackbar type="success" onClose={handleSnackbarClose} description="Link copied successfully" />
+          )}
         </div>
       )}
     </section>
