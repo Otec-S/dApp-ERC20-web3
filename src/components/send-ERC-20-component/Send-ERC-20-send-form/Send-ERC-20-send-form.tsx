@@ -7,11 +7,11 @@ import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, 
 import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
-import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
 import FormButton from '@src/components/form-button/FormButton';
 import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
 import { Token, TokenData } from '@src/shared/constants';
 import { erc20abiExtended } from '@src/shared/erc20abi-extended';
+import getTokenIcon from '@src/utils/getTokenIcon';
 
 import style from './Send-ERC-20-send-form.module.css';
 
@@ -224,8 +224,7 @@ const SendERC20SendForm: FC<Props> = ({
         polygonAddress: tokenData.tokenAddress || prevToken.polygonAddress,
         sepoliaAddress: tokenData.tokenAddress || prevToken.sepoliaAddress,
         decimals: tokenData.tokenDecimals || prevToken.decimals,
-        // TODO:
-        icon: <NotFoundTokenLogo />,
+        icon: getTokenIcon(tokenData.tokenAddress as Address),
       }));
     }
   }, [tokenData]);
