@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react';
 import cn from 'classnames';
-import { isAddress } from 'viem';
+import { Address, isAddress } from 'viem';
 
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
@@ -26,8 +26,8 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
     setSearchText(e.target.value);
   };
 
-  const handleSelectToken = (name: string) => () => {
-    const token = tokens.find((item) => item.name === name);
+  const handleSelectToken = (address: Address) => () => {
+    const token = tokens.find((item) => item.sepoliaAddress === address);
     if (token) {
       onSelect(token);
       onCLose();
@@ -66,7 +66,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
             <div
               key={item.polygonAddress}
               className={cn(styles.tokenItem, { [styles.tokenItemLightScheme]: colorScheme === 'light' })}
-              onClick={handleSelectToken(item.name)}
+              onClick={handleSelectToken(item.sepoliaAddress)}
             >
               <div className={styles.tokenIcon}>{item.icon}</div>
               <div className={cn(styles.tokenSymbol, { [styles.tokenSymbolLightScheme]: colorScheme === 'light' })}>
@@ -82,7 +82,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
           <div
             key={item.sepoliaAddress}
             className={cn(styles.listItem, { [styles.listItemLIghtScheme]: colorScheme === 'light' })}
-            onClick={handleSelectToken(item.name)}
+            onClick={handleSelectToken(item.sepoliaAddress)}
           >
             <div className={styles.tokenIcon}>{item.icon}</div>
             <div className={cn(styles.tokenSymbol, { [styles.tokenSymbolLightScheme]: colorScheme === 'light' })}>

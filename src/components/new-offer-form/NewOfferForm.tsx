@@ -82,8 +82,8 @@ const NewOfferForm: FC = () => {
     query: {
       refetchInterval: 60 * 10 * 1000, //10 minutes
     },
-    abi:erc20Abi,
-    functionName:'balanceOf',
+    abi: erc20Abi,
+    functionName: 'balanceOf',
     address: tokenFrom && tokenFrom.address,
     args: walletAddress && [walletAddress],
   });
@@ -123,7 +123,7 @@ const NewOfferForm: FC = () => {
     isPending: isWriteApprovePending,
     isSuccess: isWriteContractSuccess,
     data: transactionHash,
-    error:writeContractError,
+    error: writeContractError,
     variables: contractVariables,
   } = useWriteContract();
 
@@ -132,9 +132,9 @@ const NewOfferForm: FC = () => {
       const tokensToSpend = getValues('infiniteApprove')
         ? maxUint256
         : parseUnits(getValues('from').toString(), tokenFrom.decimals);
-        
+
       const tokensAllowedToSpend = contractsConstants && contractsConstants[1];
-      if (tokensAllowedToSpend!==undefined && tokensToSpend > tokensAllowedToSpend) {
+      if (tokensAllowedToSpend !== undefined && tokensToSpend > tokensAllowedToSpend) {
         writeContract({
           abi: erc20Abi,
           address: tokenFrom.address,
@@ -168,10 +168,10 @@ const NewOfferForm: FC = () => {
     if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade') {
       setFormStage('tradeCreated');
     }
-    if(writeContractError) {
-      toast.error('Error ' + writeContractError.name)
+    if (writeContractError) {
+      toast.error('Error ' + writeContractError.name);
     }
-  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables,writeContractError]);
+  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError]);
 
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
@@ -190,8 +190,7 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const balanceOfTokenFrom =
-    tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
+  const balanceOfTokenFrom = tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
 
   const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -222,22 +221,22 @@ const NewOfferForm: FC = () => {
   const handleCustomTokenPopupChoice = (token: TokenData, tokenSelected: 'from' | 'to') => {
     if (token.requestWasSuccessful && token.tokenAddress && token.tokenDecimals && token.tokenName) {
       switch (tokenSelected) {
-      case 'from':
-        setTokenFrom({
-          address: token.tokenAddress,
-          decimals: token.tokenDecimals,
-          name: token.tokenName,
-        });
-        setShowCustomTokenPopupFrom(false);
-        break;
-      case 'to':
-        setTokenTo({
-          address: token.tokenAddress,
-          decimals: token.tokenDecimals,
-          name: token.tokenName,
-        });
-        setShowCustomTokenPopupTo(false);
-        break; 
+        case 'from':
+          setTokenFrom({
+            address: token.tokenAddress,
+            decimals: token.tokenDecimals,
+            name: token.tokenName,
+          });
+          setShowCustomTokenPopupFrom(false);
+          break;
+        case 'to':
+          setTokenTo({
+            address: token.tokenAddress,
+            decimals: token.tokenDecimals,
+            name: token.tokenName,
+          });
+          setShowCustomTokenPopupTo(false);
+          break;
       }
     }
   };
@@ -253,7 +252,7 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
-      <Toaster position="top-center"/>
+      <Toaster position="top-center" />
       {showCustomTokenPopupTo && (
         <div className={styles.customTokenContainer}>
           <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'to')} />
@@ -324,7 +323,7 @@ const NewOfferForm: FC = () => {
                       {' Unsufficient balance'}
                     </div>
                   )}
-                  {!errors.from && balanceData!==undefined && (
+                  {!errors.from && balanceData !== undefined && (
                     <div className={styles.tokenBalanceWrapper}>
                       <span className={styles.tokenBalance}>{`Balance: ${balanceOfTokenFrom}`}</span>
                       <button
