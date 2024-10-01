@@ -95,7 +95,7 @@ const NewOfferForm: FC = () => {
       ],
   });
 
-  const { data: feeBasis, isLoading: isLoadingFee } = useReadContracts({
+  const { data: contractsConstants, isLoading: isLoadingContractData } = useReadContracts({
     allowFailure: false,
     contracts: [
       {
@@ -103,11 +103,6 @@ const NewOfferForm: FC = () => {
         functionName: 'feeBasisPoints',
         abi: tradeContractAbi,
       },
-    ],
-  });
-  const { data: tokensAllowed, isLoading: isLoadingAllowance } = useReadContracts({
-    allowFailure: false,
-    contracts: [
       {
         address: tokenFrom?.address,
         functionName: 'allowance',
@@ -119,7 +114,8 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
-  const fee = feeBasis && formatUnits(feeBasis[0], 2);
+
+  const fee = contractsConstants && formatUnits(contractsConstants[0], 2);
   const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   let serviceFee = fee && `Service fee ${fee}% `;
@@ -144,9 +140,8 @@ const NewOfferForm: FC = () => {
         ? maxUint256
         : parseUnits(getValues('from').toString(), tokenFrom.decimals);
         
-      const tokensAllowedToSpend = tokensAllowed && tokensAllowed[0];
+      const tokensAllowedToSpend = contractsConstants && contractsConstants[1];
       if (tokensAllowedToSpend!==undefined && tokensToSpend > tokensAllowedToSpend) {
-        console.log('inside')
         writeContract({
           abi: erc20Abi,
           address: tokenFrom.address,
@@ -261,7 +256,7 @@ const NewOfferForm: FC = () => {
   setValue('rate', rate);
 
   const showApproveButtonDisabled = tokenFrom === undefined;
-  const dataFromNetworkIsLoading = isLoadingBalance || isWriteApprovePending || isLoadingFee || isLoadingAllowance;
+  const dataFromNetworkIsLoading = isLoadingBalance || isWriteApprovePending || isLoadingContractData;
 
   return (
     <section className={cn(styles.createOffer)}>

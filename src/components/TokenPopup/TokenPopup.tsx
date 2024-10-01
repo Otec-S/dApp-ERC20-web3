@@ -4,13 +4,13 @@ import { isAddress } from 'viem';
 
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
-import { IToken, tokens } from '@src/shared/constants';
+import { ITokens, tokens } from '@src/shared/constants';
 
 import styles from './TokenPopup.module.css';
 
 type Props = {
   onCLose: () => void;
-  onSelect: (token: IToken) => void;
+  onSelect: (token: ITokens) => void;
   colorScheme?: 'dark' | 'light';
 };
 
