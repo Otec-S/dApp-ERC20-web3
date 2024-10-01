@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { Address } from 'viem';
+import { polygonAmoy, sepolia } from 'viem/chains';
+import { useChainId } from 'wagmi';
 
 import FailureIcon from '@assets/icons/failure.svg';
 import SuccessIcon from '@assets/icons/success.svg';
@@ -38,10 +40,28 @@ const SendERC20ResultForm: FC<Props> = ({
     setTokenData(null);
   };
 
+  const chainId = useChainId();
+
+  const getChainURL = (id: number) => {
+    switch (id) {
+      case sepolia.id:
+        return 'sepolia.etherscan.io';
+      case polygonAmoy.id:
+        return 'amoy.polygonscan.com';
+      default:
+        return '';
+    }
+  };
+
   const handleViewTransactionIconClick = () => {
-    console.log('View transaction');
-    const url = `https://amoy.polygonscan.com/tx/${txHash}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const baseURL = getChainURL(chainId);
+
+    if (baseURL) {
+      const url = `https://${baseURL}/tx/${txHash}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      console.error('Unsupported chain ID or URL not configured for this chain');
+    }
   };
 
   return (

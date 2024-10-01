@@ -21,7 +21,9 @@ export const Landing: FC = () => {
         <div className={classes.title}>
           <h1 className={classes.titleText}>Web3 platform for everything in crypto</h1>
         </div>
-        <button className={classes.button}>Start using now</button>
+        <button className={classes.button} onClick={() => navigate('/send-ERC20-tokens')}>
+          Start using now
+        </button>
       </div>
       <div className={classes.section}>
         <h2 className={classes.sectionTitle}>Products</h2>
