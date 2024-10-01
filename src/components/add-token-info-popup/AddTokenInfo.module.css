@@ -1,6 +1,6 @@
 .addToken {
   display: flex;
-  max-width: 640px;
+  width: 640px;
   height: 638px;
   flex-direction: column;
   align-items: flex-start;

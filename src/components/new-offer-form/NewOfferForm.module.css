@@ -149,6 +149,7 @@
   height: 24px;
   border: none;
   outline: none;
+  background: #fffbf2;
 }
 
 .inputReceiver {
@@ -157,6 +158,7 @@
   height: 24px;
   border: none;
   outline: none;
+  background: #fffbf2;
 }
 
 .inputReceiver,
@@ -261,6 +263,12 @@
   width: 32px;
   height: 32px;
   flex-shrink: 0;
+}
+
+.tokenIcon svg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 .tokenArrow {

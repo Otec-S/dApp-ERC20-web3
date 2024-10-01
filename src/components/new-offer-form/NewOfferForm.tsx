@@ -14,7 +14,7 @@ import { IToken, tradeContractAbi, tradeContractAddress } from '@src/shared/cons
 import getTokenIcon from '@src/utils/getTokenIcon';
 import isNumber from '@src/utils/isNumber';
 
-import AddTokenInfo from '../add-token-info-popup/AddTokenInfo';
+import AddTokenInfo, { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
@@ -46,9 +46,10 @@ interface TokenDataNewOfferForm {
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
 
 const NewOfferForm: FC = () => {
-  const [showLeftTokenPopup, setShowLeftTokenPopup] = useState(false);
-  const [showRightTokenPopup, setShowRightTokenPopup] = useState(false);
-  const [showCustomTokenPopup, setShowCustomTokenPopup] = useState(false);
+  const [showDefaultTokenPopupFrom, setShowDefaultTokenPopupFrom] = useState(false);
+  const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
+  const [showCustomTokenPopupFrom, setShowCustomTokenPopupFrom] = useState(false);
+  const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
@@ -180,16 +181,18 @@ const NewOfferForm: FC = () => {
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
       case 'from':
-        setShowLeftTokenPopup(true);
+        setShowDefaultTokenPopupFrom(true);
         break;
       case 'to':
-        setShowRightTokenPopup(true);
+        setShowDefaultTokenPopupTo(true);
+        break;
+      case 'customFrom':
+        setShowCustomTokenPopupFrom(true);
+        break;
+      case 'customTo':
+        setShowCustomTokenPopupTo(true);
         break;
     }
-  };
-
-  const handleCustomTokenPopupOpen = () => {
-    setShowCustomTokenPopup(true);
   };
 
   const balanceOfTokenFrom =
@@ -203,7 +206,7 @@ const NewOfferForm: FC = () => {
           decimals: token.decimals,
           name: token.name,
         });
-        setShowLeftTokenPopup(false);
+        setShowDefaultTokenPopupFrom(false);
         break;
       case 'to':
         setTokenTo({
@@ -211,15 +214,37 @@ const NewOfferForm: FC = () => {
           decimals: token.decimals,
           name: token.name,
         });
-        setShowRightTokenPopup(false);
+        setShowDefaultTokenPopupTo(false);
         break;
     }
   };
 
   const handleTokenPopupClose = () => {
-    setShowLeftTokenPopup(false);
-    setShowRightTokenPopup(false);
-    setShowCustomTokenPopup(false);
+    setShowDefaultTokenPopupFrom(false);
+    setShowDefaultTokenPopupTo(false);
+  };
+
+  const handleCustomTokenPopupChoice = (token: TokenData, tokenSelected: 'from' | 'to') => {
+    if (token.requestWasSuccessful && token.tokenAddress && token.tokenDecimals && token.tokenName) {
+      switch (tokenSelected) {
+      case 'from':
+        setTokenFrom({
+          address: token.tokenAddress,
+          decimals: token.tokenDecimals,
+          name: token.tokenName,
+        });
+        setShowCustomTokenPopupFrom(false);
+        break;
+      case 'to':
+        setTokenTo({
+          address: token.tokenAddress,
+          decimals: token.tokenDecimals,
+          name: token.tokenName,
+        });
+        setShowCustomTokenPopupTo(false);
+        break; 
+      }
+    }
   };
 
   const handleSetTokenMaxValue = () => {
@@ -233,9 +258,16 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
-      <div className={styles.customTokenContainer}>
-        {showCustomTokenPopup && <AddTokenInfo colorScheme="yellow" onClosePopup={handleTokenPopupClose} />}
-      </div>
+      {showCustomTokenPopupTo && (
+        <div className={styles.customTokenContainer}>
+          <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'to')} />
+        </div>
+      )}
+      {showCustomTokenPopupFrom && (
+        <div className={styles.customTokenContainer}>
+          <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'from')} />
+        </div>
+      )}
       {dataFromNetworkIsLoading && (
         <div className={styles.loader}>
           <BeatLoader
@@ -308,7 +340,7 @@ const NewOfferForm: FC = () => {
                       </button>
                     </div>
                   )}
-                  {showLeftTokenPopup && (
+                  {showDefaultTokenPopupFrom && (
                     <TokenPopup
                       onCLose={handleTokenPopupClose}
                       onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
@@ -322,7 +354,7 @@ const NewOfferForm: FC = () => {
                     </div>
                   </div>
                   <button
-                    onPointerDown={handleCustomTokenPopupOpen}
+                    onPointerDown={() => handleTokenPopupOpen('customFrom')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >
@@ -363,7 +395,7 @@ const NewOfferForm: FC = () => {
                       {' Unsufficient balance'}
                     </div>
                   )}
-                  {showRightTokenPopup && (
+                  {showDefaultTokenPopupTo && (
                     <TokenPopup
                       onCLose={handleTokenPopupClose}
                       onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
@@ -377,7 +409,7 @@ const NewOfferForm: FC = () => {
                     </div>
                   </div>
                   <button
-                    onPointerDown={handleCustomTokenPopupOpen}
+                    onPointerDown={() => handleTokenPopupOpen('customTo')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >
