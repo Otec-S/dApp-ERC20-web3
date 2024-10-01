@@ -1,6 +1,7 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
@@ -133,6 +134,7 @@ const NewOfferForm: FC = () => {
     isPending: isWriteApprovePending,
     isSuccess: isWriteContractSuccess,
     data: transactionHash,
+    error:writeContractError,
     variables: contractVariables,
   } = useWriteContract();
 
@@ -141,8 +143,10 @@ const NewOfferForm: FC = () => {
       const tokensToSpend = getValues('infiniteApprove')
         ? maxUint256
         : parseUnits(getValues('from').toString(), tokenFrom.decimals);
+        
       const tokensAllowedToSpend = tokensAllowed && tokensAllowed[0];
-      if (tokensAllowedToSpend && tokensToSpend > tokensAllowedToSpend) {
+      if (tokensAllowedToSpend!==undefined && tokensToSpend > tokensAllowedToSpend) {
+        console.log('inside')
         writeContract({
           abi: erc20Abi,
           address: tokenFrom.address,
@@ -176,7 +180,10 @@ const NewOfferForm: FC = () => {
     if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade') {
       setFormStage('tradeCreated');
     }
-  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables]);
+    if(writeContractError) {
+      toast.error('Error ' + writeContractError.name)
+    }
+  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables,writeContractError]);
 
   const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     switch (tokenToOpen) {
@@ -258,6 +265,7 @@ const NewOfferForm: FC = () => {
 
   return (
     <section className={cn(styles.createOffer)}>
+      <Toaster position="top-center"/>
       {showCustomTokenPopupTo && (
         <div className={styles.customTokenContainer}>
           <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'to')} />
