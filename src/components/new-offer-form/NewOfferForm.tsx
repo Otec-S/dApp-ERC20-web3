@@ -10,7 +10,7 @@ import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { IToken, tradeContractAbi, tradeContractAddress } from '@src/shared/constants';
+import { ITokens, tradeContractAbi, tradeContractAddress } from '@src/shared/constants';
 import getTokenIcon from '@src/utils/getTokenIcon';
 import isNumber from '@src/utils/isNumber';
 
@@ -198,7 +198,7 @@ const NewOfferForm: FC = () => {
   const balanceOfTokenFrom =
     tokenFrom && contractData && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals));
 
-  const handleDefaultTokenChoice = (token: IToken, tokenSelected: 'from' | 'to') => {
+  const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
       case 'from':
         setTokenFrom({
