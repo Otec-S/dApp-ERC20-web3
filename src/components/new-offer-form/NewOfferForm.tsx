@@ -7,7 +7,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
-import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
@@ -78,21 +78,14 @@ const NewOfferForm: FC = () => {
     setTokenTo(undefined);
   }, [chainId, reset]);
 
-  const { data: contractData, isLoading: isLoadingBalance } = useReadContracts({
+  const { data: balanceData, isLoading: isLoadingBalance } = useReadContract({
     query: {
       refetchInterval: 30 * 1000, //30 sec
     },
-    allowFailure: false,
-    contracts: walletAddress &&
-      tokenFrom?.address &&
-      tokenFrom && [
-        {
-          address: tokenFrom.address,
-          functionName: 'balanceOf',
-          abi: erc20Abi,
-          args: [walletAddress],
-        },
-      ],
+    abi:erc20Abi,
+    functionName:'balanceOf',
+    address: tokenFrom && tokenFrom.address,
+    args: walletAddress && [walletAddress],
   });
 
   const { data: contractsConstants, isLoading: isLoadingContractData } = useReadContracts({
@@ -198,7 +191,7 @@ const NewOfferForm: FC = () => {
   };
 
   const balanceOfTokenFrom =
-    tokenFrom && contractData && parseFloat(formatUnits(contractData?.[0], tokenFrom?.decimals));
+    tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
 
   const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
@@ -250,7 +243,7 @@ const NewOfferForm: FC = () => {
   };
 
   const handleSetTokenMaxValue = () => {
-    setValue('from', Number(contractData && tokenFrom && formatUnits(contractData?.[0], tokenFrom?.decimals)));
+    setValue('from', Number(balanceData && tokenFrom && formatUnits(balanceData, tokenFrom?.decimals)));
   };
   const rate = watch('from') > 0 ? watch('to') / watch('from') : 0;
   setValue('rate', rate);
@@ -331,7 +324,7 @@ const NewOfferForm: FC = () => {
                       {' Unsufficient balance'}
                     </div>
                   )}
-                  {!errors.from && contractData && (
+                  {!errors.from && balanceData!==undefined && (
                     <div className={styles.tokenBalanceWrapper}>
                       <span className={styles.tokenBalance}>{`Balance: ${balanceOfTokenFrom}`}</span>
                       <button
