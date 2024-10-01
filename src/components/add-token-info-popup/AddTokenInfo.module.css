@@ -163,7 +163,7 @@
   line-height: normal;
 }
 
-/* Убираем стили автозаполнения */
+/* Removing autofill styles */
 .inputAddress:-webkit-autofill,
 .inputAddress:-webkit-autofill:hover,
 .inputAddress:-webkit-autofill:focus {

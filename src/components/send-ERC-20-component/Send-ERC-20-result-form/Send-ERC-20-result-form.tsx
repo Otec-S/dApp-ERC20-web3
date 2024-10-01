@@ -67,12 +67,6 @@ const SendERC20ResultForm: FC<Props> = ({
   return (
     <form className={style.blockForm} onSubmit={handleSubmit}>
       <div className={style.resultForm}>
-        {/* TODO: */}
-        {/* <img
-          className={style.resultIcon}
-          src={isTxSuccess ? resultSuccessIcon.default : resultErrorIcon.default}
-          alt="Result icon"
-        /> */}
         <div className={style.resultIcon}>{isTxSuccess ? <SuccessIcon /> : <FailureIcon />}</div>
         <p className={style.transactionValue}>
           {inputValue} {tokenName}

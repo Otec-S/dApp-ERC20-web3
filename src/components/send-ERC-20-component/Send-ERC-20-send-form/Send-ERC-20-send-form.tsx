@@ -78,7 +78,6 @@ const SendERC20SendForm: FC<Props> = ({
     }
   });
 
-  // получение баланса кошелька
   const {
     data: balanceData,
     isLoading: isLoadingBalance,
@@ -88,16 +87,14 @@ const SendERC20SendForm: FC<Props> = ({
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
-    // polling - опрос сервера через каждые 10 минут
-    query: { refetchInterval: 600000 },
+    query: { refetchInterval: 600000 }, // polling
   });
 
   const balanceWithDecimals = formatUnits(BigInt(balanceData ?? 0), decimals);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    // Валидация поля ввода
-    const inputValueRegex = /^\d*\.?\d*$/;
+    const inputValueRegex = /^\d*\.?\d*$/; // Input field validation
     if (inputValueRegex.test(value)) {
       setInputValue(value);
       if (balanceWithDecimals && parseFloat(value) > parseFloat(balanceWithDecimals)) {
@@ -215,8 +212,8 @@ const SendERC20SendForm: FC<Props> = ({
     }
   }, [inputValue, recipientValue, setIsButtonActive, inputValueError, inputRecipientError]);
 
-  // сопостовление данных кастомного токена с данными стандартного токена
   useEffect(() => {
+    // Matching custom token data with standard token data
     if (tokenData) {
       setTokenSelected((prevToken) => ({
         ...prevToken,
@@ -300,8 +297,6 @@ const SendERC20SendForm: FC<Props> = ({
         </div>
         <FormButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
         {isRegularTokenPopupOpen && <TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} />}
-        {/* TODO: */}
-        {hash && <div className={style.txHash}>{hash}</div>}
       </form>
     </>
   );
