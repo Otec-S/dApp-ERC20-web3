@@ -20,9 +20,6 @@ interface FormData {
   infiniteApprove: boolean;
 }
 
-// todo удалить, сслыка для теста tradeId может быть другим
-// const link = 'http://localhost:5173/offer?tradeId=4';
-
 export const IncomingOfferBlock: FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -176,7 +173,6 @@ export const IncomingOfferBlock: FC = () => {
             type="button"
             buttonText="Great!"
             className={styles.greatButton}
-            // todo заменить потом на страницу с таблицей офферов
             onClick={() => navigate('/')}
           />
         </div>
