@@ -15,12 +15,12 @@ const override: CSSProperties = {
 };
 
 interface Props {
-  onClose: (successfullyDeleted: boolean) => void;
   tradeId: bigint;
   tokenFromName: string;
   tokenToName: string;
   amountFrom: number;
   amountTo: number;
+  onClose: (successfullyDeleted: boolean) => void;
 }
 
 const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFrom, amountTo, onClose }) => {
