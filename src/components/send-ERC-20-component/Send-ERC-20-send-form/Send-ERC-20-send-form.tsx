@@ -1,6 +1,6 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import BeatLoader from 'react-spinners/BeatLoader';
-import { Address, formatUnits, parseUnits } from 'viem';
+import { Address, formatUnits, getAddress, parseUnits } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
@@ -16,25 +16,24 @@ import getTokenIcon from '@src/utils/getTokenIcon';
 import style from './Send-ERC-20-send-form.module.css';
 
 interface Props {
-  isTxFormSubmitted: boolean;
+  inputValue: string;
+  tokenData: TokenData | null;
   setIsTxFormSubmitted: (value: boolean) => void;
   setIsTxSuccess: (value: boolean) => void;
-  inputValue: string;
   setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
   setIsCustomTokenPopupOpen: (value: boolean) => void;
-  tokenData: TokenData | null;
   setTxHash: (value: Address) => void;
 }
 
 const SendERC20SendForm: FC<Props> = ({
+  inputValue,
+  tokenData,
   setIsTxSuccess,
   setIsTxFormSubmitted,
-  inputValue,
   setInputValue,
   setTokenName,
   setIsCustomTokenPopupOpen,
-  tokenData,
   setTxHash,
 }) => {
   const [recipientValue, setRecipientValue] = useState('');
@@ -50,7 +49,7 @@ const SendERC20SendForm: FC<Props> = ({
   };
 
   const { data: hash, error: isWriteError, writeContract } = useWriteContract();
-  const { address } = useAccount(); // адрес кошелька
+  const { address } = useAccount();
 
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
@@ -87,14 +86,14 @@ const SendERC20SendForm: FC<Props> = ({
     address: currentTokenAddress as Address,
     functionName: 'balanceOf',
     args: [address as Address],
-    query: { refetchInterval: 600000 }, // polling
+    query: { refetchInterval: 600000 },
   });
 
-  const balanceWithDecimals = formatUnits(BigInt(balanceData ?? 0), decimals);
+  const balanceWithDecimals = balanceData && formatUnits(BigInt(balanceData), decimals);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNumberOfTokensInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const inputValueRegex = /^\d*\.?\d*$/; // Input field validation
+    const inputValueRegex = /^\d*\.?\d*$/;
     if (inputValueRegex.test(value)) {
       setInputValue(value);
       if (balanceWithDecimals && parseFloat(value) > parseFloat(balanceWithDecimals)) {
@@ -140,13 +139,16 @@ const SendERC20SendForm: FC<Props> = ({
   };
 
   const handleBalanceMaxClick = () => {
-    setInputValue(balanceWithDecimals);
+    if (balanceWithDecimals) {
+      setInputValue(balanceWithDecimals);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    const recipient = formData.get('recipient') as Address;
+    // TODO:
+    const recipient = getAddress(formData.get('recipient'));
     const parsedAmount = parseUnits(inputValue, decimals);
     writeContract({
       address: currentTokenAddress as Address,
@@ -213,7 +215,6 @@ const SendERC20SendForm: FC<Props> = ({
   }, [inputValue, recipientValue, setIsButtonActive, inputValueError, inputRecipientError]);
 
   useEffect(() => {
-    // Matching custom token data with standard token data
     if (tokenData) {
       setTokenSelected((prevToken) => ({
         ...prevToken,
@@ -249,7 +250,7 @@ const SendERC20SendForm: FC<Props> = ({
               type="text"
               value={inputValue}
               placeholder="0.00"
-              onChange={handleInputChange}
+              onChange={handleNumberOfTokensInputChange}
               required
             />
             <div className={style.balance}>
@@ -259,7 +260,7 @@ const SendERC20SendForm: FC<Props> = ({
                 ) : errorBalance ? (
                   <span>Error getting wallet balance</span>
                 ) : (
-                  <span>Balance: {balanceWithDecimals}</span>
+                  <span>Balance: {balanceWithDecimals || 'Not defined'}</span>
                 )}
               </div>
               <button className={style.balanceMax} type="button" onClick={handleBalanceMaxClick}>

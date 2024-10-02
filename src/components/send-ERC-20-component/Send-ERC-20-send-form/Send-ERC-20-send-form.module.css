@@ -36,7 +36,6 @@
   margin-bottom: 13.5px;
 }
 
-/* Removing autofill styles */
 .input:-webkit-autofill,
 .input:-webkit-autofill:hover,
 .input:-webkit-autofill:focus {
@@ -172,7 +171,6 @@
   border: none;
 }
 
-/* Removing autofill styles */
 .recipientInput:-webkit-autofill,
 .recipientInput:-webkit-autofill:hover,
 .recipientInput:-webkit-autofill:focus {

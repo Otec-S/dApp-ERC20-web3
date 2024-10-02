@@ -9,13 +9,13 @@ import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';
 import style from './Send-ERC-20-block.module.css';
 
 const SendERC20Block: FC = () => {
-  const [inputValue, setInputValue] = useState<string>('');
-  const [txHash, setTxHash] = useState<Address>('0x0');
+  const [inputValue, setInputValue] = useState('');
+  const [txHash, setTxHash] = useState<Address | null>(null);
   const [isTxSuccess, setIsTxSuccess] = useState(true);
   const [isTxFormSubmitted, setIsTxFormSubmitted] = useState(false);
   const [isCustomTokenPopupOpen, setIsCustomTokenPopupOpen] = useState(false);
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
-  const [tokenName, setTokenName] = useState<string>('ARB');
+  const [tokenName, setTokenName] = useState('ARB');
 
   const handleCloseCustomTokenPopup = (data: TokenData) => {
     setIsCustomTokenPopupOpen(false);
@@ -39,7 +39,7 @@ const SendERC20Block: FC = () => {
           <SendERC20ResultForm
             isTxSuccess={isTxSuccess}
             setIsTxFormSubmitted={setIsTxFormSubmitted}
-            inputValue={inputValue}
+            numberOfTokens={inputValue}
             setInputValue={setInputValue}
             tokenName={tokenName}
             setTokenName={setTokenName}
@@ -49,7 +49,6 @@ const SendERC20Block: FC = () => {
         ) : (
           <SendERC20SendForm
             setIsTxSuccess={setIsTxSuccess}
-            isTxFormSubmitted={isTxFormSubmitted}
             setIsTxFormSubmitted={setIsTxFormSubmitted}
             inputValue={inputValue}
             setInputValue={setInputValue}
@@ -62,7 +61,7 @@ const SendERC20Block: FC = () => {
       </section>
       {isCustomTokenPopupOpen && (
         <div className={style.overlay}>
-          <AddTokenInfo setIsCustomTokenPopupOpen={setIsCustomTokenPopupOpen} onClose={handleCloseCustomTokenPopup} />
+          <AddTokenInfo onClose={handleCloseCustomTokenPopup} />
         </div>
       )}
     </>

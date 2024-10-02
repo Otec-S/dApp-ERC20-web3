@@ -5,6 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
 import { logo, logoLightScheme } from '@assets/images';
+import { SEND_ERC20_ROUT } from '@src/shared/constants';
 
 import styles from './Header.module.css';
 
@@ -12,7 +13,7 @@ interface Props {
   colorScheme?: 'darkBackground' | 'lightBackground';
 }
 
-const Header: FC<Props> = ({ colorScheme }) => {
+const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
   const [burgerIsOpen, setBurgerIsOpen] = useState(false);
   const handleBurgerClick = () => {
     setBurgerIsOpen((prev) => !prev);
@@ -41,7 +42,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/send-ERC20-tokens"
+            to={SEND_ERC20_ROUT}
           >
             Send ERC-20
           </NavLink>

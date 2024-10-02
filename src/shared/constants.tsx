@@ -111,3 +111,5 @@ export interface TokenData {
   tokenDecimals?: number;
   tokenBalance?: bigint;
 }
+
+export const SEND_ERC20_ROUT = '/send-ERC20-tokens';

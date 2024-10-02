@@ -13,24 +13,24 @@ import style from './Send-ERC-20-result-form.module.css';
 
 interface Props {
   isTxSuccess: boolean;
-  setIsTxFormSubmitted: (value: boolean) => void;
-  inputValue: string;
-  setInputValue: (value: string) => void;
+  numberOfTokens: string;
   tokenName: string;
+  txHash: Address | null;
+  setIsTxFormSubmitted: (value: boolean) => void;
+  setInputValue: (value: string) => void;
   setTokenName: (value: string) => void;
   setTokenData: (value: TokenData | null) => void;
-  txHash: Address;
 }
 
 const SendERC20ResultForm: FC<Props> = ({
   isTxSuccess,
-  setIsTxFormSubmitted,
-  inputValue,
-  setInputValue,
+  numberOfTokens,
   tokenName,
+  txHash,
+  setIsTxFormSubmitted,
+  setInputValue,
   setTokenName,
   setTokenData,
-  txHash,
 }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,7 +69,7 @@ const SendERC20ResultForm: FC<Props> = ({
       <div className={style.resultForm}>
         <div className={style.resultIcon}>{isTxSuccess ? <SuccessIcon /> : <FailureIcon />}</div>
         <p className={style.transactionValue}>
-          {inputValue} {tokenName}
+          {numberOfTokens} {tokenName}
         </p>
         <button className={style.viewTransactionIcon} onClick={handleViewTransactionIconClick} type="button">
           <ViewTransactionIcon />

@@ -66,7 +66,6 @@ export const erc20abiExtended = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-  // метод для USDT
   {
     constant: false,
     inputs: [
@@ -200,7 +199,6 @@ export const erc20abiExtended = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-  // метод для USDT
   {
     constant: false,
     inputs: [

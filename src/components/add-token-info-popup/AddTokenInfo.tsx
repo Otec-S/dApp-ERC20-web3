@@ -19,9 +19,8 @@ import styles from './AddTokenInfo.module.css';
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 
 interface Props {
-  onClose: (data: TokenData) => void;
   colorScheme?: 'default' | 'yellow';
-  setIsCustomTokenPopupOpen: (value: boolean) => void;
+  onClose: (data: TokenData) => void;
 }
 
 interface FormData {
@@ -35,7 +34,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustomTokenPopupOpen }) => {
+const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
   const [formState, setFormState] = useState<FormStages>('initialState');
   const [tokenAddress, setTokenAddress] = useState<Address | undefined>(undefined);
 
@@ -153,13 +152,13 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
 
   const handleEscDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-      setIsCustomTokenPopupOpen(false);
+      onClose({ requestWasSuccessful: false });
     }
   };
 
   const handleClickOutside = (e: MouseEvent) => {
     if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-      setIsCustomTokenPopupOpen(false);
+      onClose({ requestWasSuccessful: false });
     }
   };
 
@@ -298,7 +297,7 @@ const AddTokenInfo: FC<Props> = ({ onClose, colorScheme = 'default', setIsCustom
                     [styles.successLogoTextYellowScheme]: colorScheme === 'yellow',
                   })}
                 >
-                  {getValues('tokenName') + ' token has been added'}
+                  {`${getValues('tokenName')} token has been added`}
                 </span>
               </div>
               <FormButton colorScheme={colorScheme} onPointerDown={handleCloseForm} buttonText="Okay" type="button" />

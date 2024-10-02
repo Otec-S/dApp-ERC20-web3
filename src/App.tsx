@@ -7,6 +7,7 @@ import { WagmiProvider } from 'wagmi';
 import { config } from '../wagmiConfig';
 import { Landing } from './pages/Landing';
 import SendERC20 from './pages/SendERC20/send-ERC-20';
+import { SEND_ERC20_ROUT } from './shared/constants';
 import './App.module.css';
 import './index.module.css';
 
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     element: <Landing />,
   },
   {
-    path: '/send-ERC20-tokens',
+    path: SEND_ERC20_ROUT,
     element: <SendERC20 />,
   },
 ]);
