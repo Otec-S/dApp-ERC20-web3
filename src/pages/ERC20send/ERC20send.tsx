@@ -8,7 +8,14 @@ export const ERC20send: FC = () => {
   return (
     <div style={{ background: '#FFEDBE' }}>
       <Header colorScheme="lightBackground" />
-      <CancelOffer tradeId={BigInt(15)} />
+      <CancelOffer
+        tokenFromName="MKR"
+        tokenToName="WETH"
+        amountFrom={16.56}
+        amountTo={18.0}
+        onClose={(data) => console.log(data)}
+        tradeId={BigInt(15)}
+      />
     </div>
   );
 };

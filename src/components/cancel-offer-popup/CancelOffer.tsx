@@ -15,14 +15,15 @@ const override: CSSProperties = {
 };
 
 interface Props {
+  onClose: (successfullyDeleted: boolean) => void;
   tradeId: bigint;
-  tokenFromName:string;
-  tokenToName:string;
-  amountFrom:number;
-  amountTo:number;
+  tokenFromName: string;
+  tokenToName: string;
+  amountFrom: number;
+  amountTo: number;
 }
 
-const CancelOffer: FC<Props> = ({ tradeId,tokenFromName,tokenToName,amountFrom,amountTo }) => {
+const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFrom, amountTo, onClose }) => {
   const chainId = useChainId();
   const {
     writeContract,
@@ -33,13 +34,12 @@ const CancelOffer: FC<Props> = ({ tradeId,tokenFromName,tokenToName,amountFrom,a
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log('submit');
     writeContract({
-      abi:tradeContractAbi,
+      abi: tradeContractAbi,
       address: tradeContractAddress[`${chainId}`],
-      functionName:'cancelTrade',
-      args:[tradeId]
-    })
+      functionName: 'cancelTrade',
+      args: [tradeId],
+    });
   };
 
   useEffect(() => {
@@ -49,10 +49,31 @@ const CancelOffer: FC<Props> = ({ tradeId,tokenFromName,tokenToName,amountFrom,a
   }, [writeContractError]);
 
   const successfullyDeleted = () => {
+    return <h6 className={styles.resultHeader}>Successfully deleted</h6>;
+  };
+
+  const handleClose = () => {
+    onClose(isWriteContractSuccess);
+  };
+
+  const deleteTrade = () => {
     return (
-      <div>ok</div>
-    )
-  }
+      <>
+        <div className={styles.body}>
+          <span
+            className={styles.info}
+          >{`You are about to cancel the following offer: ${amountFrom} ${tokenFromName} to ${amountTo} ${tokenToName}.`}</span>
+          <span
+            className={styles.info}
+          >{`After cancelling, ${tokenFromName} tokens will be send back to your wallet.`}</span>
+        </div>
+        <div className={styles.footer}>
+          <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
+        </div>
+        <Toaster />
+      </>
+    );
+  };
 
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
@@ -70,20 +91,12 @@ const CancelOffer: FC<Props> = ({ tradeId,tokenFromName,tokenToName,amountFrom,a
       )}
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>Cancel Offer</h5>
-        <div className={styles.closeForm}>
+        <div onPointerDown={handleClose} className={styles.closeForm}>
           <ClearIcon />
         </div>
       </div>
-      <div className={styles.body}>
-        <span className={styles.info}>{`You are about to cancel the following offer: ${amountFrom} ${tokenFromName} to ${amountTo} ${tokenToName}.`}</span>
-        <span className={styles.info}>{`After cancelling, ${tokenFromName} tokens will be send back to your wallet.`}</span>
-      </div>
-      <div className={styles.footer}>
-        <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
-      </div>
-      <Toaster />
+      {isWriteContractSuccess ? successfullyDeleted() : deleteTrade()}
     </form>
-    
   );
 };
 
