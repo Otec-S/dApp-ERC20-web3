@@ -1,9 +1,8 @@
 import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
-import Close from '@assets/icons/close.svg';
-import Search from '@assets/icons/search.svg';
+import { CloseIcon, SearchIcon } from '@assets/icons';
+import { Token, tokens } from '@shared/constants';
 
-import { Token, tokens } from '../../shared/constants';
 import styles from './TokenPopup.module.css';
 
 type Props = {
@@ -60,12 +59,12 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
         <div className={styles.searchHead}>
           <p className={styles.searchTitle}>Select a token</p>
           <div className={styles.closePopup} onClick={onCLose}>
-            <Close />
+            <CloseIcon />
           </div>
         </div>
         <div className={styles.searchRow}>
           <div className={styles.searchIcon}>
-            <Search />
+            <SearchIcon />
           </div>
           <input
             value={searchText}
@@ -74,7 +73,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
             onChange={handleChangeInput}
           />
           <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
-            <Close />
+            <CloseIcon />
           </div>
         </div>
         <div className={styles.tokensRow}>

@@ -1,16 +1,18 @@
 import { ReactElement } from 'react';
 import { Address } from 'viem';
 
-import ARBIcon from '@assets/icons/arb.svg';
-import DAIIcon from '@assets/icons/dai.svg';
-import DOGEIcon from '@assets/icons/doge.svg';
-import LINKIcon from '@assets/icons/link.svg';
-import OPIcon from '@assets/icons/op.svg';
-import PEPEIcon from '@assets/icons/pepe.svg';
-import TRXIcon from '@assets/icons/trx.svg';
-import USDCIcon from '@assets/icons/usdc.svg';
-import USDTIcon from '@assets/icons/usdt.svg';
-import WBTSIcon from '@assets/icons/wbtc.svg';
+import {
+  ARBIcon,
+  DAIIcon,
+  DOGEIcon,
+  LINKIcon,
+  OPIcon,
+  PEPEIcon,
+  TRXIcon,
+  USDCIcon,
+  USDTIcon,
+  WBTCIcon,
+} from '@assets/icons';
 
 export interface Token {
   id: number;
@@ -20,22 +22,6 @@ export interface Token {
   icon: ReactElement;
   decimals: number;
 }
-
-export interface TokenData {
-  requestWasSuccessful: boolean;
-  tokenAddress?: Address;
-  tokenName?: string;
-  tokenDecimals?: number;
-  tokenBalance?: bigint;
-}
-
-export const ROUTES = {
-  HOME: '/',
-  SEND_ERC20: '/send-ERC20-tokens',
-};
-
-export const SEPOLIA_URL = 'http://sepolia.etherscan.io';
-export const POLYGON_AMOY_URL = 'http://amoy.polygonscan.com';
 
 export const tokens: Token[] = [
   {
@@ -115,7 +101,7 @@ export const tokens: Token[] = [
     name: 'WBTC',
     sepoliaAddress: '0x8805B377F0a28846198e81120179C4Ca5c6D5318',
     polygonAddress: '0x36Ea22735269Cb7AA2A931Dd871a73c0a9124f2B',
-    icon: <WBTSIcon />,
+    icon: <WBTCIcon />,
     decimals: 8,
   },
 ];

@@ -10,7 +10,7 @@ export const blockData = [
     text: 'Our product allows you to transfer any amount of tokens directly, without intermediaries or extra costs. Simply select the recipient, specify the amount, and your transaction is instantly completed. Convenient and secure asset management without limitations!',
     link: ROUTES.SEND_ERC20,
     classname: classes.sendBlock,
-    imageSrc: sendErc.default,
+    imageSrc: sendErc,
   },
   {
     title: 'Trade ERC-20',
@@ -18,7 +18,7 @@ export const blockData = [
     text: 'Create and accept token exchange offers with other users. Specify which tokens you want to give and receive, and choose the recipient. Tokens are stored in a smart contract until the transaction is complete. Trade tokens with minimal fees and full transparency!',
     link: ROUTES.HOME,
     classname: classes.tradeBlock,
-    imageSrc: tradeErc.default,
+    imageSrc: tradeErc,
   },
   {
     title: 'NFT Collection',
@@ -26,7 +26,7 @@ export const blockData = [
     text: 'Each token is a unique piece of digital art and your access to exclusive company products and services. Join our community of collectors and gain privileges available only to our NFT holders. Invest in the future and enjoy exclusive benefits!',
     link: ROUTES.HOME,
     classname: classes.collectionBlock,
-    imageSrc: collection.default,
+    imageSrc: collection,
   },
 ];
 

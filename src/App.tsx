@@ -4,8 +4,11 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
+import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
+import { Landing } from '@pages/Landing';
+import { routes } from '@shared/constants';
+
 import { config } from '../wagmiConfig';
-import { Landing } from './pages/Landing';
 import SendERC20 from './pages/SendERC20/send-ERC-20';
 import { ROUTES } from './shared/constants';
 import './App.module.css';
@@ -27,6 +30,19 @@ const router = createBrowserRouter([
   {
     path: ROUTES.SEND_ERC20,
     element: <SendERC20 />,
+  },
+  {
+    path: routes.erc20trade,
+    element: <ERC20trade />,
+    children: [
+      { path: routes.createOffer, element: <ERC20trade /> },
+      { path: routes.myOffers, element: <ERC20trade /> },
+      { path: routes.history, element: <ERC20trade /> },
+    ],
+  },
+  {
+    path: routes.nftCollection,
+    element: <Landing />,
   },
 ]);
 

@@ -1,24 +1,22 @@
 import { FC } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { landing, tokenBlockImage } from '@src/assets/images';
-import Header from '@src/components/header/Header';
-import { TokensBlock } from '@src/components/TokensBlock/TokensBlock';
-import { ROUTES } from '@src/shared/constants';
+import { landing, tokenBlockImage } from '@assets/images';
+import Header from '@components/header/Header';
+import { TokensBlock } from '@components/TokensBlock/TokensBlock';
+import { ROUTES } from '@shared/constants';
 
 import { blockData, statisticData } from './Landing.constants';
 import classes from './Landing.module.css';
 
 export const Landing: FC = () => {
-  const navigate = useNavigate();
-
   return (
     <div className={classes.container}>
       <div className={classes.header}>
         <Header />
       </div>
       <div className={classes.imageSection}>
-        <img src={landing.default} className={classes.mainImage} alt={'main image'} />
+        <img src={landing} className={classes.mainImage} alt={'main image'} />
         <div className={classes.title}>
           <h1 className={classes.titleText}>Web3 platform for everything in crypto</h1>
         </div>
@@ -34,9 +32,9 @@ export const Landing: FC = () => {
               <h3 className={classes.blockTitle}>{item.title}</h3>
               <p className={classes.text}>{item.description}</p>
               <p className={classes.text}>{item.text}</p>
-              <button className={classes.blockButton} onClick={() => navigate(item.link)}>
+              <Link to={routes.erc20send} className={classes.blockButton}>
                 Go to app
-              </button>
+              </Link>
             </div>
             <div className={classes.blockImgWrap}>
               <Link to={item.link}>
@@ -65,7 +63,7 @@ export const Landing: FC = () => {
             <div className={classes.tokenDescription}>Or any other ERC-20 token of yours</div>
           </div>
           <div className={classes.tokenImageWrap}>
-            <img src={tokenBlockImage.default} className={classes.tokenBlockImage} alt={'Supported ERC-20 tokens'} />
+            <img src={tokenBlockImage} className={classes.tokenBlockImage} alt={'Supported ERC-20 tokens'} />
           </div>
         </div>
       </div>

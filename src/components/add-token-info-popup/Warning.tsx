@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import cn from 'classnames';
 
-import WarningIcon from '@assets/icons/warning_icon.svg';
+import { WarningIcon } from '@assets/icons';
 
 import styles from './Warning.module.css';
 

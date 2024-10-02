@@ -1,16 +1,14 @@
 import { FC } from 'react';
-import { polygonAmoy, sepolia } from 'viem/chains';
-import { useChainId, useConnections } from 'wagmi';
+import { useConnections } from 'wagmi';
 
-import { TokenRow } from '../TokenRow/TokenRow';
-import { getTokens } from './TokensBlock.utils';
+import { useChainDependentValues } from '@shared/hooks';
+
+import { TokenRow } from './TokenRow/TokenRow';
 import classes from './TokensBlock.module.css';
 
 export const TokensBlock: FC = () => {
   const connections = useConnections();
-  const chainId = useChainId();
-  const isExistChain = chainId === sepolia.id || chainId === polygonAmoy.id;
-  const tokens = isExistChain ? getTokens(chainId) : null;
+  const { tokens } = useChainDependentValues();
 
   return (
     <div className={classes.tokenContainer}>
@@ -20,7 +18,7 @@ export const TokensBlock: FC = () => {
             icon={token.icon}
             address={token.address}
             key={token.address}
-            symbol={token.symbol}
+            symbol={token.name}
             decimals={token.decimals}
           />
         ))

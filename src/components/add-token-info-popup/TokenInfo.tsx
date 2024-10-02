@@ -2,9 +2,9 @@ import { FC } from 'react';
 import cn from 'classnames';
 import { Address, formatUnits } from 'viem';
 
-import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
+import { NotFoundIcon } from '@assets/icons';
+import { tokens } from '@shared/constants/tokens';
 
-import { tokens } from '../../shared/constants';
 import styles from './TokenInfo.module.css';
 
 interface Props {
@@ -29,7 +29,7 @@ export const TokenInfo: FC<Props> = ({
   return (
     <div className={styles.tokenImgWrapper}>
       {tokens.find((t) => t.polygonAddress === tokenAddress || t.sepoliaAddress === tokenAddress)?.icon ?? (
-        <NotFoundTokenLogo />
+        <NotFoundIcon />
       )}
       <div className={cn(styles.imgTextWrapper, { [styles.imgTextWrapperYellowScheme]: colorScheme === 'yellow' })}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>

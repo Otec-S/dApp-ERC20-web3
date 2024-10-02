@@ -5,7 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
 import { logo, logoLightScheme } from '@assets/images';
-import { ROUTES } from '@src/shared/constants';
+import { ROUTES } from '@shared/constants';
 
 import styles from './Header.module.css';
 
@@ -31,13 +31,11 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
           />
         </button>
       </div>
-      <Link to={ROUTES.HOME}>
-        <img
-          className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
-          src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
-          alt="Project logo"
-        />
-      </Link>
+      <img
+        className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
+        src={colorScheme === 'lightBackground' ? logoLightScheme : logo}
+        alt="Project logo"
+      />
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink

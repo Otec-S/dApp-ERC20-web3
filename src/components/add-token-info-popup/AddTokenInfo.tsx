@@ -6,15 +6,14 @@ import cn from 'classnames';
 import { Address, isAddress } from 'viem';
 import { useAccount, useReadContracts } from 'wagmi';
 
-import ClearIcon from '@assets/icons/clear_close_icon.svg';
-import SuccessIcon from '@assets/icons/success.svg';
-import { TokenData } from '@src/shared/constants';
-import { erc20abiExtended } from '@src/shared/erc20abi-extended';
+import { ClearCloseIcon, SuccessIcon } from '@assets/icons';
+import { TokenData } from '@shared/constants';
+import { erc20abiExtended } from '@shared/erc20abi-extended';
 
-import FormButton from '../form-button/FormButton';
 import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
+import FormButton from '@components/form-button/FormButton';
 
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 
@@ -195,7 +194,7 @@ const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
               className={cn(styles.closeForm, { [styles.closeFormYellowScheme]: colorScheme === 'yellow' })}
               onPointerDown={handleCloseForm}
             >
-              <ClearIcon />
+              <ClearCloseIcon />
             </button>
           </div>
         )}
