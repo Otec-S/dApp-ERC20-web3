@@ -48,12 +48,12 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
     }
   }, [writeContractError]);
 
-  const successfullyDeleted = () => {
-    return <h6 className={styles.resultHeader}>Successfully deleted</h6>;
-  };
-
   const handleClose = () => {
     onClose(isWriteContractSuccess);
+  };
+
+  const successfullyDeleted = () => {
+    return <h6 className={styles.resultHeader}>Successfully deleted</h6>;
   };
 
   const deleteTrade = () => {
