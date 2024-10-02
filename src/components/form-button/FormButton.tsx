@@ -4,8 +4,8 @@ import cn from 'classnames';
 import styles from './FormButton.module.css';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  isButtonActive?: boolean;
   buttonText: string;
+  isButtonActive?: boolean;
   colorScheme?: 'default' | 'yellow';
 }
 
