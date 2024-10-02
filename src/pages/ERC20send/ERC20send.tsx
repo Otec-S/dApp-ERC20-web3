@@ -14,7 +14,7 @@ export const ERC20send: FC = () => {
         amountFrom={16.56}
         amountTo={18.0}
         onClose={(data) => console.log(data)}
-        tradeId={BigInt(15)}
+        tradeId={BigInt(13)}
       />
     </div>
   );

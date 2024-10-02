@@ -74,7 +74,7 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
       </>
     );
   };
-
+  
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
       {isWriteApprovePending && (
