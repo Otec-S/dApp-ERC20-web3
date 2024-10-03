@@ -1,5 +1,4 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import BeatLoader from 'react-spinners/BeatLoader';
@@ -17,11 +16,11 @@ import getTokenIcon from '@src/utils/getTokenIcon';
 
 import AddTokenInfo, { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
-import Snackbar from '../snackbar/Snackbar';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
 import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { NewOfferFormStages } from './NewOfferFormStages';
+import NewOfferTradeCreated from './NewOfferTradeCreated';
 import styles from './NewOfferForm.module.css';
 
 const override: CSSProperties = {
@@ -54,7 +53,6 @@ const NewOfferForm: FC = () => {
   const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
   const [showCustomTokenPopupFrom, setShowCustomTokenPopupFrom] = useState(false);
   const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
-  const [showCopyOfClipboard, setShowCopyOfClipboard] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
@@ -70,7 +68,7 @@ const NewOfferForm: FC = () => {
     mode: 'onChange',
   });
 
-  const { isConnected, chainId, address: walletAddress, chain } = useAccount();
+  const { isConnected, chainId, address: walletAddress } = useAccount();
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
@@ -186,10 +184,6 @@ const NewOfferForm: FC = () => {
         setShowCustomTokenPopupTo(true);
         break;
     }
-  };
-
-  const handleSnackbarClose = () => {
-    setShowCopyOfClipboard(false);
   };
 
   const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
@@ -367,9 +361,7 @@ const NewOfferForm: FC = () => {
                     placeholder="0"
                     {...register(
                       'to',
-                      isWriteContractSuccess
-                        ? { required: true, validate: (value) => value > 0 }
-                        : undefined,
+                      isWriteContractSuccess ? { required: true, validate: (value) => value > 0 } : undefined,
                     )}
                   />
                   {errors.to?.type === 'required' && (
@@ -494,20 +486,7 @@ const NewOfferForm: FC = () => {
           </form>
         </div>
       )}
-      {formStage === 'tradeCreated' && (
-        <div className={styles.clipboard}>
-          <h5 className={styles.clipboardHeader}>Share link</h5>
-          <CopyToClipboard
-            onCopy={() => setShowCopyOfClipboard(true)}
-            text={`${chain?.blockExplorers?.default.url}/tx/${transactionHash}`}
-          >
-            <div className={styles.clipboardLink}>Copy link</div>
-          </CopyToClipboard>
-          {showCopyOfClipboard && (
-            <Snackbar type="success" onClose={handleSnackbarClose} description="Link copied successfully" />
-          )}
-        </div>
-      )}
+      {formStage === 'tradeCreated' && <NewOfferTradeCreated transactionHash={transactionHash}/>}
     </section>
   );
 };
