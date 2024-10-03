@@ -14,7 +14,6 @@ import WarningIcon from '@assets/icons/warning_icon.svg';
 import { ITokens } from '@src/shared/constants';
 import { tradeContractAbi, tradeContractAddress } from '@src/shared/tradeContract';
 import getTokenIcon from '@src/utils/getTokenIcon';
-import isNumber from '@src/utils/isNumber';
 
 import AddTokenInfo, { TokenData } from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
@@ -109,12 +108,12 @@ const NewOfferForm: FC = () => {
   });
 
   const fee = contractsConstants && formatUnits(contractsConstants[0], 2);
-  const tokenAmountIsTaken = fee && getValues('from') && isNumber(getValues('from')) && getValues('from') * Number(fee);
+  const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   let serviceFee = fee && `Service fee ${fee}% `;
   serviceFee = tokenFrom && tokenAmountIsTaken ? `${serviceFee}(${tokenAmountIsTaken} ${tokenFrom.name}).` : serviceFee;
   serviceFee =
-    tokenFrom && getValues('from') && isNumber(getValues('from'))
+    tokenFrom && getValues('from')
       ? `${serviceFee}Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`
       : `${serviceFee}`;
 
@@ -367,7 +366,7 @@ const NewOfferForm: FC = () => {
                     {...register(
                       'to',
                       isWriteContractSuccess
-                        ? { required: true, validate: (value) => isNumber(value) && value > 0 }
+                        ? { required: true, validate: (value) => value > 0 }
                         : undefined,
                     )}
                   />
