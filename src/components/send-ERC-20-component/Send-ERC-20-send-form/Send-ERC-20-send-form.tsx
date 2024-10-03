@@ -264,7 +264,6 @@ const SendERC20SendForm: FC<Props> = ({
                 ) : errorBalance ? (
                   <span>Error getting wallet balance</span>
                 ) : (
-                  // TODO:
                   <span>Balance: {balanceWithDecimals || '0'}</span>
                 )}
               </div>
