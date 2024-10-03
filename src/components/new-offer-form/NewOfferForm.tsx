@@ -11,7 +11,8 @@ import { useAccount, useReadContract, useReadContracts, useWriteContract } from 
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { ITokens, tradeContractAbi, tradeContractAddress } from '@src/shared/constants';
+import { ITokens } from '@src/shared/constants';
+import { tradeContractAbi, tradeContractAddress } from '@src/shared/tradeContract';
 import getTokenIcon from '@src/utils/getTokenIcon';
 import isNumber from '@src/utils/isNumber';
 
