@@ -166,19 +166,16 @@ const SendERC20SendForm: FC<Props> = ({
   };
 
   useEffect(() => {
-    let tokenAddress: Address = '0x';
-    switch (chainId) {
-      case sepolia.id:
-        tokenAddress = tokenSelected.sepoliaAddress;
-        break;
-      case polygonAmoy.id:
-        tokenAddress = tokenSelected.polygonAddress;
-        break;
-      default:
-        tokenAddress = '0x';
-        break;
-    }
-    setCurrentTokenAddress(tokenAddress);
+    setCurrentTokenAddress(() => {
+      switch (chainId) {
+        case sepolia.id:
+          return tokenSelected.sepoliaAddress;
+        case polygonAmoy.id:
+          return tokenSelected.polygonAddress;
+        default:
+          return '0x';
+      }
+    });
   }, [chainId, tokenSelected]);
 
   useEffect(() => {
