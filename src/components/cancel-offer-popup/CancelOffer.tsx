@@ -52,29 +52,6 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
     onClose(isWriteContractSuccess);
   };
 
-  const successfullyDeleted = () => {
-    return <h6 className={styles.resultHeader}>Successfully deleted</h6>;
-  };
-
-  const deleteTrade = () => {
-    return (
-      <>
-        <div className={styles.body}>
-          <span
-            className={styles.info}
-          >{`You are about to cancel the following offer: ${amountFrom} ${tokenFromName} to ${amountTo} ${tokenToName}.`}</span>
-          <span
-            className={styles.info}
-          >{`After cancelling, ${tokenFromName} tokens will be send back to your wallet.`}</span>
-        </div>
-        <div className={styles.footer}>
-          <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
-        </div>
-        <Toaster />
-      </>
-    );
-  };
-  
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
       {isWriteApprovePending && (
@@ -95,7 +72,24 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
           <ClearIcon />
         </div>
       </div>
-      {isWriteContractSuccess ? successfullyDeleted() : deleteTrade()}
+      {isWriteContractSuccess ? (
+        <h6 className={styles.resultHeader}>Successfully deleted</h6>
+      ) : (
+        <>
+          <div className={styles.body}>
+            <span
+              className={styles.info}
+            >{`You are about to cancel the following offer: ${amountFrom} ${tokenFromName} to ${amountTo} ${tokenToName}.`}</span>
+            <span
+              className={styles.info}
+            >{`After cancelling, ${tokenFromName} tokens will be send back to your wallet.`}</span>
+          </div>
+          <div className={styles.footer}>
+            <FormButton buttonText="Cancel offer" colorScheme="yellow" type="submit" />
+          </div>
+          <Toaster />
+        </>
+      )}
     </form>
   );
 };
