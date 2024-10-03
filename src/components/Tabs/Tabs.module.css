@@ -10,15 +10,22 @@
 
 .tabLink {
   text-decoration: none;
-}
-
-.tab {
   height: 36px;
   padding: 6px 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
+
+  &:hover {
+    border-radius: 100px;
+    background: #fffbf2;
+  }
+}
+
+.tabLinkActive {
+  border-radius: 100px;
+  background: #ffb800;
 }
 
 .tabName {

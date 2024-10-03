@@ -5,6 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
 import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
+import { CreateOffer } from '@pages/ERC20trade/tabs/CreateOffer';
+import { History } from '@pages/ERC20trade/tabs/History';
+import { MyOffers } from '@pages/ERC20trade/tabs/MyOffers';
 import { Landing } from '@pages/Landing';
 import { routes } from '@shared/constants';
 
@@ -35,9 +38,9 @@ const router = createBrowserRouter([
     path: routes.erc20trade,
     element: <ERC20trade />,
     children: [
-      { path: routes.createOffer, element: <ERC20trade /> },
-      { path: routes.myOffers, element: <ERC20trade /> },
-      { path: routes.history, element: <ERC20trade /> },
+      { path: routes.createOffer, element: <CreateOffer /> },
+      { path: routes.myOffers, element: <MyOffers /> },
+      { path: routes.history, element: <History /> },
     ],
   },
   {

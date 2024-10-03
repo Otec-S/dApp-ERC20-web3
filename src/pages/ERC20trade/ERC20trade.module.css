@@ -1,0 +1,44 @@
+@value fonts: "@assets/fonts.css";
+@value montserrat, openSans from fonts;
+
+.pageWrap {
+  background-color: #ffedbe;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  min-width: 100vw;
+  padding: 48px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 148px);
+}
+
+.content {
+  min-height: calc(100vh - 244px);
+  background-color: #fffbf2;
+  border-radius: 16px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.button {
+  height: 36px;
+  padding: 16px;
+  border-radius: 100px;
+  background: #ffb800;
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+}
