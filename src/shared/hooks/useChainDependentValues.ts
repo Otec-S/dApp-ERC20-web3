@@ -1,31 +1,34 @@
+import { Address } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useChainId } from 'wagmi';
 
-import { polygonContractAddress, sepoliaContractAddress, tokens } from '@shared/constants';
+import { polygonContractAddress, sepoliaContractAddress, Token, tokens } from '../constants';
 
-export const useChainDependentValues = () => {
+interface FormattedToken extends Omit<Token, 'polygonAddress' | 'sepoliaAddress'> {
+  address: Address;
+}
+
+export interface ChainDependentValues {
+  contractAddress: Address;
+  tokens: FormattedToken[];
+  website: string;
+}
+
+export const useChainDependentValues = (): ChainDependentValues => {
   const chainId = useChainId();
 
   switch (chainId) {
     case sepolia.id: {
       return {
         contractAddress: sepoliaContractAddress,
-        tokens: tokens.map((item) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { polygonAddress, sepoliaAddress, ...token } = { ...item, address: item.sepoliaAddress };
-          return token;
-        }),
-        website: 'sepolia.etherscan.io/',
+        tokens: tokens.map((item) => ({ ...item, address: item.sepoliaAddress })),
+        website: 'sepolia.etherscan.io',
       };
     }
     case polygonAmoy.id: {
       return {
         contractAddress: polygonContractAddress,
-        tokens: tokens.map((item) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { polygonAddress, sepoliaAddress, ...token } = { ...item, address: item.polygonAddress };
-          return token;
-        }),
+        tokens: tokens.map((item) => ({ ...item, address: item.polygonAddress })),
         website: 'amoy.polygonscan.com',
       };
     }
