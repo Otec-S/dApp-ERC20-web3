@@ -1,9 +1,9 @@
 export enum StepStatus {
   DISABLED = 'disabled',
-  DARK = 'dark',
-  LIGHT = 'light',
+  CURRENT = 'current',
   COMPLETED = 'completed',
 }
+
 export interface Step {
   value: number;
   status: StepStatus;

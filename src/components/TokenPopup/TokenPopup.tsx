@@ -16,10 +16,7 @@ type Props = {
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
   const [searchText, setSearchText] = useState('');
-  let tokenArr = [];
-  if (isAddress(searchText)) {
-    tokenArr = tokens.filter((item) => item.sepoliaAddress === searchText || item.polygonAddress === searchText);
-  } else tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
+  const tokenArr = isAddress(searchText) ? tokens.filter((item) => item.sepoliaAddress === searchText || item.polygonAddress === searchText) : tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
   const firstTokensGroup = tokenArr.splice(0, 7);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +24,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
   };
 
   const handleSelectToken = (address: Address) => () => {
-    const token = tokens.find((item) => item.sepoliaAddress === address);
+    const token = tokens.find((item) => item.sepoliaAddress === address || item.polygonAddress === address);
     if (token) {
       onSelect(token);
       onCLose();

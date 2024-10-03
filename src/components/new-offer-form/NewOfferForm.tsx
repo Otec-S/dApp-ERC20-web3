@@ -6,7 +6,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
-import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
@@ -29,19 +29,19 @@ const override: CSSProperties = {
 };
 
 interface TokenDataNewOfferForm {
-  address: Address;
   decimals: number;
   name: string;
+  address: Address;
 }
 
 interface FormData {
   from: number;
   to: number;
+  rate: number;
+  infiniteApprove: boolean;
   tokenFrom: Address;
   tokenTo: Address;
-  rate: number;
   optionalTaker: Address;
-  infiniteApprove: boolean;
 }
 
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
@@ -80,18 +80,11 @@ const NewOfferForm: FC = () => {
     setTokenTo(undefined);
   }, [chainId, reset]);
 
-  const { data: balanceData, isLoading: isLoadingBalance } = useReadContract({
+  const { data: contractsData, isLoading: isLoadingContractData } = useReadContracts({
+    allowFailure: false,
     query: {
       refetchInterval: THIRTY_MINUTES,
     },
-    abi: erc20Abi,
-    functionName: 'balanceOf',
-    address: tokenFrom && tokenFrom.address,
-    args: walletAddress && [walletAddress],
-  });
-
-  const { data: contractsConstants, isLoading: isLoadingContractData } = useReadContracts({
-    allowFailure: false,
     contracts: [
       {
         address: tradeContractAddress[`${chainId}`],
@@ -104,10 +97,16 @@ const NewOfferForm: FC = () => {
         abi: erc20Abi,
         args: walletAddress && [walletAddress, tradeContractAddress[`${chainId}`]],
       },
+      {
+        address: tokenFrom && tokenFrom.address,
+        functionName: 'balanceOf',
+        abi: erc20Abi,
+        args: walletAddress && [walletAddress],
+      },
     ],
   });
-
-  const fee = contractsConstants && formatUnits(contractsConstants[0], 2);
+console.log(contractsData && contractsData[0])
+  const fee = contractsData!==undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) :'';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   let serviceFee = fee && `Service fee ${fee}% `;
@@ -132,7 +131,7 @@ const NewOfferForm: FC = () => {
         ? maxUint256
         : parseUnits(getValues('from').toString(), tokenFrom.decimals);
 
-      const tokensAllowedToSpend = contractsConstants && contractsConstants[1];
+      const tokensAllowedToSpend = contractsData && contractsData[1];
       if (tokensAllowedToSpend !== undefined && tokensToSpend > tokensAllowedToSpend) {
         writeContract({
           abi: erc20Abi,
@@ -236,15 +235,15 @@ const NewOfferForm: FC = () => {
   };
 
   const handleSetTokenMaxValue = () => {
-    setValue('from', Number(balanceData && tokenFrom && formatUnits(balanceData, tokenFrom?.decimals)));
+    setValue('from', Number(contractsData && tokenFrom && formatUnits(contractsData[2], tokenFrom?.decimals)));
   };
 
   const rate = watch('from') > 0 ? watch('to') / watch('from') : 0;
   setValue('rate', rate);
-  const balanceOfTokenFrom = tokenFrom && balanceData && parseFloat(formatUnits(balanceData, tokenFrom?.decimals));
+  const balanceOfTokenFrom = tokenFrom && contractsData && parseFloat(formatUnits(contractsData[2], tokenFrom?.decimals));
 
   const showApproveButtonDisabled = tokenFrom === undefined;
-  const isDataFromNetworkLoading = isLoadingBalance || isWriteApprovePending || isLoadingContractData;
+  const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData;
 
   return (
     <section className={cn(styles.createOffer)}>
@@ -319,7 +318,7 @@ const NewOfferForm: FC = () => {
                       {' Unsufficient balance'}
                     </div>
                   )}
-                  {!errors.from && balanceData !== undefined && (
+                  {!errors.from && contractsData && (
                     <div className={styles.tokenBalanceWrapper}>
                       <span className={styles.tokenBalance}>{`Balance: ${balanceOfTokenFrom}`}</span>
                       <button
@@ -407,16 +406,10 @@ const NewOfferForm: FC = () => {
                 </label>
               </div>
               <div className={styles.additionalInputsWrapper}>
-                <label className={styles.labelRate}>
-                  <input
-                    className={styles.inputRate}
-                    type="text"
-                    readOnly={true}
-                    placeholder="0"
-                    {...register('rate')}
-                  />
+                <div className={styles.labelRate}>
+                  <span className={styles.inputRate}>{rate}</span>
                   <span className={styles.labelText}>Rate</span>
-                </label>
+                </div>
                 <label className={styles.labelReceiver}>
                   <input
                     className={styles.inputReceiver}

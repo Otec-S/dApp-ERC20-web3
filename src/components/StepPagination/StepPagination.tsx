@@ -16,9 +16,10 @@ export const StepPagination: FC<Props> = ({ steps }) => {
       {steps.map((step) => (
         <div
           className={cn(styles.step, {
-            [styles.stepLight]: step.status == StepStatus.LIGHT,
+            [styles.stepLight]: step.status === StepStatus.CURRENT && step.value % 2 !== 0,
             [styles.stepDisable]: step.status === StepStatus.DISABLED,
-            [styles.stepDark]: step.status === StepStatus.DARK || step.status === StepStatus.COMPLETED,
+            [styles.stepDark]:
+              (step.status === StepStatus.CURRENT && step.value % 2 === 0) || step.status === StepStatus.COMPLETED,
           })}
           key={step.value}
         >

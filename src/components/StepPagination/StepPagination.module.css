@@ -13,6 +13,7 @@
   border-radius: 100px;
   position: relative;
   box-sizing: border-box;
+  padding-top: 2px;
 
   &:not(:last-child):after {
     content: '';
@@ -42,7 +43,7 @@
 
 .stepText {
   text-align: center;
-  font-family: 'OpenSans', sans-serif;
+  font-family: openSans;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
