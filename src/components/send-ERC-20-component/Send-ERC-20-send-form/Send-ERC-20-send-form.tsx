@@ -26,6 +26,11 @@ interface Props {
   setTxHash: (value: Address) => void;
 }
 
+const override: CSSProperties = {
+  display: 'block',
+  margin: '100px auto',
+};
+
 const SendERC20SendForm: FC<Props> = ({
   inputValue,
   tokenData,
@@ -41,16 +46,8 @@ const SendERC20SendForm: FC<Props> = ({
   const [inputValueError, setInputValueError] = useState<string | null>(null);
   const [inputRecipientError, setInputRecipientError] = useState<string | null>(null);
   const [isRegularTokenPopupOpen, setIsRegularTokenPopupOpen] = useState(false);
-  const [decimals, setDecimals] = useState<number>(18);
-
-  const override: CSSProperties = {
-    display: 'block',
-    margin: '100px auto',
-  };
-
   const { data: hash, error: isWriteError, writeContract } = useWriteContract();
   const { address } = useAccount();
-
   const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
     hash,
   });
@@ -91,7 +88,7 @@ const SendERC20SendForm: FC<Props> = ({
     },
   );
 
-  const balanceWithDecimals = balanceData && formatUnits(BigInt(balanceData), decimals);
+  const balanceWithDecimals = balanceData && formatUnits(BigInt(balanceData), tokenSelected.decimals);
 
   const handleNumberOfTokensInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -132,7 +129,6 @@ const SendERC20SendForm: FC<Props> = ({
     setTokenSelected(tokenSelected);
     setIsRegularTokenPopupOpen(false);
     setTokenName(tokenSelected.name);
-    setDecimals(tokenSelected.decimals);
   };
 
   const handleCustomTokenButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -153,7 +149,7 @@ const SendERC20SendForm: FC<Props> = ({
 
     if (typeof recipientValue === 'string') {
       const recipient = getAddress(recipientValue);
-      const parsedAmount = parseUnits(inputValue, decimals);
+      const parsedAmount = parseUnits(inputValue, tokenSelected.decimals);
       writeContract({
         address: currentTokenAddress,
         abi: erc20abiExtended,
