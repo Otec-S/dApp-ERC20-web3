@@ -47,6 +47,8 @@ interface FormData {
 
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
 
+const THIRTY_MINUTES = 60 * 10 * 1000;
+
 const NewOfferForm: FC = () => {
   const [showDefaultTokenPopupFrom, setShowDefaultTokenPopupFrom] = useState(false);
   const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
@@ -82,7 +84,7 @@ const NewOfferForm: FC = () => {
 
   const { data: balanceData, isLoading: isLoadingBalance } = useReadContract({
     query: {
-      refetchInterval: 60 * 10 * 1000,
+      refetchInterval: THIRTY_MINUTES,
     },
     abi: erc20Abi,
     functionName: 'balanceOf',
