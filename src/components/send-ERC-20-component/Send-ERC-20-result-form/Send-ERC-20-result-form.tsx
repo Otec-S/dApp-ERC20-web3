@@ -26,14 +26,14 @@ const SendERC20ResultForm: FC<Props> = ({ isTxSuccess, numberOfTokens, tokenName
     onResultFormSubmitted();
   };
 
-  const handleViewTransactionIconClick = () => {
+  const generateTransactionURL = (): string => {
     const baseURL = getChainURL(chainId);
 
     if (baseURL) {
-      const url = `${baseURL}/tx/${txHash}`;
-      window.open(url, '_blank', 'noopener,noreferrer');
+      return `${baseURL}/tx/${txHash}`;
     } else {
       console.error('Unsupported chain ID or URL not configured for this chain');
+      return '#';
     }
   };
 
@@ -44,9 +44,14 @@ const SendERC20ResultForm: FC<Props> = ({ isTxSuccess, numberOfTokens, tokenName
         <p className={style.transactionValue}>
           {numberOfTokens} {tokenName}
         </p>
-        <button className={style.viewTransactionIcon} onClick={handleViewTransactionIconClick} type="button">
+        <a
+          className={style.viewTransactionIcon}
+          href={generateTransactionURL()}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <ViewTransactionIcon />
-        </button>
+        </a>
       </div>
       <FormButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
     </form>
