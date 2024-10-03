@@ -21,6 +21,18 @@ export interface Token {
   decimals: number;
 }
 
+export interface TokenData {
+  requestWasSuccessful: boolean;
+  tokenAddress?: Address;
+  tokenName?: string;
+  tokenDecimals?: number;
+  tokenBalance?: bigint;
+}
+
+export const SEND_ERC20_ROUT = '/send-ERC20-tokens';
+export const SEPOLIA_URL = 'http://sepolia.etherscan.io';
+export const POLYGON_AMOY_URL = 'http://amoy.polygonscan.com';
+
 export const tokens: Token[] = [
   {
     id: 1,
@@ -103,13 +115,3 @@ export const tokens: Token[] = [
     decimals: 8,
   },
 ];
-
-export interface TokenData {
-  requestWasSuccessful: boolean;
-  tokenAddress?: Address;
-  tokenName?: string;
-  tokenDecimals?: number;
-  tokenBalance?: bigint;
-}
-
-export const SEND_ERC20_ROUT = '/send-ERC20-tokens';

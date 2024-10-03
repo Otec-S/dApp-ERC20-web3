@@ -265,7 +265,7 @@ const SendERC20SendForm: FC<Props> = ({
                   <span>Error getting wallet balance</span>
                 ) : (
                   // TODO:
-                  <span>Balance: {balanceWithDecimals || 'Not defined'}</span>
+                  <span>Balance: {balanceWithDecimals || '0'}</span>
                 )}
               </div>
               <button className={style.balanceMax} type="button" onClick={handleBalanceMaxClick}>

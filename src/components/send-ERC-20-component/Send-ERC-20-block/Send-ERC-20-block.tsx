@@ -25,6 +25,13 @@ const SendERC20Block: FC = () => {
     }
   };
 
+  const handleResultFormSubmitted = () => {
+    setIsTxFormSubmitted(false);
+    setInputValue('');
+    setTokenName('ARB');
+    setTokenData(null);
+  };
+
   return (
     <>
       <section className={style.block}>
@@ -38,13 +45,10 @@ const SendERC20Block: FC = () => {
         {isTxFormSubmitted ? (
           <SendERC20ResultForm
             isTxSuccess={isTxSuccess}
-            setIsTxFormSubmitted={setIsTxFormSubmitted}
             numberOfTokens={inputValue}
-            setInputValue={setInputValue}
             tokenName={tokenName}
-            setTokenName={setTokenName}
-            setTokenData={setTokenData}
             txHash={txHash}
+            onResultFormSubmitted={handleResultFormSubmitted}
           />
         ) : (
           <SendERC20SendForm
