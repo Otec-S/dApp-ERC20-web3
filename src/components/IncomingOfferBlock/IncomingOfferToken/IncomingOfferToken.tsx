@@ -7,9 +7,9 @@ import { useChainDependentValues } from '@shared/hooks';
 import styles from './IncomingOfferToken.module.css';
 
 interface Props {
+  text: string;
   address?: Address;
   amount?: number;
-  text: string;
   symbol?: string;
 }
 
