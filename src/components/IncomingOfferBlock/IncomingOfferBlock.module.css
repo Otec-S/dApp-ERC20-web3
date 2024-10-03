@@ -58,3 +58,164 @@
   font-size: 16px;
   font-family: openSans;
 }
+
+.infoBlock {
+  min-height: 240px;
+  height: fit-content;
+  width: 100%;
+  padding: 32px 24px;
+  box-sizing: border-box;
+  border-top: 2px solid #f5f5f5;
+  border-bottom: 2px solid #f5f5f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+}
+
+.tokenRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.rateBox {
+  min-width: 68px;
+  width: fit-content;
+  height: 72px;
+  border-radius: 8px;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoDescription {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  opacity: 0.5;
+}
+
+.infoText {
+  color: #000;
+  font-family: openSans;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.infoBox {
+  display: flex;
+  gap: 8px;
+}
+
+.arrowBox {
+  height: 48px;
+  width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.warningBox {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ff007a;
+  padding: 5px 8px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.warningIcon {
+  padding: 12px;
+}
+
+.warningTextCol {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.warningText {
+  color: #ff007a;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.warningAddress {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.approveBlock {
+  width: 100%;
+  padding: 16px 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.approveText {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.buttonBlock {
+  width: 100%;
+  padding: 16px 24px;
+  box-sizing: border-box;
+}
+
+.description {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.buttonRow {
+  width: 100%;
+  display: flex;
+  gap: 16px;
+  margin: 16px 0 10px 0;
+  box-sizing: border-box;
+  color: #000;
+}
+
+.button {
+  height: 36px;
+  font-size: 14px;
+}
+
+.paginationRow {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
