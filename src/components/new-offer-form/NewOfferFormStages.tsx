@@ -8,9 +8,9 @@ interface Props {
   description: string;
 }
 
-export const NewOfferFormStages: FC<Props> = ({ activeStage, description }) => {
-  const stages = [1, 2, 3];
+const stages = [1, 2, 3];
 
+export const NewOfferFormStages: FC<Props> = ({ activeStage, description }) => {
   return (
     <div className={styles.stages}>
       <h5 className={styles.header}>{description}</h5>
