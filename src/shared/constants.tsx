@@ -29,7 +29,11 @@ export interface TokenData {
   tokenBalance?: bigint;
 }
 
-export const SEND_ERC20_ROUT = '/send-ERC20-tokens';
+export const ROUTS = {
+  HOME: '/',
+  SEND_ERC20: '/send-ERC20-tokens',
+};
+
 export const SEPOLIA_URL = 'http://sepolia.etherscan.io';
 export const POLYGON_AMOY_URL = 'http://amoy.polygonscan.com';
 

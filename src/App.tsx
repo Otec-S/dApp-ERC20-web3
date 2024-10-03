@@ -7,7 +7,7 @@ import { WagmiProvider } from 'wagmi';
 import { config } from '../wagmiConfig';
 import { Landing } from './pages/Landing';
 import SendERC20 from './pages/SendERC20/send-ERC-20';
-import { SEND_ERC20_ROUT } from './shared/constants';
+import { ROUTS } from './shared/constants';
 import './App.module.css';
 import './index.module.css';
 
@@ -21,11 +21,11 @@ const rainbowtTheme = darkTheme({
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTS.HOME,
     element: <Landing />,
   },
   {
-    path: SEND_ERC20_ROUT,
+    path: ROUTS.SEND_ERC20,
     element: <SendERC20 />,
   },
 ]);

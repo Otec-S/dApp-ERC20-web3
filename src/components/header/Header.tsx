@@ -5,7 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
 import { logo, logoLightScheme } from '@assets/images';
-import { SEND_ERC20_ROUT } from '@src/shared/constants';
+import { ROUTS } from '@src/shared/constants';
 
 import styles from './Header.module.css';
 
@@ -31,7 +31,7 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
           />
         </button>
       </div>
-      <Link to="/">
+      <Link to={ROUTS.HOME}>
         <img
           className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
           src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
@@ -42,19 +42,19 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to={SEND_ERC20_ROUT}
+            to={ROUTS.SEND_ERC20}
           >
             Send ERC-20
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/"
+            to={ROUTS.HOME}
           >
             Trade ERC-20
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/"
+            to={ROUTS.HOME}
           >
             NFT Collection
           </NavLink>
