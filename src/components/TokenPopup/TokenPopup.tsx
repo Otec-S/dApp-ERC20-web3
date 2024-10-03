@@ -9,9 +9,9 @@ import { ITokens, tokens } from '@src/shared/constants';
 import styles from './TokenPopup.module.css';
 
 type Props = {
+  colorScheme?: 'dark' | 'light';
   onCLose: () => void;
   onSelect: (token: ITokens) => void;
-  colorScheme?: 'dark' | 'light';
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
