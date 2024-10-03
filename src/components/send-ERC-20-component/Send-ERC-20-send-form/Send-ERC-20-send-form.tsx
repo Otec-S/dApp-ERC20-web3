@@ -66,14 +66,14 @@ const SendERC20SendForm: FC<Props> = ({
     decimals: 18,
   });
 
-  const [currentTokenAddress, setCurrentTokenAddress] = useState<string>(() => {
+  const [currentTokenAddress, setCurrentTokenAddress] = useState<Address>(() => {
     switch (chainId) {
       case sepolia.id:
         return tokenSelected.sepoliaAddress;
       case polygonAmoy.id:
         return tokenSelected.polygonAddress;
       default:
-        return '';
+        return '0x';
     }
   });
 
@@ -81,13 +81,15 @@ const SendERC20SendForm: FC<Props> = ({
     data: balanceData,
     isLoading: isLoadingBalance,
     isError: errorBalance,
-  } = useReadContract({
-    abi: erc20abiExtended,
-    address: currentTokenAddress as Address,
-    functionName: 'balanceOf',
-    args: [address as Address],
-    query: { refetchInterval: 600000 },
-  });
+  } = useReadContract(
+    address && {
+      abi: erc20abiExtended,
+      address: currentTokenAddress,
+      functionName: 'balanceOf',
+      args: [address],
+      query: { refetchInterval: 600000 },
+    },
+  );
 
   const balanceWithDecimals = balanceData && formatUnits(BigInt(balanceData), decimals);
 
@@ -147,19 +149,24 @@ const SendERC20SendForm: FC<Props> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    // TODO:
-    const recipient = getAddress(formData.get('recipient'));
-    const parsedAmount = parseUnits(inputValue, decimals);
-    writeContract({
-      address: currentTokenAddress as Address,
-      abi: erc20abiExtended,
-      functionName: 'transfer',
-      args: [recipient, parsedAmount],
-    });
+    const recipientValue = formData.get('recipient');
+
+    if (typeof recipientValue === 'string') {
+      const recipient = getAddress(recipientValue);
+      const parsedAmount = parseUnits(inputValue, decimals);
+      writeContract({
+        address: currentTokenAddress,
+        abi: erc20abiExtended,
+        functionName: 'transfer',
+        args: [recipient, parsedAmount],
+      });
+    } else {
+      console.error('Invalid recipient address');
+    }
   };
 
   useEffect(() => {
-    let tokenAddress = '';
+    let tokenAddress: Address = '0x';
     switch (chainId) {
       case sepolia.id:
         tokenAddress = tokenSelected.sepoliaAddress;
@@ -168,7 +175,7 @@ const SendERC20SendForm: FC<Props> = ({
         tokenAddress = tokenSelected.polygonAddress;
         break;
       default:
-        tokenAddress = '';
+        tokenAddress = '0x';
         break;
     }
     setCurrentTokenAddress(tokenAddress);
@@ -260,6 +267,7 @@ const SendERC20SendForm: FC<Props> = ({
                 ) : errorBalance ? (
                   <span>Error getting wallet balance</span>
                 ) : (
+                  // TODO:
                   <span>Balance: {balanceWithDecimals || 'Not defined'}</span>
                 )}
               </div>
