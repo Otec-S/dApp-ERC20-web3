@@ -22,9 +22,9 @@ export const Landing: FC = () => {
         <div className={classes.title}>
           <h1 className={classes.titleText}>Web3 platform for everything in crypto</h1>
         </div>
-        <a className={classes.button} href={ROUTS.SEND_ERC20}>
+        <Link className={classes.button} to={ROUTS.SEND_ERC20}>
           Start using now
-        </a>
+        </Link>
       </div>
       <div className={classes.section}>
         <h2 className={classes.sectionTitle}>Products</h2>

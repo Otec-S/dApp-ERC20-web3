@@ -9,6 +9,7 @@ import FormButton from '@src/components/form-button/FormButton';
 import { getChainURL } from '@src/utils/getChainURL';
 
 import style from './Send-ERC-20-result-form.module.css';
+import { Link } from 'react-router-dom';
 
 interface Props {
   isTxSuccess: boolean;
@@ -44,14 +45,14 @@ const SendERC20ResultForm: FC<Props> = ({ isTxSuccess, numberOfTokens, tokenName
         <p className={style.transactionValue}>
           {numberOfTokens} {tokenName}
         </p>
-        <a
+        <Link
           className={style.viewTransactionIcon}
-          href={generateTransactionURL()}
+          to={generateTransactionURL()}
           target="_blank"
           rel="noopener noreferrer"
         >
           <ViewTransactionIcon />
-        </a>
+        </Link>
       </div>
       <FormButton buttonText={isTxSuccess ? 'Great!' : 'Start again'} />
     </form>
