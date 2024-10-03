@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { Address } from 'viem';
 import { useChainId } from 'wagmi';
 
@@ -9,7 +10,6 @@ import FormButton from '@src/components/form-button/FormButton';
 import { getChainURL } from '@src/utils/getChainURL';
 
 import style from './Send-ERC-20-result-form.module.css';
-import { Link } from 'react-router-dom';
 
 interface Props {
   isTxSuccess: boolean;
