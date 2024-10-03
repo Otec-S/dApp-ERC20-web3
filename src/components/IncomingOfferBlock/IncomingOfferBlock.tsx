@@ -1,9 +1,8 @@
 import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
-import { matchPath, useLocation, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { BarLoader } from 'react-spinners';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { erc20Abi, formatUnits, maxUint256 } from 'viem';
 import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
@@ -23,20 +22,13 @@ interface FormData {
 }
 
 export const IncomingOfferBlock: FC = () => {
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const { openConnectModal } = useConnectModal();
-  const { address: walletAddress, isConnected } = useAccount();
+  const { address: walletAddress } = useAccount();
   const { watch, register } = useForm<FormData>();
   const { contractAddress, tokens } = useChainDependentValues();
 
-  if (!isConnected && openConnectModal) {
-    openConnectModal();
-  }
-
-  console.log(searchParams, matchPath('/:category', location.pathname));
-  const tradeId = searchParams.get('id') as unknown as bigint;
+  const { id } = useParams();
   const isInfiniteApprove = watch('infiniteApprove');
+  const tradeId = id ? BigInt(id) : undefined;
 
   const {
     writeContract: approveTrade,
@@ -61,7 +53,7 @@ export const IncomingOfferBlock: FC = () => {
     abi: tradeContractAbi,
     address: contractAddress,
     functionName: 'getOfferDetails',
-    args: [tradeId],
+    args: tradeId && [tradeId],
     query: { refetchInterval: 60000 },
   });
 
@@ -99,8 +91,8 @@ export const IncomingOfferBlock: FC = () => {
   const amountToFormatted = Number(amountTo && tokenToDecimals && formatUnits(amountTo, tokenToDecimals));
   const rate = Number(amountFromFormatted && amountToFormatted && (amountToFormatted / amountFromFormatted).toFixed(2));
   const steps = [
-    { value: 1, status: isApproveSuccess ? StepStatus.COMPLETED : StepStatus.DARK },
-    { value: 2, status: isApproveSuccess ? StepStatus.LIGHT : StepStatus.DISABLED },
+    { value: 1, status: isApproveSuccess ? StepStatus.COMPLETED : StepStatus.CURRENT },
+    { value: 2, status: isApproveSuccess ? StepStatus.CURRENT : StepStatus.DISABLED },
   ];
   const isApproved = (allowance && amountTo && allowance >= amountTo) || isApproveSuccess;
   const hasWarning = tokens.every((item) => item.address !== tokenFrom);
@@ -122,7 +114,7 @@ export const IncomingOfferBlock: FC = () => {
       abi: tradeContractAbi,
       address: contractAddress,
       functionName: 'take',
-      args: [tradeId],
+      args: tradeId && [tradeId],
     });
   };
 
