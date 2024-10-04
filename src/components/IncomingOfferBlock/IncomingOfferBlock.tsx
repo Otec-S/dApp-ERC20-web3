@@ -28,7 +28,7 @@ export const IncomingOfferBlock: FC = () => {
 
   const { id } = useParams();
   const isInfiniteApprove = watch('infiniteApprove');
-  const tradeId: bigint | undefined = id ? BigInt(id) : undefined;
+  const tradeId = id ? BigInt(id) : undefined;
 
   const {
     writeContract: approveTrade,
@@ -49,13 +49,17 @@ export const IncomingOfferBlock: FC = () => {
     data: offerData,
     isPending: isOfferDataPending,
     error: offerDataError,
-  } = useReadContract({
-    abi: tradeContractAbi,
-    address: contractAddress,
-    functionName: 'getOfferDetails',
-    args: tradeId && [tradeId],
-    query: { refetchInterval: 60000 },
-  });
+  } = useReadContract(
+    tradeId
+      ? {
+          abi: tradeContractAbi,
+          address: contractAddress,
+          functionName: 'getOfferDetails',
+          args: [tradeId],
+          query: { refetchInterval: 60000 },
+        }
+      : undefined,
+  );
 
   const [tokenFrom, tokenTo, amountFrom, amountTo, , , optionalTaker, , completed] = offerData || [];
 
@@ -110,12 +114,14 @@ export const IncomingOfferBlock: FC = () => {
   };
 
   const handleAcceptTrade = () => {
-    acceptTrade({
-      abi: tradeContractAbi,
-      address: contractAddress,
-      functionName: 'take',
-      args: tradeId && [tradeId],
-    });
+    if (tradeId) {
+      acceptTrade({
+        abi: tradeContractAbi,
+        address: contractAddress,
+        functionName: 'take',
+        args: [tradeId],
+      });
+    }
   };
 
   return (
