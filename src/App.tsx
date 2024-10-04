@@ -4,15 +4,16 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
-import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
 import { CreateOffer } from '@pages/ERC20trade/tabs/CreateOffer';
 import { History } from '@pages/ERC20trade/tabs/History';
 import { MyOffers } from '@pages/ERC20trade/tabs/MyOffers';
+
+import { config } from '../wagmiConfig';
+import { IncomingOfferBlock } from '@components/IncomingOfferBlock/IncomingOfferBlock';
+import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
 import { Landing } from '@pages/Landing';
 import SendERC20 from '@pages/SendERC20/send-ERC-20';
 import { ROUTES } from '@shared/constants';
-
-import { config } from '../wagmiConfig';
 import './App.module.css';
 import './index.module.css';
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
     path: ROUTES.ERC20_TRADE,
     element: <ERC20trade />,
     children: [
+      {
+        path: ':id',
+        element: <IncomingOfferBlock />,
+      },
       { path: ROUTES.CREATE_OFFER, element: <CreateOffer /> },
       { path: ROUTES.MY_OFFERS, element: <MyOffers /> },
       { path: ROUTES.HISTORY, element: <History /> },
