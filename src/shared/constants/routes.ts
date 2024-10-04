@@ -1,10 +1,6 @@
-export const routes = {
-  main: '/',
-  erc20send: '/erc20send',
-  erc20trade: '/erc20trade',
-  nftCollection: '/nft-collection',
-
-  createOffer: 'create-offer',
-  myOffers: 'my-offers',
-  history: 'history',
+export const ROUTES = {
+  HOME: '/',
+  SEND_ERC20: '/send-ERC20-tokens',
+  ERC20_TRADE: '/erc20trade',
+  NFT_COLLECTION: '/',
 };

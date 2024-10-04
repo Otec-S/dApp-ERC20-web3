@@ -1,6 +1,3 @@
-import { Address } from 'viem';
-import { polygonAmoy, sepolia } from 'viem/chains';
-
 export const tradeContractAbi = [
   {
     inputs: [{ internalType: 'uint256', name: '_feeBasisPoints', type: 'uint256' }],
@@ -338,8 +335,3 @@ export const tradeContractAbi = [
     type: 'function',
   },
 ] as const;
-
-export const tradeContractAddress: Record<string, Address> = {
-  [`${polygonAmoy.id}`]: '0x30bbAA44F7A80AfC9a5CB1aEEb8247B8E2aDE392',
-  [`${sepolia.id}`]: '0x9CE9DFFA60c558E22178172DDa1774234AECAEBd',
-};
