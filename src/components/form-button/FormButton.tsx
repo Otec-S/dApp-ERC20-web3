@@ -9,13 +9,17 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   colorScheme?: 'default' | 'yellow';
 }
 
-const FormButton: FC<Props> = ({ isButtonActive = true, buttonText, colorScheme = 'default', ...rest }) => {
+const FormButton: FC<Props> = ({ buttonText, className, isButtonActive = true, colorScheme = 'default', ...rest }) => {
   return (
     <button
-      className={cn(styles.formButton, {
-        [styles.inactiveButton]: !isButtonActive,
-        [styles.buttonYellow]: colorScheme === 'yellow',
-      })}
+      className={cn(
+        styles.formButton,
+        {
+          [styles.inactiveButton]: !isButtonActive,
+          [styles.buttonYellow]: colorScheme === 'yellow',
+        },
+        className,
+      )}
       disabled={!isButtonActive}
       {...rest}
     >

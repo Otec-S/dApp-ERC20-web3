@@ -1,0 +1,219 @@
+.blockForm {
+  position: relative;
+
+  background-color: #333333;
+  border-radius: 16px;
+  padding: 48px;
+}
+
+.sender {
+  margin-bottom: 24px;
+  border-radius: 24px;
+  background-color: #515151;
+  display: flex;
+  padding: 22px 22px 12px;
+}
+
+.inputBlock {
+  width: 75%;
+}
+
+.input {
+  width: 95%;
+  background-color: inherit;
+  border: none;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 13.5px;
+}
+
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #515151 inset;
+  box-shadow: 0 0 0px 1000px #515151 inset;
+  -webkit-text-fill-color: #fff;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+}
+
+.balanceValue {
+  color: #ffffff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 8px;
+}
+
+.balanceExceededError {
+  color: pink;
+  font-family: 'Inter', sans-serif;
+}
+
+.balanceMax {
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.tokenBlock {
+  padding: 1px 11px 7px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.availableTokensSelector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  outline: none;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.nameOfToken {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.addCustomToken {
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  opacity: 0.5;
+
+  box-sizing: border-box;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+
+  &:hover {
+    opacity: 0.2;
+  }
+}
+
+.recipient {
+  margin-bottom: 48px;
+  border-radius: 50px;
+  background-color: #515151;
+  padding: 11.5px 16px;
+  border: none;
+}
+
+.recipientInput {
+  width: 100%;
+  overflow: hidden;
+  color: #fff;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background-color: #515151;
+  border: none;
+}
+
+.recipientInput:-webkit-autofill,
+.recipientInput:-webkit-autofill:hover,
+.recipientInput:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #515151 inset;
+  box-shadow: 0 0 0px 1000px #515151 inset;
+  -webkit-text-fill-color: #fff;
+}
+
+.inputRecipientError {
+  margin-top: 5px;
+  color: pink;
+  font-family: 'Inter', sans-serif;
+}
+
+.loader {
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+  text-align: center;
+}
+
+@media (max-width: 845px) {
+  .block {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .blockForm {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sender {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .blockForm {
+    padding: 12px;
+  }
+}

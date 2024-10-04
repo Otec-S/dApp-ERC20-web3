@@ -1,0 +1,26 @@
+@value colors: "@assets/colors.css";
+@value fonts: "@assets/fonts.css";
+@value dark, orange, white, darkBlue from colors;
+@value montserrat, openSans from fonts;
+
+.container {
+  height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #ffedbe;
+  box-sizing: border-box;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  background-color: #ffedbe;
+  height: fit-content;
+  z-index: 3;
+}

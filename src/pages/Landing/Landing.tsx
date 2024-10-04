@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { landing, tokenBlockImage } from '@src/assets/images';
 import Header from '@src/components/header/Header';
 import { TokensBlock } from '@src/components/TokensBlock/TokensBlock';
+import { ROUTES } from '@src/shared/constants';
 
 import { blockData, statisticData } from './Landing.constants';
 import classes from './Landing.module.css';
@@ -21,7 +22,9 @@ export const Landing: FC = () => {
         <div className={classes.title}>
           <h1 className={classes.titleText}>Web3 platform for everything in crypto</h1>
         </div>
-        <button className={classes.button}>Start using now</button>
+        <Link className={classes.button} to={ROUTES.SEND_ERC20}>
+          Start using now
+        </Link>
       </div>
       <div className={classes.section}>
         <h2 className={classes.sectionTitle}>Products</h2>

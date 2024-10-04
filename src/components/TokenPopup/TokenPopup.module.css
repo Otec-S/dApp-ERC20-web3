@@ -4,15 +4,13 @@
 @value inter, openSans from fonts;
 
 .container {
-  position: absolute;
   width: 370px;
   height: 500px;
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
+  border-radius: 16px;
   background-color: darkGrey;
   box-sizing: border-box;
-  z-index: 5;
   color: white;
   border-radius: 16px;
 }
@@ -42,10 +40,11 @@
 .searchHead {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .searchTitle {
-  /* color: white; */
+  color: white;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -55,6 +54,10 @@
   font-weight: 700;
   line-height: normal;
   margin: 0;
+}
+
+.searchTitleLightScheme {
+  color: black;
 }
 
 .searchRow {
@@ -78,10 +81,11 @@
 .closePopup {
   cursor: pointer;
   transition: transform 0.5s ease;
-}
+  transform-origin: center;
 
-.closePopup:hover {
-  transform: rotate(90deg);
+  &:hover {
+    transform: rotate(90deg);
+  }
 }
 
 .input {
@@ -126,16 +130,16 @@
 }
 
 .inputCLoseIcon {
-  width: 24px;
-  min-width: 24px;
-  margin-right: 2px;
+  width: 21px;
+  margin-right: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  cursor: pointer;
   transition: transform 0.5s ease;
+  transform-origin: center;
 
   &:hover {
-    cursor: pointer;
+    transform: rotate(90deg);
   }
 }
 

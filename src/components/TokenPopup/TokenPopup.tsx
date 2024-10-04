@@ -1,22 +1,24 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 import cn from 'classnames';
-import { Address, isAddress } from 'viem';
+import { Address } from 'viem';
 
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
-import { ITokens, tokens } from '@src/shared/constants';
+import { Token, tokens } from '@src/shared/constants/tokens';
 
 import styles from './TokenPopup.module.css';
 
 type Props = {
   colorScheme?: 'dark' | 'light';
   onCLose: () => void;
-  onSelect: (token: ITokens) => void;
+  onSelect: (token: Token) => void;
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
   const [searchText, setSearchText] = useState('');
-  const tokenArr = isAddress(searchText) ? tokens.filter((item) => item.sepoliaAddress === searchText || item.polygonAddress === searchText) : tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()))
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  const tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
   const firstTokensGroup = tokenArr.splice(0, 7);
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,11 +37,32 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
     setSearchText('');
   };
 
+  // const handleEscDown = (e: KeyboardEvent) => {
+  //   if (e.key === 'Escape') {
+  //     onCLose();
+  //   }
+  // };
+
+  // const handleClickOutside = (e: MouseEvent) => {
+  //   if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+  //     onCLose();
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleEscDown);
+  //   window.addEventListener('click', handleClickOutside);
+  //   return () => {
+  //     window.removeEventListener('keydown', handleEscDown);
+  //     window.removeEventListener('click', handleClickOutside);
+  //   };
+  // }, []);
+
   return (
-    <div className={cn(styles.container, { [styles.containerLightScheme]: colorScheme === 'light' })}>
-      <div className={cn(styles.searchBlock, { [styles.searchBlockLightScheme]: colorScheme === 'light' })}>
+    <div className={cn(styles.container,{[styles.containerLightScheme]:colorScheme === 'light'})} ref={popupRef}>
+      <div className={cn(styles.searchBlock,{[styles.searchBlockLightScheme]:colorScheme === 'light'})}>
         <div className={styles.searchHead}>
-          <p className={styles.searchTitle}>Select a token</p>
+          <p className={cn(styles.searchTitle,{[styles.searchTitleLightScheme]:colorScheme === 'light'})}>Select a token</p>
           <div className={styles.closePopup} onClick={onCLose}>
             <Close />
           </div>

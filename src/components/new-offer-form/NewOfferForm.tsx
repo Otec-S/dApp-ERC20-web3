@@ -10,11 +10,12 @@ import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
-import { ITokens } from '@src/shared/constants';
-import { tradeContractAbi, tradeContractAddress } from '@src/shared/tradeContract';
+import { tradeContractAddress } from '@src/shared/constants/contract';
+import { Token, TokenData } from '@src/shared/constants/tokens';
+import { tradeContractAbi } from '@src/shared/constants/tradeContractAbi';
 import getTokenIcon from '@src/utils/getTokenIcon';
 
-import AddTokenInfo, { TokenData } from '../add-token-info-popup/AddTokenInfo';
+import AddTokenInfo from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
@@ -105,7 +106,6 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
-console.log(contractsData && contractsData[0])
   const fee = contractsData!==undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) :'';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
@@ -168,7 +168,8 @@ console.log(contractsData && contractsData[0])
     }
   }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError]);
 
-  const handleTokenPopupOpen = (tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
+  const handleTokenPopupOpen = (e: React.MouseEvent<HTMLDivElement|HTMLButtonElement>,tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
+    e.stopPropagation();
     switch (tokenToOpen) {
       case 'from':
         setShowDefaultTokenPopupFrom(true);
@@ -185,7 +186,7 @@ console.log(contractsData && contractsData[0])
     }
   };
 
-  const handleDefaultTokenChoice = (token: ITokens, tokenSelected: 'from' | 'to') => {
+  const handleDefaultTokenChoice = (token: Token, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
       case 'from':
         setTokenFrom({
@@ -250,12 +251,12 @@ console.log(contractsData && contractsData[0])
       <Toaster position="top-center" />
       {showCustomTokenPopupTo && (
         <div className={styles.customTokenContainer}>
-          <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'to')} />
+          <AddTokenInfo colorScheme="yellow" onClose={(data) => handleCustomTokenPopupChoice(data, 'to')} />
         </div>
       )}
       {showCustomTokenPopupFrom && (
         <div className={styles.customTokenContainer}>
-          <AddTokenInfo colorScheme="yellow" onClosePopup={(data) => handleCustomTokenPopupChoice(data, 'from')} />
+          <AddTokenInfo colorScheme="yellow" onClose={(data) => handleCustomTokenPopupChoice(data, 'from')} />
         </div>
       )}
       {isDataFromNetworkLoading && (
@@ -331,20 +332,22 @@ console.log(contractsData && contractsData[0])
                     </div>
                   )}
                   {showDefaultTokenPopupFrom && (
-                    <TokenPopup
+                    <div className={styles.tokenPopupContainer}>
+                      <TokenPopup
                       onCLose={handleTokenPopupClose}
                       onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
                       colorScheme="light"
                     />
+                    </div>
                   )}
-                  <div onPointerDown={() => handleTokenPopupOpen('from')} className={styles.tokenPopup}>
+                  <div onClick={(e) => handleTokenPopupOpen(e,'from')} className={styles.tokenPopup}>
                     <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
                     <div className={styles.tokenArrow}>
                       <ArrowDown />
                     </div>
                   </div>
                   <button
-                    onPointerDown={() => handleTokenPopupOpen('customFrom')}
+                    onClick={(e) => handleTokenPopupOpen(e,'customFrom')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >
@@ -384,20 +387,22 @@ console.log(contractsData && contractsData[0])
                     </div>
                   )}
                   {showDefaultTokenPopupTo && (
+                    <div className={styles.tokenPopupContainer}>
                     <TokenPopup
                       onCLose={handleTokenPopupClose}
                       onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
                       colorScheme="light"
                     />
+                    </div>
                   )}
-                  <div onPointerDown={() => handleTokenPopupOpen('to')} className={styles.tokenPopup}>
+                  <div onClick={(e) => handleTokenPopupOpen(e,'to')} className={styles.tokenPopup}>
                     <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
                     <div className={styles.tokenArrow}>
                       <ArrowDown />
                     </div>
                   </div>
                   <button
-                    onPointerDown={() => handleTokenPopupOpen('customTo')}
+                    onClick={(e) => handleTokenPopupOpen(e,'customTo')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >

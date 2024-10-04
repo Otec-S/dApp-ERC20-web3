@@ -150,6 +150,14 @@
   line-height: normal;
 }
 
+.inputAddress:-webkit-autofill,
+.inputAddress:-webkit-autofill:hover,
+.inputAddress:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #515151 inset;
+  box-shadow: 0 0 0px 1000px #515151 inset;
+  -webkit-text-fill-color: #fff;
+}
+
 .inputAddressYellowScheme {
   background: transparent;
 }
