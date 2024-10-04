@@ -56,6 +56,7 @@ const NewOfferForm: FC = () => {
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
+  const [tokenApproved, setTokenApproved] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
     register,
     handleSubmit,
@@ -137,10 +138,15 @@ const NewOfferForm: FC = () => {
     if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade' && isTransactionSuccess) {
       setFormStage('tradeCreated');
     }
+    if(tokenFrom?.address !== tokenApproved?.address && formStage ==='createTrade') {
+      setFormStage('approveToken');
+      setTokenApproved(tokenFrom);
+      refetch();
+    }
     if (writeContractError) {
       toast.error(`Error: ${writeContractError.name}`);
     }
-  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError,isTransactionSuccess,refetch]);
+  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError,isTransactionSuccess,refetch,tokenFrom,tokenApproved]);
 
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
@@ -199,6 +205,13 @@ const NewOfferForm: FC = () => {
           decimals: token.decimals,
           name: token.name,
         });
+        if (formStage === 'approveToken') {
+          setTokenApproved({
+          address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
+          decimals: token.decimals,
+          name: token.name,
+        })
+        }
         setShowDefaultTokenPopupFrom(false);
         break;
       case 'to':
