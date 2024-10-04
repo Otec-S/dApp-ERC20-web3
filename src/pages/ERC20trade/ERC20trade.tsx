@@ -4,9 +4,9 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
+import { Tabs } from '@components/Tabs/Tabs';
 
 import styles from './ERC20trade.module.css';
-import { Tabs } from '@components/Tabs/Tabs';
 
 export const ERC20trade: FC = () => {
   const { isConnected } = useAccount();

@@ -46,13 +46,13 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to={ROUTES.HOME}
+            to={ROUTES.ERC20_TRADE}
           >
             Trade ERC-20
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to={ROUTES.HOME}
+            to={ROUTES.NFT_COLLECTION}
           >
             NFT Collection
           </NavLink>
