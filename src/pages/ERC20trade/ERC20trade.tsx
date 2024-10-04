@@ -1,13 +1,13 @@
 import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
-import { IncomingOfferBlock } from '@components/IncomingOfferBlock/IncomingOfferBlock';
 
-import styles from './OfferPage.module.css';
+import styles from './ERC20trade.module.css';
 
-export const OfferPage: FC = () => {
+export const ERC20trade: FC = () => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
 
@@ -20,7 +20,7 @@ export const OfferPage: FC = () => {
       <div className={styles.header}>
         <Header />
       </div>
-      <IncomingOfferBlock />
+      <Outlet />
     </div>
   );
 };
