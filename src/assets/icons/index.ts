@@ -1,7 +1,9 @@
+export { default as ArrowRightIcon } from './arrow-right.svg';
 export { default as ClearCloseIcon } from './clear_close.svg';
 export { default as CloseIcon } from './close.svg';
 export { default as HistoryIcon } from './history.svg';
 export { default as MyOfferIcon } from './my-offer.svg';
+export { default as NewWindowIcon } from './new_window_icon.svg';
 export { default as PlusIcon } from './plus.svg';
 export { default as SearchIcon } from './search.svg';
 export { default as SuccessIcon } from './success.svg';

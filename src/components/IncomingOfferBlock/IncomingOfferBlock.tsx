@@ -6,13 +6,13 @@ import { BarLoader } from 'react-spinners';
 import { erc20Abi, formatUnits, maxUint256 } from 'viem';
 import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
 
+import { ArrowRightIcon, WarningIcon } from '@assets/icons';
+import FormButton from '@components/form-button/FormButton';
+import { StepPagination } from '@components/StepPagination/StepPagination';
+import { StepStatus } from '@components/StepPagination/StepPagination.interface';
 import { tradeContractAbi } from '@shared/constants';
 import { useChainDependentValues } from '@shared/hooks';
-import { ArrowRightIcon, WarningIcon } from '@src/assets/icons';
 
-import FormButton from '../form-button/FormButton';
-import { StepPagination } from '../StepPagination/StepPagination';
-import { StepStatus } from '../StepPagination/StepPagination.interface';
 import { IncomingOfferToken } from './IncomingOfferToken/IncomingOfferToken';
 import { SuccessDialog } from './SuccessDialog/SuccessDialog';
 import styles from './IncomingOfferBlock.module.css';
