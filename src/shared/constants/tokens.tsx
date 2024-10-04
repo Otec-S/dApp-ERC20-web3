@@ -23,6 +23,14 @@ export interface Token {
   decimals: number;
 }
 
+export interface TokenData {
+  requestWasSuccessful: boolean;
+  tokenAddress?: Address;
+  tokenName?: string;
+  tokenDecimals?: number;
+  tokenBalance?: bigint;
+}
+
 export const tokens: Token[] = [
   {
     id: 1,

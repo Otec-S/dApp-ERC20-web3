@@ -4,14 +4,13 @@ import { Address, formatUnits, getAddress, parseUnits } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import ARBIcon from '@assets/icons/arb.svg';
+import { ARBIcon } from '@assets/icons';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
-import FormButton from '@src/components/form-button/FormButton';
-import { TokenPopup } from '@src/components/TokenPopup/TokenPopup';
-import { Token, TokenData } from '@src/shared/constants';
-import { erc20abiExtended } from '@src/shared/erc20abi-extended';
-import getTokenIcon from '@src/utils/getTokenIcon';
+import FormButton from '@components/form-button/FormButton';
+import { TokenPopup } from '@components/TokenPopup/TokenPopup';
+import { erc20abiExtended, Token, TokenData } from '@shared/constants';
+import getTokenIcon from '@shared/utils/getTokenIcon';
 
 import style from './Send-ERC-20-send-form.module.css';
 

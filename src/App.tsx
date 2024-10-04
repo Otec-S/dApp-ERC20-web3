@@ -9,11 +9,10 @@ import { CreateOffer } from '@pages/ERC20trade/tabs/CreateOffer';
 import { History } from '@pages/ERC20trade/tabs/History';
 import { MyOffers } from '@pages/ERC20trade/tabs/MyOffers';
 import { Landing } from '@pages/Landing';
-import { routes } from '@shared/constants';
+import SendERC20 from '@pages/SendERC20/send-ERC-20';
+import { ROUTES } from '@shared/constants';
 
 import { config } from '../wagmiConfig';
-import SendERC20 from './pages/SendERC20/send-ERC-20';
-import { ROUTES } from './shared/constants';
 import './App.module.css';
 import './index.module.css';
 
@@ -35,16 +34,16 @@ const router = createBrowserRouter([
     element: <SendERC20 />,
   },
   {
-    path: routes.erc20trade,
+    path: ROUTES.ERC20_TRADE,
     element: <ERC20trade />,
     children: [
-      { path: routes.createOffer, element: <CreateOffer /> },
-      { path: routes.myOffers, element: <MyOffers /> },
-      { path: routes.history, element: <History /> },
+      { path: ROUTES.CREATE_OFFER, element: <CreateOffer /> },
+      { path: ROUTES.MY_OFFERS, element: <MyOffers /> },
+      { path: ROUTES.HISTORY, element: <History /> },
     ],
   },
   {
-    path: routes.nftCollection,
+    path: ROUTES.NFT_COLLECTION,
     element: <Landing />,
   },
 ]);

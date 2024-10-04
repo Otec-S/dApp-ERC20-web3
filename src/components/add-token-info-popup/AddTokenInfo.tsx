@@ -7,13 +7,13 @@ import { Address, isAddress } from 'viem';
 import { useAccount, useReadContracts } from 'wagmi';
 
 import { ClearCloseIcon, SuccessIcon } from '@assets/icons';
+import FormButton from '@components/form-button/FormButton';
 import { TokenData } from '@shared/constants';
-import { erc20abiExtended } from '@shared/erc20abi-extended';
+import { erc20abiExtended } from '@shared/constants';
 
 import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';
-import FormButton from '@components/form-button/FormButton';
 
 type FormStages = 'initialState' | 'showTokenNameState' | 'showTokenAvatarState' | 'readyToAddState' | 'errorState';
 

@@ -5,7 +5,7 @@ import { useChainId, useWriteContract } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import FormButton from '@components/form-button/FormButton';
-import { tradeContractAbi, tradeContractAddress } from '@src/shared/tradeContract';
+import { tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
 import styles from './CancelOffer.module.css';
 

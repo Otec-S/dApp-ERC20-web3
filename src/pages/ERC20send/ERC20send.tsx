@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import Header from '../../components/header/Header';
+import Header from '@components/header/Header';
 
 export const ERC20send: FC = () => {
   return (

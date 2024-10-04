@@ -1,5 +1,5 @@
 import { collection, sendErc, tradeErc } from '@assets/images';
-import { ROUTES } from '@src/shared/constants';
+import { ROUTES } from '@shared/constants';
 
 import classes from './Landing.module.css';
 
