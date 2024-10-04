@@ -28,7 +28,7 @@ export const IncomingOfferBlock: FC = () => {
 
   const { id } = useParams();
   const isInfiniteApprove = watch('infiniteApprove');
-  const tradeId = id ? BigInt(id) : undefined;
+  const tradeId: bigint | undefined = id ? BigInt(id) : undefined;
 
   const {
     writeContract: approveTrade,
