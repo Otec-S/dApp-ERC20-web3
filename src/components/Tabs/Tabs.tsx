@@ -15,6 +15,7 @@ export const Tabs: FC = () => {
           to={tab.route}
           relative="path"
           className={cn(styles.tabLink, { [styles.tabLinkActive]: pathname.includes(tab.route) })}
+          key={tab.route}
         >
           {tab.icon}
           <p className={styles.tabName}>{tab.name}</p>
