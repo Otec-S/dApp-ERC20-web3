@@ -4,9 +4,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
+import { Address, concat, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
-import { useAccount, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import WarningIcon from '@assets/icons/warning_icon.svg';
@@ -106,6 +106,7 @@ const NewOfferForm: FC = () => {
       },
     ],
   });
+
   const fee = contractsData!==undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) :'';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
@@ -125,14 +126,38 @@ const NewOfferForm: FC = () => {
     variables: contractVariables,
   } = useWriteContract();
 
+  console.log('transaction hash')
+  console.log(transactionHash)
+
+  const { isLoading: isTransactionLoading, isSuccess:isTransactionSuccess} = useWaitForTransactionReceipt({
+    hash:transactionHash
+  });
+
+  console.log('isTransactionLoading')
+  console.log(isTransactionLoading)
+
+  useEffect(() => {
+    if (formStage === 'approveToken' && isWriteContractSuccess && isTransactionSuccess) {
+      setFormStage('createTrade');
+    }
+    if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade' && isTransactionSuccess) {
+      setFormStage('tradeCreated');
+    }
+    if (writeContractError) {
+      toast.error(`Error: ${writeContractError.name}`);
+    }
+  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError,isTransactionSuccess]);
+
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
+      console.log('inside 1')
       const tokensToSpend = getValues('infiniteApprove')
         ? maxUint256
         : parseUnits(getValues('from').toString(), tokenFrom.decimals);
 
       const tokensAllowedToSpend = contractsData && contractsData[1];
       if (tokensAllowedToSpend !== undefined && tokensToSpend > tokensAllowedToSpend) {
+        console.log('inside 1 write')
         writeContract({
           abi: erc20Abi,
           address: tokenFrom.address,
@@ -141,6 +166,7 @@ const NewOfferForm: FC = () => {
         });
       } else setFormStage('createTrade');
     } else if (formStage === 'createTrade' && tokenFrom && tokenTo && !errors.from && !errors.to && walletAddress) {
+      console.log('inside 2 write')
       writeContract({
         abi: tradeContractAbi,
         address: tradeContractAddress[`${chainId}`],
@@ -155,18 +181,6 @@ const NewOfferForm: FC = () => {
       });
     }
   };
-
-  useEffect(() => {
-    if (formStage === 'approveToken' && isWriteContractSuccess) {
-      setFormStage('createTrade');
-    }
-    if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade') {
-      setFormStage('tradeCreated');
-    }
-    if (writeContractError) {
-      toast.error(`Error: ${writeContractError.name}`);
-    }
-  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError]);
 
   const handleTokenPopupOpen = (e: React.MouseEvent<HTMLDivElement|HTMLButtonElement>,tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
     e.stopPropagation();
@@ -244,7 +258,7 @@ const NewOfferForm: FC = () => {
   const balanceOfTokenFrom = tokenFrom && contractsData && parseFloat(formatUnits(contractsData[2], tokenFrom?.decimals));
 
   const showApproveButtonDisabled = tokenFrom === undefined;
-  const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData;
+  const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData || isTransactionLoading;
 
   return (
     <section className={cn(styles.createOffer)}>
