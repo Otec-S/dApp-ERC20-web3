@@ -1,0 +1,43 @@
+@value fonts: "@assets/fonts.css";
+@value montserrat, openSans from fonts;
+
+.infoBox {
+  display: flex;
+  gap: 8px;
+}
+
+.tokenBoxIcon {
+  height: 48px;
+  width: 48px;
+  border-radius: 100px;
+  overflow: hidden;
+
+  svg {
+    height: 48px;
+    width: 48px;
+  }
+}
+
+.infoCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoDescription {
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  opacity: 0.5;
+}
+
+.infoText {
+  color: #000;
+  font-family: openSans;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

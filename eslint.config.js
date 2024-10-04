@@ -24,12 +24,13 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      eqeqeq: ['error', 'always'],
       'simple-import-sort/imports': [
         'error',
         {
           groups: [
             ['^react', '^\\u0000', '^node:', '^@?\\w'],
-            ['^(@src|@components|@assets)(/.*|$)'],
+            ['^(@src|@components|@assets|@shared)(/.*|$)'],
             ['^\\.\\.(?!/?$)', '^\\.(?!/?$)', '^\\./?$', '^.+\\.(module.css)$'],
           ],
         },
