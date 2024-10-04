@@ -4,12 +4,12 @@ import cn from 'classnames';
 import styles from './FormButton.module.css';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  isButtonActive?: boolean;
   buttonText: string;
+  isButtonActive?: boolean;
   colorScheme?: 'default' | 'yellow';
 }
 
-const SubmitButton: FC<Props> = ({ isButtonActive = true, buttonText, colorScheme = 'default', ...rest }) => {
+const FormButton: FC<Props> = ({ buttonText, isButtonActive = true, colorScheme = 'default', ...rest }) => {
   return (
     <button
       className={cn(styles.formButton, {
@@ -24,4 +24,4 @@ const SubmitButton: FC<Props> = ({ isButtonActive = true, buttonText, colorSchem
   );
 };
 
-export default SubmitButton;
+export default FormButton;

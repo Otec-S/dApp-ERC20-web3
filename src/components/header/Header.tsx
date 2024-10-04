@@ -1,10 +1,11 @@
 import { FC, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import '@rainbow-me/rainbowkit/styles.css';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
 import { logo, logoLightScheme } from '@assets/images';
+import { ROUTES } from '@src/shared/constants';
 
 import styles from './Header.module.css';
 
@@ -12,7 +13,7 @@ interface Props {
   colorScheme?: 'darkBackground' | 'lightBackground';
 }
 
-const Header: FC<Props> = ({ colorScheme }) => {
+const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
   const [burgerIsOpen, setBurgerIsOpen] = useState(false);
   const handleBurgerClick = () => {
     setBurgerIsOpen((prev) => !prev);
@@ -30,28 +31,30 @@ const Header: FC<Props> = ({ colorScheme }) => {
           />
         </button>
       </div>
-      <img
-        className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
-        src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
-        alt="Project logo"
-      />
+      <Link to={ROUTES.HOME}>
+        <img
+          className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
+          src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
+          alt="Project logo"
+        />
+      </Link>
       <div className={cn(styles.body, { [styles.bodyBurgerIsOpen]: burgerIsOpen })}>
         <nav className={cn(styles.nav, { [styles.navBurgerIsOpen]: burgerIsOpen })}>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/erc20send"
+            to={ROUTES.SEND_ERC20}
           >
             Send ERC-20
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/"
+            to={ROUTES.HOME}
           >
             Trade ERC-20
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to="/"
+            to={ROUTES.HOME}
           >
             NFT Collection
           </NavLink>
@@ -61,7 +64,7 @@ const Header: FC<Props> = ({ colorScheme }) => {
             [styles.connectButtonWrapperYellowScheme]: colorScheme === 'lightBackground',
           })}
         >
-          <ConnectButton label="Connect wallet" chainStatus={'none'} showBalance={false} accountStatus="address" />
+          <ConnectButton label="Connect wallet" showBalance={false} accountStatus="address" />
         </div>
       </div>
     </header>

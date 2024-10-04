@@ -25,7 +25,7 @@ export const TokensBlock: FC = () => {
           />
         ))
       ) : (
-        <h3>Connect to Sepolia or PolygonAmoy</h3>
+        <div className={classes.offerToConnectChain}>Connect to Sepolia or PolygonAmoy</div>
       )}
     </div>
   );

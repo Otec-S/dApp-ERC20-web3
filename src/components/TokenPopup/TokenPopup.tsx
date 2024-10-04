@@ -1,18 +1,19 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 
-import { IToken, tokens } from '@assets/constants';
 import Close from '@assets/icons/close.svg';
 import Search from '@assets/icons/search.svg';
 
+import { Token, tokens } from '../../shared/constants';
 import styles from './TokenPopup.module.css';
 
 type Props = {
   onCLose: () => void;
-  onSelect: (token: IToken) => void;
+  onSelect: (token: Token) => void;
 };
 
 export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
   const [searchText, setSearchText] = useState('');
+  const popupRef = useRef<HTMLDivElement>(null);
 
   const tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
   const firstTokensGroup = tokenArr.splice(0, 7);
@@ -32,8 +33,29 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
     setSearchText('');
   };
 
+  const handleEscDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onCLose();
+    }
+  };
+
+  const handleClickOutside = (e: MouseEvent) => {
+    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
+      onCLose();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleEscDown);
+    window.addEventListener('click', handleClickOutside);
+    return () => {
+      window.removeEventListener('keydown', handleEscDown);
+      window.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className={styles.container}>
+    <div className={styles.container} ref={popupRef}>
       <div className={styles.searchBlock}>
         <div className={styles.searchHead}>
           <p className={styles.searchTitle}>Select a token</p>
@@ -57,7 +79,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
         </div>
         <div className={styles.tokensRow}>
           {firstTokensGroup.map((item) => (
-            <div className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
+            <div key={item.id} className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
               <div className={styles.tokenIcon}>{item.icon}</div>
               <div className={styles.tokenSymbol}> {item.name}</div>
             </div>
@@ -66,7 +88,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
       </div>
       <div className={styles.listBlock}>
         {tokenArr.map((item) => (
-          <div className={styles.listItem} onClick={handleSelectToken(item.name)}>
+          <div key={item.id} className={styles.listItem} onClick={handleSelectToken(item.name)}>
             <div className={styles.tokenIcon}>{item.icon}</div>
             <div className={styles.tokenSymbol}> {item.name}</div>
           </div>
