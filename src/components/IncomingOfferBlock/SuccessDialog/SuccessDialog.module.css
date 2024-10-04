@@ -54,6 +54,18 @@
   height: 36px;
   font-size: 14px;
   width: 144px;
+  background-color: #ffb800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 100px;
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .successLogoWrapper {

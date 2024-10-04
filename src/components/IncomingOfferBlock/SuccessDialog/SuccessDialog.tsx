@@ -1,9 +1,8 @@
 import { FC } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Hash } from 'viem';
 
 import { ArrowRightIcon, NewWindowIcon, SuccessIcon } from '@assets/icons';
-import FormButton from '@components/form-button/FormButton';
 import { useChainDependentValues } from '@shared/hooks';
 
 import styles from './SuccessDialog.module.css';
@@ -25,7 +24,6 @@ export const SuccessDialog: FC<Props> = ({
   tokenToName,
   rate,
 }) => {
-  const navigate = useNavigate();
   const { website } = useChainDependentValues();
 
   return (
@@ -49,13 +47,9 @@ export const SuccessDialog: FC<Props> = ({
           </div>
         </Link>
       )}
-      <FormButton
-        colorScheme="yellow"
-        type="button"
-        buttonText="Great!"
-        className={styles.greatButton}
-        onClick={() => navigate('/')}
-      />
+      <Link to="/" className={styles.greatButton}>
+        Great!
+      </Link>
     </div>
   );
 };
