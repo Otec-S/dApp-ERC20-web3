@@ -29,7 +29,7 @@ export interface TokenData {
   tokenBalance?: bigint;
 }
 
-export const ROUTS = {
+export const ROUTES = {
   HOME: '/',
   SEND_ERC20: '/send-ERC20-tokens',
 };
