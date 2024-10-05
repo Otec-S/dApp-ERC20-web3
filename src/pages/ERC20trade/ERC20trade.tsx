@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
@@ -22,7 +21,6 @@ export const ERC20trade: FC = () => {
         <Header colorScheme="lightBackground" />
       </div>
       <NewOfferForm />
-      {/* <Outlet /> */}
     </div>
   );
 };

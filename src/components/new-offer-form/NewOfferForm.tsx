@@ -109,6 +109,17 @@ const NewOfferForm: FC = () => {
     ],
   });
 
+  useEffect(() => {
+    if (
+      formStage === 'createTrade' &&
+      tokenFrom &&
+      contractsData &&
+      getValues('from') > Number(formatUnits(contractsData[1], tokenFrom?.decimals))
+    ) {
+      setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
+    }
+  }, [contractsData, formStage, getValues, setValue, tokenFrom]);
+
   const fee = contractsData !== undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) : '';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
@@ -118,7 +129,7 @@ const NewOfferForm: FC = () => {
 
   const handleStageSelect = (stage: number) => {
     if (stage === 1) {
-      setValue('from', 0);
+      reset();
       setFormStage('approveToken');
     }
   };
@@ -159,14 +170,6 @@ const NewOfferForm: FC = () => {
       setFormStage('approveToken');
       setTokenApproved(tokenFrom);
       refetch();
-    }
-    if (
-      formStage === 'createTrade' &&
-      tokenFrom &&
-      contractsData &&
-      getValues('from') > Number(formatUnits(contractsData[1], tokenFrom?.decimals))
-    ) {
-      setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
     }
     if (writeContractError) {
       toast.error(`Error: ${writeContractError.name}`);
