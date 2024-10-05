@@ -19,9 +19,9 @@ export const ERC20trade: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Header colorScheme='lightBackground'/>
+        <Header colorScheme="lightBackground" />
       </div>
-      <NewOfferForm/>
+      <NewOfferForm />
       {/* <Outlet /> */}
     </div>
   );

@@ -81,7 +81,11 @@ const NewOfferForm: FC = () => {
     setTokenTo(undefined);
   }, [chainId, reset]);
 
-  const { data: contractsData, isLoading: isLoadingContractData, refetch } = useReadContracts({
+  const {
+    data: contractsData,
+    isLoading: isLoadingContractData,
+    refetch,
+  } = useReadContracts({
     allowFailure: false,
     query: {
       refetchInterval: THIRTY_MINUTES,
@@ -107,15 +111,10 @@ const NewOfferForm: FC = () => {
     ],
   });
 
-  const fee = contractsData!==undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) :'';
+  const fee = contractsData !== undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) : '';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
-  let serviceFee = fee && `Service fee ${fee}% `;
-  serviceFee = tokenFrom && tokenAmountIsTaken ? `${serviceFee}(${tokenAmountIsTaken} ${tokenFrom.name}).` : serviceFee;
-  serviceFee =
-    tokenFrom && getValues('from')
-      ? `${serviceFee}Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}`
-      : `${serviceFee}`;
+  const serviceFee = fee && `Service fee ${fee}% ${fee && tokenFrom && tokenAmountIsTaken ? `(${tokenAmountIsTaken} ${tokenFrom.name}).`:''}${tokenFrom && getValues('from')? ` Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}.`:''}`;
 
   const {
     writeContract,
@@ -126,8 +125,8 @@ const NewOfferForm: FC = () => {
     variables: contractVariables,
   } = useWriteContract();
 
-  const { isLoading: isTransactionLoading, isSuccess:isTransactionSuccess} = useWaitForTransactionReceipt({
-    hash:transactionHash
+  const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
+    hash: transactionHash,
   });
 
   useEffect(() => {
@@ -135,18 +134,39 @@ const NewOfferForm: FC = () => {
       setFormStage('createTrade');
       refetch();
     }
-    if (formStage === 'createTrade' && isWriteContractSuccess && contractVariables.functionName === 'initiateTrade' && isTransactionSuccess) {
+    if (
+      formStage === 'createTrade' &&
+      isWriteContractSuccess &&
+      contractVariables.functionName === 'initiateTrade' &&
+      isTransactionSuccess
+    ) {
       setFormStage('tradeCreated');
     }
-    if(tokenFrom?.address !== tokenApproved?.address && formStage ==='createTrade') {
+    if (tokenFrom?.address !== tokenApproved?.address && formStage === 'createTrade') {
       setFormStage('approveToken');
       setTokenApproved(tokenFrom);
       refetch();
     }
+    if (formStage === 'createTrade' && tokenFrom && contractsData && getValues('from') > Number(formatUnits(contractsData[1],tokenFrom?.decimals))) {
+      setValue('from',Number(formatUnits(contractsData[1],tokenFrom?.decimals)))
+    }
     if (writeContractError) {
       toast.error(`Error: ${writeContractError.name}`);
     }
-  }, [formStage, setFormStage, isWriteContractSuccess, contractVariables, writeContractError,isTransactionSuccess,refetch,tokenFrom,tokenApproved]);
+  }, [
+    formStage,
+    setFormStage,
+    isWriteContractSuccess,
+    contractVariables,
+    writeContractError,
+    isTransactionSuccess,
+    refetch,
+    tokenFrom,
+    tokenApproved,
+    contractsData,
+    getValues,
+    setValue,
+  ]);
 
   const onSubmit: SubmitHandler<FormData> = () => {
     if (!errors.from && tokenFrom && walletAddress && formStage === 'approveToken') {
@@ -179,7 +199,10 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const handleTokenPopupOpen = (e: React.MouseEvent<HTMLDivElement|HTMLButtonElement>,tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo') => {
+  const handleTokenPopupOpen = (
+    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
+    tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo',
+  ) => {
     e.stopPropagation();
     switch (tokenToOpen) {
       case 'from':
@@ -207,10 +230,10 @@ const NewOfferForm: FC = () => {
         });
         if (formStage === 'approveToken') {
           setTokenApproved({
-          address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
-          decimals: token.decimals,
-          name: token.name,
-        })
+            address: chainId === sepolia.id ? token.sepoliaAddress : token.polygonAddress,
+            decimals: token.decimals,
+            name: token.name,
+          });
         }
         setShowDefaultTokenPopupFrom(false);
         break;
@@ -257,8 +280,9 @@ const NewOfferForm: FC = () => {
     setValue('from', Number(contractsData && tokenFrom && formatUnits(contractsData[2], tokenFrom?.decimals)));
   };
 
-  const rate = watch('from') > 0 ? (watch('to') / watch('from')) : 0;
-  const balanceOfTokenFrom = tokenFrom && contractsData && parseFloat(formatUnits(contractsData[2], tokenFrom?.decimals));
+  const rate = watch('from') > 0 ? watch('to') / watch('from') : 0;
+  const balanceOfTokenFrom =
+    tokenFrom && contractsData && parseFloat(formatUnits(contractsData[2], tokenFrom?.decimals));
 
   const showApproveButtonDisabled = tokenFrom === undefined;
   const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData || isTransactionLoading;
@@ -311,6 +335,7 @@ const NewOfferForm: FC = () => {
                     type="number"
                     step="0.000000000000000001"
                     placeholder="0"
+                    readOnly={formStage !=='approveToken'}
                     {...register('from', {
                       required: true,
                       validate: (value) => (balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0),
@@ -351,20 +376,20 @@ const NewOfferForm: FC = () => {
                   {showDefaultTokenPopupFrom && (
                     <div className={styles.tokenPopupContainer}>
                       <TokenPopup
-                      onCLose={handleTokenPopupClose}
-                      onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
-                      colorScheme="light"
-                    />
+                        onCLose={handleTokenPopupClose}
+                        onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
+                        colorScheme="light"
+                      />
                     </div>
                   )}
-                  <div onClick={(e) => handleTokenPopupOpen(e,'from')} className={styles.tokenPopup}>
+                  <div onClick={(e) => handleTokenPopupOpen(e, 'from')} className={styles.tokenPopup}>
                     <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
                     <div className={styles.tokenArrow}>
                       <ArrowDown />
                     </div>
                   </div>
                   <button
-                    onClick={(e) => handleTokenPopupOpen(e,'customFrom')}
+                    onClick={(e) => handleTokenPopupOpen(e, 'customFrom')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >
@@ -405,21 +430,21 @@ const NewOfferForm: FC = () => {
                   )}
                   {showDefaultTokenPopupTo && (
                     <div className={styles.tokenPopupContainer}>
-                    <TokenPopup
-                      onCLose={handleTokenPopupClose}
-                      onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
-                      colorScheme="light"
-                    />
+                      <TokenPopup
+                        onCLose={handleTokenPopupClose}
+                        onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
+                        colorScheme="light"
+                      />
                     </div>
                   )}
-                  <div onClick={(e) => handleTokenPopupOpen(e,'to')} className={styles.tokenPopup}>
+                  <div onClick={(e) => handleTokenPopupOpen(e, 'to')} className={styles.tokenPopup}>
                     <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
                     <div className={styles.tokenArrow}>
                       <ArrowDown />
                     </div>
                   </div>
                   <button
-                    onClick={(e) => handleTokenPopupOpen(e,'customTo')}
+                    onClick={(e) => handleTokenPopupOpen(e, 'customTo')}
                     className={styles.buttonAddCustomToken}
                     type="button"
                   >
@@ -501,7 +526,7 @@ const NewOfferForm: FC = () => {
           </form>
         </div>
       )}
-      {formStage === 'tradeCreated' && <NewOfferTradeCreated transactionHash={transactionHash}/>}
+      {formStage === 'tradeCreated' && <NewOfferTradeCreated transactionHash={transactionHash} />}
     </section>
   );
 };

@@ -59,10 +59,12 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
   // }, []);
 
   return (
-    <div className={cn(styles.container,{[styles.containerLightScheme]:colorScheme === 'light'})} ref={popupRef}>
-      <div className={cn(styles.searchBlock,{[styles.searchBlockLightScheme]:colorScheme === 'light'})}>
+    <div className={cn(styles.container, { [styles.containerLightScheme]: colorScheme === 'light' })} ref={popupRef}>
+      <div className={cn(styles.searchBlock, { [styles.searchBlockLightScheme]: colorScheme === 'light' })}>
         <div className={styles.searchHead}>
-          <p className={cn(styles.searchTitle,{[styles.searchTitleLightScheme]:colorScheme === 'light'})}>Select a token</p>
+          <p className={cn(styles.searchTitle, { [styles.searchTitleLightScheme]: colorScheme === 'light' })}>
+            Select a token
+          </p>
           <div className={styles.closePopup} onClick={onCLose}>
             <Close />
           </div>
