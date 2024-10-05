@@ -30,6 +30,7 @@
   border: 2px solid #000;
   color: #000;
   background: #ffedbe;
+  cursor: pointer;
 }
 
 .activeStage {

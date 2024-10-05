@@ -116,6 +116,10 @@ const NewOfferForm: FC = () => {
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
   const serviceFee = fee && `Service fee ${fee}% ${fee && tokenFrom && tokenAmountIsTaken ? `(${tokenAmountIsTaken} ${tokenFrom.name}).`:''}${tokenFrom && getValues('from')? ` Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}.`:''}`;
 
+  const handleStageSelect = (stage:number) => {
+    if(stage ===1) setFormStage('approveToken');
+  }
+
   const {
     writeContract,
     isPending: isWriteApprovePending,
@@ -318,6 +322,7 @@ const NewOfferForm: FC = () => {
           <NewOfferFormStages
             description={formStage === 'createTrade' ? 'Create' : 'Approve'}
             activeStage={formStage === 'createTrade' ? 2 : 1}
+            onSelect={handleStageSelect}
           />
         )}
       </div>
