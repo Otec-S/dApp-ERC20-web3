@@ -72,20 +72,9 @@ export const NewOfferInputs: FC<Props> = ({
             placeholder="0"
             readOnly={formStage !== 'approveToken'}
             {...register('from', {
-              required: true,
               validate: (value) => (balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0),
             })}
           />
-          {errors.from?.type === 'required' && (
-            <div className={styles.error}>
-              {
-                <div className={styles.warningIcon}>
-                  <WarningIcon />
-                </div>
-              }
-              {' Required field'}
-            </div>
-          )}
           {errors.from?.type === 'validate' && (
             <div className={styles.error}>
               {
@@ -134,7 +123,7 @@ export const NewOfferInputs: FC<Props> = ({
             type="number"
             step="0.000000000000000001"
             placeholder="0"
-            {...register('to', { validate: (value) => value >= 0 })}
+            {...register('to', { validate: (value) => formStage==='approveToken' ? true : value > 0})}
           />
           {errors.to?.type === 'required' && (
             <div className={styles.error}>
