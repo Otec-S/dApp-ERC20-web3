@@ -26,12 +26,12 @@ interface FormData {
 
 interface Props {
   formStage: FormStages;
-  balanceOfTokenFrom?: number;
   showDefaultTokenPopupTo: boolean;
   rate: number;
   serviceFee: string;
   tokenFrom?: TokenDataNewOfferForm;
   tokenTo?: TokenDataNewOfferForm;
+  balanceOfTokenFrom?: number;
   contractsData?: [bigint, bigint, bigint];
   showDefaultTokenPopupFrom: boolean;
   register: UseFormRegister<FormData>;
