@@ -297,7 +297,11 @@ const SendERC20SendForm: FC<Props> = ({
           {inputRecipientError && <div className={style.inputRecipientError}>{inputRecipientError}</div>}
         </div>
         <FormButton buttonText="Send" isButtonActive={isButtonActive} disabled={!isButtonActive} />
-        {isRegularTokenPopupOpen && <div className={style.overlay}><TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} /></div>}
+        {isRegularTokenPopupOpen && (
+          <div className={style.overlay}>
+            <TokenPopup onCLose={handleCloseRegularTokenPopup} onSelect={handleOnSelect} />
+          </div>
+        )}
       </form>
     </>
   );

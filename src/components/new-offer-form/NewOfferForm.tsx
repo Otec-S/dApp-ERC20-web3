@@ -118,8 +118,9 @@ const NewOfferForm: FC = () => {
 
   const handleStageSelect = (stage: number) => {
     if (stage === 1) {
-      setValue('from',0);
-      setFormStage('approveToken')};
+      setValue('from', 0);
+      setFormStage('approveToken');
+    }
   };
 
   const {
@@ -136,7 +137,13 @@ const NewOfferForm: FC = () => {
   });
 
   useEffect(() => {
-    if (formStage === 'approveToken' && isWriteContractSuccess && isTransactionSuccess && getValues('from') && getValues('from')>0) {
+    if (
+      formStage === 'approveToken' &&
+      isWriteContractSuccess &&
+      isTransactionSuccess &&
+      getValues('from') &&
+      getValues('from') > 0
+    ) {
       setFormStage('createTrade');
       refetch();
     }
