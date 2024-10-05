@@ -4,23 +4,20 @@ import toast, { Toaster } from 'react-hot-toast';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import ArrowDown from '@assets/icons/arrow_down.svg';
-import WarningIcon from '@assets/icons/warning_icon.svg';
 import { tradeContractAddress } from '@src/shared/constants/contract';
 import { Token, TokenData } from '@src/shared/constants/tokens';
 import { tradeContractAbi } from '@src/shared/constants/tradeContractAbi';
-import getTokenIcon from '@src/utils/getTokenIcon';
 
 import AddTokenInfo from '../add-token-info-popup/AddTokenInfo';
 import FormButton from '../form-button/FormButton';
 import { StepPagination } from '../StepPagination/StepPagination';
 import { StepStatus } from '../StepPagination/StepPagination.interface';
-import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { NewOfferFormStages } from './NewOfferFormStages';
+import { NewOfferInputs } from './NewOfferInputs';
 import NewOfferTradeCreated from './NewOfferTradeCreated';
 import styles from './NewOfferForm.module.css';
 
@@ -29,7 +26,7 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-interface TokenDataNewOfferForm {
+export interface TokenDataNewOfferForm {
   decimals: number;
   name: string;
   address: Address;
@@ -45,6 +42,7 @@ interface FormData {
 }
 
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
+type TokenSelect = 'from' | 'to' | 'customFrom' | 'customTo';
 
 const THIRTY_MINUTES = 60 * 10 * 1000;
 
@@ -114,11 +112,15 @@ const NewOfferForm: FC = () => {
   const fee = contractsData !== undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) : '';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
   const tokenAmountOfReceiver = tokenAmountIsTaken && getValues('from') && getValues('from') - tokenAmountIsTaken;
-  const serviceFee = fee && `Service fee ${fee}% ${fee && tokenFrom && tokenAmountIsTaken ? `(${tokenAmountIsTaken} ${tokenFrom.name}).`:''}${tokenFrom && getValues('from')? ` Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}.`:''}`;
+  const serviceFee =
+    fee &&
+    `Service fee ${fee}% ${fee && tokenFrom && tokenAmountIsTaken ? `(${tokenAmountIsTaken} ${tokenFrom.name}).` : ''}${tokenFrom && getValues('from') ? ` Receiver will get ${tokenAmountOfReceiver} ${tokenFrom.name}.` : ''}`;
 
-  const handleStageSelect = (stage:number) => {
-    if(stage ===1) setFormStage('approveToken');
-  }
+  const handleStageSelect = (stage: number) => {
+    if (stage === 1) {
+      setValue('from',0);
+      setFormStage('approveToken')};
+  };
 
   const {
     writeContract,
@@ -134,7 +136,7 @@ const NewOfferForm: FC = () => {
   });
 
   useEffect(() => {
-    if (formStage === 'approveToken' && isWriteContractSuccess && isTransactionSuccess) {
+    if (formStage === 'approveToken' && isWriteContractSuccess && isTransactionSuccess && getValues('from') && getValues('from')>0) {
       setFormStage('createTrade');
       refetch();
     }
@@ -151,8 +153,13 @@ const NewOfferForm: FC = () => {
       setTokenApproved(tokenFrom);
       refetch();
     }
-    if (formStage === 'createTrade' && tokenFrom && contractsData && getValues('from') > Number(formatUnits(contractsData[1],tokenFrom?.decimals))) {
-      setValue('from',Number(formatUnits(contractsData[1],tokenFrom?.decimals)))
+    if (
+      formStage === 'createTrade' &&
+      tokenFrom &&
+      contractsData &&
+      getValues('from') > Number(formatUnits(contractsData[1], tokenFrom?.decimals))
+    ) {
+      setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
     }
     if (writeContractError) {
       toast.error(`Error: ${writeContractError.name}`);
@@ -203,10 +210,7 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  const handleTokenPopupOpen = (
-    e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>,
-    tokenToOpen: 'from' | 'to' | 'customFrom' | 'customTo',
-  ) => {
+  const handleTokenPopupOpen = (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>, tokenToOpen: TokenSelect) => {
     e.stopPropagation();
     switch (tokenToOpen) {
       case 'from':
@@ -329,169 +333,23 @@ const NewOfferForm: FC = () => {
       {formStage !== 'tradeCreated' && (
         <div className={cn(styles.formWrapper)}>
           <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-            <div className={styles.inputs}>
-              <div className={styles.inputsWraper}>
-                <label className={styles.label}>
-                  From
-                  <input
-                    className={cn(styles.inputQuantity, {
-                      [styles.inputQuantityError]: errors.from?.type === 'validate',
-                    })}
-                    type="number"
-                    step="0.000000000000000001"
-                    placeholder="0"
-                    readOnly={formStage !=='approveToken'}
-                    {...register('from', {
-                      required: true,
-                      validate: (value) => (balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0),
-                    })}
-                  />
-                  {errors.from?.type === 'required' && (
-                    <div className={styles.error}>
-                      {
-                        <div className={styles.warningIcon}>
-                          <WarningIcon />
-                        </div>
-                      }
-                      {' Required field'}
-                    </div>
-                  )}
-                  {errors.from?.type === 'validate' && (
-                    <div className={styles.error}>
-                      {
-                        <div className={styles.warningIcon}>
-                          <WarningIcon />
-                        </div>
-                      }
-                      {' Unsufficient balance'}
-                    </div>
-                  )}
-                  {!errors.from && contractsData && (
-                    <div className={styles.tokenBalanceWrapper}>
-                      <span className={styles.tokenBalance}>{`Balance: ${balanceOfTokenFrom}`}</span>
-                      <button
-                        onPointerDown={handleSetTokenMaxValue}
-                        className={styles.tokenBalanceButton}
-                        type="button"
-                      >
-                        Max
-                      </button>
-                    </div>
-                  )}
-                  {showDefaultTokenPopupFrom && (
-                    <div className={styles.tokenPopupContainer}>
-                      <TokenPopup
-                        onCLose={handleTokenPopupClose}
-                        onSelect={(data) => handleDefaultTokenChoice(data, 'from')}
-                        colorScheme="light"
-                      />
-                    </div>
-                  )}
-                  <div onClick={(e) => handleTokenPopupOpen(e, 'from')} className={styles.tokenPopup}>
-                    <div className={styles.tokenIcon}>{tokenFrom?.address && getTokenIcon(tokenFrom?.address)}</div>
-                    <div className={styles.tokenArrow}>
-                      <ArrowDown />
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => handleTokenPopupOpen(e, 'customFrom')}
-                    className={styles.buttonAddCustomToken}
-                    type="button"
-                  >
-                    + Add a custom token
-                  </button>
-                </label>
-                <label className={styles.label}>
-                  To
-                  <input
-                    className={styles.inputQuantity}
-                    type="number"
-                    step="0.000000000000000001"
-                    placeholder="0"
-                    {...register(
-                      'to',
-                      isWriteContractSuccess ? { required: true, validate: (value) => value > 0 } : undefined,
-                    )}
-                  />
-                  {errors.to?.type === 'required' && (
-                    <div className={styles.error}>
-                      {
-                        <div className={styles.warningIcon}>
-                          <WarningIcon />
-                        </div>
-                      }
-                      {' Required field'}
-                    </div>
-                  )}
-                  {errors.to?.type === 'validate' && (
-                    <div className={styles.error}>
-                      {
-                        <div className={styles.warningIcon}>
-                          <WarningIcon />
-                        </div>
-                      }
-                      {' Unsufficient balance'}
-                    </div>
-                  )}
-                  {showDefaultTokenPopupTo && (
-                    <div className={styles.tokenPopupContainer}>
-                      <TokenPopup
-                        onCLose={handleTokenPopupClose}
-                        onSelect={(token) => handleDefaultTokenChoice(token, 'to')}
-                        colorScheme="light"
-                      />
-                    </div>
-                  )}
-                  <div onClick={(e) => handleTokenPopupOpen(e, 'to')} className={styles.tokenPopup}>
-                    <div className={styles.tokenIcon}>{tokenTo?.address && getTokenIcon(tokenTo?.address)}</div>
-                    <div className={styles.tokenArrow}>
-                      <ArrowDown />
-                    </div>
-                  </div>
-                  <button
-                    onClick={(e) => handleTokenPopupOpen(e, 'customTo')}
-                    className={styles.buttonAddCustomToken}
-                    type="button"
-                  >
-                    + Add a custom token
-                  </button>
-                </label>
-              </div>
-              <div className={styles.additionalInputsWrapper}>
-                <div className={styles.labelRate}>
-                  <span className={styles.inputRate}>{rate}</span>
-                  <span className={styles.labelText}>Rate</span>
-                </div>
-                <label className={styles.labelReceiver}>
-                  <input
-                    className={styles.inputReceiver}
-                    type="text"
-                    defaultValue="0x0000000000000000000000000000000000000000"
-                    {...register('optionalTaker', { validate: (value) => isAddress(value) })}
-                  />
-                  <span className={styles.labelText}>Receiver</span>
-                  {errors.optionalTaker?.type === 'validate' && (
-                    <div className={styles.optionalTakerError}>
-                      {
-                        <div className={styles.warningIcon}>
-                          <WarningIcon />
-                        </div>
-                      }
-                      {' Please input address'}
-                    </div>
-                  )}
-                </label>
-              </div>
-              <div className={styles.approveWrraper}>
-                <span className={styles.fee}>{serviceFee}</span>
-                <div>
-                  <input type="checkbox" id="infiniteapprove" {...register('infiniteApprove')} />
-                  <label htmlFor="infiniteapprove" className={styles.approve}>
-                    Infinite approve
-                  </label>
-                </div>
-              </div>
-            </div>
+            <NewOfferInputs
+              showDefaultTokenPopupTo={showDefaultTokenPopupTo}
+              errors={errors}
+              tokenTo={tokenTo}
+              register={register}
+              serviceFee={serviceFee}
+              contractsData={contractsData}
+              showDefaultTokenPopupFrom={showDefaultTokenPopupFrom}
+              tokenFrom={tokenFrom}
+              rate={rate}
+              formStage={formStage}
+              balanceOfTokenFrom={balanceOfTokenFrom}
+              handleSetTokenMaxValue={handleSetTokenMaxValue}
+              handleDefaultTokenChoice={handleDefaultTokenChoice}
+              handleTokenPopupClose={handleTokenPopupClose}
+              handleTokenPopupOpen={handleTokenPopupOpen}
+            />
             <div className={cn(styles.buttons, { [styles.buttonsAfterTokenApproval]: formStage === 'createTrade' })}>
               <span className={styles.helpText}>
                 {formStage === 'approveToken'
