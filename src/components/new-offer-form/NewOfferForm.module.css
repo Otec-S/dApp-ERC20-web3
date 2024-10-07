@@ -1,0 +1,456 @@
+.createOffer {
+  width: 840px;
+  position: relative;
+  height: 561px;
+}
+
+.headerWrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.inputs {
+  height: 381px;
+  border-radius: 16px 16px 0 0;
+  background: #fffbf2;
+  padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.buttonAddCustomToken {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  color: black;
+  border-radius: 100px;
+  background: rgba(0, 0, 0, 0.05);
+  display: flex;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 24px;
+  width: 143px;
+  position: absolute;
+  right: 24px;
+  bottom: 15px;
+  cursor: pointer;
+}
+
+.approve {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+}
+
+.approveWrraper {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  gap: 16px;
+}
+
+.buttons {
+  background: #fffbf2;
+  height: 142px;
+  padding: 16px 24px;
+  border-radius: 0 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.buttonsAfterTokenApproval {
+  background: white;
+}
+
+.buttonsWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}
+
+.label {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-grow: 1;
+  position: relative;
+}
+
+.inputQuantity {
+  border-radius: 24px;
+  border: 1px solid #222;
+  background: #fffbf2;
+  width: 100%;
+  height: 102px;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px 218px 45px 24px;
+  outline: none;
+}
+
+.inputQuantityError {
+  color: #ff007a;
+}
+
+.inputRate {
+  width: 135px;
+  height: 24px;
+  border: none;
+  outline: none;
+  background: #fffbf2;
+}
+
+.inputReceiver {
+  max-width: 460px;
+  width: 100%;
+  height: 24px;
+  border: none;
+  outline: none;
+  background: #fffbf2;
+}
+
+.inputReceiver,
+.inputRate {
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.inputRate::placeholder,
+.inputQuantity::placeholder,
+.inputReceiver::placeholder {
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.inputRate::placeholder {
+  font-size: 24px;
+}
+
+.inputReceiver::placeholder {
+  font-size: 18px;
+}
+
+.labelRate {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  max-width: 210px;
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid #333;
+  width: 210px;
+  height: 48px;
+  padding: 0px 24px;
+}
+
+.labelReceiver {
+  display: flex;
+  flex-direction: row;
+  border-radius: 100px;
+  border: 1px solid #333;
+  display: flex;
+  max-width: 566px;
+  width: 100%;
+  height: 48px;
+  padding: 0px 24px;
+  align-items: center;
+  position: relative;
+}
+
+.labelText {
+  flex-shrink: 0;
+  overflow: hidden;
+  color: #404040;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: inline-block;
+}
+
+.inputsWraper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 16px;
+}
+
+.tokenPopup {
+  position: absolute;
+  right: 24px;
+  cursor: pointer;
+  bottom: 54px;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.tokenIcon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.tokenIcon svg {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.tokenArrow {
+  width: 16px;
+  height: 16px;
+}
+
+.loader {
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: lightgrey;
+  text-align: center;
+  padding: 100px;
+  z-index: 9999;
+}
+
+.tokenBalance {
+  color: #000;
+  text-align: right;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  max-width: 129px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  height: 16px;
+  display: block;
+  white-space: nowrap;
+}
+
+.error,
+.optionalTakerError {
+  color: #ff007a;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.error {
+  position: absolute;
+  left: 24px;
+  bottom: 18px;
+}
+
+.optionalTakerError {
+  position: absolute;
+  left: 24px;
+  top: 50px;
+}
+
+.warningIcon {
+  width: 16px;
+  height: 16px;
+}
+
+.warningIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.tokenBalanceWrapper {
+  position: absolute;
+  left: 24px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  max-width: 170px;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+}
+
+.tokenBalanceButton {
+  display: flex;
+  padding: 4px 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.additionalInputsWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.tokenPopupContainer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.customTokenContainer {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+  z-index: 10;
+}
+
+.fee {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.clipboardLink {
+  border-radius: 100px;
+  background: #ffb800;
+  display: flex;
+  height: 38px;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  width: 95px;
+  cursor: pointer;
+}
+
+.clipboardHeader {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 8px;
+}
+
+.clipboard {
+  background: white;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.helpText {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

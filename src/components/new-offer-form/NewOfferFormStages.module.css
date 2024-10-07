@@ -1,0 +1,45 @@
+.stages {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  font-family: 'Open Sans', sans-serif;
+  align-items: center;
+}
+
+.header {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.stage {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  padding: 10px 0px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  border-radius: 100px;
+  border: 2px solid #000;
+  color: #000;
+  background: #ffedbe;
+  cursor: pointer;
+}
+
+.activeStage {
+  color: white;
+  background: var(--Gray-1, #333);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}

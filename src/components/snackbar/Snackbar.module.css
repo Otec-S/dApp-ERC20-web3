@@ -1,0 +1,38 @@
+.snackbar {
+  display: flex;
+  width: 340px;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  background: #1aab9b;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  min-height: 37px;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.snackbarError {
+  background: #ff5252;
+}
+
+.icon {
+  color: white;
+  transition: transform 0.5s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon:hover {
+  transform: rotate(90deg);
+}
