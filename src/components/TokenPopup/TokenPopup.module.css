@@ -4,10 +4,6 @@
 @value inter, openSans from fonts;
 
 .container {
-  position: absolute;
-  top: 55px;
-  right: 55px;
-  z-index: 10;
   width: 370px;
   height: 500px;
   display: flex;
@@ -15,6 +11,12 @@
   border-radius: 16px;
   background-color: darkGrey;
   box-sizing: border-box;
+  color: white;
+}
+
+.containerLightScheme {
+  color: black;
+  background: white;
 }
 
 .searchBlock {
@@ -26,11 +28,18 @@
   gap: 16px;
   box-sizing: border-box;
   border-bottom: 1px solid #222;
+  border-radius: 16px 16px 0 0;
+}
+
+.searchBlockLightScheme {
+  background: #ffe5a1;
+  border-bottom: none;
 }
 
 .searchHead {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .searchTitle {
@@ -46,6 +55,10 @@
   margin: 0;
 }
 
+.searchTitleLightScheme {
+  color: black;
+}
+
 .searchRow {
   display: flex;
   align-items: center;
@@ -54,6 +67,14 @@
   border: 1px solid #222;
   background: #515151;
   box-sizing: border-box;
+}
+
+.searchRowLightScheme {
+  background: white;
+}
+
+.searchIconLightScheme {
+  color: black;
 }
 
 .closePopup {
@@ -70,7 +91,7 @@
   height: 36px;
   width: 100%;
   overflow: hidden;
-  color: #fff;
+  color: inherit;
   font-feature-settings:
     'liga' off,
     'clig' off;
@@ -82,11 +103,10 @@
   line-height: normal;
   background: #515151;
   border: none;
-  color: white;
   box-sizing: border-box;
 
   &::placeholder {
-    color: white;
+    color: inherit;
   }
 
   &:focus {
@@ -94,11 +114,18 @@
   }
 }
 
+.inputLightScheme {
+  background: white;
+}
+
 .searchIcon {
   width: 24px;
   min-width: 24px;
   margin-left: 16px;
   height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .inputCLoseIcon {
@@ -113,6 +140,10 @@
   &:hover {
     transform: rotate(90deg);
   }
+}
+
+.inputCLoseIcon:hover {
+  transform: rotate(90deg);
 }
 
 .tokensRow {
@@ -140,6 +171,8 @@
 .tokenIcon {
   height: 20px;
   width: 20px;
+  display: flex;
+  align-items: center;
 
   svg {
     height: 20px;
@@ -161,6 +194,7 @@
 
 .listBlock {
   overflow-y: scroll;
+  border-radius: 0 0 16px 16px;
 
   &::-webkit-scrollbar {
     width: 1px;
@@ -180,4 +214,21 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.listItemLIghtScheme {
+  border-bottom: none;
+}
+
+.tokenSymbolLightScheme {
+  color: black;
+}
+
+.tokenItemLightScheme {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: #ffedbe;
+}
+
+.tokenSymbolLightScheme {
+  color: black;
 }

@@ -1,19 +1,6 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background: rgba(0, 0, 0, 0.5);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-}
-
 .addToken {
   display: flex;
-  max-width: 640px;
+  width: 640px;
   height: 638px;
   flex-direction: column;
   align-items: flex-start;
