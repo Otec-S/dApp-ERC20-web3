@@ -7,9 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
+import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
+import getTokenIcon from '@src/utils/getTokenIcon';
 import { shortenHash } from '@src/utils/shortenHash';
 
 import { rows } from './offers-table.mock';
+import styles from './offers-table.module.css';
 
 export const OffersTable: FC = () => {
   return (
@@ -34,8 +37,18 @@ export const OffersTable: FC = () => {
               <TableCell component="th" scope="row">
                 {row.id}
               </TableCell>
-              <TableCell align="left">{row.from}</TableCell>
-              <TableCell align="left">{row.to}</TableCell>
+              <TableCell align="left">
+                <div className={styles.token}>
+                  <div className={styles.tokenLogo}>{getTokenIcon(row.fromTokenAddress)}</div>
+                  {row.fromTokenName}
+                </div>
+              </TableCell>
+              <TableCell align="left">
+                <div className={styles.token}>
+                  <div className={styles.tokenLogo}>{getTokenIcon(row.toTokenAddress)}</div>
+                  {row.toTokenName}
+                </div>
+              </TableCell>
               <TableCell align="right">{row.amount1}</TableCell>
               <TableCell align="right">{row.amount2}</TableCell>
               <TableCell align="right">{row.rate}</TableCell>
