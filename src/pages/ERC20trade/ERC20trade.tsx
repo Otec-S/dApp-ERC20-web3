@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Outlet } from 'react-router-dom';
+// import { Outlet } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
@@ -7,6 +7,7 @@ import Header from '@components/header/Header';
 import { OffersTable } from '@src/components/offers-table/offers-table';
 
 import styles from './ERC20trade.module.css';
+import EnhancedTable from '@src/components/offers-table/test-table';
 
 export const ERC20trade: FC = () => {
   const { isConnected } = useAccount();
@@ -21,9 +22,10 @@ export const ERC20trade: FC = () => {
       <div className={styles.header}>
         <Header />
       </div>
-      <Outlet />
-      <div>
+      {/* <Outlet /> */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
         <OffersTable />
+        <EnhancedTable />
       </div>
     </div>
   );
