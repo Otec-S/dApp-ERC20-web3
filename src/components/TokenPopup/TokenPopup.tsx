@@ -37,27 +37,6 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
     setSearchText('');
   };
 
-  // const handleEscDown = (e: KeyboardEvent) => {
-  //   if (e.key === 'Escape') {
-  //     onCLose();
-  //   }
-  // };
-
-  // const handleClickOutside = (e: MouseEvent) => {
-  //   if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-  //     onCLose();
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleEscDown);
-  //   window.addEventListener('click', handleClickOutside);
-  //   return () => {
-  //     window.removeEventListener('keydown', handleEscDown);
-  //     window.removeEventListener('click', handleClickOutside);
-  //   };
-  // }, []);
-
   return (
     <div className={cn(styles.container, { [styles.containerLightScheme]: colorScheme === 'light' })} ref={popupRef}>
       <div className={cn(styles.searchBlock, { [styles.searchBlockLightScheme]: colorScheme === 'light' })}>
