@@ -4,6 +4,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
+import { OffersTable } from '@src/components/offers-table/offers-table';
 
 import styles from './ERC20trade.module.css';
 
@@ -21,6 +22,9 @@ export const ERC20trade: FC = () => {
         <Header />
       </div>
       <Outlet />
+      <div>
+        <OffersTable />
+      </div>
     </div>
   );
 };
