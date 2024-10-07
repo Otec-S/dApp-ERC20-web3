@@ -35,7 +35,30 @@ export const OffersTable: FC = () => {
   const visibleRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', border: '1px solid black' }}>
+      <div className={styles.titleBlock}>
+        <h1 className={styles.title}>My offers</h1>
+        <div className={styles.statusButtons}>
+          <button className={styles.statusButton}>All</button>
+          <button className={styles.statusButton}>Open</button>
+          <button className={styles.statusButton}>For me</button>
+        </div>
+        <div className={styles.cancelAndSearchButtons}>
+          <button className={styles.cancelOfferButton}>Cancel offer</button>
+          <input type="text" className={styles.searchOffer} placeholder="Offer ID or Asset" />
+        </div>
+      </div>
+
+      <TablePagination
+        rowsPerPageOptions={[3, 5, 10]}
+        component="div"
+        count={rows.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ border: '2px solid green' }}
+      />
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer className={styles.container}>
           <Table sx={{ minWidth: 650 }} aria-label="table of offers">
@@ -102,15 +125,6 @@ export const OffersTable: FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[3, 5, 10]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
       </Paper>
     </Box>
   );

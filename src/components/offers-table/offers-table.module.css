@@ -1,3 +1,51 @@
+.titleBlock {
+  margin: 24px 0 0 24px;
+}
+
+.title {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  margin-bottom: 16px;
+}
+
+.statusButtons {
+  /* Стили для кнопок статуса */
+}
+
+.statusButton {
+  padding: 16px;
+  border: 1px solid #000;
+
+  text-align: center;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.cancelAndSearchButtons {
+  /* Стили для кнопок отмены и поиска */
+}
+
+.cancelOfferButton {
+  /* Стили для кнопки отмены предложения */
+}
+
+.searchOffer {
+  /* Стили для поиска предложения */
+}
+
 .token {
   display: flex;
   gap: 5px;

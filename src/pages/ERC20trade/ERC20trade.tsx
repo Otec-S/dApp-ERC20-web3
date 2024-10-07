@@ -5,9 +5,9 @@ import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
 import { OffersTable } from '@src/components/offers-table/offers-table';
+import EnhancedTable from '@src/components/offers-table/test-table';
 
 import styles from './ERC20trade.module.css';
-import EnhancedTable from '@src/components/offers-table/test-table';
 
 export const ERC20trade: FC = () => {
   const { isConnected } = useAccount();
@@ -22,10 +22,11 @@ export const ERC20trade: FC = () => {
       <div className={styles.header}>
         <Header />
       </div>
+      {/* FIXME: */}
       {/* <Outlet /> */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '50px' }}>
         <OffersTable />
-        <EnhancedTable />
+        {/* <EnhancedTable /> */}
       </div>
     </div>
   );
