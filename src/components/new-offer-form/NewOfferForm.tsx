@@ -1,13 +1,15 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { CSSProperties, FC, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import { useSearchParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, maxUint256, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, isAddress, maxUint256, parseUnits } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
+import { tokens } from '@src/assets/constants';
 import { tradeContractAddress } from '@src/shared/constants/contract';
 import { Token, TokenData } from '@src/shared/constants/tokens';
 import { tradeContractAbi } from '@src/shared/constants/tradeContractAbi';
@@ -47,6 +49,44 @@ type TokenSelect = 'from' | 'to' | 'customFrom' | 'customTo';
 const THIRTY_MINUTES = 60 * 10 * 1000;
 
 const NewOfferForm: FC = () => {
+  const [searchParams] = useSearchParams();
+  const { isConnected, chainId, address: walletAddress } = useAccount();
+
+  const optionalTaker =
+    searchParams.get('optionalTaker') && isAddress(searchParams.get('optionalTaker') ?? '')
+      ? (searchParams.get('optionalTaker') as Address)
+      : '0x0000000000000000000000000000000000000000';
+
+  const tokenFromParams = useMemo(() => {
+    return {
+      decimals: searchParams.get('tokenFromName') ? Number(searchParams.get('tokenFromName')) : 18,
+      name: searchParams.get('tokenFromName') ?? 'ARB',
+      address:
+        searchParams.get('tokenFromAddress') && isAddress(searchParams.get('tokenFromAddress') ?? '')
+          ? (searchParams.get('tokenFromAddress') as Address)
+          : chainId === sepolia.id
+            ? tokens[0].sepoliaAddress
+            : tokens[0].polygonAddress,
+    };
+  }, [chainId, searchParams]);
+
+  const tokenToParams = useMemo(() => {
+    return {
+      decimals: searchParams.get('tokenToName') ? Number(searchParams.get('tokenToName')) : 18,
+      name: searchParams.get('tokenToName') ?? 'DAI',
+      address:
+        searchParams.get('tokenFromAddress') && isAddress(searchParams.get('tokenFromAddress') ?? '')
+          ? (searchParams.get('tokenFromAddress') as Address)
+          : chainId === sepolia.id
+            ? tokens[1].sepoliaAddress
+            : tokens[1].polygonAddress,
+    };
+  }, [chainId, searchParams]);
+
+  const tokenFromAmount = searchParams.get('tokenFromAmount') ? Number(searchParams.get('tokenFromAmount')) : 0;
+
+  const tokenToAmount = searchParams.get('tokenToAmount') ? Number(searchParams.get('tokenToAmount')) : 0;
+
   const [showDefaultTokenPopupFrom, setShowDefaultTokenPopupFrom] = useState(false);
   const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
   const [showCustomTokenPopupFrom, setShowCustomTokenPopupFrom] = useState(false);
@@ -67,17 +107,20 @@ const NewOfferForm: FC = () => {
     mode: 'onChange',
   });
 
-  const { isConnected, chainId, address: walletAddress } = useAccount();
+  useEffect(() => {
+    if (Number(tokenFromAmount) !== 0 && Number(tokenToAmount) !== 0) {
+      setValue('from', Number(tokenFromAmount));
+      setValue('to', Number(tokenToAmount));
+    }
+    setTokenFrom(tokenFromParams);
+    setTokenTo(tokenToParams);
+    setValue('optionalTaker', optionalTaker);
+  }, [tokenFromAmount, tokenToAmount, setValue, chainId, tokenFromParams, tokenToParams, optionalTaker]);
+
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
-
-  useEffect(() => {
-    reset();
-    setTokenFrom(undefined);
-    setTokenTo(undefined);
-  }, [chainId, reset]);
 
   const {
     data: contractsData,
