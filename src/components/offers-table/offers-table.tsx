@@ -34,6 +34,7 @@ export const OffersTable: FC = () => {
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
+
   const handleClearInput = () => {
     setSearchText('');
   };
@@ -63,15 +64,19 @@ export const OffersTable: FC = () => {
 
   // TODO:
   // Фильтруем строки по поисковому запросу
-  // const searchedRows = filteredRows.filter((row) => {
-  //   if (searchText === '') {
-  //     return true;
-  //   }
-  //   return row.id.includes(searchText) || row.fromTokenName.toLowerCase().includes(searchText.toLowerCase());
-  // });
+  const searchedRows = filteredRows.filter((row) => {
+    if (searchText === '') {
+      return true;
+    }
+    return (
+      row.id.toString().includes(searchText) ||
+      row.fromTokenName.toLowerCase().includes(searchText.toLowerCase()) ||
+      row.toTokenName.toLowerCase().includes(searchText.toLowerCase())
+    );
+  });
 
   // Вычисляем видимые строки
-  const visibleRows = filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const visibleRows = searchedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Box sx={{ width: '100%', marginTop: '150px', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
@@ -79,7 +84,6 @@ export const OffersTable: FC = () => {
         <h1 className={styles.title}>My offers</h1>
         <div className={styles.statusButtons}>
           <button
-            // className={`${styles.statusButton} ${styles.statusButtonActive}`}>
             className={cn(styles.statusButton, {
               [styles.statusButtonActive]: activeButton === 'All',
             })}
@@ -104,37 +108,38 @@ export const OffersTable: FC = () => {
             For me <span className={styles.offersCount}>{forMeOffersCount}</span>
           </button>
         </div>
-        <div className={styles.cancelAndSearchButtons}>
-          <button className={styles.cancelOfferButton}>Cancel offer</button>
-          {/* <input type="text" className={styles.searchOffer} placeholder="Offer ID or Asset" /> */}
-          {/* TODO: вниз */}
-          <div className={styles.searchRow}>
-            <div className={styles.searchIcon}>
-              <Search />
+        <div className={styles.buttonsAndPagination}>
+          <div className={styles.cancelAndSearchButtons}>
+            <button className={styles.cancelOfferButton}>Cancel offer</button>
+            <div className={styles.searchRow}>
+              <div className={styles.searchIcon}>
+                <Search />
+              </div>
+              <input
+                value={searchText}
+                className={styles.input}
+                placeholder="Offer ID or Asset"
+                onChange={handleChangeInput}
+              />
+              <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
+                <Close />
+              </div>
             </div>
-            <input
-              value={searchText}
-              className={styles.input}
-              placeholder="Offer ID or Asset"
-              onChange={handleChangeInput}
+          </div>
+          <div className={styles.pagination}>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 15]}
+              component="div"
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
-              <Close />
-            </div>
-            {/* TODO: вверх */}
           </div>
         </div>
       </div>
 
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 15]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableContainer className={styles.container}>
           <Table sx={{ minWidth: 650 }} aria-label="table of offers">

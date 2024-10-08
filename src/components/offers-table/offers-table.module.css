@@ -1,9 +1,11 @@
 .titleBlock {
-  margin: 24px 0 -35px 24px;
+  /* margin: 24px 0 -35px 24px; */
+  margin: 24px 0 0 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: 50%;
+  /* width: 50%; */
+  z-index: 10;
 }
 
 .title {
@@ -158,6 +160,15 @@
 
 .searchOffer {
   /* Стили для поиска предложения */
+}
+
+.buttonsAndPagination {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  /* margin: 24px 24px 0 24px; */
 }
 
 .token {
