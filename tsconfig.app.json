@@ -23,9 +23,9 @@
     "baseUrl": ".",
     "paths": {
       "@pages/*": ["./src/pages/*"],
-      "@shared/*": ["./src/shared/*"],
       "@assets/*": ["./src/assets/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": ["src"]
