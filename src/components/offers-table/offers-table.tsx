@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -145,6 +145,7 @@ export const OffersTable: FC = () => {
           <Table sx={{ minWidth: 650 }} aria-label="table of offers">
             <TableHead>
               <TableRow sx={{ fontWeight: 'bold', backgroundColor: '#FFE5A1', fontFamily: 'Open Sans, sans serif' }}>
+                <TableCell></TableCell>
                 <TableCell>Offer ID</TableCell>
                 <TableCell align="left">From Asset 1</TableCell>
                 <TableCell align="left">To Asset 2</TableCell>
@@ -159,6 +160,25 @@ export const OffersTable: FC = () => {
             <TableBody>
               {visibleRows.map((row) => (
                 <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell padding="none">
+                    <Checkbox
+                      // color="primary"
+                      // size="small"
+                      sx={{
+                        '& .MuiSvgIcon-root': { fontSize: 15 },
+                        '&.Mui-checked': {
+                          color: 'black',
+                        },
+                      }}
+                      className={styles.checkbox}
+                      // indeterminate={numSelected > 0 && numSelected < rowCount}
+                      // checked={rowCount > 0 && numSelected === rowCount}
+                      // onChange={onSelectAllClick}
+                      // inputProps={{
+                      //   'aria-label': 'select all desserts',
+                      // }}
+                    />
+                  </TableCell>
                   <TableCell component="th" scope="row">
                     {row.id}
                   </TableCell>

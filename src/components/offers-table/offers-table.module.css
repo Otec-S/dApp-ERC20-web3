@@ -1,6 +1,6 @@
 .titleBlock {
   /* margin: 24px 0 -35px 24px; */
-  margin: 24px 0 0 24px;
+  margin: 24px 0 0 40px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -169,6 +169,10 @@
   justify-content: space-between;
   align-items: center;
   /* margin: 24px 24px 0 24px; */
+}
+
+.checkbox {
+  /* color: red; */
 }
 
 .token {
