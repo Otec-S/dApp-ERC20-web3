@@ -40,10 +40,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: '/erc20trade',
-    element: <ERC20trade />,
-  },
+  // {
+  //   path: '/erc20trade',
+  //   element: <ERC20trade />,
+  // },
 ]);
 
 const App: FC = () => {

@@ -1,5 +1,9 @@
 .titleBlock {
-  margin: 24px 0 0 24px;
+  margin: 24px 0 -35px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 50%;
 }
 
 .title {
@@ -12,16 +16,18 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  margin-bottom: 16px;
 }
 
 .statusButtons {
-  /* Стили для кнопок статуса */
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .statusButton {
-  padding: 16px;
-  border: 1px solid #000;
+  padding: 5px 16px;
+  border-radius: 100px;
+  background-color: initial;
 
   text-align: center;
   font-feature-settings:
@@ -34,12 +40,100 @@
   line-height: normal;
 }
 
+.statusButtonActive {
+  background-color: #fff;
+}
+
 .cancelAndSearchButtons {
-  /* Стили для кнопок отмены и поиска */
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .cancelOfferButton {
-  /* Стили для кнопки отмены предложения */
+  border-radius: 100px;
+  background: #ffb800;
+  display: flex;
+  /* height: 36px; */
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.searchRow {
+  width: 210px;
+  display: flex;
+  align-items: center;
+  /* width: 100%; */
+  border-radius: 100px;
+  border: 2px solid #222;
+  background: inherit;
+  box-sizing: border-box;
+}
+
+.searchIcon {
+  width: 24px;
+  min-width: 8px;
+  margin-left: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputCLoseIcon {
+  width: 21px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+  transform-origin: center;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
+}
+
+/* FIXME: дубрируется? */
+.inputCLoseIcon:hover {
+  transform: rotate(90deg);
+}
+
+.input {
+  height: 36px;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: openSans, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: inherit;
+  border: none;
+  box-sizing: border-box;
+
+  /* &::placeholder {
+    color: inherit;
+  } */
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .searchOffer {
