@@ -5,6 +5,10 @@
   align-items: center;
 }
 
+.tokenImgWrapper svg {
+  border-radius: 50%;
+}
+
 .tokenImg {
   width: 48px;
   height: 48px;

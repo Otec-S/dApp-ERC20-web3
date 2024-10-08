@@ -1,16 +1,19 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
-
-import { CloseIcon, SearchIcon } from '@assets/icons';
+import { ChangeEvent, FC, useRef, useState } from 'react';
+import cn from 'classnames';
+import { Address } from 'viem';
+import { CloseIcon } from '@assets/icons';
+import Search from '@assets/icons/search.svg';
 import { Token, tokens } from '@shared/constants';
 
 import styles from './TokenPopup.module.css';
 
 type Props = {
+  colorScheme?: 'dark' | 'light';
   onCLose: () => void;
   onSelect: (token: Token) => void;
 };
 
-export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
+export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
   const [searchText, setSearchText] = useState('');
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -21,10 +24,11 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
     setSearchText(e.target.value);
   };
 
-  const handleSelectToken = (name: string) => () => {
-    const token = tokens.find((item) => item.name === name);
+  const handleSelectToken = (address: Address) => () => {
+    const token = tokens.find((item) => item.sepoliaAddress === address || item.polygonAddress === address);
     if (token) {
       onSelect(token);
+      onCLose();
     }
   };
 
@@ -32,43 +36,24 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
     setSearchText('');
   };
 
-  const handleEscDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onCLose();
-    }
-  };
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-      onCLose();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleEscDown);
-    window.addEventListener('click', handleClickOutside);
-    return () => {
-      window.removeEventListener('keydown', handleEscDown);
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className={styles.container} ref={popupRef}>
-      <div className={styles.searchBlock}>
+    <div className={cn(styles.container, { [styles.containerLightScheme]: colorScheme === 'light' })} ref={popupRef}>
+      <div className={cn(styles.searchBlock, { [styles.searchBlockLightScheme]: colorScheme === 'light' })}>
         <div className={styles.searchHead}>
-          <p className={styles.searchTitle}>Select a token</p>
+          <p className={cn(styles.searchTitle, { [styles.searchTitleLightScheme]: colorScheme === 'light' })}>
+            Select a token
+          </p>
           <div className={styles.closePopup} onClick={onCLose}>
             <CloseIcon />
           </div>
         </div>
-        <div className={styles.searchRow}>
-          <div className={styles.searchIcon}>
-            <SearchIcon />
+        <div className={cn(styles.searchRow, { [styles.searchRowLightScheme]: colorScheme === 'light' })}>
+          <div className={cn(styles.searchIcon, { [styles.searchIconLightScheme]: colorScheme === 'light' })}>
+            <Search />
           </div>
           <input
             value={searchText}
-            className={styles.input}
+            className={cn(styles.input, { [styles.inputLightScheme]: colorScheme === 'light' })}
             placeholder="Search asset or paste address"
             onChange={handleChangeInput}
           />
@@ -78,18 +63,32 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect }) => {
         </div>
         <div className={styles.tokensRow}>
           {firstTokensGroup.map((item) => (
-            <div key={item.id} className={styles.tokenItem} onClick={handleSelectToken(item.name)}>
+            <div
+              key={item.polygonAddress}
+              className={cn(styles.tokenItem, { [styles.tokenItemLightScheme]: colorScheme === 'light' })}
+              onClick={handleSelectToken(item.sepoliaAddress)}
+            >
               <div className={styles.tokenIcon}>{item.icon}</div>
-              <div className={styles.tokenSymbol}> {item.name}</div>
+              <div className={cn(styles.tokenSymbol, { [styles.tokenSymbolLightScheme]: colorScheme === 'light' })}>
+                {' '}
+                {item.name}
+              </div>
             </div>
           ))}
         </div>
       </div>
       <div className={styles.listBlock}>
         {tokenArr.map((item) => (
-          <div key={item.id} className={styles.listItem} onClick={handleSelectToken(item.name)}>
+          <div
+            key={item.sepoliaAddress}
+            className={cn(styles.listItem, { [styles.listItemLIghtScheme]: colorScheme === 'light' })}
+            onClick={handleSelectToken(item.sepoliaAddress)}
+          >
             <div className={styles.tokenIcon}>{item.icon}</div>
-            <div className={styles.tokenSymbol}> {item.name}</div>
+            <div className={cn(styles.tokenSymbol, { [styles.tokenSymbolLightScheme]: colorScheme === 'light' })}>
+              {' '}
+              {item.name}
+            </div>
           </div>
         ))}
       </div>

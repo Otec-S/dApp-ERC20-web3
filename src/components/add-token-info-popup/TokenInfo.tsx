@@ -33,7 +33,7 @@ export const TokenInfo: FC<Props> = ({
       )}
       <div className={cn(styles.imgTextWrapper, { [styles.imgTextWrapperYellowScheme]: colorScheme === 'yellow' })}>
         <span className={styles.tokenNameHeader}>{tokenName}</span>
-        <span className={styles.tokenName}>{balance + ' ' + tokenName}</span>
+        <span className={styles.tokenName}>{`${balance} ${tokenName}`}</span>
       </div>
     </div>
   );

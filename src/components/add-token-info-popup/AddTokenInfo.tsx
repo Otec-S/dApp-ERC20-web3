@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useEffect, useRef, useState } from 'react';
+import { CSSProperties, FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
@@ -42,7 +42,6 @@ const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
-  const popupRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -149,29 +148,8 @@ const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
     });
   };
 
-  const handleEscDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      onClose({ requestWasSuccessful: false });
-    }
-  };
-
-  const handleClickOutside = (e: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(e.target as Node)) {
-      onClose({ requestWasSuccessful: false });
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleEscDown);
-    window.addEventListener('click', handleClickOutside);
-    return () => {
-      window.removeEventListener('keydown', handleEscDown);
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
   return (
-    <div className="container" ref={popupRef}>
+    <div className="container">
       <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
         {isLoadingContacts && (
           <div className={styles.loader}>
