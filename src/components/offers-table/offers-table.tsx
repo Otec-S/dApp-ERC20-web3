@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import cn from 'classnames';
 
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
@@ -23,8 +24,12 @@ import styles from './offers-table.module.css';
 export const OffersTable: FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
+  const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
+
+  const handleButtonClick = (buttonName: string) => {
+    setActiveButton(buttonName);
+  };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
@@ -45,17 +50,59 @@ export const OffersTable: FC = () => {
     setPage(0);
   };
 
+  const openOffersCount = rows.filter((row) => row.status === 'Open').length;
+  const forMeOffersCount = rows.filter((row) => row.status === 'For me').length;
+
+  // Фильтруем строки по активной кнопке
+  const filteredRows = rows.filter((row) => {
+    if (activeButton === 'All') {
+      return true;
+    }
+    return row.status === activeButton;
+  });
+
+  // TODO:
+  // Фильтруем строки по поисковому запросу
+  // const searchedRows = filteredRows.filter((row) => {
+  //   if (searchText === '') {
+  //     return true;
+  //   }
+  //   return row.id.includes(searchText) || row.fromTokenName.toLowerCase().includes(searchText.toLowerCase());
+  // });
+
   // Вычисляем видимые строки
-  const visibleRows = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const visibleRows = filteredRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Box sx={{ width: '100%', marginTop: '150px', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
       <div className={styles.titleBlock}>
         <h1 className={styles.title}>My offers</h1>
         <div className={styles.statusButtons}>
-          <button className={`${styles.statusButton} ${styles.statusButtonActive}`}>All</button>
-          <button className={styles.statusButton}>Open</button>
-          <button className={styles.statusButton}>For me</button>
+          <button
+            // className={`${styles.statusButton} ${styles.statusButtonActive}`}>
+            className={cn(styles.statusButton, {
+              [styles.statusButtonActive]: activeButton === 'All',
+            })}
+            onClick={() => handleButtonClick('All')}
+          >
+            All
+          </button>
+          <button
+            className={cn(styles.statusButton, {
+              [styles.statusButtonActive]: activeButton === 'Open',
+            })}
+            onClick={() => handleButtonClick('Open')}
+          >
+            Open <span className={styles.offersCount}>{openOffersCount}</span>
+          </button>
+          <button
+            className={cn(styles.statusButton, {
+              [styles.statusButtonActive]: activeButton === 'For me',
+            })}
+            onClick={() => handleButtonClick('For me')}
+          >
+            For me <span className={styles.offersCount}>{forMeOffersCount}</span>
+          </button>
         </div>
         <div className={styles.cancelAndSearchButtons}>
           <button className={styles.cancelOfferButton}>Cancel offer</button>
