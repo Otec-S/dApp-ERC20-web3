@@ -1,7 +1,7 @@
-export * as collection from './collection.png';
-export * as landing from './landing.png';
-export * as logo from './logo.png';
-export * as logoLightScheme from './logoLightScheme.png';
-export * as sendErc from './sendErc.png';
-export * as tokenBlockImage from './tokenBlockImage.png';
-export * as tradeErc from './tradeErc.png';
+export { default as collection } from './collection.png';
+export { default as landing } from './landing.png';
+export { default as logo } from './logo.png';
+export { default as logoLightScheme } from './logoLightScheme.png';
+export { default as sendErc } from './sendErc.png';
+export { default as tokenBlockImage } from './tokenBlockImage.png';
+export { default as tradeErc } from './tradeErc.png';

@@ -8,10 +8,10 @@ import { useAccount, useReadContracts } from 'wagmi';
 
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
-import { TokenData } from '@src/shared/constants';
-import { erc20abiExtended } from '@src/shared/constants/erc20abi-extended';
+import FormButton from '@components/form-button/FormButton';
+import { TokenData } from '@shared/constants';
+import { erc20abiExtended } from '@shared/constants';
 
-import FormButton from '../form-button/FormButton';
 import TokenInfo from './TokenInfo';
 import Warning from './Warning';
 import styles from './AddTokenInfo.module.css';

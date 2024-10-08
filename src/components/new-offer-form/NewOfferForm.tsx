@@ -9,14 +9,12 @@ import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits } fr
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { tradeContractAddress } from '@src/shared/constants/contract';
-import { Token, TokenData } from '@src/shared/constants/tokens';
-import { tradeContractAbi } from '@src/shared/constants/tradeContractAbi';
+import AddTokenInfo from '@components/add-token-info-popup/AddTokenInfo';
+import FormButton from '@components/form-button/FormButton';
+import { StepPagination } from '@components/step-pagination/StepPagination';
+import { StepStatus } from '@components/step-pagination/StepPagination.interface';
+import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
-import AddTokenInfo from '../add-token-info-popup/AddTokenInfo';
-import FormButton from '../form-button/FormButton';
-import { StepPagination } from '../StepPagination/StepPagination';
-import { StepStatus } from '../StepPagination/StepPagination.interface';
 import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
 import NewOfferTradeCreated from './NewOfferTradeCreated';

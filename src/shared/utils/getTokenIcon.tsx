@@ -1,7 +1,7 @@
 import { Address } from 'viem';
 
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
-import { tokens } from '@src/shared/constants';
+import { tokens } from '@shared/constants';
 
 const getTokenIcon = (address: Address) => {
   const tokenInSupportedTokens = tokens.find(

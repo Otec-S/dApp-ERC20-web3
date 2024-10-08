@@ -1,6 +1,8 @@
-import { Address } from 'viem';
+import toast from 'react-hot-toast';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+import { Address, zeroAddress } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 import { polygonContractAddress, sepoliaContractAddress, Token, tokens } from '../constants';
 
@@ -16,6 +18,12 @@ export interface ChainDependentValues {
 
 export const useChainDependentValues = (): ChainDependentValues => {
   const chainId = useChainId();
+  const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
+
+  if (!isConnected && openConnectModal) {
+    openConnectModal();
+  }
 
   switch (chainId) {
     case sepolia.id: {
@@ -32,7 +40,13 @@ export const useChainDependentValues = (): ChainDependentValues => {
         website: 'amoy.polygonscan.com',
       };
     }
-    default:
-      throw new Error('no such chain');
+    default: {
+      toast.error('This chain is not supported, please select Sepolia or PolygonAmoy');
+      return {
+        contractAddress: zeroAddress,
+        tokens: [],
+        website: '',
+      };
+    }
   }
 };

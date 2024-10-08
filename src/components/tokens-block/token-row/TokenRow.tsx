@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import { Address } from 'viem';
 import { useWatchAsset } from 'wagmi';
 
-import PlusIcon from '@assets/icons/plus-icon.svg';
+import { PlusIcon } from '@assets/icons';
 
 import classes from './TokenRow.module.css';
 
