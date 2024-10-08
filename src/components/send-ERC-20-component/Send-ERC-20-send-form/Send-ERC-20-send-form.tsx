@@ -4,7 +4,7 @@ import { Address, formatUnits, getAddress, parseUnits } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { ARBIcon } from '@assets/icons';
+import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import FormButton from '@components/form-button/FormButton';
