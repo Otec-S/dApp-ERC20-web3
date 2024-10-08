@@ -1,12 +1,12 @@
 import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
-import { Tabs } from '@components/Tabs/Tabs';
+import { Tabs } from '@components/tabs/Tabs';
 
 import styles from './ERC20trade.module.css';
-import { Outlet } from 'react-router-dom';
 
 export const ERC20trade: FC = () => {
   const { isConnected } = useAccount();
@@ -17,12 +17,14 @@ export const ERC20trade: FC = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrap}>
       <div className={styles.header}>
         <Header colorScheme="lightBackground" />
+        <Tabs />
       </div>
-      <Tabs />
-      <Outlet />
+      <div className={styles.container}>
+        <Outlet />
+      </div>
     </div>
   );
 };

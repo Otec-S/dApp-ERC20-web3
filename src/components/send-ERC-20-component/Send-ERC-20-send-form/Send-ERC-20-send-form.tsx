@@ -8,7 +8,7 @@ import { ARBIcon } from '@assets/icons';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import FormButton from '@components/form-button/FormButton';
-import { TokenPopup } from '@components/TokenPopup/TokenPopup';
+import { TokenPopup } from '@components/token-popup/TokenPopup';
 import { erc20abiExtended, Token, TokenData } from '@shared/constants';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 

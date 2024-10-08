@@ -1,6 +1,7 @@
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Address } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
-import { useChainId } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
 
 import { polygonContractAddress, sepoliaContractAddress, Token, tokens } from '../constants';
 
@@ -16,6 +17,12 @@ export interface ChainDependentValues {
 
 export const useChainDependentValues = (): ChainDependentValues => {
   const chainId = useChainId();
+  const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
+
+  if (!isConnected && openConnectModal) {
+    openConnectModal();
+  }
 
   switch (chainId) {
     case sepolia.id: {

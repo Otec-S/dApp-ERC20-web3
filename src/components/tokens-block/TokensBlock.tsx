@@ -3,7 +3,7 @@ import { useConnections } from 'wagmi';
 
 import { useChainDependentValues } from '@shared/hooks';
 
-import { TokenRow } from './TokenRow/TokenRow';
+import { TokenRow } from './token-row/TokenRow';
 import classes from './TokensBlock.module.css';
 
 export const TokensBlock: FC = () => {

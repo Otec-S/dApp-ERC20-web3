@@ -8,20 +8,20 @@ import { useAccount, useReadContract, useReadContracts, useWriteContract } from 
 
 import { ArrowRightIcon, WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
-import { StepPagination } from '@components/StepPagination/StepPagination';
-import { StepStatus } from '@components/StepPagination/StepPagination.interface';
+import { StepPagination } from '@components/step-pagination/StepPagination';
+import { StepStatus } from '@components/step-pagination/StepPagination.interface';
 import { tradeContractAbi } from '@shared/constants';
 import { useChainDependentValues } from '@shared/hooks';
 
-import { IncomingOfferToken } from './IncomingOfferToken/IncomingOfferToken';
-import { SuccessDialog } from './SuccessDialog/SuccessDialog';
-import styles from './IncomingOfferBlock.module.css';
+import { IncomingOfferToken } from './incoming-offer-token/IncomingOfferToken';
+import { SuccessDialog } from './success-dialog/SuccessDialog';
+import styles from './IncomingOfferForm.module.css';
 
 interface FormData {
   infiniteApprove: boolean;
 }
 
-export const IncomingOfferBlock: FC = () => {
+export const IncomingOfferForm: FC = () => {
   const { address: walletAddress } = useAccount();
   const { watch, register } = useForm<FormData>();
   const { contractAddress, tokens } = useChainDependentValues();

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { landing, tokenBlockImage } from '@assets/images';
 import Header from '@components/header/Header';
-import { TokensBlock } from '@components/TokensBlock/TokensBlock';
+import { TokensBlock } from '@components/tokens-block/TokensBlock';
 import { ROUTES } from '@shared/constants';
 
 import { blockData, statisticData } from './Landing.constants';

@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Address } from 'viem';
+
 import { CloseIcon } from '@assets/icons';
 import Search from '@assets/icons/search.svg';
 import { Token, tokens } from '@shared/constants';
