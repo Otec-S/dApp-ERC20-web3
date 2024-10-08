@@ -5,7 +5,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 
 import { logo, logoLightScheme } from '@assets/images';
-import { ROUTES } from '@src/shared/constants';
+import { ROUTES } from '@shared/constants';
 
 import styles from './Header.module.css';
 
@@ -34,7 +34,7 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
       <Link to={ROUTES.HOME}>
         <img
           className={cn(styles.img, { [styles.imgBurgerIsOpen]: burgerIsOpen })}
-          src={colorScheme === 'lightBackground' ? logoLightScheme.default : logo.default}
+          src={colorScheme === 'lightBackground' ? logoLightScheme : logo}
           alt="Project logo"
         />
       </Link>
@@ -54,7 +54,7 @@ const Header: FC<Props> = ({ colorScheme = 'darkBackground' }) => {
           </NavLink>
           <NavLink
             className={cn(styles.navLink, { [styles.navLinkYellowScheme]: colorScheme === 'lightBackground' })}
-            to={ROUTES.HOME}
+            to={ROUTES.NFT_COLLECTION}
           >
             NFT Collection
           </NavLink>

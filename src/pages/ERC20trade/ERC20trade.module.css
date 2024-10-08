@@ -1,26 +1,53 @@
-@value colors: "@assets/colors.css";
 @value fonts: "@assets/fonts.css";
-@value dark, orange, white, darkBlue from colors;
 @value montserrat, openSans from fonts;
 
-.container {
-  height: 100%;
-  min-height: 100vh;
-  width: 100%;
+.pageWrap {
   background-color: #ffedbe;
   box-sizing: border-box;
-  z-index: 2;
+}
+
+.container {
+  width: 100%;
+  min-width: calc(100vw - 20px);
+  padding: 48px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 148px);
+}
+
+.content {
+  min-height: calc(100vh - 244px);
+  background-color: #fffbf2;
+  border-radius: 16px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.formContent {
+  composes: content;
+  background-color: #ffedbe;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  padding: 0;
 }
 
-.header {
-  width: 100%;
-  position: fixed;
-  top: 0;
-  background-color: #ffedbe;
-  height: fit-content;
-  z-index: 3;
+.button {
+  height: 36px;
+  padding: 16px;
+  border-radius: 100px;
+  background: #ffb800;
+  color: #000;
+  font-family: openSans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
 }

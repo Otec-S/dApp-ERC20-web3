@@ -3,17 +3,18 @@ import { Link } from 'react-router-dom';
 import { Hash } from 'viem';
 
 import { ArrowRightIcon, NewWindowIcon, SuccessIcon } from '@assets/icons';
+import { ROUTES } from '@shared/constants';
 import { useChainDependentValues } from '@shared/hooks';
 
 import styles from './SuccessDialog.module.css';
 
 interface Props {
-  acceptedTradeHash: Hash;
   amountFromFormatted: number;
   amountToFormatted: number;
   tokenFromName: string;
   tokenToName: string;
   rate: number;
+  acceptedTradeHash?: Hash;
 }
 
 export const SuccessDialog: FC<Props> = ({
@@ -47,7 +48,7 @@ export const SuccessDialog: FC<Props> = ({
           </div>
         </Link>
       )}
-      <Link to="/" className={styles.greatButton}>
+      <Link to={ROUTES.ERC20_TRADE} className={styles.greatButton}>
         Great!
       </Link>
     </div>

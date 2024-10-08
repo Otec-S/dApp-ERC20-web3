@@ -1,9 +1,10 @@
 import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
-import NewOfferForm from '@src/components/new-offer-form/NewOfferForm';
+import { Tabs } from '@components/tabs/Tabs';
 
 import styles from './ERC20trade.module.css';
 
@@ -16,11 +17,14 @@ export const ERC20trade: FC = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={styles.pageWrap}>
       <div className={styles.header}>
         <Header colorScheme="lightBackground" />
+        <Tabs />
       </div>
-      <NewOfferForm />
+      <div className={styles.container}>
+        <Outlet />
+      </div>
     </div>
   );
 };

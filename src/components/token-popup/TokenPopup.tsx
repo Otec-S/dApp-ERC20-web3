@@ -2,9 +2,9 @@ import { ChangeEvent, FC, useRef, useState } from 'react';
 import cn from 'classnames';
 import { Address } from 'viem';
 
-import Close from '@assets/icons/close.svg';
+import { CloseIcon } from '@assets/icons';
 import Search from '@assets/icons/search.svg';
-import { Token, tokens } from '@src/shared/constants/tokens';
+import { Token, tokens } from '@shared/constants';
 
 import styles from './TokenPopup.module.css';
 
@@ -45,7 +45,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
             Select a token
           </p>
           <div className={styles.closePopup} onClick={onCLose}>
-            <Close />
+            <CloseIcon />
           </div>
         </div>
         <div className={cn(styles.searchRow, { [styles.searchRowLightScheme]: colorScheme === 'light' })}>
@@ -59,7 +59,7 @@ export const TokenPopup: FC<Props> = ({ onCLose, onSelect, colorScheme }) => {
             onChange={handleChangeInput}
           />
           <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
-            <Close />
+            <CloseIcon />
           </div>
         </div>
         <div className={styles.tokensRow}>

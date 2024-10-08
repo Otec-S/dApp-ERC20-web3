@@ -1,1 +1,1 @@
-export * from './useChainDependentValues';
+export { useChainDependentValues } from './useChainDependentValues';

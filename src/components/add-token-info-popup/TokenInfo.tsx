@@ -3,8 +3,8 @@ import cn from 'classnames';
 import { Address, formatUnits } from 'viem';
 
 import NotFoundTokenLogo from '@assets/icons/not_found_token_logo.svg';
+import { tokens } from '@shared/constants/tokens';
 
-import { tokens } from '../../shared/constants';
 import styles from './TokenInfo.module.css';
 
 interface Props {

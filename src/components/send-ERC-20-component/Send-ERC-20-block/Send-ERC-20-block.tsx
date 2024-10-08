@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { Address } from 'viem';
 
-import AddTokenInfo from '@src/components/add-token-info-popup/AddTokenInfo';
-import { TokenData } from '@src/shared/constants';
+import AddTokenInfo from '@components/add-token-info-popup/AddTokenInfo';
+import { TokenData } from '@shared/constants';
 
 import SendERC20ResultForm from '../Send-ERC-20-result-form/Send-ERC-20-result-form';
 import SendERC20SendForm from '../Send-ERC-20-send-form/Send-ERC-20-send-form';

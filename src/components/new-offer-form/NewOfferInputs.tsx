@@ -3,12 +3,12 @@ import { FieldErrors, UseFormRegister } from 'react-hook-form';
 import cn from 'classnames';
 import { Address, isAddress } from 'viem';
 
+import { WarningIcon } from '@assets/icons';
 import ArrowDown from '@assets/icons/arrow_down.svg';
-import { WarningIcon } from '@src/assets/icons';
-import { Token } from '@src/shared/constants';
-import getTokenIcon from '@src/utils/getTokenIcon';
+import { TokenPopup } from '@components/token-popup/TokenPopup';
+import { Token } from '@shared/constants';
+import getTokenIcon from '@shared/utils/getTokenIcon';
 
-import { TokenPopup } from '../TokenPopup/TokenPopup';
 import { TokenDataNewOfferForm } from './NewOfferForm';
 import styles from './NewOfferForm.module.css';
 

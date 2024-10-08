@@ -6,8 +6,8 @@ import { useChainId } from 'wagmi';
 import FailureIcon from '@assets/icons/failure.svg';
 import SuccessIcon from '@assets/icons/success.svg';
 import ViewTransactionIcon from '@assets/icons/view_tx.svg';
-import FormButton from '@src/components/form-button/FormButton';
-import { getChainURL } from '@src/utils/getChainURL';
+import FormButton from '@components/form-button/FormButton';
+import { getChainURL } from '@shared/utils/getChainURL';
 
 import style from './Send-ERC-20-result-form.module.css';
 
