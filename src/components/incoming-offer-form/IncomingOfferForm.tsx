@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { BarLoader } from 'react-spinners';
 import { erc20Abi, formatUnits, maxUint256 } from 'viem';
-import { useAccount, useReadContract, useReadContracts, useWriteContract } from 'wagmi';
+import { useAccount, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { ArrowRightIcon, WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
@@ -30,25 +30,21 @@ export const IncomingOfferForm: FC = () => {
   const isInfiniteApprove = watch('infiniteApprove');
   const tradeId = id ? BigInt(id) : undefined;
 
-  const {
-    writeContract: approveTrade,
-    isPending: isApprovePending,
-    isSuccess: isApproveSuccess,
-    error: approveError,
-  } = useWriteContract();
+  const { writeContract: approveTrade, data: approveHash, error: approveError } = useWriteContract();
+  const { isLoading: isApproveLoading, isSuccess: isApproveSuccess } = useWaitForTransactionReceipt({
+    hash: approveHash,
+  });
 
-  const {
-    writeContract: acceptTrade,
-    data: acceptedTradeHash,
-    isPending: isAcceptPending,
-    error: acceptError,
-    isSuccess: isAcceptSuccess,
-  } = useWriteContract();
+  const { writeContract: acceptTrade, data: acceptedTradeHash, error: acceptError } = useWriteContract();
+  const { isLoading: isAcceptLoading, isSuccess: isAcceptSuccess } = useWaitForTransactionReceipt({
+    hash: acceptedTradeHash,
+  });
 
   const {
     data: offerData,
     isPending: isOfferDataPending,
     error: offerDataError,
+    refetch: refetchOfferData,
   } = useReadContract(
     tradeId
       ? {
@@ -67,6 +63,7 @@ export const IncomingOfferForm: FC = () => {
     data: tokensData,
     isPending: isTokenInfoPending,
     error: tokenInfoError,
+    refetch: refetchTokenData,
   } = useReadContracts({
     allowFailure: false,
     contracts: tokenFrom &&
@@ -89,16 +86,30 @@ export const IncomingOfferForm: FC = () => {
     }
   }, [acceptError, approveError, offerDataError, tokenInfoError]);
 
-  if (isOfferDataPending || isApprovePending || isAcceptPending || isTokenInfoPending) return <BarLoader />;
+  useEffect(() => {
+    if (isApproveSuccess) {
+      refetchTokenData();
+    }
+  }, [isApproveSuccess, refetchTokenData]);
+
+  useEffect(() => {
+    if (isAcceptSuccess) {
+      refetchOfferData();
+    }
+  }, [isAcceptSuccess, refetchOfferData]);
+
+  if (isOfferDataPending || isApproveLoading || isAcceptLoading || isTokenInfoPending) return <BarLoader />;
 
   const amountFromFormatted = Number(amountFrom && tokenFromDecimals && formatUnits(amountFrom, tokenFromDecimals));
   const amountToFormatted = Number(amountTo && tokenToDecimals && formatUnits(amountTo, tokenToDecimals));
   const rate = Number(amountFromFormatted && amountToFormatted && (amountToFormatted / amountFromFormatted).toFixed(2));
+
+  const isApproved = allowance && amountTo && allowance >= amountTo;
   const steps = [
-    { value: 1, status: isApproveSuccess ? StepStatus.COMPLETED : StepStatus.CURRENT },
-    { value: 2, status: isApproveSuccess ? StepStatus.CURRENT : StepStatus.DISABLED },
+    { value: 1, status: isApproved ? StepStatus.COMPLETED : StepStatus.CURRENT },
+    { value: 2, status: isApproved ? StepStatus.CURRENT : StepStatus.DISABLED },
   ];
-  const isApproved = (allowance && amountTo && allowance >= amountTo) || isApproveSuccess;
+
   const hasWarning = tokens.every((item) => item.address !== tokenFrom);
 
   const handleApproveTrade = () => {
@@ -131,10 +142,10 @@ export const IncomingOfferForm: FC = () => {
           <div className={styles.container}>
             <div className={styles.titleBlock}>
               <h3 className={styles.title}>
-                {completed && isAcceptSuccess ? 'Offer has been successfully accepted!' : `Offer ID ${tradeId}`}
+                {completed ? 'Offer has been successfully accepted!' : `Offer ID ${tradeId}`}
               </h3>
             </div>
-            {completed && isAcceptSuccess ? (
+            {completed ? (
               <SuccessDialog
                 acceptedTradeHash={acceptedTradeHash}
                 amountFromFormatted={amountFromFormatted}
