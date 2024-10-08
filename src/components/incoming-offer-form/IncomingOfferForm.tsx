@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { BarLoader } from 'react-spinners';
 import { erc20Abi, formatUnits, maxUint256 } from 'viem';
@@ -243,7 +243,6 @@ export const IncomingOfferForm: FC = () => {
           </div>
         </form>
       )}
-      <Toaster />
     </>
   );
 };

@@ -32,7 +32,7 @@ export const Landing: FC = () => {
               <h3 className={classes.blockTitle}>{item.title}</h3>
               <p className={classes.text}>{item.description}</p>
               <p className={classes.text}>{item.text}</p>
-              <Link to={ROUTES.SEND_ERC20} className={classes.blockButton}>
+              <Link to={item.link} className={classes.blockButton}>
                 Go to app
               </Link>
             </div>

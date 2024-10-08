@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -61,6 +62,7 @@ const App: FC = () => {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider modalSize="compact" theme={rainbowtTheme}>
             <RouterProvider router={router} />
+            <Toaster />
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
