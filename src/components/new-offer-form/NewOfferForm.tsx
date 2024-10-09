@@ -1,10 +1,11 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
+import { useSearchParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, maxUint256, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
@@ -42,9 +43,11 @@ interface FormData {
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
 type TokenSelect = 'from' | 'to' | 'customFrom' | 'customTo';
 
-const THIRTY_MINUTES = 60 * 10 * 1000;
+const TEN_MINUTES = 60 * 10 * 1000;
 
 const NewOfferForm: FC = () => {
+  const [searchParams] = useSearchParams();
+  const { isConnected, chainId, address: walletAddress } = useAccount();
   const [showDefaultTokenPopupFrom, setShowDefaultTokenPopupFrom] = useState(false);
   const [showDefaultTokenPopupTo, setShowDefaultTokenPopupTo] = useState(false);
   const [showCustomTokenPopupFrom, setShowCustomTokenPopupFrom] = useState(false);
@@ -65,17 +68,40 @@ const NewOfferForm: FC = () => {
     mode: 'onChange',
   });
 
-  const { isConnected, chainId, address: walletAddress } = useAccount();
+  useEffect(() => {
+    if (
+      searchParams.get('tokenToName') &&
+      searchParams.get('tokenFromAddress') &&
+      searchParams.get('tokenToAddress') &&
+      searchParams.get('tokenFromName') &&
+      searchParams.get('tokenToDecimals') &&
+      searchParams.get('tokenfromDecimals')
+    ) {
+      const tokenToParams = {
+        decimals: Number(searchParams.get('tokenToDecimals')),
+        name: `${searchParams.get('tokenToName')}`,
+        address: getAddress(searchParams.get('tokenToAddress') ?? '')
+      };
+      const tokenFromParams = {
+        decimals: Number(searchParams.get('tokenFromDecimals')),
+        name: `${searchParams.get('tokenFromName')}`,
+        address: getAddress(searchParams.get('tokenFromAddress') ?? '')
+      };
+      const tokenFromAmount = Number(searchParams.get('tokenFromAmount'));
+      const tokenToAmount = Number(searchParams.get('tokenToAmount'));
+      const optionalTaker = getAddress(searchParams.get('optionalTaker') ?? zeroAddress);
+      setValue('from', Number(tokenFromAmount));
+      setValue('to', Number(tokenToAmount));
+      setTokenFrom(tokenFromParams);
+      setTokenTo(tokenToParams);
+      setValue('optionalTaker', optionalTaker);
+    }
+  }, [searchParams, setTokenTo, chainId, setValue]);
+
   const { openConnectModal } = useConnectModal();
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
-
-  useEffect(() => {
-    reset();
-    setTokenFrom(undefined);
-    setTokenTo(undefined);
-  }, [chainId, reset]);
 
   const {
     data: contractsData,
@@ -84,7 +110,7 @@ const NewOfferForm: FC = () => {
   } = useReadContracts({
     allowFailure: false,
     query: {
-      refetchInterval: THIRTY_MINUTES,
+      refetchInterval: TEN_MINUTES,
     },
     contracts: [
       {

@@ -18,6 +18,7 @@
   justify-content: space-between;
   color: black;
   border-radius: 8px 8px 0 0;
+  background: #FFE5A1;
 }
 
 .header {
@@ -55,6 +56,7 @@
   display: flex;
   align-items: center;
   justify-items: center;
+  color: black;
 }
 
 .closeForm:hover {
