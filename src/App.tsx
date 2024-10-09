@@ -13,7 +13,7 @@ import { Landing } from '@pages/Landing';
 import SendERC20 from '@pages/SendERC20/send-ERC-20';
 import { ROUTES } from '@shared/constants';
 
-import { ERC20trade } from '../src/pages/ERC20trade';
+import { ERC20trade } from '../src/pages/ERC20trade/ERC20trade';
 import { config } from '../wagmiConfig';
 import './App.module.css';
 import './index.module.css';
@@ -50,10 +50,10 @@ const router = createBrowserRouter([
       { path: ROUTES.HISTORY, element: <History /> },
     ],
   },
-  // {
-  //   path: ROUTES.NFT_COLLECTION,
-  //   element: <Landing />,
-  // },
+  {
+    path: ROUTES.NFT_COLLECTION,
+    element: <Landing />,
+  },
 ]);
 
 const App: FC = () => {
