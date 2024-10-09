@@ -8,16 +8,16 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import SquareArrowIcon from '@src/assets/icons/square_arrow.svg';
 import cn from 'classnames';
 
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
 import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
-import { SquareArrowIcon } from '@src/assets/icons';
-import getTokenIcon from '@src/utils/getTokenIcon';
-import { shortenHash } from '@src/utils/shortenHash';
 
+import getTokenIcon from '../../shared/utils/getTokenIcon';
+import { shortenHash } from '../../shared/utils/shortenHash';
 import { rows } from './offers-table.mock';
 import styles from './offers-table.module.css';
 
