@@ -1,15 +1,20 @@
 import { FC } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
+import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
+import { CreateOffer } from '@pages/ERC20trade/modules/CreateOffer';
+import { History } from '@pages/ERC20trade/modules/History';
+import { IncomingOffer } from '@pages/ERC20trade/modules/IncomingOffer';
+import { MyOffers } from '@pages/ERC20trade/modules/MyOffers';
+import { Landing } from '@pages/Landing';
+import SendERC20 from '@pages/SendERC20/send-ERC-20';
+import { ROUTES } from '@shared/constants';
+
 import { config } from '../wagmiConfig';
-import { IncomingOfferBlock } from './components/IncomingOfferBlock/IncomingOfferBlock';
-import { ERC20trade } from './pages/ERC20trade/ERC20trade';
-import { Landing } from './pages/Landing';
-import SendERC20 from './pages/SendERC20/send-ERC-20';
-import { ROUTES } from './shared/constants';
 import './App.module.css';
 import './index.module.css';
 
@@ -34,15 +39,19 @@ const router = createBrowserRouter([
     path: ROUTES.ERC20_TRADE,
     element: <ERC20trade />,
     children: [
+      { index: true, element: <Navigate to={ROUTES.CREATE_OFFER} replace /> },
       {
         path: ':id',
-        element: <IncomingOfferBlock />,
+        element: <IncomingOffer />,
       },
+      { path: ROUTES.CREATE_OFFER, element: <CreateOffer /> },
+      { path: ROUTES.MY_OFFERS, element: <MyOffers /> },
+      { path: ROUTES.HISTORY, element: <History /> },
     ],
   },
   // {
-  //   path: '/erc20trade',
-  //   element: <ERC20trade />,
+  //   path: ROUTES.NFT_COLLECTION,
+  //   element: <Landing />,
   // },
 ]);
 
@@ -53,6 +62,7 @@ const App: FC = () => {
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider modalSize="compact" theme={rainbowtTheme}>
             <RouterProvider router={router} />
+            <Toaster />
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

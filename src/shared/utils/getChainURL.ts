@@ -1,6 +1,6 @@
 import { polygonAmoy, sepolia } from 'viem/chains';
 
-import { POLYGON_AMOY_URL, SEPOLIA_URL } from '@src/shared/constants';
+import { POLYGON_AMOY_URL, SEPOLIA_URL } from '@shared/constants';
 
 export const getChainURL = (id: number) => {
   switch (id) {
