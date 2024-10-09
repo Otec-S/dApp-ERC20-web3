@@ -14,6 +14,7 @@ import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
 import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
+import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 
 import SquareArrowIcon from '../../assets/icons/square_arrow.svg';
 import getTokenIcon from '../../shared/utils/getTokenIcon';
@@ -21,26 +22,56 @@ import { shortenHash } from '../../shared/utils/shortenHash';
 import { rows } from './offers-table.mock';
 import styles from './offers-table.module.css';
 
+interface Offer {
+  id: number;
+  fromTokenAddress: string;
+  fromTokenName: string;
+  toTokenAddress: string;
+  toTokenName: string;
+  amount1: number;
+  amount2: number;
+  rate: number;
+  hash: string;
+  status: 'Open' | 'For me';
+  receiver: string;
+}
+
 export const OffersTable: FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
 
-  const handleButtonClick = (buttonName: string) => {
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
+
+  const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
+
+  const handleCheckboxChange = (rowId: number) => {
+    setSelectedRows((prevSelectedRows) =>
+      prevSelectedRows.includes(rowId) ? prevSelectedRows.filter((id) => id !== rowId) : [...prevSelectedRows, rowId],
+    );
+  };
+
+  const handleCancelOffer = () => {
+    if (selectedRows.length > 0) {
+      const selectedOffer = rows.find((row) => row.id === selectedRows[0]);
+      setOfferToCancel(selectedOffer || null);
+      setIsCancelPopupOpen(true);
+    }
+  };
+
+  const handleStatusButtonClick = (buttonName: string) => {
     setActiveButton(buttonName);
   };
 
-  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeOfferSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
 
-  const handleClearInput = () => {
+  const handleClearOfferSearchInput = () => {
     setSearchText('');
   };
-
-  // TODO: добавь логику сортировки таблицы
-  // const tokenArr = tokens.filter((item) => item.name.toLowerCase().includes(searchText.toLowerCase()));
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -79,7 +110,7 @@ export const OffersTable: FC = () => {
   const visibleRows = searchedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Box sx={{ width: '100%', marginTop: '150px', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
+    <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
       <div className={styles.titleBlock}>
         <h1 className={styles.title}>My offers</h1>
         <div className={styles.statusButtons}>
@@ -87,7 +118,7 @@ export const OffersTable: FC = () => {
             className={cn(styles.statusButton, {
               [styles.statusButtonActive]: activeButton === 'All',
             })}
-            onClick={() => handleButtonClick('All')}
+            onClick={() => handleStatusButtonClick('All')}
           >
             All
           </button>
@@ -95,7 +126,7 @@ export const OffersTable: FC = () => {
             className={cn(styles.statusButton, {
               [styles.statusButtonActive]: activeButton === 'Open',
             })}
-            onClick={() => handleButtonClick('Open')}
+            onClick={() => handleStatusButtonClick('Open')}
           >
             Open <span className={styles.offersCount}>{openOffersCount}</span>
           </button>
@@ -103,14 +134,16 @@ export const OffersTable: FC = () => {
             className={cn(styles.statusButton, {
               [styles.statusButtonActive]: activeButton === 'For me',
             })}
-            onClick={() => handleButtonClick('For me')}
+            onClick={() => handleStatusButtonClick('For me')}
           >
             For me <span className={styles.offersCount}>{forMeOffersCount}</span>
           </button>
         </div>
         <div className={styles.buttonsAndPagination}>
           <div className={styles.cancelAndSearchButtons}>
-            <button className={styles.cancelOfferButton}>Cancel offer</button>
+            <button className={styles.cancelOfferButton} onClick={handleCancelOffer}>
+              Cancel offer
+            </button>
             <div className={styles.searchRow}>
               <div className={styles.searchIcon}>
                 <Search />
@@ -119,9 +152,9 @@ export const OffersTable: FC = () => {
                 value={searchText}
                 className={styles.input}
                 placeholder="Offer ID or Asset"
-                onChange={handleChangeInput}
+                onChange={handleChangeOfferSearchInput}
               />
-              <div className={styles.inputCLoseIcon} onClick={handleClearInput}>
+              <div className={styles.inputCLoseIcon} onClick={handleClearOfferSearchInput}>
                 <Close />
               </div>
             </div>
@@ -162,8 +195,8 @@ export const OffersTable: FC = () => {
                 <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell padding="none">
                     <Checkbox
-                      // color="primary"
-                      // size="small"
+                      checked={selectedRows.includes(row.id)}
+                      onChange={() => handleCheckboxChange(row.id)}
                       sx={{
                         '& .MuiSvgIcon-root': { fontSize: 15 },
                         '&.Mui-checked': {
@@ -171,12 +204,6 @@ export const OffersTable: FC = () => {
                         },
                       }}
                       className={styles.checkbox}
-                      // indeterminate={numSelected > 0 && numSelected < rowCount}
-                      // checked={rowCount > 0 && numSelected === rowCount}
-                      // onChange={onSelectAllClick}
-                      // inputProps={{
-                      //   'aria-label': 'select all desserts',
-                      // }}
                     />
                   </TableCell>
                   <TableCell component="th" scope="row">
@@ -227,6 +254,20 @@ export const OffersTable: FC = () => {
           </Table>
         </TableContainer>
       </Paper>
+      {isCancelPopupOpen && offerToCancel && (
+        <CancelOffer
+          tradeId={BigInt(offerToCancel.id)}
+          tokenFromName={offerToCancel.fromTokenName}
+          tokenToName={offerToCancel.toTokenName}
+          amountFrom={offerToCancel.amount1}
+          amountTo={offerToCancel.amount2}
+          onClose={(successfullyDeleted) => {
+            if (successfullyDeleted) {
+              setIsCancelPopupOpen(false);
+            }
+          }}
+        />
+      )}
     </Box>
   );
 };

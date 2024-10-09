@@ -89,6 +89,11 @@
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+
+  &:hover {
+    background-color: white;
+    cursor: pointer;
+  }
 }
 
 .searchRow {
