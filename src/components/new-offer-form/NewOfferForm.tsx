@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
@@ -43,8 +43,7 @@ interface FormData {
 type FormStages = 'approveToken' | 'createTrade' | 'tradeCreated';
 type TokenSelect = 'from' | 'to' | 'customFrom' | 'customTo';
 
-const THIRTY_MINUTES = 60 * 10 * 1000;
-const BROADCAST_ADDRESS = '0x0000000000000000000000000000000000000000';
+const TEN_MINUTES = 60 * 10 * 1000;
 
 const NewOfferForm: FC = () => {
   const [searchParams] = useSearchParams();
@@ -90,7 +89,7 @@ const NewOfferForm: FC = () => {
       };
       const tokenFromAmount = Number(searchParams.get('tokenFromAmount'));
       const tokenToAmount = Number(searchParams.get('tokenToAmount'));
-      const optionalTaker = getAddress(searchParams.get('optionalTaker') ?? BROADCAST_ADDRESS);
+      const optionalTaker = getAddress(searchParams.get('optionalTaker') ?? zeroAddress);
       setValue('from', Number(tokenFromAmount));
       setValue('to', Number(tokenToAmount));
       setTokenFrom(tokenFromParams);
@@ -111,7 +110,7 @@ const NewOfferForm: FC = () => {
   } = useReadContracts({
     allowFailure: false,
     query: {
-      refetchInterval: THIRTY_MINUTES,
+      refetchInterval: TEN_MINUTES,
     },
     contracts: [
       {
