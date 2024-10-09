@@ -109,6 +109,11 @@ export const OffersTable: FC = () => {
   // Вычисляем видимые строки
   const visibleRows = searchedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  // TODO: расширить надо будет
+  const handleCloseCancelOfferPopup = () => {
+    setIsCancelPopupOpen(false);
+  };
+
   return (
     <>
       <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
@@ -264,11 +269,12 @@ export const OffersTable: FC = () => {
             tokenToName={offerToCancel.toTokenName}
             amountFrom={offerToCancel.amount1}
             amountTo={offerToCancel.amount2}
-            onClose={(successfullyDeleted) => {
-              if (successfullyDeleted) {
-                setIsCancelPopupOpen(false);
-              }
-            }}
+            // onClose={(successfullyDeleted) => {
+            //   if (successfullyDeleted) {
+            //     setIsCancelPopupOpen(false);
+            //   }
+            // }}
+            onClose={handleCloseCancelOfferPopup}
           />
         </div>
       )}

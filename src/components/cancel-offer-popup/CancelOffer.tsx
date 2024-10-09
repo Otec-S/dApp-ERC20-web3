@@ -3,7 +3,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { useChainId, useWriteContract } from 'wagmi';
 
-import ClearIcon from '@assets/icons/clear_close_icon.svg';
+import CloseIcon from '@assets/icons/clear_close_icon.svg';
 import FormButton from '@components/form-button/FormButton';
 import { tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
@@ -34,12 +34,13 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    writeContract({
-      abi: tradeContractAbi,
-      address: tradeContractAddress[`${chainId}`],
-      functionName: 'cancelTrade',
-      args: [tradeId],
-    });
+    // TODO: отключил пока на мок данных
+    // writeContract({
+    //   abi: tradeContractAbi,
+    //   address: tradeContractAddress[`${chainId}`],
+    //   functionName: 'cancelTrade',
+    //   args: [tradeId],
+    // });
   };
 
   useEffect(() => {
@@ -69,7 +70,7 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>Cancel Offer</h5>
         <div onPointerDown={handleClose} className={styles.closeForm}>
-          <ClearIcon />
+          <CloseIcon />
         </div>
       </div>
       {isWriteContractSuccess ? (
