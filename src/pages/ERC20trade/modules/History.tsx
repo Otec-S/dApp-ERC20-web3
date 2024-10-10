@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { OffersTableHistory } from '@components/offers-table/offers-table-history';
+import { OffersTableHistory } from '@components/offers-table/Offers-table-history';
 
 export const History: FC = () => {
   return (

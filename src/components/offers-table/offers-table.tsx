@@ -2,9 +2,9 @@ import { ChangeEvent, FC, useState } from 'react';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 
-import { rows } from './offers-table.mock';
-import OffersTableBox from './offers-table-box';
-import { Offer } from './offers-tables.types';
+import { rows } from './Offers-table.mock';
+import OffersTableBox from './Offers-table-box';
+import { Offer } from './Offers-tables.types';
 import styles from './offers-table.module.css';
 
 export const OffersTable: FC = () => {

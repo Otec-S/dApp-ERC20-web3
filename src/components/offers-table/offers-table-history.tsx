@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 // import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { ROUTES } from '@shared/constants';
 
-import { rowsHistory } from './offers-table.mock';
-import OffersTableBox from './offers-table-box';
+import { rowsHistory } from './Offers-table.mock';
+import OffersTableBox from './Offers-table-box';
 // import { Offer } from './offers-tables.types';
 // import styles from './offers-table.module.css';
 

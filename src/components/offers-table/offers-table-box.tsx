@@ -23,7 +23,7 @@ import Snackbar from '@components/snackbar/Snackbar';
 import SquareArrowIcon from '../../assets/icons/square_arrow.svg';
 import getTokenIcon from '../../shared/utils/getTokenIcon';
 import { shortenHash } from '../../shared/utils/shortenHash';
-import { Offer } from './offers-tables.types';
+import { Offer } from './Offers-tables.types';
 import styles from './offers-table.module.css';
 
 interface Props {
