@@ -31,6 +31,7 @@ interface OffersTableBoxProps {
   mainButton: string;
   rows: Offer[];
   visibleRows: Offer[];
+  filteredRows: Offer[];
   searchText: string;
   selectedRows: number[];
   rowsPerPage: number;
@@ -49,8 +50,8 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
   statusButtons,
   activeButton,
   mainButton,
-  rows,
   visibleRows,
+  filteredRows,
   searchText,
   selectedRows,
   rowsPerPage,
@@ -104,7 +105,7 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
             <TablePagination
               rowsPerPageOptions={[5, 10, 15]}
               component="div"
-              count={rows.length}
+              count={filteredRows.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={onChangePage}

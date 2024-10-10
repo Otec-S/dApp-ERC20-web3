@@ -1,11 +1,13 @@
 import { ChangeEvent, FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
+// import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
+import { ROUTES } from '@shared/constants';
 
 import { rowsHistory } from './offers-table.mock';
 import OffersTableBox from './offers-table-box';
-import { Offer } from './offers-tables.types';
-import styles from './offers-table.module.css';
+// import { Offer } from './offers-tables.types';
+// import styles from './offers-table.module.css';
 
 export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
@@ -13,8 +15,10 @@ export const OffersTableHistory: FC = () => {
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
-  const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
+  // const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
+  // const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
+
+  const navigate = useNavigate(); // Получите функцию для навигации
 
   const handleCheckboxChange = (rowId: number) => {
     setSelectedRows((prevSelectedRows) =>
@@ -22,12 +26,8 @@ export const OffersTableHistory: FC = () => {
     );
   };
 
-  const handleCancelOffer = () => {
-    if (selectedRows.length > 0) {
-      const selectedOffer = rowsHistory.find((row) => row.id === selectedRows[0]);
-      setOfferToCancel(selectedOffer || null);
-      setIsCancelPopupOpen(true);
-    }
+  const handleReOpenClick = () => {
+    navigate(ROUTES.CREATE_OFFER, { replace: true });
   };
 
   const handleStatusButtonClick = (buttonName: string) => {
@@ -74,10 +74,6 @@ export const OffersTableHistory: FC = () => {
 
   const visibleRows = searchedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  const handleCloseCancelOfferPopup = () => {
-    setIsCancelPopupOpen(false);
-  };
-
   const tableConfig = {
     title: 'History',
     statusButtons: [
@@ -89,38 +85,25 @@ export const OffersTableHistory: FC = () => {
   };
 
   return (
-    <>
-      <OffersTableBox
-        title={tableConfig.title}
-        statusButtons={tableConfig.statusButtons}
-        activeButton={activeButton}
-        mainButton={tableConfig.mainButton}
-        rows={rowsHistory}
-        visibleRows={visibleRows}
-        searchText={searchText}
-        selectedRows={selectedRows}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onStatusButtonClick={handleStatusButtonClick}
-        onMainButtonClick={handleCancelOffer}
-        onSearchInputChange={handleChangeOfferSearchInput}
-        onClearSearchInput={handleClearOfferSearchInput}
-        onCheckboxChange={handleCheckboxChange}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-      {isCancelPopupOpen && offerToCancel && (
-        <div className={styles.overlay}>
-          <CancelOffer
-            tradeId={BigInt(offerToCancel.id)}
-            tokenFromName={offerToCancel.fromTokenName}
-            tokenToName={offerToCancel.toTokenName}
-            amountFrom={offerToCancel.amount1}
-            amountTo={offerToCancel.amount2}
-            onClose={handleCloseCancelOfferPopup}
-          />
-        </div>
-      )}
-    </>
+    <OffersTableBox
+      title={tableConfig.title}
+      statusButtons={tableConfig.statusButtons}
+      activeButton={activeButton}
+      mainButton={tableConfig.mainButton}
+      rows={rowsHistory}
+      visibleRows={visibleRows}
+      searchText={searchText}
+      selectedRows={selectedRows}
+      filteredRows={filteredRows}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onStatusButtonClick={handleStatusButtonClick}
+      onMainButtonClick={handleReOpenClick}
+      onSearchInputChange={handleChangeOfferSearchInput}
+      onClearSearchInput={handleClearOfferSearchInput}
+      onCheckboxChange={handleCheckboxChange}
+      onChangePage={handleChangePage}
+      onChangeRowsPerPage={handleChangeRowsPerPage}
+    />
   );
 };

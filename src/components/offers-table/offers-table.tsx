@@ -97,6 +97,7 @@ export const OffersTable: FC = () => {
         mainButton={tableConfig.mainButton}
         rows={rows}
         visibleRows={visibleRows}
+        filteredRows={filteredRows}
         searchText={searchText}
         selectedRows={selectedRows}
         rowsPerPage={rowsPerPage}
