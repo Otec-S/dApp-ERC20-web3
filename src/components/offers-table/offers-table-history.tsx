@@ -19,11 +19,11 @@ import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import SquareArrowIcon from '../../assets/icons/square_arrow.svg';
 import getTokenIcon from '../../shared/utils/getTokenIcon';
 import { shortenHash } from '../../shared/utils/shortenHash';
-import { rows } from './offers-table.mock';
+import { rowsHistory } from './offers-table.mock';
 import { Offer } from './offers-tables.types';
 import styles from './offers-table.module.css';
 
-export const OffersTable: FC = () => {
+export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeButton, setActiveButton] = useState('All');
@@ -42,7 +42,7 @@ export const OffersTable: FC = () => {
 
   const handleCancelOffer = () => {
     if (selectedRows.length > 0) {
-      const selectedOffer = rows.find((row) => row.id === selectedRows[0]);
+      const selectedOffer = rowsHistory.find((row) => row.id === selectedRows[0]);
       setOfferToCancel(selectedOffer || null);
       setIsCancelPopupOpen(true);
     }
@@ -69,11 +69,11 @@ export const OffersTable: FC = () => {
     setPage(0);
   };
 
-  const openOffersCount = rows.filter((row) => row.status === 'Open').length;
-  const forMeOffersCount = rows.filter((row) => row.status === 'For me').length;
+  const openOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
+  const forMeOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
   // Фильтруем строки по активной кнопке
-  const filteredRows = rows.filter((row) => {
+  const filteredRows = rowsHistory.filter((row) => {
     if (activeButton === 'All') {
       return true;
     }
@@ -105,7 +105,7 @@ export const OffersTable: FC = () => {
     <>
       <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
         <div className={styles.titleBlock}>
-          <h1 className={styles.title}>My offers</h1>
+          <h1 className={styles.title}>History</h1>
           <div className={styles.statusButtons}>
             <button
               className={cn(styles.statusButton, {
@@ -117,25 +117,25 @@ export const OffersTable: FC = () => {
             </button>
             <button
               className={cn(styles.statusButton, {
-                [styles.statusButtonActive]: activeButton === 'Open',
+                [styles.statusButtonActive]: activeButton === 'Accepted',
               })}
-              onClick={() => handleStatusButtonClick('Open')}
+              onClick={() => handleStatusButtonClick('Accepted')}
             >
-              Open <span className={styles.offersCount}>{openOffersCount}</span>
+              Accepted <span className={styles.offersCount}>{openOffersCount}</span>
             </button>
             <button
               className={cn(styles.statusButton, {
-                [styles.statusButtonActive]: activeButton === 'For me',
+                [styles.statusButtonActive]: activeButton === 'Cancelled',
               })}
-              onClick={() => handleStatusButtonClick('For me')}
+              onClick={() => handleStatusButtonClick('Cancelled')}
             >
-              For me <span className={styles.offersCount}>{forMeOffersCount}</span>
+              Cancelled <span className={styles.offersCount}>{forMeOffersCount}</span>
             </button>
           </div>
           <div className={styles.buttonsAndPagination}>
             <div className={styles.cancelAndSearchButtons}>
               <button className={styles.cancelOfferButton} onClick={handleCancelOffer}>
-                Cancel offer
+                Re-open
               </button>
               {/*  */}
               <div className={styles.searchRow}>
@@ -158,7 +158,7 @@ export const OffersTable: FC = () => {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 15]}
                 component="div"
-                count={rows.length}
+                count={rowsHistory.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

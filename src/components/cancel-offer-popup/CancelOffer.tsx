@@ -35,12 +35,12 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     // TODO: отключил пока на мок данных
-    // writeContract({
-    //   abi: tradeContractAbi,
-    //   address: tradeContractAddress[`${chainId}`],
-    //   functionName: 'cancelTrade',
-    //   args: [tradeId],
-    // });
+    writeContract({
+      abi: tradeContractAbi,
+      address: tradeContractAddress[`${chainId}`],
+      functionName: 'cancelTrade',
+      args: [tradeId],
+    });
   };
 
   useEffect(() => {
