@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useState } from 'react';
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 
 import { rows } from './offers-table.mock';
-import OffersTableBox from './offers-table-box'; // предположим, что этот компонент в той же директории
+import OffersTableBox from './offers-table-box';
 import { Offer } from './offers-tables.types';
 import styles from './offers-table.module.css';
 

@@ -26,7 +26,7 @@ import { shortenHash } from '../../shared/utils/shortenHash';
 import { Offer } from './offers-tables.types';
 import styles from './offers-table.module.css';
 
-interface OffersTableBoxProps {
+interface Props {
   title: string;
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
@@ -47,7 +47,7 @@ interface OffersTableBoxProps {
   onChangeRowsPerPage: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const OffersTableBox: FC<OffersTableBoxProps> = ({
+const OffersTableBox: FC<Props> = ({
   title,
   statusButtons,
   activeButton,
@@ -72,7 +72,7 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
   };
   return (
     <>
-      <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
+      <Box className={styles.box}>
         <div className={styles.titleBlock}>
           <h1 className={styles.title}>{title}</h1>
           <div className={styles.statusButtons}>
@@ -122,11 +122,11 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
           </div>
         </div>
 
-        <Paper sx={{ width: '100%', mb: 2 }}>
+        <Paper className={styles.paper}>
           <TableContainer className={styles.container}>
-            <Table sx={{ minWidth: 650 }} aria-label="table of offers">
+            <Table className={styles.table} aria-label="table of offers">
               <TableHead>
-                <TableRow sx={{ fontWeight: 'bold', backgroundColor: '#FFE5A1', fontFamily: 'Open Sans, sans serif' }}>
+                <TableRow className={styles.tableRow}>
                   <TableCell></TableCell>
                   <TableCell>Offer ID</TableCell>
                   <TableCell align="left">From Asset 1</TableCell>
@@ -141,7 +141,7 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
               </TableHead>
               <TableBody>
                 {visibleRows.map((row) => (
-                  <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableRow key={row.id} className={styles.tableBodyRow}>
                     <TableCell padding="none">
                       <Checkbox
                         checked={selectedRows.includes(row.id)}
@@ -152,7 +152,6 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
                             color: 'black',
                           },
                         }}
-                        className={styles.checkbox}
                       />
                     </TableCell>
                     <TableCell component="th" scope="row">

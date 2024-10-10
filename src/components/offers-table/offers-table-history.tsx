@@ -27,7 +27,9 @@ export const OffersTableHistory: FC = () => {
   };
 
   const handleReOpenClick = () => {
-    navigate(ROUTES.CREATE_OFFER, { replace: true });
+    if (selectedRows.length > 0) {
+      navigate(ROUTES.CREATE_OFFER, { replace: true });
+    }
   };
 
   const handleStatusButtonClick = (buttonName: string) => {
