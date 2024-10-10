@@ -5,7 +5,7 @@ import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { rows } from './Offers-table.mock';
 import OffersTableBox from './Offers-table-box';
 import { Offer } from './Offers-tables.types';
-import styles from './offers-table.module.css';
+import styles from './Offers-table.module.css';
 
 export const OffersTable: FC = () => {
   const [page, setPage] = useState(0);
@@ -15,6 +15,8 @@ export const OffersTable: FC = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
   const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
+  const openOffersCount = rows.filter((row) => row.status === 'Open').length;
+  const forMeOffersCount = rows.filter((row) => row.status === 'For me').length;
 
   const handleCheckboxChange = (rowId: number) => {
     setSelectedRows((prevSelectedRows) =>
@@ -50,9 +52,6 @@ export const OffersTable: FC = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const openOffersCount = rows.filter((row) => row.status === 'Open').length;
-  const forMeOffersCount = rows.filter((row) => row.status === 'For me').length;
 
   const filteredRows = rows.filter((row) => {
     if (activeButton === 'All') {

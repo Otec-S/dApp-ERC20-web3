@@ -18,13 +18,13 @@ import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
 import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
+import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
+import getTokenIcon from '@shared/utils/getTokenIcon';
+import { shortenHash } from '@shared/utils/shortenHash';
 
-import SquareArrowIcon from '../../assets/icons/square_arrow.svg';
-import getTokenIcon from '../../shared/utils/getTokenIcon';
-import { shortenHash } from '../../shared/utils/shortenHash';
 import { Offer } from './Offers-tables.types';
-import styles from './offers-table.module.css';
+import styles from './Offers-table.module.css';
 
 interface Props {
   title: string;

@@ -44,7 +44,6 @@ const router = createBrowserRouter([
         path: ':id',
         element: <IncomingOffer />,
       },
-      // TODO: разберись с этим
       { path: ROUTES.CREATE_OFFER, element: <CreateOffer /> },
       { path: ROUTES.MY_OFFERS, element: <MyOffers /> },
       { path: ROUTES.HISTORY, element: <History /> },

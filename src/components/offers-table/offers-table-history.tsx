@@ -1,13 +1,10 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { ROUTES } from '@shared/constants';
 
 import { rowsHistory } from './Offers-table.mock';
 import OffersTableBox from './Offers-table-box';
-// import { Offer } from './offers-tables.types';
-// import styles from './offers-table.module.css';
 
 export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
@@ -15,10 +12,10 @@ export const OffersTableHistory: FC = () => {
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  // const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
-  // const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
+  const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
+  const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
-  const navigate = useNavigate(); // Получите функцию для навигации
+  const navigate = useNavigate();
 
   const handleCheckboxChange = (rowId: number) => {
     setSelectedRows((prevSelectedRows) =>
@@ -52,9 +49,6 @@ export const OffersTableHistory: FC = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
-  const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
-  const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
   const filteredRows = rowsHistory.filter((row) => {
     if (activeButton === 'All') {
