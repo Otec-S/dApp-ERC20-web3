@@ -205,16 +205,33 @@
   display: flex;
   gap: 5px;
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
 }
 
 /* TODO: упрости */
-.etherscanIcon .copyIcon .statusIcon {
+.etherscanIcon .statusIcon {
   max-width: 20px;
   max-height: 20px;
   border-radius: 50%;
   display: flex;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+.copyIcon {
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
 }
 
 .status {

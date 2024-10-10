@@ -1,4 +1,5 @@
-import React, { ChangeEvent, FC } from 'react';
+import React, { ChangeEvent, FC, useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import {
   Box,
   Checkbox,
@@ -17,6 +18,7 @@ import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
 import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
+import Snackbar from '@components/snackbar/Snackbar';
 
 import SquareArrowIcon from '../../assets/icons/square_arrow.svg';
 import getTokenIcon from '../../shared/utils/getTokenIcon';
@@ -64,139 +66,157 @@ const OffersTableBox: FC<OffersTableBoxProps> = ({
   onChangePage,
   onChangeRowsPerPage,
 }) => {
+  const [showCopyOfClipboard, setShowCopyOfClipboard] = useState(false);
+  const handleSnackbarClose = () => {
+    setShowCopyOfClipboard(false);
+  };
   return (
-    <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
-      <div className={styles.titleBlock}>
-        <h1 className={styles.title}>{title}</h1>
-        <div className={styles.statusButtons}>
-          {statusButtons.map((button) => (
-            <button
-              key={button.name}
-              className={cn(styles.statusButton, {
-                [styles.statusButtonActive]: activeButton === button.name,
-              })}
-              onClick={() => onStatusButtonClick(button.name)}
-            >
-              {button.name} <span className={styles.offersCount}>{button.count}</span>
-            </button>
-          ))}
-        </div>
-        <div className={styles.buttonsAndPagination}>
-          <div className={styles.cancelAndSearchButtons}>
-            <button className={styles.cancelOfferButton} onClick={onMainButtonClick}>
-              {mainButton}
-            </button>
-            <div className={styles.searchRow}>
-              <div className={styles.searchIcon}>
-                <Search />
-              </div>
-              <input
-                value={searchText}
-                className={styles.input}
-                placeholder="Offer ID or Asset"
-                onChange={onSearchInputChange}
-              />
-              <div className={styles.inputCLoseIcon} onClick={onClearSearchInput}>
-                <Close />
+    <>
+      <Box sx={{ width: '100%', backgroundColor: '#FFE5A1', borderRadius: '16px' }}>
+        <div className={styles.titleBlock}>
+          <h1 className={styles.title}>{title}</h1>
+          <div className={styles.statusButtons}>
+            {statusButtons.map((button) => (
+              <button
+                key={button.name}
+                className={cn(styles.statusButton, {
+                  [styles.statusButtonActive]: activeButton === button.name,
+                })}
+                onClick={() => onStatusButtonClick(button.name)}
+              >
+                {button.name} <span className={styles.offersCount}>{button.count}</span>
+              </button>
+            ))}
+          </div>
+          <div className={styles.buttonsAndPagination}>
+            <div className={styles.cancelAndSearchButtons}>
+              <button className={styles.cancelOfferButton} onClick={onMainButtonClick}>
+                {mainButton}
+              </button>
+              <div className={styles.searchRow}>
+                <div className={styles.searchIcon}>
+                  <Search />
+                </div>
+                <input
+                  value={searchText}
+                  className={styles.input}
+                  placeholder="Offer ID or Asset"
+                  onChange={onSearchInputChange}
+                />
+                <div className={styles.inputCLoseIcon} onClick={onClearSearchInput}>
+                  <Close />
+                </div>
               </div>
             </div>
-          </div>
-          <div className={styles.pagination}>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 15]}
-              component="div"
-              count={filteredRows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={onChangePage}
-              onRowsPerPageChange={onChangeRowsPerPage}
-            />
+            <div className={styles.pagination}>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 15]}
+                component="div"
+                count={filteredRows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <Paper sx={{ width: '100%', mb: 2 }}>
-        <TableContainer className={styles.container}>
-          <Table sx={{ minWidth: 650 }} aria-label="table of offers">
-            <TableHead>
-              <TableRow sx={{ fontWeight: 'bold', backgroundColor: '#FFE5A1', fontFamily: 'Open Sans, sans serif' }}>
-                <TableCell></TableCell>
-                <TableCell>Offer ID</TableCell>
-                <TableCell align="left">From Asset 1</TableCell>
-                <TableCell align="left">To Asset 2</TableCell>
-                <TableCell align="right">Amount 1</TableCell>
-                <TableCell align="right">Amount 2</TableCell>
-                <TableCell align="right">Rate</TableCell>
-                <TableCell align="left">Tx hash</TableCell>
-                <TableCell align="left">Status</TableCell>
-                <TableCell align="left">Receiver</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {visibleRows.map((row) => (
-                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell padding="none">
-                    <Checkbox
-                      checked={selectedRows.includes(row.id)}
-                      onChange={() => onCheckboxChange(row.id)}
-                      sx={{
-                        '& .MuiSvgIcon-root': { fontSize: 15 },
-                        '&.Mui-checked': {
-                          color: 'black',
-                        },
-                      }}
-                      className={styles.checkbox}
-                    />
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {row.id}
-                  </TableCell>
-                  <TableCell align="left">
-                    <div className={styles.token}>
-                      <div className={styles.tokenLogo}>{getTokenIcon(row.fromTokenAddress)}</div>
-                      {row.fromTokenName}
-                    </div>
-                  </TableCell>
-                  <TableCell align="left">
-                    <div className={styles.token}>
-                      <div className={styles.tokenLogo}>{getTokenIcon(row.toTokenAddress)}</div>
-                      {row.toTokenName}
-                    </div>
-                  </TableCell>
-                  <TableCell align="right">{row.amount1}</TableCell>
-                  <TableCell align="right">{row.amount2}</TableCell>
-                  <TableCell align="right">{row.rate}</TableCell>
-                  <TableCell align="left">
-                    <div className={styles.hash}>
-                      {shortenHash(row.hash)}
-                      <div className={styles.icons}>
-                        <div className={styles.etherscanIcon}>
-                          <EtherScanLogo />
-                        </div>
-                        <div className={styles.copyIcon}>
-                          <CopyIcon />
+        <Paper sx={{ width: '100%', mb: 2 }}>
+          <TableContainer className={styles.container}>
+            <Table sx={{ minWidth: 650 }} aria-label="table of offers">
+              <TableHead>
+                <TableRow sx={{ fontWeight: 'bold', backgroundColor: '#FFE5A1', fontFamily: 'Open Sans, sans serif' }}>
+                  <TableCell></TableCell>
+                  <TableCell>Offer ID</TableCell>
+                  <TableCell align="left">From Asset 1</TableCell>
+                  <TableCell align="left">To Asset 2</TableCell>
+                  <TableCell align="right">Amount 1</TableCell>
+                  <TableCell align="right">Amount 2</TableCell>
+                  <TableCell align="right">Rate</TableCell>
+                  <TableCell align="left">Tx hash</TableCell>
+                  <TableCell align="left">Status</TableCell>
+                  <TableCell align="left">Receiver</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {visibleRows.map((row) => (
+                  <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell padding="none">
+                      <Checkbox
+                        checked={selectedRows.includes(row.id)}
+                        onChange={() => onCheckboxChange(row.id)}
+                        sx={{
+                          '& .MuiSvgIcon-root': { fontSize: 15 },
+                          '&.Mui-checked': {
+                            color: 'black',
+                          },
+                        }}
+                        className={styles.checkbox}
+                      />
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row.id}
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.token}>
+                        <div className={styles.tokenLogo}>{getTokenIcon(row.fromTokenAddress)}</div>
+                        {row.fromTokenName}
+                      </div>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.token}>
+                        <div className={styles.tokenLogo}>{getTokenIcon(row.toTokenAddress)}</div>
+                        {row.toTokenName}
+                      </div>
+                    </TableCell>
+                    <TableCell align="right">{row.amount1}</TableCell>
+                    <TableCell align="right">{row.amount2}</TableCell>
+                    <TableCell align="right">{row.rate}</TableCell>
+                    <TableCell align="left">
+                      <div className={styles.hash}>
+                        {shortenHash(row.hash)}
+                        <div className={styles.icons}>
+                          <div className={styles.etherscanIcon}>
+                            <EtherScanLogo />
+                          </div>
+                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.hash}>
+                            <div className={styles.copyIcon}>
+                              <CopyIcon />
+                            </div>
+                          </CopyToClipboard>
                         </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell align="left">
-                    <div className={styles.status}>
-                      {row.status}
-                      {row.status === 'For me' && <SquareArrowIcon />}
-                    </div>
-                  </TableCell>
-                  <TableCell align="left">
-                    <div className={styles.receiver}>
-                      {shortenHash(row.receiver)} <CopyIcon />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-    </Box>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.status}>
+                        {row.status}
+                        {row.status === 'For me' && <SquareArrowIcon />}
+                      </div>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.receiver}>
+                        {shortenHash(row.receiver)}
+                        <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
+                          <div className={styles.copyIcon}>
+                            <CopyIcon />
+                          </div>
+                        </CopyToClipboard>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+      </Box>
+      {showCopyOfClipboard && (
+        <div className={styles.overlay}>
+          <Snackbar type="success" onClose={handleSnackbarClose} description="Link copied successfully" />
+        </div>
+      )}
+    </>
   );
 };
 
