@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Checkbox,
@@ -20,6 +21,7 @@ import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
+import { ROUTES } from '@shared/constants';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 import { shortenHash } from '@shared/utils/shortenHash';
 
@@ -190,7 +192,9 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="left">
                       <div className={styles.status}>
                         {row.status}
-                        {row.status === 'For me' && <SquareArrowIcon />}
+                        <Link to={`${ROUTES.ERC20_TRADE}/${row.id}`}>
+                          {row.status === 'For me' && <SquareArrowIcon />}
+                        </Link>
                       </div>
                     </TableCell>
                     <TableCell align="left">

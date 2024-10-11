@@ -19,14 +19,24 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
     args: [userAddress],
   });
 
+  const { data: offersForMe } = useReadContract({
+    address: contractAddress,
+    abi: tradeContractAbi,
+    functionName: 'getOptionalTakerTrades',
+    args: [userAddress],
+  });
+
   useEffect(() => {
     if (isError) {
       console.error('Error fetching user trades:', error);
       return;
     }
+
+    const newRowsReal: OfferReal[] = [];
+
+    // Обработка данных из getUserTrades
     if (data) {
-      const newRowsReal = data.map((offer) => {
-        // Найдите fromTokenName и toTokenName по адресам
+      const userTrades = data.map((offer) => {
         const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
         const toToken = tokens.find((token) => token.address === offer.tokenTo);
 
@@ -36,21 +46,45 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
           fromTokenName: fromToken ? fromToken.name : 'Unknown',
           toTokenAddress: offer.tokenTo,
           toTokenName: toToken ? toToken.name : 'Unknown',
-          amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)), // Используйте децималы токена или по умолчанию 18
-          amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)), // Используйте децималы токена или по умолчанию 18
+          amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
+          amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
           rate: Number(offer.amountFrom) / Number(offer.amountTo),
           hash: zeroAddress,
-          status: offer.active ? 'Open' : offer.completed ? 'Accepted' : 'Cancelled',
+          status: 'Open',
           receiver: offer.optionalTaker || '',
         };
       });
-      // setRowsReal(newRowsReal);
-      // TODO: что это?
-      if (JSON.stringify(newRowsReal) !== JSON.stringify(rowsReal)) {
-        setRowsReal(newRowsReal);
-      }
+      newRowsReal.push(...userTrades);
     }
-  }, [data, isError, error, userAddress, contractAddress, tokens]);
+
+    // Обработка данных из getOptionalTakerTrades
+    if (offersForMe) {
+      const optionalTakerTrades = offersForMe.map((offer) => {
+        const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
+        const toToken = tokens.find((token) => token.address === offer.tokenTo);
+
+        return {
+          id: Number(offer.tradeID), // Здесь предполагаем, что tradeID уникален
+          fromTokenAddress: offer.tokenFrom,
+          fromTokenName: fromToken ? fromToken.name : 'Unknown',
+          toTokenAddress: offer.tokenTo,
+          toTokenName: toToken ? toToken.name : 'Unknown',
+          amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
+          amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
+          rate: Number(offer.amountFrom) / Number(offer.amountTo),
+          hash: zeroAddress,
+          status: 'For me',
+          receiver: offer.optionalTaker || '',
+        };
+      });
+      newRowsReal.push(...optionalTakerTrades);
+    }
+
+    // Проверяем, изменился ли rowsReal
+    if (JSON.stringify(newRowsReal) !== JSON.stringify(rowsReal)) {
+      setRowsReal(newRowsReal);
+    }
+  }, [data, offersForMe, isError, error, userAddress, contractAddress, tokens]);
 
   return rowsReal;
 }
