@@ -1,4 +1,70 @@
 .adminForm {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  max-width: 800px;
+  width: 100%;
+}
+
+.inputAddress {
+  border-radius: 30px;
+  border: 1px solid #222;
+  background: #fffbf2;
+  width: 100%;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px 218px 45px 24px;
+  outline: none;
+}
+
+.labelAddress {
+  color: black;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.error {
+  color: #ff007a;
+}
+
+.roles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: black;
+    font-feature-settings:
+      'liga' off,
+      'clig' off;
+    text-overflow: ellipsis;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.rolesLabel {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
