@@ -5,6 +5,7 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
+import { Admin } from '@pages/admin/Admin';
 import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
 import { CreateOffer } from '@pages/ERC20trade/modules/CreateOffer';
 import { History } from '@pages/ERC20trade/modules/History';
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: ROUTES.NFT_COLLECTION,
     element: <Landing />,
+  },
+  {
+    path: ROUTES.ADMIN,
+    element: <Admin />,
   },
 ]);
 

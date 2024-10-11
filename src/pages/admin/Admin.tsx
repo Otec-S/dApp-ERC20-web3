@@ -4,8 +4,6 @@ import { useAccount } from 'wagmi';
 
 import Header from '@components/header/Header';
 
-import styles from './ERC20trade.module.css';
-
 export const Admin: FC = () => {
   const { isConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
@@ -15,9 +13,9 @@ export const Admin: FC = () => {
   }
 
   return (
-    <div className={styles.pageWrap}>
-      <div className={styles.header}>
-        <Header colorScheme="lightBackground" />
+    <div>
+      <div>
+        <Header colorScheme="darkBackground" />
       </div>
     </div>
   );
