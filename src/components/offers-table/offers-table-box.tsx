@@ -23,7 +23,7 @@ import Snackbar from '@components/snackbar/Snackbar';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 import { shortenHash } from '@shared/utils/shortenHash';
 
-import { Offer } from './Offers-tables.types';
+import { OfferReal } from './offers-tables.types';
 import styles from './Offers-table.module.css';
 
 interface Props {
@@ -31,9 +31,9 @@ interface Props {
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
   mainButton: string;
-  rows: Offer[];
-  visibleRows: Offer[];
-  filteredRows: Offer[];
+  rows: OfferReal[];
+  visibleRows: OfferReal[];
+  filteredRows: OfferReal[];
   searchText: string;
   selectedRows: number[];
   rowsPerPage: number;

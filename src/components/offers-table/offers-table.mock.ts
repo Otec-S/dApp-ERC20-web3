@@ -1,4 +1,4 @@
-import { Offer } from './Offers-tables.types';
+import { Offer } from './offers-tables.types';
 
 export function createData(offer: Offer): Offer {
   return {
