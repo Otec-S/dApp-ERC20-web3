@@ -1,0 +1,264 @@
+.titleBlock {
+  margin: 24px 0 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 10;
+}
+
+.title {
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: Montserrat, sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+
+.statusButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.statusButton {
+  padding: 5px 16px;
+  border-radius: 100px;
+  background-color: initial;
+
+  text-align: center;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  &:hover {
+    opacity: 0.8;
+    outline: auto;
+    cursor: pointer;
+  }
+}
+
+.statusButtonActive {
+  background-color: #fff;
+}
+
+.offersCount {
+  color: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.cancelAndSearchButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.cancelOfferButton {
+  border-radius: 100px;
+  background: #ffb800;
+  display: flex;
+  padding: 0px 16px;
+  justify-content: center;
+  align-items: center;
+  color: #000;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+
+  &:hover {
+    background-color: white;
+    cursor: pointer;
+  }
+}
+
+.searchRow {
+  width: 210px;
+  display: flex;
+  align-items: center;
+  border-radius: 100px;
+  border: 2px solid #222;
+  background: inherit;
+  box-sizing: border-box;
+}
+
+.searchIcon {
+  width: 24px;
+  min-width: 8px;
+  margin-left: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inputCLoseIcon {
+  width: 21px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.5s ease;
+  transform-origin: center;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
+}
+
+.input {
+  height: 36px;
+  width: 100%;
+  overflow: hidden;
+  color: inherit;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: openSans, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: inherit;
+  border: none;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.buttonsAndPagination {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.token {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.tokenLogo {
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.hash {
+  display: flex;
+  gap: 9px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icons {
+  display: flex;
+  gap: 5px;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.etherscanIcon .statusIcon {
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+}
+.copyIcon {
+  max-width: 20px;
+  max-height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 0.5;
+  }
+}
+
+.status {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.receiver {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.box {
+  width: 100%;
+  background-color: #ffe5a1;
+  border-radius: 16px;
+}
+
+.paper {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.table {
+  min-width: 650px;
+}
+
+.tableRow {
+  font-weight: bold;
+  background-color: #ffe5a1;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.tableBodyRow:last-child td,
+.tableBodyRow:last-child th {
+  border: 0;
+}
