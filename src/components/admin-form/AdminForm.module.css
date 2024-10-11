@@ -52,15 +52,15 @@
   flex-direction: column;
   gap: 10px;
   color: black;
-    font-feature-settings:
-      'liga' off,
-      'clig' off;
-    text-overflow: ellipsis;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 22px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: normal;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .rolesLabel {

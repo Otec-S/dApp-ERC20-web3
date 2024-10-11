@@ -1,7 +1,7 @@
 .admin {
   display: flex;
   flex-direction: column;
-  background: #2D4BC1;
+  background: #2d4bc1;
   align-items: center;
   height: 100vh;
   width: 100%;
@@ -13,7 +13,7 @@
 }
 
 .header {
-  color: #FFF;
+  color: #fff;
   font-family: Montserrat, sans-serif;
   font-size: 34px;
   font-style: normal;
