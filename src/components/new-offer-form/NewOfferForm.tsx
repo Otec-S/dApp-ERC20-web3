@@ -54,6 +54,7 @@ const NewOfferForm: FC = () => {
   const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
+  const [tokenFromAmount, setTokenFromAmount] = useState<number|undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenApproved, setTokenApproved] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
@@ -106,7 +107,7 @@ const NewOfferForm: FC = () => {
   const {
     data: contractsData,
     isLoading: isLoadingContractData,
-    refetch,
+    refetch
   } = useReadContracts({
     allowFailure: false,
     query: {
@@ -137,12 +138,12 @@ const NewOfferForm: FC = () => {
     if (
       formStage === 'createTrade' &&
       tokenFrom &&
-      contractsData &&
-      getValues('from') > Number(formatUnits(contractsData[1], tokenFrom?.decimals))
+      contractsData && tokenFromAmount && 
+      tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals))
     ) {
       setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
     }
-  }, [contractsData, formStage, getValues, setValue, tokenFrom]);
+  }, [contractsData, formStage, getValues, setValue, tokenFrom, tokenFromAmount]);
 
   const fee = contractsData !== undefined && contractsData[0] !== undefined ? formatUnits(contractsData[0], 2) : '';
   const tokenAmountIsTaken = fee && getValues('from') && getValues('from') * Number(fee);
@@ -154,6 +155,7 @@ const NewOfferForm: FC = () => {
   const handleStageSelect = (stage: number) => {
     if (stage === 1) {
       reset();
+      setTokenFromAmount(undefined);
       setFormStage('approveToken');
     }
   };
@@ -180,6 +182,7 @@ const NewOfferForm: FC = () => {
       getValues('from') > 0
     ) {
       setFormStage('createTrade');
+      setTokenFromAmount(getValues('from'));
       refetch();
     }
     if (
