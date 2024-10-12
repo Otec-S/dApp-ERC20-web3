@@ -1773,4 +1773,4 @@ export const nftContractAbi = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-];
+] as const;

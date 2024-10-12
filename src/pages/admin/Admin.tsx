@@ -1,21 +1,29 @@
 import { FC } from 'react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { arbitrumSepolia } from 'viem/chains';
-import { useAccount, useChainId } from 'wagmi';
+import { useAccount, useReadContract } from 'wagmi';
 
 import { AdminForm } from '@components/admin-form/AdminForm';
 import Header from '@components/header/Header';
+import { nftContractAddress } from '@shared/constants/nftContract';
+import { nftContractAbi } from '@shared/constants/nftContractAbi';
 
 import styles from './Admin.module.css';
 
 export const Admin: FC = () => {
-  const { isConnected } = useAccount();
+  const { isConnected, chainId } = useAccount();
   const { openConnectModal } = useConnectModal();
 
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
-  const chainId = useChainId();
+
+  const { data: roleConstant } = useReadContract({
+    abi: nftContractAbi,
+    address: nftContractAddress,
+    functionName: 'PRICE_MANAGER_ROLE',
+  });
+  console.log(roleConstant);
   if (chainId === arbitrumSepolia.id) {
     return (
       <div className={styles.admin}>

@@ -11,5 +11,6 @@ export const config = getDefaultConfig({
     [polygon.id]: http(import.meta.env.VITE_POLYGON_RPC_URL),
     [polygonAmoy.id]: http(import.meta.env.VITE_POLYGON_AMOY_RPC_URL),
     [mainnet.id]: http(import.meta.env.VITE_MAINNET_RPC_URL),
+    [arbitrumSepolia.id]: http(import.meta.env.VITE_ARBITRUM_RPC_URL),
   },
 });
