@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { arbitrumSepolia } from 'viem/chains';
+import { useAccount, useChainId } from 'wagmi';
 
 import { AdminForm } from '@components/admin-form/AdminForm';
 import Header from '@components/header/Header';
@@ -14,13 +15,24 @@ export const Admin: FC = () => {
   if (!isConnected && openConnectModal) {
     openConnectModal();
   }
+  const chainId = useChainId();
+  if (chainId === arbitrumSepolia.id) {
+    return (
+      <div className={styles.admin}>
+        <Header colorScheme="darkBackground" />
+        <main className={styles.main}>
+          <h1 className={styles.header}>Admin page</h1>
+          <AdminForm />
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.admin}>
       <Header colorScheme="darkBackground" />
       <main className={styles.main}>
-        <h1 className={styles.header}>Admin page</h1>
-        <AdminForm />
+        <h1 className={styles.header}>Please select arbitrum sepolia network</h1>
       </main>
     </div>
   );
