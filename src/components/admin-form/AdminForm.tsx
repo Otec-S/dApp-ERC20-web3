@@ -78,8 +78,8 @@ export const AdminForm: FC = () => {
     ],
   });
 
-  // const isUserPriceManager=roles && roles[0]; 
-  const isUserSaleManager= roles && roles[1]; 
+  // const isUserPriceManager=roles && roles[0];
+  const isUserSaleManager = roles && roles[1];
   // const isUserWhiteListManager= roles && roles[2];
 
   const dataIsLoading = isRolesApprovedLoading || isConstantsLoading;
@@ -117,11 +117,10 @@ export const AdminForm: FC = () => {
 
   if (chainId === arbitrumSepolia.id) {
     return (
-
-        <section className={styles.main}>
-          <h2 className={styles.header}>Admin form</h2>
-          <div className={styles.adminForm}>{isUserSaleManager && <AdminSaleForm />}</div>
-        </section>
+      <section className={styles.main}>
+        <h2 className={styles.header}>Admin form</h2>
+        <div className={styles.adminForm}>{isUserSaleManager && <AdminSaleForm />}</div>
+      </section>
     );
   }
 

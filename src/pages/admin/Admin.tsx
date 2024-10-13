@@ -6,7 +6,6 @@ import Header from '@components/header/Header';
 import styles from './Admin.module.css';
 
 export const Admin: FC = () => {
-  
   return (
     <div className={styles.admin}>
       <Header colorScheme="darkBackground" />
