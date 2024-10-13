@@ -6,6 +6,7 @@ import { arbitrumSepolia } from 'viem/chains';
 import { useAccount, useReadContracts } from 'wagmi';
 
 import { AdminForm } from '@components/admin-form/AdminForm';
+import FormButton from '@components/form-button/FormButton';
 import Header from '@components/header/Header';
 import { ROUTES } from '@shared/constants';
 import { nftContractAddress } from '@shared/constants/nftContract';
@@ -52,7 +53,7 @@ export const Admin: FC = () => {
   const SELL_PHASE_MANAGER_ROLE = constantsRoles && constantsRoles[1];
   const WHITE_LIST_MANAGER_ROLE = constantsRoles && constantsRoles[2];
 
-  const { data: rolesApproved, isLoading: isRolesApprovedLoading } = useReadContracts({
+  const { data: roles, isLoading: isRolesApprovedLoading } = useReadContracts({
     allowFailure: false,
     contracts: [
       {
@@ -91,11 +92,23 @@ export const Admin: FC = () => {
         />
       </div>
     );
-  } else {
-    const userIsAllowedToSeeAdminPanel = rolesApproved && rolesApproved.some((role) => role === true);
-    if (!userIsAllowedToSeeAdminPanel) {
-      navigate(ROUTES.HOME);
-    }
+  }
+
+  const isUserAllowedToPassAdminPanel = roles && roles.some((role) => role === true);
+
+  if (!isUserAllowedToPassAdminPanel) {
+    return (
+      <div className={styles.admin}>
+        <Header colorScheme="darkBackground" />
+        <main className={styles.main}>
+          <h1 className={styles.header}>You are not allowed to admin panel</h1>
+          <h2 className={styles.subheader}>Please check your rights and chain settings(Arbitrum Sepolia)</h2>
+          <div className={styles.backButton}>
+            <FormButton colorScheme="yellow" buttonText="Back" onPointerDown={() => navigate(ROUTES.HOME)} />
+          </div>
+        </main>
+      </div>
+    );
   }
 
   if (chainId === arbitrumSepolia.id) {

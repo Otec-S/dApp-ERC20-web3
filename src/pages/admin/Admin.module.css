@@ -14,8 +14,19 @@
 
 .header {
   color: #fff;
-  font-family: Montserrat, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 48px 0;
+  text-align: center;
+}
+
+.subheader {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
@@ -34,4 +45,9 @@
   text-align: center;
   padding: 100px;
   z-index: 9999;
+}
+
+.backButton {
+  width: 150px;
+  margin: 0 auto;
 }
