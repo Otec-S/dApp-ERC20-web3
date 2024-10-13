@@ -1,4 +1,4 @@
-import { CSSProperties, FC } from 'react';
+import { CSSProperties, FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BeatLoader } from 'react-spinners';
 import { useReadContracts } from 'wagmi';
@@ -10,15 +10,15 @@ import { nftContractAbi } from '@shared/constants/nftContractAbi';
 import styles from './AdminSaleForm.module.css';
 
 enum SaleStatus {
-  SOON = 0,
-  AVAILABLE = 1,
-  FINISHED = 2,
+  SOON = '0',
+  AVAILABLE = '1',
+  FINISHED = '2',
 }
 
 interface FormData {
-  airdrope: SaleStatus;
-  publicSale: SaleStatus;
-  whiteListSale: SaleStatus;
+  airdrope: string;
+  publicSale: string;
+  whiteListSale: string;
 }
 
 const override: CSSProperties = {
@@ -47,9 +47,18 @@ export const AdminSaleForm: FC = () => {
       },
     ],
   });
-  console.log(saleState);
-  const { register, handleSubmit } = useForm<FormData>();
+
+  const { register, handleSubmit, setValue } = useForm<FormData>();
   const onSubmit = (data: FormData) => console.log(data);
+
+  useEffect(()=>{
+    if(saleState) {
+      setValue('airdrope',`${saleState[0]}`);
+      setValue('whiteListSale',`${saleState[1]}`);
+      setValue('publicSale',`${saleState[2]}`);
+    }
+
+  },[saleState,setValue])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -72,7 +81,6 @@ export const AdminSaleForm: FC = () => {
             type="radio"
             id="airdrope0"
             value={SaleStatus.SOON}
-            checked={saleState && saleState[0] === SaleStatus.SOON}
             {...register('airdrope')}
           />
           <label className={styles.label} htmlFor="airdrope0">
@@ -82,7 +90,6 @@ export const AdminSaleForm: FC = () => {
         <div>
           <input
             type="radio"
-            checked={saleState && saleState[0] === SaleStatus.AVAILABLE}
             id="airdrope1"
             value={SaleStatus.AVAILABLE}
             {...register('airdrope')}
@@ -93,7 +100,6 @@ export const AdminSaleForm: FC = () => {
         </div>
         <div>
           <input
-            checked={saleState && saleState[0] === SaleStatus.FINISHED}
             type="radio"
             id="airdrope2"
             {...register('airdrope')}
@@ -108,7 +114,6 @@ export const AdminSaleForm: FC = () => {
         <legend className={styles.label}>Select white list state:</legend>
         <div>
           <input
-            checked={saleState && saleState[1] === SaleStatus.SOON}
             type="radio"
             id="whitelist0"
             {...register('whiteListSale')}
@@ -120,7 +125,6 @@ export const AdminSaleForm: FC = () => {
         </div>
         <div>
           <input
-            checked={saleState && saleState[1] === SaleStatus.AVAILABLE}
             type="radio"
             id="whitelist1"
             {...register('whiteListSale')}
@@ -132,7 +136,6 @@ export const AdminSaleForm: FC = () => {
         </div>
         <div>
           <input
-            checked={saleState && saleState[1] === SaleStatus.FINISHED}
             type="radio"
             id="whitelist2"
             {...register('whiteListSale')}
@@ -147,7 +150,6 @@ export const AdminSaleForm: FC = () => {
         <legend className={styles.label}>Select public sale state:</legend>
         <div>
           <input
-            checked={saleState && saleState[2] === SaleStatus.SOON}
             type="radio"
             id="publicSale0"
             {...register('publicSale')}
@@ -159,7 +161,6 @@ export const AdminSaleForm: FC = () => {
         </div>
         <div>
           <input
-            checked={saleState && saleState[2] === SaleStatus.AVAILABLE}
             type="radio"
             id="publicSale1"
             {...register('publicSale')}
@@ -171,7 +172,6 @@ export const AdminSaleForm: FC = () => {
         </div>
         <div>
           <input
-            checked={saleState && saleState[2] === SaleStatus.FINISHED}
             type="radio"
             id="publicSale2"
             {...register('publicSale')}
