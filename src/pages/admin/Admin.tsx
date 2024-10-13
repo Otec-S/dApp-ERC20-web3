@@ -49,9 +49,9 @@ export const Admin: FC = () => {
     ],
   });
 
-  const PRICE_MANAGER_ROLE = constantsRoles && constantsRoles[0];
-  const SELL_PHASE_MANAGER_ROLE = constantsRoles && constantsRoles[1];
-  const WHITE_LIST_MANAGER_ROLE = constantsRoles && constantsRoles[2];
+  const PRICE_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[0];
+  const SELL_PHASE_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[1];
+  const WHITE_LIST_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[2];
 
   const { data: roles, isLoading: isRolesApprovedLoading } = useReadContracts({
     allowFailure: false,
@@ -60,19 +60,21 @@ export const Admin: FC = () => {
         address: nftContractAddress,
         functionName: 'hasRole',
         abi: nftContractAbi,
-        args: PRICE_MANAGER_ROLE && walletAddress && [PRICE_MANAGER_ROLE, walletAddress],
+        args: PRICE_MANAGER_ROLE_DESCRIPTOR && walletAddress && [PRICE_MANAGER_ROLE_DESCRIPTOR, walletAddress],
       },
       {
         address: nftContractAddress,
         functionName: 'hasRole',
         abi: nftContractAbi,
-        args: SELL_PHASE_MANAGER_ROLE && walletAddress && [SELL_PHASE_MANAGER_ROLE, walletAddress],
+        args: SELL_PHASE_MANAGER_ROLE_DESCRIPTOR &&
+          walletAddress && [SELL_PHASE_MANAGER_ROLE_DESCRIPTOR, walletAddress],
       },
       {
         address: nftContractAddress,
         functionName: 'hasRole',
         abi: nftContractAbi,
-        args: WHITE_LIST_MANAGER_ROLE && walletAddress && [WHITE_LIST_MANAGER_ROLE, walletAddress],
+        args: WHITE_LIST_MANAGER_ROLE_DESCRIPTOR &&
+          walletAddress && [WHITE_LIST_MANAGER_ROLE_DESCRIPTOR, walletAddress],
       },
     ],
   });
@@ -117,7 +119,7 @@ export const Admin: FC = () => {
         <Header colorScheme="darkBackground" />
         <main className={styles.main}>
           <h1 className={styles.header}>Admin page</h1>
-          <AdminForm />
+          <AdminForm priceManager={roles[0]} saleManager={roles[1]} whiteListManager={roles[2]} />
         </main>
       </div>
     );
