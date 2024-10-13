@@ -1,7 +1,8 @@
 import { CSSProperties, FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-import { useReadContracts } from 'wagmi';
+import { useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import FormButton from '@components/form-button/FormButton';
 import { nftContractAddress } from '@shared/constants/nftContract';
@@ -16,9 +17,9 @@ enum SaleStatus {
 }
 
 interface FormData {
-  airdrope: string;
-  publicSale: string;
-  whiteListSale: string;
+  airdrope: SaleStatus;
+  publicSale: SaleStatus;
+  whiteListSale: SaleStatus;
 }
 
 const override: CSSProperties = {
@@ -49,19 +50,94 @@ export const AdminSaleForm: FC = () => {
   });
 
   const { register, handleSubmit, setValue } = useForm<FormData>();
-  const onSubmit = (data: FormData) => console.log(data);
 
   useEffect(() => {
     if (saleState) {
-      setValue('airdrope', `${saleState[0]}`);
-      setValue('whiteListSale', `${saleState[1]}`);
-      setValue('publicSale', `${saleState[2]}`);
+      setValue('airdrope', `${saleState[0]}` as SaleStatus);
+      setValue('whiteListSale', `${saleState[1]}` as SaleStatus);
+      setValue('publicSale', `${saleState[2]}` as SaleStatus);
     }
   }, [saleState, setValue]);
 
+  const {
+    writeContract: approveAirdrop,
+    data: approveAirdropHash,
+    error: approveAirdropError,
+    isPending: isWriteApproveAirdropPending,
+  } = useWriteContract();
+  const { isLoading: isApproveAirdropLoading } = useWaitForTransactionReceipt({
+    hash: approveAirdropHash,
+  });
+  const {
+    writeContract: approveWhiteListSale,
+    data: approveWhiteListSaleHash,
+    error: approveWhiteListSaleError,
+    isPending: isWriteWhiteListPending,
+  } = useWriteContract();
+  const { isLoading: isApproveWhiteListSaleLoading } = useWaitForTransactionReceipt({
+    hash: approveWhiteListSaleHash,
+  });
+  const {
+    writeContract: approvePublicSale,
+    data: approvePublicSaleHash,
+    error: approvePublicSaleError,
+    isPending: isWritePublicSalePending,
+  } = useWriteContract();
+  const { isLoading: isApprovePublicSaleLoading } = useWaitForTransactionReceipt({
+    hash: approvePublicSaleHash,
+  });
+
+  useEffect(() => {
+    if (approveAirdropError) {
+      toast.error(`Error to write airdrop stage: ${approveAirdropError.name}`);
+    }
+    if (approveWhiteListSaleError) {
+      toast.error(`Error to write white list sale stage: ${approveWhiteListSaleError.name}`);
+    }
+    if (approvePublicSaleError) {
+      toast.error(`Error to write public sale stage: ${approvePublicSaleError.name}`);
+    }
+  }, [approveAirdropError, approveWhiteListSaleError, approvePublicSaleError]);
+
+  const onSubmit = (data: FormData) => {
+    if (saleState && data.airdrope !== `${saleState[0]}`) {
+      approveAirdrop({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'toggleAirDrop',
+        args: [Number(data.airdrope)],
+      });
+    }
+    if (saleState && data.whiteListSale !== `${saleState[1]}`) {
+      approveWhiteListSale({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'toggleWhiteListSale',
+        args: [Number(data.whiteListSale)],
+      });
+    }
+    if (saleState && data.publicSale !== `${saleState[2]}`) {
+      approvePublicSale({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'togglePublicSale',
+        args: [Number(data.whiteListSale)],
+      });
+    }
+  };
+
+  const dataIsLoading =
+    isWriteApproveAirdropPending ||
+    isWriteWhiteListPending ||
+    isWritePublicSalePending ||
+    isSaleLoading ||
+    isApproveWhiteListSaleLoading ||
+    isApproveAirdropLoading ||
+    isApprovePublicSaleLoading;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {isSaleLoading && (
+      {dataIsLoading && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
@@ -128,7 +204,7 @@ export const AdminSaleForm: FC = () => {
           </label>
         </div>
       </fieldset>
-      <FormButton type="submit" buttonText="Set sell stage" colorScheme="yellow" />
+      <FormButton disabled={dataIsLoading} type="submit" buttonText="Set sell stage" colorScheme="yellow" />
     </form>
   );
 };
