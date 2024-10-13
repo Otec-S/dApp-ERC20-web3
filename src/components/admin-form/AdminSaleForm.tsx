@@ -51,14 +51,13 @@ export const AdminSaleForm: FC = () => {
   const { register, handleSubmit, setValue } = useForm<FormData>();
   const onSubmit = (data: FormData) => console.log(data);
 
-  useEffect(()=>{
-    if(saleState) {
-      setValue('airdrope',`${saleState[0]}`);
-      setValue('whiteListSale',`${saleState[1]}`);
-      setValue('publicSale',`${saleState[2]}`);
+  useEffect(() => {
+    if (saleState) {
+      setValue('airdrope', `${saleState[0]}`);
+      setValue('whiteListSale', `${saleState[1]}`);
+      setValue('publicSale', `${saleState[2]}`);
     }
-
-  },[saleState,setValue])
+  }, [saleState, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -76,109 +75,56 @@ export const AdminSaleForm: FC = () => {
       )}
       <fieldset className={styles.fieldSet}>
         <legend className={styles.label}>Select airdrop state:</legend>
-        <div>
-          <input
-            type="radio"
-            id="airdrope0"
-            value={SaleStatus.SOON}
-            {...register('airdrope')}
-          />
-          <label className={styles.label} htmlFor="airdrope0">
-            Soon
-          </label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="airdrope1"
-            value={SaleStatus.AVAILABLE}
-            {...register('airdrope')}
-          />
-          <label className={styles.label} htmlFor="airdrope1">
-            Available
-          </label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="airdrope2"
-            {...register('airdrope')}
-            value={SaleStatus.FINISHED}
-          />
-          <label className={styles.label} htmlFor="airdrope2">
-            Finished
-          </label>
-        </div>
+        <label className={styles.label}>
+          <input type="radio" value={SaleStatus.SOON} {...register('airdrope')} />
+          <span>Soon</span>
+        </label>
+        <label className={styles.label}>
+          <input type="radio" value={SaleStatus.AVAILABLE} {...register('airdrope')} />
+          <span>Available</span>
+        </label>
+        <label className={styles.label}>
+          <input type="radio" {...register('airdrope')} value={SaleStatus.FINISHED} />
+          <span>Finished</span>
+        </label>
       </fieldset>
       <fieldset className={styles.fieldSet}>
         <legend className={styles.label}>Select white list state:</legend>
+        <label className={styles.label}>
+          <input type="radio" {...register('whiteListSale')} value={SaleStatus.SOON} />
+          <span>Soon</span>
+        </label>
         <div>
-          <input
-            type="radio"
-            id="whitelist0"
-            {...register('whiteListSale')}
-            value={SaleStatus.SOON}
-          />
-          <label className={styles.label} htmlFor="whitelist0">
-            Soon
+          <label className={styles.label}>
+            <input type="radio" {...register('whiteListSale')} value={SaleStatus.AVAILABLE} />
+            <span>Available</span>
           </label>
         </div>
         <div>
-          <input
-            type="radio"
-            id="whitelist1"
-            {...register('whiteListSale')}
-            value={SaleStatus.AVAILABLE}
-          />
-          <label className={styles.label} htmlFor="whitelist1">
-            Available
-          </label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="whitelist2"
-            {...register('whiteListSale')}
-            value={SaleStatus.FINISHED}
-          />
-          <label className={styles.label} htmlFor="whitelist2">
-            Finished
+          <label className={styles.label}>
+            <input type="radio" {...register('whiteListSale')} value={SaleStatus.FINISHED} />
+            <span>Finished</span>
           </label>
         </div>
       </fieldset>
       <fieldset className={styles.fieldSet}>
         <legend className={styles.label}>Select public sale state:</legend>
         <div>
-          <input
-            type="radio"
-            id="publicSale0"
-            {...register('publicSale')}
-            value={SaleStatus.SOON}
-          />
-          <label className={styles.label} htmlFor="publicSale0">
-            Soon
+          <label className={styles.label}>
+            <input type="radio" {...register('publicSale')} value={SaleStatus.SOON} />
+            <span>Soon</span>
           </label>
         </div>
         <div>
-          <input
-            type="radio"
-            id="publicSale1"
-            {...register('publicSale')}
-            value={SaleStatus.AVAILABLE}
-          />
-          <label className={styles.label} htmlFor="publicSale1">
-            Available
+          <label className={styles.label}>
+            <input type="radio" {...register('publicSale')} value={SaleStatus.AVAILABLE} />
+            <span>Available</span>
           </label>
         </div>
         <div>
-          <input
-            type="radio"
-            id="publicSale2"
-            {...register('publicSale')}
-            value={SaleStatus.FINISHED}
-          />
-          <label className={styles.label} htmlFor="publicSale2">
-            Finished
+          <label className={styles.label}>
+            <input type="radio" {...register('publicSale')} value={SaleStatus.FINISHED} />
+            <span>Finished</span>
           </label>
         </div>
       </fieldset>
