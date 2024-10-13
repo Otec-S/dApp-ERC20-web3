@@ -103,15 +103,13 @@ export const AdminForm: FC = () => {
 
   if (!isUserAllowedToPassAdminPanel) {
     return (
-      <div className={styles.admin}>
-        <main className={styles.main}>
-          <h1 className={styles.header}>You are not allowed to admin panel</h1>
-          <h2 className={styles.subheader}>Please check your rights and chain settings(Arbitrum Sepolia)</h2>
-          <div className={styles.backButton}>
-            <FormButton colorScheme="yellow" buttonText="Back" onPointerDown={() => navigate(ROUTES.HOME)} />
-          </div>
-        </main>
-      </div>
+      <section className={styles.main}>
+        <h2 className={styles.header}>You are not allowed to admin panel</h2>
+        <h3 className={styles.subheader}>Please check your rights and chain settings(Arbitrum Sepolia)</h3>
+        <div className={styles.backButton}>
+          <FormButton colorScheme="yellow" buttonText="Back" onPointerDown={() => navigate(ROUTES.HOME)} />
+        </div>
+      </section>
     );
   }
 
@@ -125,10 +123,8 @@ export const AdminForm: FC = () => {
   }
 
   return (
-    <div className={styles.admin}>
-      <main className={styles.main}>
-        <h1 className={styles.header}>Please select arbitrum sepolia network</h1>
-      </main>
-    </div>
+    <section className={styles.main}>
+      <h2 className={styles.header}>Please select arbitrum sepolia network</h2>
+    </section>
   );
 };
