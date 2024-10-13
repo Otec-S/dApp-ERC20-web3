@@ -13,17 +13,5 @@ interface Props {
 }
 
 export const AdminForm: FC<Props> = ({ priceManager, saleManager, whiteListManager }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
-  const onSubmit = (data: FormData) => console.log(data);
-
-  return (
-    <form className={styles.adminForm} onSubmit={handleSubmit(onSubmit)}>
-      {saleManager && <AdminSaleForm />}
-      <FormButton type="submit" buttonText="Submit all" colorScheme="yellow" />
-    </form>
-  );
+  return <div className={styles.adminForm}>{saleManager && <AdminSaleForm />}</div>;
 };
