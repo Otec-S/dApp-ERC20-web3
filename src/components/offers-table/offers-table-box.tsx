@@ -17,7 +17,7 @@ import cn from 'classnames';
 
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
-import EtherScanLogo from '@assets/icons/etherscan.svg';
+// import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
@@ -136,7 +136,7 @@ const OffersTableBox: FC<Props> = ({
                   <TableCell align="right">Amount 1</TableCell>
                   <TableCell align="right">Amount 2</TableCell>
                   <TableCell align="right">Rate</TableCell>
-                  <TableCell align="left">Tx hash</TableCell>
+                  {/* <TableCell align="left">Tx hash</TableCell> */}
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left">Receiver</TableCell>
                 </TableRow>
@@ -174,7 +174,7 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="right">{row.amount1}</TableCell>
                     <TableCell align="right">{row.amount2}</TableCell>
                     <TableCell align="right">{row.rate}</TableCell>
-                    <TableCell align="left">
+                    {/* <TableCell align="left">
                       <div className={styles.hash}>
                         {shortenHash(row.hash)}
                         <div className={styles.icons}>
@@ -188,7 +188,7 @@ const OffersTableBox: FC<Props> = ({
                           </CopyToClipboard>
                         </div>
                       </div>
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell align="left">
                       <div className={styles.status}>
                         {row.status}
