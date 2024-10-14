@@ -63,13 +63,13 @@ export const AdminWhiteListForm: FC = () => {
       keccak256,
       { hashLeaves: true, sortPairs: true },
     );
-    const treeRoot = getAddress(merkleTree.getRoot().toString('hex'));
+    const treeRoot = merkleTree.getHexRoot();
     setAddresses(data.addresses);
     writeTreeRootHash({
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootWhiteList',
-      args: [treeRoot],
+      args: [treeRoot as `0x${string}`],
     });
   };
 

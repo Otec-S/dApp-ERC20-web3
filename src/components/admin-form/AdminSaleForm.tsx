@@ -121,7 +121,7 @@ export const AdminSaleForm: FC = () => {
         abi: nftContractAbi,
         address: nftContractAddress,
         functionName: 'togglePublicSale',
-        args: [Number(data.whiteListSale)],
+        args: [Number(data.publicSale)],
       });
     }
   };
