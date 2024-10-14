@@ -11,6 +11,7 @@ import { nftContractAddress } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
 
 import { AdminSaleForm } from './AdminSaleForm';
+import { AdminWhiteListForm } from './AdminWhiteListForm';
 import styles from './AdminForm.module.css';
 
 const override: CSSProperties = {
@@ -80,7 +81,7 @@ export const AdminForm: FC = () => {
 
   // const isUserPriceManager=roles && roles[0];
   const isUserSaleManager = roles && roles[1];
-  // const isUserWhiteListManager= roles && roles[2];
+  const isUserWhiteListManager= roles && roles[2];
 
   const dataIsLoading = isRolesApprovedLoading || isConstantsLoading;
 
@@ -117,7 +118,8 @@ export const AdminForm: FC = () => {
     return (
       <section className={styles.main}>
         <h2 className={styles.header}>Admin form</h2>
-        <div className={styles.adminForm}>{isUserSaleManager && <AdminSaleForm />}</div>
+        {isUserSaleManager && <div className={styles.adminForm}><AdminSaleForm /></div>}
+        {isUserWhiteListManager && <div className={styles.adminForm}><AdminWhiteListForm /></div>}
       </section>
     );
   }
