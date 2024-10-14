@@ -99,6 +99,7 @@ export const AdminWhiteListForm: FC = () => {
                 <FormButton
                   colorScheme="yellow"
                   type="button"
+                  title='Delete address'
                   buttonText="Delete"
                   onPointerDown={() => remove(index)}
                 />
@@ -112,6 +113,7 @@ export const AdminWhiteListForm: FC = () => {
           colorScheme="yellow"
           type="button"
           buttonText="+"
+          title='Add address'
           onPointerDown={() =>
             append({
               address: undefined,
