@@ -8,7 +8,8 @@ export const useProofUpload = (proofs: Proofs) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [uri, setUri] = useState<string | null>(null);
-  const clientId = import.meta.env.VITE_ARBITRUM_RPC_URL;
+  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID;
+  console.log('inside hook' + clientId)
   const client = createThirdwebClient({ clientId });
   useEffect(() => {
     const file = new File([JSON.stringify(proofs)], '1.json');

@@ -78,6 +78,8 @@ export const AdminWhiteListForm: FC = () => {
     });
   };
 
+
+
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
       {isRootHashLoading ||

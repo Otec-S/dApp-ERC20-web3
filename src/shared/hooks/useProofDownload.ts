@@ -8,7 +8,7 @@ export const useProofDownload = (uri: string) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [file, setFile] = useState<Proofs | null>(null);
-  const clientId = import.meta.env.VITE_ARBITRUM_RPC_URL;
+  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID;
   const client = createThirdwebClient({ clientId });
   useEffect(() => {
     const downloadData = async () => {
