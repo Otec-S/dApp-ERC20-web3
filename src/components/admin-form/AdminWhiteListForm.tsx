@@ -20,12 +20,12 @@ const mockAddresses = [
 
 interface FormData {
   addresses: {
-    address: string;
+    address: Address | undefined;
   }[];
 }
 
 export const AdminWhiteListForm: FC = () => {
-  const [addresses, setAddresses] = useState<Array<{ address: Address }>>(mockAddresses);
+  const [addresses, setAddresses] = useState<Array<{ address: Address | undefined }>>(mockAddresses);
 
   const {
     register,
@@ -40,16 +40,13 @@ export const AdminWhiteListForm: FC = () => {
   });
   useEffect(() => {
     setValue('addresses', addresses);
-  }, []);
+  }, [addresses, setValue]);
 
   const onSubmit = (data: FormData) => {
-    console.log('----------------------------------------')
-    console.log(data);
-    console.log('----------------------------------------')
+    setAddresses(data.addresses);
   };
 
   const dataIsLoading = false;
-console.log(errors.addresses?.[2]?.address?.type)
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
       <h3 className={styles.subheader}>Add or remove addresses from white list</h3>
@@ -71,22 +68,32 @@ console.log(errors.addresses?.[2]?.address?.type)
             <li className={styles.addressItem} key={field.id}>
               <div className={styles.inputWrapper}>
                 <input
-                {...register(`addresses.${index}.address` as const, {
-                  required: true,
-                  validate: (value) => isAddress(value),
-                })}
-                className={styles.inputAddress}
-              />
-              {errors.addresses?.[index]?.address?.type === 'required' && (
-                <div className={styles.error}>
-                  {
-                    <div className={styles.warningIcon}>
-                      <WarningIcon />
-                    </div>
-                  }
-                  {' Required field'}
-                </div>
-              )}
+                  {...register(`addresses.${index}.address` as const, {
+                    required: true,
+                    validate: (value) => value && isAddress(value),
+                  })}
+                  className={styles.inputAddress}
+                />
+                {errors.addresses?.[index]?.address?.type === 'required' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Required field'}
+                  </div>
+                )}
+                {errors.addresses?.[index]?.address?.type === 'validate' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Input is not address'}
+                  </div>
+                )}
               </div>
               <div className={styles.deleteButton}>
                 <FormButton
@@ -107,7 +114,7 @@ console.log(errors.addresses?.[2]?.address?.type)
           buttonText="+"
           onPointerDown={() =>
             append({
-              address: '',
+              address: undefined,
             })
           }
         />

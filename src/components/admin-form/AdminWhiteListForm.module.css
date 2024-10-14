@@ -25,6 +25,7 @@
   display: flex;
   flex-direction: row;
   gap: 5px;
+  padding-left: 16px;
 }
 
 .warningIcon {
@@ -33,7 +34,7 @@
   justify-items: center;
 }
 
-.warningIcon svg{
+.warningIcon svg {
   width: 20px;
   height: 20px;
 }
