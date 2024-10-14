@@ -33,11 +33,6 @@ export const AdminForm: FC = () => {
     contracts: [
       {
         address: nftContractAddress,
-        functionName: 'PRICE_MANAGER_ROLE',
-        abi: nftContractAbi,
-      },
-      {
-        address: nftContractAddress,
         functionName: 'SELL_PHASE_MANAGER_ROLE',
         abi: nftContractAbi,
       },
@@ -49,19 +44,12 @@ export const AdminForm: FC = () => {
     ],
   });
 
-  const PRICE_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[0];
-  const SELL_PHASE_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[1];
-  const WHITE_LIST_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[2];
+  const SELL_PHASE_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[0];
+  const WHITE_LIST_MANAGER_ROLE_DESCRIPTOR = constantsRoles && constantsRoles[1];
 
   const { data: roles, isLoading: isRolesApprovedLoading } = useReadContracts({
     allowFailure: false,
     contracts: [
-      {
-        address: nftContractAddress,
-        functionName: 'hasRole',
-        abi: nftContractAbi,
-        args: PRICE_MANAGER_ROLE_DESCRIPTOR && walletAddress && [PRICE_MANAGER_ROLE_DESCRIPTOR, walletAddress],
-      },
       {
         address: nftContractAddress,
         functionName: 'hasRole',
@@ -79,9 +67,8 @@ export const AdminForm: FC = () => {
     ],
   });
 
-  // const isUserPriceManager=roles && roles[0];
-  const isUserSaleManager = roles && roles[1];
-  const isUserWhiteListManager= roles && roles[2];
+  const isUserSaleManager = roles && roles[0];
+  const isUserWhiteListManager = roles && roles[1];
 
   const dataIsLoading = isRolesApprovedLoading || isConstantsLoading;
 
@@ -118,8 +105,16 @@ export const AdminForm: FC = () => {
     return (
       <section className={styles.main}>
         <h2 className={styles.header}>Admin form</h2>
-        {isUserSaleManager && <div className={styles.adminForm}><AdminSaleForm /></div>}
-        {isUserWhiteListManager && <div className={styles.adminForm}><AdminWhiteListForm /></div>}
+        {isUserSaleManager && (
+          <div className={styles.adminForm}>
+            <AdminSaleForm />
+          </div>
+        )}
+        {isUserWhiteListManager && (
+          <div className={styles.adminForm}>
+            <AdminWhiteListForm />
+          </div>
+        )}
       </section>
     );
   }

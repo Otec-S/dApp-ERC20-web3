@@ -1,0 +1,90 @@
+.adminWhiteListForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.deleteButton {
+  width: 100px;
+}
+
+.addButton {
+  width: 50px;
+}
+
+.error {
+  color: #ff007a;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.warningIcon {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+.warningIcon svg{
+  width: 20px;
+  height: 20px;
+}
+
+.inputAddress {
+  height: 48px;
+  border-radius: 30px;
+  border: 1px solid #222;
+  background: #fffbf2;
+  width: 550px;
+  overflow: hidden;
+  color: rgba(0, 0, 0, 0.5);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+  text-overflow: ellipsis;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 16px;
+  outline: none;
+}
+
+.addressItem {
+  display: flex;
+  flex-direction: row;
+  gap: 25px;
+  align-items: center;
+  position: relative;
+}
+
+.addresses {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subheader {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-align: center;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
