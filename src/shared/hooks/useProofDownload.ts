@@ -4,7 +4,7 @@ import { download } from 'thirdweb/storage';
 
 import { Proofs } from '@shared/constants/nftContract';
 
-export const useProofDownload = (uri: string) => {
+export const useProofDownload = (uri: string|null) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [file, setFile] = useState<Proofs | null>(null);
@@ -14,12 +14,14 @@ export const useProofDownload = (uri: string) => {
     const downloadData = async () => {
       setLoading(true);
       try {
-        const file: Response = await download({
+        if (uri) {
+          const file: Response = await download({
           client,
           uri,
         });
         const proofs = await file.json();
         setFile(proofs);
+        }
       } catch {
         setError(true);
       } finally {
