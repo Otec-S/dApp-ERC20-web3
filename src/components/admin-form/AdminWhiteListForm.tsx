@@ -1,10 +1,15 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-import { Address, getAddress, isAddress } from 'viem';
+import { MerkleTree } from 'merkletreejs';
+import { Address, getAddress, isAddress, keccak256 } from 'viem';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
+import { nftContractAddress } from '@shared/constants/nftContract';
+import { nftContractAbi } from '@shared/constants/nftContractAbi';
 
 import styles from './AdminWhiteListForm.module.css';
 
@@ -26,6 +31,16 @@ interface FormData {
 
 export const AdminWhiteListForm: FC = () => {
   const [addresses, setAddresses] = useState<Array<{ address: Address | undefined }>>(mockAddresses);
+  const { writeContract: writeTreeRootHash, data: approveTreeRootHash, error: rootHashWriteError } = useWriteContract();
+  const { isLoading: isRootHashLoading } = useWaitForTransactionReceipt({
+    hash: approveTreeRootHash,
+  });
+
+  useEffect(() => {
+    if (rootHashWriteError) {
+      toast.error(`Error to write tree root hash: ${rootHashWriteError.name}`);
+    }
+  }, [rootHashWriteError]);
 
   const {
     register,
@@ -43,14 +58,25 @@ export const AdminWhiteListForm: FC = () => {
   }, [addresses, setValue]);
 
   const onSubmit = (data: FormData) => {
+    const merkleTree = new MerkleTree(
+      data.addresses.map((address) => address.address),
+      keccak256,
+      { hashLeaves: true, sortPairs: true },
+    );
+    const treeRoot = getAddress(merkleTree.getRoot().toString('hex'));
     setAddresses(data.addresses);
+    writeTreeRootHash({
+      abi: nftContractAbi,
+      address: nftContractAddress,
+      functionName: 'setMerkleRootWhiteList',
+      args: [treeRoot],
+    });
   };
 
-  const dataIsLoading = false;
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
       <h3 className={styles.subheader}>Add or remove addresses from white list</h3>
-      {dataIsLoading && (
+      {isRootHashLoading && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
@@ -99,7 +125,7 @@ export const AdminWhiteListForm: FC = () => {
                 <FormButton
                   colorScheme="yellow"
                   type="button"
-                  title='Delete address'
+                  title="Delete address"
                   buttonText="Delete"
                   onPointerDown={() => remove(index)}
                 />
@@ -113,7 +139,7 @@ export const AdminWhiteListForm: FC = () => {
           colorScheme="yellow"
           type="button"
           buttonText="+"
-          title='Add address'
+          title="Add address"
           onPointerDown={() =>
             append({
               address: undefined,
@@ -121,7 +147,13 @@ export const AdminWhiteListForm: FC = () => {
           }
         />
       </div>
-      <FormButton disabled={dataIsLoading} type="submit" buttonText="Set white list" colorScheme="yellow" />
+      <FormButton
+        title="Submit form"
+        disabled={isRootHashLoading}
+        type="submit"
+        buttonText="Set white list"
+        colorScheme="yellow"
+      />
     </form>
   );
 };
