@@ -36,6 +36,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
 
     // Обработка данных из getUserTrades
     if (data) {
+      console.log('data', data);
       const userTrades = data.map((offer) => {
         const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
         const toToken = tokens.find((token) => token.address === offer.tokenTo);
@@ -48,7 +49,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
           toTokenName: toToken ? toToken.name : 'Unknown',
           amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
           amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
-          rate: Number(offer.amountFrom) / Number(offer.amountTo),
+          rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
           hash: zeroAddress,
           status: 'Open',
           receiver: offer.optionalTaker || '',
@@ -59,6 +60,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
 
     // Обработка данных из getOptionalTakerTrades
     if (offersForMe) {
+      console.log('offersForMe', offersForMe);
       const optionalTakerTrades = offersForMe.map((offer) => {
         const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
         const toToken = tokens.find((token) => token.address === offer.tokenTo);
@@ -71,7 +73,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
           toTokenName: toToken ? toToken.name : 'Unknown',
           amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
           amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
-          rate: Number(offer.amountFrom) / Number(offer.amountTo),
+          rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
           hash: zeroAddress,
           status: 'For me',
           receiver: offer.optionalTaker || '',
