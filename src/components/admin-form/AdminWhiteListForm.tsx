@@ -31,7 +31,12 @@ interface FormData {
 
 export const AdminWhiteListForm: FC = () => {
   const [addresses, setAddresses] = useState<Array<{ address: Address | undefined }>>(mockAddresses);
-  const { writeContract: writeTreeRootHash, data: approveTreeRootHash, error: rootHashWriteError } = useWriteContract();
+  const {
+    writeContract: writeTreeRootHash,
+    data: approveTreeRootHash,
+    error: rootHashWriteError,
+    isPending: isTransactionLoading,
+  } = useWriteContract();
   const { isLoading: isRootHashLoading } = useWaitForTransactionReceipt({
     hash: approveTreeRootHash,
   });
@@ -75,19 +80,20 @@ export const AdminWhiteListForm: FC = () => {
 
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
+      {isRootHashLoading ||
+        (isTransactionLoading && (
+          <div className={styles.loader}>
+            <BeatLoader
+              color={'red'}
+              loading={true}
+              cssOverride={override}
+              size={100}
+              aria-label="Loading Spinner"
+              data-testid="loader"
+            />
+          </div>
+        ))}
       <h3 className={styles.subheader}>Add or remove addresses from white list</h3>
-      {isRootHashLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
       <ul className={styles.addresses}>
         {fields.map((field, index) => {
           return (

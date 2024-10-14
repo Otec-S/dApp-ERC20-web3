@@ -89,3 +89,16 @@
   flex-direction: column;
   gap: 5px;
 }
+
+.loader {
+  opacity: 0.5;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: #2d4bc1;
+  text-align: center;
+  padding: 100px;
+  z-index: 9999;
+}

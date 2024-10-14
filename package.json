@@ -27,6 +27,7 @@
     "react-router-dom": "^6.26.2",
     "react-spinners": "^0.14.1",
     "styled-components": "^6.1.13",
+    "thirdweb": "^5.61.6",
     "viem": "^2.21.5",
     "wagmi": "^2.12.10"
   },
