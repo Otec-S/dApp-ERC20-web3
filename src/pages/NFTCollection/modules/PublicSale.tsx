@@ -1,37 +1,54 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { formatUnits, parseUnits, toBytes } from 'viem';
-import { useAccount, useBalance, useConfig, useReadContracts, useWriteContract } from 'wagmi';
+import {
+  useAccount,
+  useBalance,
+  useConfig,
+  useReadContracts,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi';
 import { signMessage } from 'wagmi/actions';
 
+import { Loader } from '@components/loader/Loader';
 import { MintingForm } from '@components/minting-form/MintingForm';
 import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
 import { getTotalCost } from '@shared/utils/getTotalCost';
+
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
   const config = useConfig();
   const { files } = useFetchFiles();
-  const { writeContract } = useWriteContract({});
+  const { writeContract, error, isError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
+  const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
 
-  const { data } = useReadContracts({
+  const { data, refetch } = useReadContracts({
     allowFailure: false,
-    contracts: [
-      { abi: nftContractAbi, address: nftContractAddress, functionName: 'CAT' },
-      { abi: nftContractAbi, address: nftContractAddress, functionName: 'MAX_PUBLIC_MINT' },
-      { abi: nftContractAbi, address: nftContractAddress, functionName: 'publicSalePrice' },
-    ],
+    contracts: walletAddress
+      ? [
+          { abi: nftContractAbi, address: nftContractAddress, functionName: 'CAT' },
+          {
+            abi: nftContractAbi,
+            address: nftContractAddress,
+            functionName: 'allowedToPublicMintAmount',
+            args: [walletAddress],
+          },
+          { abi: nftContractAbi, address: nftContractAddress, functionName: 'publicSalePrice' },
+        ]
+      : undefined,
   });
 
-  const [cat, maxAmount, salePrice] = data || [];
+  const [cat, allowedToPublicMintAmount, salePrice] = data || [];
 
   const mintNft = useCallback(
     async ({ amount }: { amount: number }) => {
       if (cat && salePrice) {
         const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
         await signMessage(config, { message: { raw: toBytes(cat) } }).then((signature) => {
-          console.log(signature);
           writeContract({
             abi: nftContractAbi,
             address: nftContractAddress,
@@ -45,13 +62,26 @@ export const PublicSale: FC = () => {
     [cat, salePrice, config, writeContract, nftContractAddress],
   );
 
-  return maxAmount && salePrice && balanceData ? (
+  useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+    if (isError) {
+      toast.error(error.name);
+    }
+  }, [error, isError, isSuccess, refetch]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  return allowedToPublicMintAmount && salePrice && balanceData ? (
     <MintingForm
       title={'Mint NFTs now!'}
       description={'You can mint up to 10 NFTs for the market price'}
       balance={Number(formatUnits(balanceData.value, balanceData.decimals))}
       price={Number(formatUnits(salePrice, 18))}
-      maxAmount={Number(maxAmount)}
+      maxAmount={Number(allowedToPublicMintAmount)}
       files={files}
       onClick={mintNft}
     />

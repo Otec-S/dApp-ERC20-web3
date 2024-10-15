@@ -15,6 +15,9 @@ export const NFTCollection: FC = () => {
 
   const { data } = useReadContracts({
     allowFailure: false,
+    query: {
+      refetchInterval: 10 * 1000,
+    },
     contracts: [
       {
         address: nftContractAddress,
@@ -24,11 +27,6 @@ export const NFTCollection: FC = () => {
       {
         address: nftContractAddress,
         functionName: 'totalSupply',
-        abi: nftContractAbi,
-      },
-      {
-        address: nftContractAddress,
-        functionName: 'getMerkleProofs',
         abi: nftContractAbi,
       },
     ],
