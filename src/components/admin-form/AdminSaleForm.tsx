@@ -150,7 +150,7 @@ export const AdminSaleForm: FC = () => {
         </div>
       )}
       <fieldset className={styles.fieldSet}>
-        <legend className={styles.label}>Select airdrop state:</legend>
+        <legend className={styles.label}>Select airdrop stage:</legend>
         <label className={styles.label}>
           <input type="radio" value={SaleStatus.SOON} {...register('airdrope')} />
           <span>Soon</span>
@@ -165,7 +165,7 @@ export const AdminSaleForm: FC = () => {
         </label>
       </fieldset>
       <fieldset className={styles.fieldSet}>
-        <legend className={styles.label}>Select white list state:</legend>
+        <legend className={styles.label}>Select white list stage:</legend>
         <label className={styles.label}>
           <input type="radio" {...register('whiteListSale')} value={SaleStatus.SOON} />
           <span>Soon</span>
@@ -184,7 +184,7 @@ export const AdminSaleForm: FC = () => {
         </div>
       </fieldset>
       <fieldset className={styles.fieldSet}>
-        <legend className={styles.label}>Select public sale state:</legend>
+        <legend className={styles.label}>Select public sale stage:</legend>
         <div>
           <label className={styles.label}>
             <input type="radio" {...register('publicSale')} value={SaleStatus.SOON} />

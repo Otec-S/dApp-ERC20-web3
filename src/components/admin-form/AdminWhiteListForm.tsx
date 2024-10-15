@@ -3,13 +3,14 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { MerkleTree } from 'merkletreejs';
-import { Address, getAddress, isAddress, keccak256 } from 'viem';
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { Address, isAddress, keccak256 } from 'viem';
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
-import { nftContractAddress } from '@shared/constants/nftContract';
+import { nftContractAddress, Proofs } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
+import { useProofUpload } from '@shared/hooks/useProofUpload';
 
 import styles from './AdminWhiteListForm.module.css';
 
@@ -18,21 +19,20 @@ const override: CSSProperties = {
   margin: '100px auto',
 };
 
-const mockAddresses = [
-  { address: getAddress('0x58ee5953d47C1dD226CcC18eeBc337Dee91f04dA') },
-  { address: getAddress('0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054') },
-];
-
 interface FormData {
-  addresses: {
-    address: Address | undefined;
+  airdrop: {
+    value?: Address;
+  }[];
+  private: {
+    value?: Address;
   }[];
 }
 
 export const AdminWhiteListForm: FC = () => {
-  const [addresses, setAddresses] = useState<Array<{ address: Address | undefined }>>(mockAddresses);
+  const { address: walletAddress } = useAccount();
+  const [proofs, setProofs] = useState<Proofs | undefined>(undefined);
   const {
-    writeContract: writeTreeRootHash,
+    writeContract: writeRootHash,
     data: approveTreeRootHash,
     error: rootHashWriteError,
     isPending: isTransactionLoading,
@@ -51,64 +51,105 @@ export const AdminWhiteListForm: FC = () => {
     register,
     control,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<FormData>();
-  const { fields, append, remove } = useFieldArray({
-    name: 'addresses',
+  const {
+    fields: airdropFields,
+    append: appendAirdrop,
+    remove: removeAirdrop,
+  } = useFieldArray({
+    name: 'airdrop',
     control,
   });
-  useEffect(() => {
-    setValue('addresses', addresses);
-  }, [addresses, setValue]);
+  const {
+    fields: privatePresaleFields,
+    append: appendPrivatePresale,
+    remove: removePrivatePresale,
+  } = useFieldArray({
+    name: 'private',
+    control,
+  });
 
   const onSubmit = (data: FormData) => {
-    const merkleTree = new MerkleTree(
-      data.addresses.map((address) => address.address),
+    const airdropMerkleTree = new MerkleTree(
+      data.airdrop.map((address) => address.value),
       keccak256,
       { hashLeaves: true, sortPairs: true },
     );
-    const treeRoot = merkleTree.getHexRoot();
-    setAddresses(data.addresses);
-    writeTreeRootHash({
+    const privatePresaleMerkleTree = new MerkleTree(
+      data.private.map((address) => address.value),
+      keccak256,
+      { hashLeaves: true, sortPairs: true },
+    );
+    const airdropTreeRoot = airdropMerkleTree.getHexRoot();
+    const privatePresaleTreeRoot = privatePresaleMerkleTree.getHexRoot();
+    writeRootHash({
+      abi: nftContractAbi,
+      address: nftContractAddress,
+      functionName: 'setMerkleRootAirDrop',
+      args: [airdropTreeRoot as `0x${string}`],
+    });
+    writeRootHash({
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootWhiteList',
-      args: [treeRoot as `0x${string}`],
+      args: [privatePresaleTreeRoot as `0x${string}`],
     });
+    const proofs: Proofs = {
+      airdrop: [
+        {
+          address: walletAddress ?? '',
+          proof: data.airdrop?.map((value) => value.value ?? '') ?? [],
+        },
+      ],
+      private: [
+        {
+          address: walletAddress ?? '',
+          proof: data.private.map((value) => value.value ?? '') ?? [],
+        },
+      ],
+    };
+    setProofs(proofs);
+    console.log(proofs);
   };
 
+  const { uri, loading: proofsLoading, error: proofsUploadError } = useProofUpload(proofs);
+  console.log(uri);
+  useEffect(() => {
+    if (proofsUploadError) {
+      toast.error(`Error to upload proofs`);
+    }
+  }, [proofsUploadError]);
 
-
+  const dataIsLoading = isRootHashLoading || isTransactionLoading || proofsLoading;
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
-      {isRootHashLoading ||
-        (isTransactionLoading && (
-          <div className={styles.loader}>
-            <BeatLoader
-              color={'red'}
-              loading={true}
-              cssOverride={override}
-              size={100}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        ))}
-      <h3 className={styles.subheader}>Add or remove addresses from white list</h3>
+      {dataIsLoading && (
+        <div className={styles.loader}>
+          <BeatLoader
+            color={'red'}
+            loading={true}
+            cssOverride={override}
+            size={100}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      )}
+      <h3 className={styles.subheader}>Add or remove addresses of airdrop white list</h3>
       <ul className={styles.addresses}>
-        {fields.map((field, index) => {
+        {airdropFields.map((field, index) => {
           return (
             <li className={styles.addressItem} key={field.id}>
               <div className={styles.inputWrapper}>
                 <input
-                  {...register(`addresses.${index}.address` as const, {
+                  {...register(`airdrop.${index}.value` as const, {
                     required: true,
                     validate: (value) => value && isAddress(value),
                   })}
                   className={styles.inputAddress}
                 />
-                {errors.addresses?.[index]?.address?.type === 'required' && (
+                {errors.airdrop?.[index]?.value?.type === 'required' && (
                   <div className={styles.error}>
                     {
                       <div className={styles.warningIcon}>
@@ -118,7 +159,7 @@ export const AdminWhiteListForm: FC = () => {
                     {' Required field'}
                   </div>
                 )}
-                {errors.addresses?.[index]?.address?.type === 'validate' && (
+                {errors.airdrop?.[index]?.value?.type === 'validate' && (
                   <div className={styles.error}>
                     {
                       <div className={styles.warningIcon}>
@@ -135,31 +176,91 @@ export const AdminWhiteListForm: FC = () => {
                   type="button"
                   title="Delete address"
                   buttonText="Delete"
-                  onPointerDown={() => remove(index)}
+                  onPointerDown={() => removeAirdrop(index)}
                 />
               </div>
             </li>
           );
         })}
+        <div className={styles.addButton}>
+          <FormButton
+            colorScheme="yellow"
+            type="button"
+            buttonText="+"
+            title="Add address"
+            onPointerDown={() =>
+              appendAirdrop({
+                value: undefined,
+              })
+            }
+          />
+        </div>
       </ul>
-      <div className={styles.addButton}>
-        <FormButton
-          colorScheme="yellow"
-          type="button"
-          buttonText="+"
-          title="Add address"
-          onPointerDown={() =>
-            append({
-              address: undefined,
-            })
-          }
-        />
-      </div>
+      <h3 className={styles.subheader}>Add or remove addresses of private presale white list</h3>
+      <ul className={styles.addresses}>
+        {privatePresaleFields.map((field, index) => {
+          return (
+            <li className={styles.addressItem} key={field.id}>
+              <div className={styles.inputWrapper}>
+                <input
+                  {...register(`private.${index}.value` as const, {
+                    required: true,
+                    validate: (value) => value && isAddress(value),
+                  })}
+                  className={styles.inputAddress}
+                />
+                {errors.private?.[index]?.value?.type === 'required' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Required field'}
+                  </div>
+                )}
+                {errors.private?.[index]?.value?.type === 'validate' && (
+                  <div className={styles.error}>
+                    {
+                      <div className={styles.warningIcon}>
+                        <WarningIcon />
+                      </div>
+                    }
+                    {' Input is not address'}
+                  </div>
+                )}
+              </div>
+              <div className={styles.deleteButton}>
+                <FormButton
+                  colorScheme="yellow"
+                  type="button"
+                  title="Delete address"
+                  buttonText="Delete"
+                  onPointerDown={() => removePrivatePresale(index)}
+                />
+              </div>
+            </li>
+          );
+        })}
+        <div className={styles.addButton}>
+          <FormButton
+            colorScheme="yellow"
+            type="button"
+            buttonText="+"
+            title="Add address"
+            onPointerDown={() =>
+              appendPrivatePresale({
+                value: undefined,
+              })
+            }
+          />
+        </div>
+      </ul>
       <FormButton
         title="Submit form"
-        disabled={isRootHashLoading}
+        disabled={false}
         type="submit"
-        buttonText="Set white list"
+        buttonText="Set white lists"
         colorScheme="yellow"
       />
     </form>
