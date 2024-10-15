@@ -5,7 +5,7 @@ import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { useUserTrades } from '@shared/hooks/useUserTrades';
 
 // import { rows } from './Offers-table.mock';
-import OffersTableBox from './Offers-table-box';
+import OffersTableBox from './offers-table-box';
 import { OfferReal } from './offers-tables.types';
 // import { Offer } from './offers-tables.types';
 import styles from './Offers-table.module.css';

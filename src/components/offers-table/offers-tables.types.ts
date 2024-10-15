@@ -23,7 +23,7 @@ export interface OfferReal {
   amount1: number;
   amount2: number;
   rate: number;
-  hash: Address;
+  // hash: Address;
   // status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
   status: string;
   receiver: Address;

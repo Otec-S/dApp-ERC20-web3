@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@shared/constants';
 
-import { rowsHistory } from './Offers-table.mock';
-import OffersTableBox from './Offers-table-box';
+import { rowsHistory } from './offers-table.mock';
+import OffersTableBox from './offers-table-box';
 
 export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
