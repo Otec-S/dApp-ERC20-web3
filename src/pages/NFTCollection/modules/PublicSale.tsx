@@ -1,11 +1,12 @@
 import { FC, useCallback } from 'react';
-import { formatUnits, toBytes } from 'viem';
+import { formatUnits, parseUnits, toBytes } from 'viem';
 import { useAccount, useBalance, useConfig, useReadContracts, useWriteContract } from 'wagmi';
 import { signMessage } from 'wagmi/actions';
 
 import { MintingForm } from '@components/minting-form/MintingForm';
 import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
+import { getTotalCost } from '@shared/utils/getTotalCost';
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
   const config = useConfig();
@@ -27,7 +28,8 @@ export const PublicSale: FC = () => {
 
   const mintNft = useCallback(
     async ({ amount }: { amount: number }) => {
-      if (cat) {
+      if (cat && salePrice) {
+        const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
         await signMessage(config, { message: { raw: toBytes(cat) } }).then((signature) => {
           console.log(signature);
           writeContract({
@@ -35,11 +37,12 @@ export const PublicSale: FC = () => {
             address: nftContractAddress,
             functionName: 'mint',
             args: [BigInt(amount), signature],
+            value: parseUnits(totalCost.toString(), 18),
           });
         });
       }
     },
-    [config, cat, nftContractAddress, writeContract],
+    [cat, salePrice, config, writeContract, nftContractAddress],
   );
 
   return maxAmount && salePrice && balanceData ? (

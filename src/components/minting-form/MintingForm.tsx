@@ -3,6 +3,7 @@ import { FC, useState } from 'react';
 import { ArrowDownIcon } from '@assets/icons';
 import { NFTFile, useEtherPrice } from '@shared/hooks';
 import { getFormattedPrice } from '@shared/utils/getFormattedPrice';
+import { getTotalCost } from '@shared/utils/getTotalCost';
 
 import styles from './MintingForm.module.css';
 
@@ -21,7 +22,7 @@ export const MintingForm: FC<Props> = ({ title, description, balance, price, max
 
   const [amount, setAmount] = useState(0);
 
-  const totalCost = Math.round(amount * price * Math.pow(10, 18)) / Math.pow(10, 18);
+  const totalCost = getTotalCost({ amount, price });
 
   return (
     <div className={styles.content}>

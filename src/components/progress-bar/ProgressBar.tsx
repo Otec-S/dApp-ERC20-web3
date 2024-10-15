@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const ProgressBar: FC<Props> = ({ amount = 0, maxAmount = 100 }) => {
-  const width = (Number(amount) * 100) / Number(maxAmount);
+  const width = Math.ceil((Number(amount) * 100) / Number(maxAmount));
   const borderRadius = width > 99 ? '100px' : '100px 0px 0px 100px';
 
   return (
