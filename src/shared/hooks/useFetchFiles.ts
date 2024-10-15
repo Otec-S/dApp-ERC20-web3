@@ -6,9 +6,10 @@ export interface NFTFile {
   image: string;
 }
 
+const uri = 'https://ipfs.io/ipfs/QmNe7EebKaNuRoN2ov9nMuwHXQvXbYXCLM9W1nDBxnqLgL/';
+
 export const useFetchFiles = () => {
   const client = createThirdwebClient({ clientId: '0c0dcc5c52fbee7dd63b7534a5bbcc77' });
-  const uri = 'https://ipfs.io/ipfs/QmNe7EebKaNuRoN2ov9nMuwHXQvXbYXCLM9W1nDBxnqLgL/';
 
   const [files, setFiles] = useState<NFTFile[]>([]);
 
