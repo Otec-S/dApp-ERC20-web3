@@ -1,20 +1,20 @@
 import { ChangeEvent, FC, useState } from 'react';
-import { Address } from 'viem';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
-import { useUserTrades } from '@shared/hooks/useUserTrades';
 
+// import { useUserTrades } from '@shared/hooks/useUserTrades';
 // import { rows } from './Offers-table.mock';
 import OffersTableBox from './offers-table-box';
 import { OfferReal } from './offers-tables.types';
 // import { Offer } from './offers-tables.types';
-import styles from './Offers-table.module.css';
+import styles from './offers-table.module.css';
 
-// TODO:
-const userAddress: Address = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
+interface Props {
+  rowsMyOffers: OfferReal[];
+}
 
-export const OffersTable: FC = () => {
-  const rowsReal = useUserTrades(userAddress);
+export const OffersTable: FC<Props> = ({ rowsMyOffers }) => {
+  // const rowsReal = useUserTrades(userAddress);
   // console.log('rowsReal', rowsReal);
 
   const [page, setPage] = useState(0);
@@ -24,8 +24,8 @@ export const OffersTable: FC = () => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
   const [offerToCancel, setOfferToCancel] = useState<OfferReal | null>(null);
-  const openOffersCount = rowsReal.filter((row) => row.status === 'Open').length;
-  const forMeOffersCount = rowsReal.filter((row) => row.status === 'For me').length;
+  const openOffersCount = rowsMyOffers.filter((row) => row.status === 'Open').length;
+  const forMeOffersCount = rowsMyOffers.filter((row) => row.status === 'For me').length;
 
   const handleCheckboxChange = (rowId: number) => {
     setSelectedRows((prevSelectedRows) =>
@@ -35,7 +35,7 @@ export const OffersTable: FC = () => {
 
   const handleCancelOffer = () => {
     if (selectedRows.length > 0) {
-      const selectedOffer = rowsReal.find((row) => row.id === selectedRows[0]);
+      const selectedOffer = rowsMyOffers.find((row) => row.id === selectedRows[0]);
       setOfferToCancel(selectedOffer || null);
       setIsCancelPopupOpen(true);
     }
@@ -62,7 +62,7 @@ export const OffersTable: FC = () => {
     setPage(0);
   };
 
-  const filteredRows = rowsReal.filter((row) => {
+  const filteredRows = rowsMyOffers.filter((row) => {
     if (activeButton === 'All') {
       return true;
     }
@@ -89,7 +89,7 @@ export const OffersTable: FC = () => {
   const tableConfig = {
     title: 'My offers',
     statusButtons: [
-      { name: 'All', count: rowsReal.length },
+      { name: 'All', count: rowsMyOffers.length },
       { name: 'Open', count: openOffersCount },
       { name: 'For me', count: forMeOffersCount },
     ],
@@ -104,7 +104,7 @@ export const OffersTable: FC = () => {
         activeButton={activeButton}
         mainButton={tableConfig.mainButton}
         // rows={rows}
-        rows={rowsReal}
+        rows={rowsMyOffers}
         visibleRows={visibleRows}
         filteredRows={filteredRows}
         searchText={searchText}

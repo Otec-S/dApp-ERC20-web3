@@ -3,10 +3,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { ROUTES } from '@shared/constants';
 
-import { rowsHistory } from './offers-table.mock';
+// import { rowsHistory } from './offers-table.mock';
 import OffersTableBox from './offers-table-box';
+import { OfferReal } from './offers-tables.types';
 
-export const OffersTableHistory: FC = () => {
+interface Props {
+  rowsHistory: OfferReal[];
+}
+
+export const OffersTableHistory: FC<Props> = ({ rowsHistory }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [activeButton, setActiveButton] = useState('All');
