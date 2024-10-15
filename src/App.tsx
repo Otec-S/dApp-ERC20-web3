@@ -11,6 +11,11 @@ import { History } from '@pages/ERC20trade/modules/History';
 import { IncomingOffer } from '@pages/ERC20trade/modules/IncomingOffer';
 import { MyOffers } from '@pages/ERC20trade/modules/MyOffers';
 import { Landing } from '@pages/Landing';
+import { AirDrop } from '@pages/NFTCollection/modules/AirDrop';
+import { Collection } from '@pages/NFTCollection/modules/Collection';
+import { PreSale } from '@pages/NFTCollection/modules/PreSale';
+import { PublicSale } from '@pages/NFTCollection/modules/PublicSale';
+import { NFTCollection } from '@pages/NFTCollection/NFTCollection';
 import SendERC20 from '@pages/SendERC20/send-ERC-20';
 import { ROUTES } from '@shared/constants';
 
@@ -51,7 +56,14 @@ const router = createBrowserRouter([
   },
   {
     path: ROUTES.NFT_COLLECTION,
-    element: <Landing />,
+    element: <NFTCollection />,
+    children: [
+      { index: true, element: <Navigate to={ROUTES.AIRDROP} replace /> },
+      { path: ROUTES.AIRDROP, element: <AirDrop /> },
+      { path: ROUTES.PRESALE, element: <PreSale /> },
+      { path: ROUTES.PUBLIC_SALE, element: <PublicSale /> },
+      { path: ROUTES.COLLECTION, element: <Collection /> },
+    ],
   },
 ]);
 

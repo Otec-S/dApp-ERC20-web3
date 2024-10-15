@@ -1,10 +1,10 @@
 import toast from 'react-hot-toast';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { Address, zeroAddress } from 'viem';
-import { polygonAmoy, sepolia } from 'viem/chains';
+import { arbitrumSepolia, polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId } from 'wagmi';
 
-import { polygonContractAddress, sepoliaContractAddress, Token, tokens } from '../constants';
+import { nftContractAddress, polygonContractAddress, sepoliaContractAddress, Token, tokens } from '../constants';
 
 interface FormattedToken extends Omit<Token, 'polygonAddress' | 'sepoliaAddress'> {
   address: Address;
@@ -14,6 +14,7 @@ export interface ChainDependentValues {
   contractAddress: Address;
   tokens: FormattedToken[];
   website: string;
+  nftContractAddress: Address;
 }
 
 export const useChainDependentValues = (): ChainDependentValues => {
@@ -31,6 +32,7 @@ export const useChainDependentValues = (): ChainDependentValues => {
         contractAddress: sepoliaContractAddress,
         tokens: tokens.map((item) => ({ ...item, address: item.sepoliaAddress })),
         website: 'sepolia.etherscan.io',
+        nftContractAddress: zeroAddress,
       };
     }
     case polygonAmoy.id: {
@@ -38,6 +40,15 @@ export const useChainDependentValues = (): ChainDependentValues => {
         contractAddress: polygonContractAddress,
         tokens: tokens.map((item) => ({ ...item, address: item.polygonAddress })),
         website: 'amoy.polygonscan.com',
+        nftContractAddress: zeroAddress,
+      };
+    }
+    case arbitrumSepolia.id: {
+      return {
+        contractAddress: zeroAddress,
+        tokens: tokens.map((item) => ({ ...item, address: zeroAddress })),
+        website: 'sepolia.arbiscan.io',
+        nftContractAddress: nftContractAddress,
       };
     }
     default: {
@@ -46,6 +57,7 @@ export const useChainDependentValues = (): ChainDependentValues => {
         contractAddress: zeroAddress,
         tokens: [],
         website: '',
+        nftContractAddress: zeroAddress,
       };
     }
   }
