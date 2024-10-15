@@ -5,7 +5,6 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
-import { ERC20trade } from '@pages/ERC20trade/ERC20trade';
 import { CreateOffer } from '@pages/ERC20trade/modules/CreateOffer';
 import { History } from '@pages/ERC20trade/modules/History';
 import { IncomingOffer } from '@pages/ERC20trade/modules/IncomingOffer';
@@ -19,6 +18,7 @@ import { NFTCollection } from '@pages/NFTCollection/NFTCollection';
 import SendERC20 from '@pages/SendERC20/send-ERC-20';
 import { ROUTES } from '@shared/constants';
 
+import { ERC20trade } from '../src/pages/ERC20trade/ERC20trade';
 import { config } from '../wagmiConfig';
 import './App.module.css';
 import './index.module.css';

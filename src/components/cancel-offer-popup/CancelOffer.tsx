@@ -1,9 +1,9 @@
 import { CSSProperties, FC, FormEventHandler, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-import { useChainId, useWriteContract } from 'wagmi';
+import { useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import ClearIcon from '@assets/icons/clear_close_icon.svg';
+import CloseIcon from '@assets/icons/clear_close_icon.svg';
 import FormButton from '@components/form-button/FormButton';
 import { tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
@@ -28,9 +28,13 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
   const {
     writeContract,
     isPending: isWriteApprovePending,
-    isSuccess: isWriteContractSuccess,
     error: writeContractError,
+    data:transactionHash,
   } = useWriteContract();
+
+  const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
+    hash: transactionHash,
+  });
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -49,12 +53,14 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
   }, [writeContractError]);
 
   const handleClose = () => {
-    onClose(isWriteContractSuccess);
+    onClose(isTransactionSuccess);
   };
+
+  const isDataFromNetworkLoading = isWriteApprovePending || isTransactionLoading; 
 
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
-      {isWriteApprovePending && (
+      {isDataFromNetworkLoading && (
         <div className={styles.loader}>
           <BeatLoader
             color={'red'}
@@ -69,10 +75,10 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>Cancel Offer</h5>
         <div onPointerDown={handleClose} className={styles.closeForm}>
-          <ClearIcon />
+          <CloseIcon />
         </div>
       </div>
-      {isWriteContractSuccess ? (
+      {isTransactionSuccess ? (
         <h6 className={styles.resultHeader}>Successfully deleted</h6>
       ) : (
         <>
