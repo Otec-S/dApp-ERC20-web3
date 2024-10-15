@@ -26,5 +26,5 @@ export interface OfferReal {
   // hash: Address;
   // status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
   status: string;
-  receiver: Address;
+  receiver: Address | string;
 }

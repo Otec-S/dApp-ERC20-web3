@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Address, formatUnits } from 'viem';
+import { Address, formatUnits, zeroAddress } from 'viem';
 import { useReadContract } from 'wagmi';
 
 import { OfferReal } from '@components/offers-table/offers-tables.types';
@@ -59,7 +59,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
             status: offer.active ? 'Open' : 'Cancelled',
-            receiver: offer.optionalTaker || '',
+            receiver: offer.optionalTaker !== zeroAddress ? offer.optionalTaker : 'Any',
           };
         })
       : [];
@@ -71,6 +71,7 @@ export function useUserTrades(userAddress: Address): OfferReal[] {
       return;
     }
 
+    // TODO: упростить тут как-то?
     const newRowsReal = [
       ...(userTradesData ? parseTradeData(userTradesData) : []),
       ...(offersForMeData ? parseTradeData(offersForMeData) : []),

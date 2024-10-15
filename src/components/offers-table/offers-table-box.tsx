@@ -200,11 +200,13 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="left">
                       <div className={styles.receiver}>
                         {shortenHash(row.receiver)}
-                        <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
-                          <div className={styles.copyIcon}>
-                            <CopyIcon />
-                          </div>
-                        </CopyToClipboard>
+                        {row.receiver !== 'Any' && (
+                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
+                            <div className={styles.copyIcon}>
+                              <CopyIcon />
+                            </div>
+                          </CopyToClipboard>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

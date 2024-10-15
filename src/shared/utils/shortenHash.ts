@@ -1,6 +1,4 @@
-import { Address } from 'viem';
-
-export const shortenHash = (hash: Address, startLength: number = 6, endLength: number = 6): string => {
+export const shortenHash = (hash: string, startLength: number = 6, endLength: number = 6): string => {
   if (hash.length <= startLength + endLength) {
     return hash;
   }
