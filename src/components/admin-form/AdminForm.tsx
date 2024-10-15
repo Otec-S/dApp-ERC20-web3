@@ -54,15 +54,19 @@ export const AdminForm: FC = () => {
         address: nftContractAddress,
         functionName: 'hasRole',
         abi: nftContractAbi,
-        args: (walletAddress && SELL_PHASE_MANAGER_ROLE_DESCRIPTOR) 
-        ? [SELL_PHASE_MANAGER_ROLE_DESCRIPTOR, walletAddress] : undefined,
+        args:
+          walletAddress && SELL_PHASE_MANAGER_ROLE_DESCRIPTOR
+            ? [SELL_PHASE_MANAGER_ROLE_DESCRIPTOR, walletAddress]
+            : undefined,
       },
       {
         address: nftContractAddress,
         functionName: 'hasRole',
         abi: nftContractAbi,
-        args: (walletAddress && WHITE_LIST_MANAGER_ROLE_DESCRIPTOR) 
-        ? [WHITE_LIST_MANAGER_ROLE_DESCRIPTOR, walletAddress] : undefined,
+        args:
+          walletAddress && WHITE_LIST_MANAGER_ROLE_DESCRIPTOR
+            ? [WHITE_LIST_MANAGER_ROLE_DESCRIPTOR, walletAddress]
+            : undefined,
       },
     ],
   });
