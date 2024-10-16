@@ -261,8 +261,6 @@ const NewOfferForm: FC = () => {
     }
   };
 
-  console.log(watch('infiniteApprove'))
-
   const handleDefaultTokenChoice = (token: Token, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
       case 'from':
