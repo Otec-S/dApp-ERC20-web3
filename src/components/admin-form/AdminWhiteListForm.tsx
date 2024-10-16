@@ -3,8 +3,8 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { MerkleTree } from 'merkletreejs';
-import { Address, isAddress, keccak256 } from 'viem';
-import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { isAddress, keccak256 } from 'viem';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
@@ -21,15 +21,14 @@ const override: CSSProperties = {
 
 interface FormData {
   airdrop: {
-    value?: Address;
+    value?: `0x${string}`;
   }[];
   private: {
-    value?: Address;
+    value?: `0x${string}`;
   }[];
 }
 
 export const AdminWhiteListForm: FC = () => {
-  const { address: walletAddress } = useAccount();
   const [proofs, setProofs] = useState<Proofs | undefined>(undefined);
   const {
     writeContract: writeRootHash,
@@ -40,12 +39,15 @@ export const AdminWhiteListForm: FC = () => {
   const { isLoading: isRootHashLoading } = useWaitForTransactionReceipt({
     hash: approveTreeRootHash,
   });
-
-  useEffect(() => {
-    if (rootHashWriteError) {
-      toast.error(`Error to write tree root hash: ${rootHashWriteError.name}`);
-    }
-  }, [rootHashWriteError]);
+  const {
+    writeContract: writeUri,
+    data: approveUri,
+    error: uriWriteError,
+    isPending: isUriLoading,
+  } = useWriteContract();
+  const { isLoading: isUriLoadingTransaction } = useWaitForTransactionReceipt({
+    hash: approveUri,
+  });
 
   const {
     register,
@@ -87,41 +89,65 @@ export const AdminWhiteListForm: FC = () => {
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootAirDrop',
-      args: [airdropTreeRoot as `0x${string}`],
+      args: [airdropTreeRoot],
     });
     writeRootHash({
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootWhiteList',
-      args: [privatePresaleTreeRoot as `0x${string}`],
+      args: [privatePresaleTreeRoot],
     });
     const proofs: Proofs = {
-      airdrop: [
-        {
-          address: walletAddress ?? '',
-          proof: data.airdrop?.map((value) => value.value ?? '') ?? [],
-        },
-      ],
-      private: [
-        {
-          address: walletAddress ?? '',
-          proof: data.private.map((value) => value.value ?? '') ?? [],
-        },
-      ],
+      airdrop: [],
+      private: [],
     };
+    data.airdrop.forEach((address) => {
+      if (address.value) {
+        const proofWithAddress = {
+          address: address.value,
+          proof: isAddress(address.value) ? airdropMerkleTree.getHexProof(keccak256(address.value)) : [],
+        };
+        proofs.airdrop.push(proofWithAddress);
+      }
+    });
+    data.private.forEach((address) => {
+      if (address.value) {
+        const proofWithAddress = {
+          address: address.value,
+          proof: privatePresaleMerkleTree.getHexProof(keccak256(address.value)),
+        };
+        proofs.private.push(proofWithAddress);
+      }
+    });
     setProofs(proofs);
-    console.log(proofs);
   };
 
   const { uri, loading: proofsLoading, error: proofsUploadError } = useProofUpload(proofs);
-  console.log(uri);
+
   useEffect(() => {
+    if (rootHashWriteError) {
+      toast.error(`Error to write tree root hash: ${rootHashWriteError.name}`);
+    }
+    if (uriWriteError) {
+      toast.error(`Error to write uri`);
+    }
     if (proofsUploadError) {
       toast.error(`Error to upload proofs`);
     }
-  }, [proofsUploadError]);
+  }, [rootHashWriteError, uriWriteError, proofsUploadError]);
 
-  const dataIsLoading = isRootHashLoading || isTransactionLoading || proofsLoading;
+  if (uri) {
+    writeUri({
+      address: nftContractAddress,
+      abi: nftContractAbi,
+      functionName: 'setMerkleProofs',
+      args: [uri],
+    });
+  }
+
+  const dataIsLoading =
+    isRootHashLoading || isTransactionLoading || proofsLoading || isUriLoading || isUriLoadingTransaction;
+
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
       {dataIsLoading && (

@@ -9,5 +9,5 @@ export interface Proofs {
 
 export interface Proof {
   address: Address;
-  proof: Address[];
+  proof: Array<string>;
 }
