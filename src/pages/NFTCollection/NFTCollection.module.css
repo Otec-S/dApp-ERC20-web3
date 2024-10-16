@@ -22,3 +22,22 @@
   display: flex;
   gap: 104px;
 }
+
+.titleWrap {
+  margin-bottom: 48px;
+}
+
+.title {
+  color: #fff;
+  font-family: montserrat;
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.collection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+}
