@@ -55,7 +55,7 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
 
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
-      {isDataFromNetworkLoading && <Loader/>}
+      {isDataFromNetworkLoading && <Loader />}
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>Cancel Offer</h5>
         <div onPointerDown={handleClose} className={styles.closeForm}>

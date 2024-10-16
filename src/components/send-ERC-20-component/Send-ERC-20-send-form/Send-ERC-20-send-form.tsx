@@ -224,7 +224,7 @@ const SendERC20SendForm: FC<Props> = ({
   return (
     <>
       <form className={style.blockForm} onSubmit={handleSubmit}>
-        {isConfirming && <Loader/>}
+        {isConfirming && <Loader />}
         <div className={style.sender}>
           <div className={style.inputBlock}>
             <input

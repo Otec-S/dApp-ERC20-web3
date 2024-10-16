@@ -132,7 +132,7 @@ export const AdminSaleForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {dataIsLoading && <Loader/>}
+      {dataIsLoading && <Loader />}
       <fieldset className={styles.fieldSet}>
         <legend className={styles.label}>Select airdrop stage:</legend>
         <label className={styles.label}>

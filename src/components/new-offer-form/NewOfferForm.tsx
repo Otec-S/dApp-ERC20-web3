@@ -118,7 +118,7 @@ const NewOfferForm: FC = () => {
         address: tokenFrom?.address,
         functionName: 'allowance',
         abi: erc20Abi,
-        args: walletAddress ? [walletAddress, tradeContractAddress[`${chainId}`]]:undefined,
+        args: walletAddress ? [walletAddress, tradeContractAddress[`${chainId}`]] : undefined,
       },
       {
         address: tokenFrom && tokenFrom.address,
@@ -341,7 +341,7 @@ const NewOfferForm: FC = () => {
           <AddTokenInfo colorScheme="yellow" onClose={(data) => handleCustomTokenPopupChoice(data, 'from')} />
         </div>
       )}
-      {isDataFromNetworkLoading && <Loader/>}
+      {isDataFromNetworkLoading && <Loader />}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>{formStage !== 'tradeCreated' ? 'New offer' : 'New offer has been created!'}</h2>
         {formStage !== 'tradeCreated' && (

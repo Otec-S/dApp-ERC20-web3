@@ -147,7 +147,7 @@ const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
   return (
     <div className="container">
       <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
-        {isLoadingContacts && <Loader/>}
+        {isLoadingContacts && <Loader />}
         {formState !== 'errorState' && (
           <div className={cn(styles.headerWrapper, { [styles.headerWrapperYellow]: colorScheme === 'yellow' })}>
             <h5 className={styles.header}>

@@ -3,7 +3,7 @@ import { upload } from 'thirdweb/storage';
 
 import { Proofs } from '@shared/constants/nftContract';
 
-import {thirdWebClient} from '../../../thirdWebClient';
+import { thirdWebClient } from '../../../thirdWebClient';
 
 export const useProofUpload = (proofs?: Proofs) => {
   const [loading, setLoading] = useState(false);
@@ -16,7 +16,7 @@ export const useProofUpload = (proofs?: Proofs) => {
         setLoading(true);
         try {
           const uri = await upload({
-            client:thirdWebClient,
+            client: thirdWebClient,
             files: [file],
           });
           setUri(uri);
