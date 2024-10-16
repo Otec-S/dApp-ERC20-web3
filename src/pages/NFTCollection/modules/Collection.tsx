@@ -37,9 +37,9 @@ export const Collection: FC = () => {
       </div>
       <div className={styles.collection}>
         {files.map((file) => (
-          <div className={styles.contentImage}>
+          <div className={styles.contentImage} key={file.name}>
             <div className={styles.imageWrap}>
-              <img className={styles.image} src={file.image}></img>
+              <img className={styles.image} src={file.image} alt={`${file.name}`}></img>
             </div>
             <div className={styles.imageInfo}>
               <p className={styles.imageInfoText}>{file.name}</p>
