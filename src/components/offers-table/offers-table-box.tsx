@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import cn from 'classnames';
 
+import { ShareIcon } from '@assets/icons';
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
 // import EtherScanLogo from '@assets/icons/etherscan.svg';
@@ -139,6 +140,7 @@ const OffersTableBox: FC<Props> = ({
                   {/* <TableCell align="left">Tx hash</TableCell> */}
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left">Receiver</TableCell>
+                  <TableCell align="left">Share</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -207,6 +209,18 @@ const OffersTableBox: FC<Props> = ({
                             </div>
                           </CopyToClipboard>
                         )}
+                      </div>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.share}>
+                        <CopyToClipboard
+                          onCopy={() => setShowCopyOfClipboard(true)}
+                          text={`${window.location.origin}${ROUTES.ERC20_TRADE}/${row.id}`}
+                        >
+                          <div className={styles.copyIcon}>
+                            <ShareIcon />
+                          </div>
+                        </CopyToClipboard>
                       </div>
                     </TableCell>
                   </TableRow>

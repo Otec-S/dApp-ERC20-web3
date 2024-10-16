@@ -41,14 +41,14 @@ export const OffersTables: FC = () => {
 
   // console.log('offersForMeData', offersForMeData);
 
-  // const { data: offer25 } = useReadContract({
-  //   address: contractAddress,
-  //   abi: tradeContractAbi,
-  //   functionName: 'getOfferDetails',
-  //   args: [BigInt(25)],
-  // });
+  const { data: offer25 } = useReadContract({
+    address: contractAddress,
+    abi: tradeContractAbi,
+    functionName: 'getOfferDetails',
+    args: [BigInt(25)],
+  });
 
-  // console.log('offer25', offer25);
+  console.log('offer25', offer25);
 
   const handleContractError = (error: unknown) => {
     if (error instanceof Error) {
