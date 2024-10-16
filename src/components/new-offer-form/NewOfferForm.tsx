@@ -261,6 +261,8 @@ const NewOfferForm: FC = () => {
     }
   };
 
+  console.log(watch('infiniteApprove'))
+
   const handleDefaultTokenChoice = (token: Token, tokenSelected: 'from' | 'to') => {
     switch (tokenSelected) {
       case 'from':
@@ -358,6 +360,7 @@ const NewOfferForm: FC = () => {
             <NewOfferInputs
               showDefaultTokenPopupTo={showDefaultTokenPopupTo}
               errors={errors}
+              infinite={watch('infiniteApprove')}
               tokenTo={tokenTo}
               register={register}
               serviceFee={serviceFee}
