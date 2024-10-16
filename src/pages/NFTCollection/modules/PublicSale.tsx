@@ -17,10 +17,12 @@ import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
 import { getTotalCost } from '@shared/utils/getTotalCost';
 
+const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
+
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
   const config = useConfig();
-  const { files } = useFetchFiles();
+  const { files } = useFetchFiles({ tokenIds });
   const { writeContract, error, isError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
