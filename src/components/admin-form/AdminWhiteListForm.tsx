@@ -121,7 +121,7 @@ export const AdminWhiteListForm: FC = () => {
         proofs.private.push(proofWithAddress);
       }
     });
-    
+
     setProofs(proofs);
   };
 
@@ -278,7 +278,7 @@ export const AdminWhiteListForm: FC = () => {
       </ul>
       <FormButton
         title="Submit form"
-        disabled={false}
+        disabled={dataIsLoading}
         type="submit"
         buttonText="Set white lists"
         colorScheme="yellow"
