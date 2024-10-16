@@ -73,29 +73,35 @@ export const AdminWhiteListForm: FC = () => {
       keccak256,
       { hashLeaves: true, sortPairs: true },
     );
+
     const privatePresaleMerkleTree = new MerkleTree(
       data.private.map((address) => address.value),
       keccak256,
       { hashLeaves: true, sortPairs: true },
     );
+
     const airdropTreeRoot = airdropMerkleTree.getHexRoot();
     const privatePresaleTreeRoot = privatePresaleMerkleTree.getHexRoot();
+
     writeRootHash({
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootAirDrop',
       args: [airdropTreeRoot],
     });
+
     writeRootHash({
       abi: nftContractAbi,
       address: nftContractAddress,
       functionName: 'setMerkleRootWhiteList',
       args: [privatePresaleTreeRoot],
     });
+
     const proofs: Proofs = {
       airdrop: [],
       private: [],
     };
+
     data.airdrop.forEach((address) => {
       if (address.value) {
         const proofWithAddress = {
@@ -105,6 +111,7 @@ export const AdminWhiteListForm: FC = () => {
         proofs.airdrop.push(proofWithAddress);
       }
     });
+
     data.private.forEach((address) => {
       if (address.value) {
         const proofWithAddress = {
@@ -114,6 +121,7 @@ export const AdminWhiteListForm: FC = () => {
         proofs.private.push(proofWithAddress);
       }
     });
+    
     setProofs(proofs);
   };
 
@@ -131,21 +139,23 @@ export const AdminWhiteListForm: FC = () => {
     }
   }, [rootHashWriteError, uriWriteError, proofsUploadError]);
 
-  if (uri) {
-    writeUri({
-      address: nftContractAddress,
-      abi: nftContractAbi,
-      functionName: 'setMerkleProofs',
-      args: [uri],
-    });
-  }
+  useEffect(() => {
+    if (uri) {
+      writeUri({
+        address: nftContractAddress,
+        abi: nftContractAbi,
+        functionName: 'setMerkleProofs',
+        args: [uri],
+      });
+    }
+  }, [uri, writeUri]);
 
   const dataIsLoading =
     isRootHashLoading || isTransactionLoading || proofsLoading || isUriLoading || isUriLoadingTransaction;
 
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
-      {dataIsLoading && <Loader/>}
+      {dataIsLoading && <Loader />}
       <h3 className={styles.subheader}>Add or remove addresses of airdrop white list</h3>
       <ul className={styles.addresses}>
         {airdropFields.map((field, index) => {

@@ -1,18 +1,13 @@
-import { CSSProperties, FC, FormEventHandler, useEffect } from 'react';
+import { FC, FormEventHandler, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { BeatLoader } from 'react-spinners';
 import { useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import CloseIcon from '@assets/icons/clear_close_icon.svg';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
 import styles from './CancelOffer.module.css';
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '0 auto',
-};
 
 interface Props {
   tradeId: bigint;
@@ -29,7 +24,7 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
     writeContract,
     isPending: isWriteApprovePending,
     error: writeContractError,
-    data:transactionHash,
+    data: transactionHash,
   } = useWriteContract();
 
   const { isLoading: isTransactionLoading, isSuccess: isTransactionSuccess } = useWaitForTransactionReceipt({
@@ -56,22 +51,11 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
     onClose(isTransactionSuccess);
   };
 
-  const isDataFromNetworkLoading = isWriteApprovePending || isTransactionLoading; 
+  const isDataFromNetworkLoading = isWriteApprovePending || isTransactionLoading;
 
   return (
     <form className={styles.cancelOffer} onSubmit={handleSubmit}>
-      {isDataFromNetworkLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
+      {isDataFromNetworkLoading && <Loader/>}
       <div className={styles.headerWrapper}>
         <h5 className={styles.header}>Cancel Offer</h5>
         <div onPointerDown={handleClose} className={styles.closeForm}>

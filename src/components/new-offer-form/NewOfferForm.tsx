@@ -1,8 +1,7 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
@@ -11,6 +10,7 @@ import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteCon
 
 import AddTokenInfo from '@components/add-token-info-popup/AddTokenInfo';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
 import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
@@ -19,11 +19,6 @@ import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
 import NewOfferTradeCreated from './NewOfferTradeCreated';
 import styles from './NewOfferForm.module.css';
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 export interface TokenDataNewOfferForm {
   decimals: number;
@@ -123,13 +118,13 @@ const NewOfferForm: FC = () => {
         address: tokenFrom?.address,
         functionName: 'allowance',
         abi: erc20Abi,
-        args: walletAddress && [walletAddress, tradeContractAddress[`${chainId}`]],
+        args: walletAddress ? [walletAddress, tradeContractAddress[`${chainId}`]]:undefined,
       },
       {
         address: tokenFrom && tokenFrom.address,
         functionName: 'balanceOf',
         abi: erc20Abi,
-        args: walletAddress && [walletAddress],
+        args: walletAddress ? [walletAddress] : undefined,
       },
     ],
   });
@@ -346,18 +341,7 @@ const NewOfferForm: FC = () => {
           <AddTokenInfo colorScheme="yellow" onClose={(data) => handleCustomTokenPopupChoice(data, 'from')} />
         </div>
       )}
-      {isDataFromNetworkLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
+      {isDataFromNetworkLoading && <Loader/>}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>{formStage !== 'tradeCreated' ? 'New offer' : 'New offer has been created!'}</h2>
         {formStage !== 'tradeCreated' && (

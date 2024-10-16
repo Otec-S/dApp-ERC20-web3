@@ -71,7 +71,7 @@ export const AdminForm: FC = () => {
 
   const dataIsLoading = isRolesApprovedLoading || isConstantsLoading;
 
-  if (dataIsLoading) return <Loader/>
+  if (dataIsLoading) return <Loader />;
 
   const isUserAllowedToPassAdminPanel = roles && roles.some((role) => role === true);
 
