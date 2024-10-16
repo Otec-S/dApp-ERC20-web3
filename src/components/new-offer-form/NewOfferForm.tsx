@@ -54,7 +54,7 @@ const NewOfferForm: FC = () => {
   const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
-  const [tokenFromAmount, setTokenFromAmount] = useState<number|undefined>(undefined);
+  const [tokenFromAmount, setTokenFromAmount] = useState<number | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenApproved, setTokenApproved] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
@@ -81,12 +81,12 @@ const NewOfferForm: FC = () => {
       const tokenToParams = {
         decimals: Number(searchParams.get('tokenToDecimals')),
         name: `${searchParams.get('tokenToName')}`,
-        address: getAddress(searchParams.get('tokenToAddress') ?? '')
+        address: getAddress(searchParams.get('tokenToAddress') ?? ''),
       };
       const tokenFromParams = {
         decimals: Number(searchParams.get('tokenFromDecimals')),
         name: `${searchParams.get('tokenFromName')}`,
-        address: getAddress(searchParams.get('tokenFromAddress') ?? '')
+        address: getAddress(searchParams.get('tokenFromAddress') ?? ''),
       };
       const tokenFromAmount = Number(searchParams.get('tokenFromAmount'));
       const tokenToAmount = Number(searchParams.get('tokenToAmount'));
@@ -107,7 +107,7 @@ const NewOfferForm: FC = () => {
   const {
     data: contractsData,
     isLoading: isLoadingContractData,
-    refetch
+    refetch,
   } = useReadContracts({
     allowFailure: false,
     query: {
@@ -138,7 +138,8 @@ const NewOfferForm: FC = () => {
     if (
       formStage === 'createTrade' &&
       tokenFrom &&
-      contractsData && tokenFromAmount && 
+      contractsData &&
+      tokenFromAmount &&
       tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals))
     ) {
       setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
@@ -331,6 +332,17 @@ const NewOfferForm: FC = () => {
 
   const showApproveButtonDisabled = tokenFrom === undefined;
   const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData || isTransactionLoading;
+
+  // TODO: перезагрузка страницы созданного оффера посе 5 сек задержки
+  useEffect(() => {
+    if (formStage === 'tradeCreated') {
+      const timer = setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [formStage]);
 
   return (
     <section className={cn(styles.createOffer)}>
