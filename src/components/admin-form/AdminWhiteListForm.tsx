@@ -1,23 +1,18 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { BeatLoader } from 'react-spinners';
 import { MerkleTree } from 'merkletreejs';
 import { isAddress, keccak256 } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { nftContractAddress, Proofs } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
 import { useProofUpload } from '@shared/hooks/useProofUpload';
 
 import styles from './AdminWhiteListForm.module.css';
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 interface FormData {
   airdrop: {
@@ -150,18 +145,7 @@ export const AdminWhiteListForm: FC = () => {
 
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
-      {dataIsLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
+      {dataIsLoading && <Loader/>}
       <h3 className={styles.subheader}>Add or remove addresses of airdrop white list</h3>
       <ul className={styles.addresses}>
         {airdropFields.map((field, index) => {

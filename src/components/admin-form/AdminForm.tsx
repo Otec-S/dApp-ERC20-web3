@@ -1,11 +1,11 @@
-import { CSSProperties, FC } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BeatLoader } from 'react-spinners';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { arbitrumSepolia } from 'viem/chains';
 import { useAccount, useReadContracts } from 'wagmi';
 
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { ROUTES } from '@shared/constants';
 import { nftContractAddress } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
@@ -13,11 +13,6 @@ import { nftContractAbi } from '@shared/constants/nftContractAbi';
 import { AdminSaleForm } from './AdminSaleForm';
 import { AdminWhiteListForm } from './AdminWhiteListForm';
 import styles from './AdminForm.module.css';
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 export const AdminForm: FC = () => {
   const { isConnected, chainId, address: walletAddress } = useAccount();
@@ -76,20 +71,7 @@ export const AdminForm: FC = () => {
 
   const dataIsLoading = isRolesApprovedLoading || isConstantsLoading;
 
-  if (dataIsLoading) {
-    return (
-      <div className={styles.loader}>
-        <BeatLoader
-          color={'red'}
-          loading={true}
-          cssOverride={override}
-          size={100}
-          aria-label="Loading Spinner"
-          data-testid="loader"
-        />
-      </div>
-    );
-  }
+  if (dataIsLoading) return <Loader/>
 
   const isUserAllowedToPassAdminPanel = roles && roles.some((role) => role === true);
 
