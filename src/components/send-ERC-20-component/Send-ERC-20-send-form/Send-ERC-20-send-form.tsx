@@ -1,5 +1,4 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
-import BeatLoader from 'react-spinners/BeatLoader';
+import { FC, useEffect, useState } from 'react';
 import { Address, formatUnits, getAddress, parseUnits } from 'viem';
 import { polygonAmoy, sepolia } from 'viem/chains';
 import { useAccount, useChainId, useReadContract, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
@@ -8,6 +7,7 @@ import ARBIcon from '@assets/icons/arb.svg';
 import ArrowDown from '@assets/icons/arrow_down.svg';
 import BalanceMaxSign from '@assets/icons/balanceMaxSign.svg';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { TokenPopup } from '@components/token-popup/TokenPopup';
 import { erc20abiExtended, Token, TokenData } from '@shared/constants';
 import getTokenIcon from '@shared/utils/getTokenIcon';
@@ -24,11 +24,6 @@ interface Props {
   setIsCustomTokenPopupOpen: (value: boolean) => void;
   setTxHash: (value: Address) => void;
 }
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 const SendERC20SendForm: FC<Props> = ({
   inputValue,
@@ -229,18 +224,7 @@ const SendERC20SendForm: FC<Props> = ({
   return (
     <>
       <form className={style.blockForm} onSubmit={handleSubmit}>
-        {isConfirming && (
-          <div className={style.loader}>
-            <BeatLoader
-              color={'red'}
-              loading={isConfirming}
-              cssOverride={override}
-              size={100}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        )}
+        {isConfirming && <Loader/>}
         <div className={style.sender}>
           <div className={style.inputBlock}>
             <input

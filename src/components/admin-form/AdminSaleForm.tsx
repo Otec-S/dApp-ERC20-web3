@@ -1,10 +1,10 @@
-import { CSSProperties, FC, useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { BeatLoader } from 'react-spinners';
 import { useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { nftContractAddress } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
 
@@ -21,11 +21,6 @@ interface FormData {
   publicSale: SaleStatus;
   whiteListSale: SaleStatus;
 }
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 export const AdminSaleForm: FC = () => {
   const { data: saleState, isLoading: isSaleLoading } = useReadContracts({
@@ -137,18 +132,7 @@ export const AdminSaleForm: FC = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {dataIsLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
+      {dataIsLoading && <Loader/>}
       <fieldset className={styles.fieldSet}>
         <legend className={styles.label}>Select airdrop stage:</legend>
         <label className={styles.label}>
