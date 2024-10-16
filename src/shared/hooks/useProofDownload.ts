@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react';
-import { createThirdwebClient } from 'thirdweb';
 import { download } from 'thirdweb/storage';
 
 import { Proofs } from '@shared/constants/nftContract';
+
+import {thirdWebClient} from '../../../thirdWebClient';
 
 export const useProofDownload = (uri: string | null) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [file, setFile] = useState<Proofs | null>(null);
-  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID;
-  const client = createThirdwebClient({ clientId });
   useEffect(() => {
     const downloadData = async () => {
       setLoading(true);
       try {
         if (uri) {
           const file: Response = await download({
-            client,
+            client:thirdWebClient,
             uri,
           });
           const proofs = await file.json();
@@ -30,6 +29,6 @@ export const useProofDownload = (uri: string | null) => {
     };
     downloadData();
     return () => {};
-  }, [client, uri]);
+  }, [uri]);
   return { file, loading, error };
 };

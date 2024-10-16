@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
-import { createThirdwebClient } from 'thirdweb';
 import { upload } from 'thirdweb/storage';
 
 import { Proofs } from '@shared/constants/nftContract';
+
+import {thirdWebClient} from '../../../thirdWebClient';
 
 export const useProofUpload = (proofs?: Proofs) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [uri, setUri] = useState<string | null>(null);
-  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID;
-  const client = createThirdwebClient({ clientId });
   useEffect(() => {
     if (proofs) {
       const file = new File([JSON.stringify(proofs)], '1.json');
@@ -17,7 +16,7 @@ export const useProofUpload = (proofs?: Proofs) => {
         setLoading(true);
         try {
           const uri = await upload({
-            client,
+            client:thirdWebClient,
             files: [file],
           });
           setUri(uri);
@@ -30,6 +29,6 @@ export const useProofUpload = (proofs?: Proofs) => {
       uploadData();
     }
     return () => {};
-  }, [client, proofs]);
+  }, [proofs]);
   return { uri, loading, error };
 };
