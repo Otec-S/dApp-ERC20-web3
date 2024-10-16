@@ -15,7 +15,9 @@ export const OffersTables: FC = () => {
   const userAddress: Address = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
   const { contractAddress, tokens } = useChainDependentValues();
   const [rowsMyOffers, setRowsMyOffers] = useState<OfferReal[]>([]);
+  console.log('rowsMyOffers', rowsMyOffers);
   const [rowsHistory, setRowsHistory] = useState<OfferReal[]>([]);
+  // console.log('rowsHistory', rowsHistory);
 
   const {
     data: myOffersData,
@@ -28,16 +30,25 @@ export const OffersTables: FC = () => {
     args: [userAddress],
   });
 
-  // console.log('userTradesData', userTradesData);
+  console.log('myOffersData', myOffersData);
 
-  const { data: offersForMeData } = useReadContract({
-    address: contractAddress,
-    abi: tradeContractAbi,
-    functionName: 'getOptionalTakerTrades',
-    args: [userAddress],
-  });
+  // const { data: offersForMeData } = useReadContract({
+  //   address: contractAddress,
+  //   abi: tradeContractAbi,
+  //   functionName: 'getOptionalTakerTrades',
+  //   args: [userAddress],
+  // });
 
   // console.log('offersForMeData', offersForMeData);
+
+  // const { data: offer25 } = useReadContract({
+  //   address: contractAddress,
+  //   abi: tradeContractAbi,
+  //   functionName: 'getOfferDetails',
+  //   args: [BigInt(25)],
+  // });
+
+  // console.log('offer25', offer25);
 
   const handleContractError = (error: unknown) => {
     if (error instanceof Error) {
@@ -47,7 +58,10 @@ export const OffersTables: FC = () => {
     }
   };
 
-  const parseTradeData = (tradeData: typeof myOffersData | typeof offersForMeData) => {
+  const parseTradeData = (
+    tradeData: typeof myOffersData,
+    // | typeof offersForMeData
+  ) => {
     return tradeData && Array.isArray(tradeData)
       ? tradeData.map((offer) => {
           const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
@@ -62,7 +76,8 @@ export const OffersTables: FC = () => {
             amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
-            status: offer.active ? 'Open' : 'Cancelled',
+            // status: offer.active ? 'Open' : 'Cancelled',
+            status: offer.optionalTaker === userAddress ? 'For me' : offer.active ? 'Open' : 'Cancelled',
             receiver: offer.optionalTaker !== zeroAddress ? offer.optionalTaker : 'Any',
           };
         })
@@ -93,17 +108,23 @@ export const OffersTables: FC = () => {
     const cancelledMyOffers = parsedMyOffers.filter((offer) => offer.status === 'Cancelled');
 
     // Для offersForMeData просто разбираем данные без фильтрации
-    const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
+    // const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
 
     // В rowsMyOffers попадают все активные из myOffersData и все из offersForMeData
-    const newRowsMyOffers = [...activeMyOffers, ...parsedOffersForMe];
+    const newRowsMyOffers = [
+      ...activeMyOffers,
+      //  ...parsedOffersForMe
+    ];
     setRowsMyOffers(newRowsMyOffers);
 
     // В rowsHistory попадают все отменённые из myOffersData
     setRowsHistory(cancelledMyOffers);
 
     // TODO: дополни массив зависимостей, но следи за перерендерами
-  }, [myOffersData, offersForMeData]);
+  }, [
+    myOffersData,
+    // offersForMeData
+  ]);
 
   return (
     <>
