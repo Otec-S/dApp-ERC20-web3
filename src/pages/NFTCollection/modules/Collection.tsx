@@ -1,12 +1,12 @@
 import { FC, useEffect } from 'react';
 import { useAccount, useReadContracts } from 'wagmi';
 
+import { EthLogoIcon } from '@assets/icons';
+import { Loader } from '@components/loader/Loader';
 import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
 
 import styles from '../NFTCollection.module.css';
-import { Loader } from '@components/loader/Loader';
-import { EthLogoIcon } from '@assets/icons';
 
 export const Collection: FC = () => {
   const { address: walletAddress } = useAccount();
@@ -24,7 +24,7 @@ export const Collection: FC = () => {
 
   useEffect(() => {
     setTokenIds(tokenIds ? tokenIds.map((item) => Number(item)) : []);
-  }, [tokenIds]);
+  }, [setTokenIds, tokenIds]);
 
   if (isLoading) {
     return <Loader />;
