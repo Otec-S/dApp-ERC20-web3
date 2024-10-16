@@ -8,16 +8,17 @@ export interface NFTFile {
 
 const uri = 'https://ipfs.io/ipfs/QmNe7EebKaNuRoN2ov9nMuwHXQvXbYXCLM9W1nDBxnqLgL/';
 
-export const useFetchFiles = () => {
-  const client = createThirdwebClient({ clientId: '0c0dcc5c52fbee7dd63b7534a5bbcc77' });
+export const useFetchFiles = ({ tokenIds }: { tokenIds: number[] }) => {
+  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID ?? '';
+  const client = createThirdwebClient({ clientId });
 
   const [files, setFiles] = useState<NFTFile[]>([]);
 
-  const fetches: Promise<NFTFile>[] = Array.from(Array(10).keys()).map((id) => {
+  const fetches: Promise<NFTFile>[] = tokenIds.map((id) => {
     return new Promise((resolve) => {
       download({
         client,
-        uri: `${uri}${id + 1}.json`,
+        uri: `${uri}${id}.json`,
       }).then((file) => {
         resolve(file.json());
       });
