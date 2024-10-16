@@ -14,6 +14,7 @@ import FormButton from '@components/form-button/FormButton';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
 import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { PAGE_RELOAD_TIMEOUT } from '@shared/constants/timeout';
 
 import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
@@ -338,7 +339,7 @@ const NewOfferForm: FC = () => {
     if (formStage === 'tradeCreated') {
       const timer = setTimeout(() => {
         window.location.reload();
-      }, 5000);
+      }, PAGE_RELOAD_TIMEOUT);
 
       return () => clearTimeout(timer);
     }
