@@ -4,12 +4,11 @@ import { formatUnits, parseUnits, toBytes } from 'viem';
 import {
   useAccount,
   useBalance,
-  useConfig,
   useReadContracts,
+  useSignMessage,
   useWaitForTransactionReceipt,
   useWriteContract,
 } from 'wagmi';
-import { signMessage } from 'wagmi/actions';
 
 import { Loader } from '@components/loader/Loader';
 import { MintingForm } from '@components/minting-form/MintingForm';
@@ -21,12 +20,13 @@ const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
 
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
-  const config = useConfig();
+
   const { files, setTokenIds } = useFetchFiles();
   const { writeContract, error, isError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+  const { signMessage } = useSignMessage();
 
   const { data, refetch } = useReadContracts({
     allowFailure: false,
@@ -47,21 +47,27 @@ export const PublicSale: FC = () => {
   const [cat, allowedToPublicMintAmount, salePrice] = data || [];
 
   const mintNft = useCallback(
-    async ({ amount }: { amount: number }) => {
+    ({ amount }: { amount: number }) => {
       if (cat && salePrice) {
-        const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
-        await signMessage(config, { message: { raw: toBytes(cat) } }).then((signature) => {
-          writeContract({
-            abi: nftContractAbi,
-            address: nftContractAddress,
-            functionName: 'mint',
-            args: [BigInt(amount), signature],
-            value: parseUnits(totalCost.toString(), 18),
-          });
-        });
+        signMessage(
+          { message: { raw: toBytes(cat) } },
+          {
+            onSuccess: (signature) => {
+              const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
+
+              writeContract({
+                abi: nftContractAbi,
+                address: nftContractAddress,
+                functionName: 'mint',
+                args: [BigInt(amount), signature],
+                value: parseUnits(totalCost.toString(), 18),
+              });
+            },
+          },
+        );
       }
     },
-    [cat, salePrice, config, writeContract, nftContractAddress],
+    [cat, salePrice, signMessage, writeContract, nftContractAddress],
   );
 
   useEffect(() => {
