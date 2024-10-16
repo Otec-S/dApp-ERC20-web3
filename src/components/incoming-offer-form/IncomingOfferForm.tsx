@@ -2,12 +2,12 @@ import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-import { BarLoader } from 'react-spinners';
 import { erc20Abi, formatUnits, maxUint256 } from 'viem';
 import { useAccount, useReadContract, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { ArrowRightIcon, WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
 import { tradeContractAbi } from '@shared/constants';
@@ -98,7 +98,7 @@ export const IncomingOfferForm: FC = () => {
     }
   }, [isAcceptSuccess, refetchOfferData]);
 
-  if (isOfferDataPending || isApproveLoading || isAcceptLoading || isTokenInfoPending) return <BarLoader />;
+  if (isOfferDataPending || isApproveLoading || isAcceptLoading || isTokenInfoPending) return <Loader />;
 
   const amountFromFormatted = Number(amountFrom && tokenFromDecimals && formatUnits(amountFrom, tokenFromDecimals));
   const amountToFormatted = Number(amountTo && tokenToDecimals && formatUnits(amountTo, tokenToDecimals));
