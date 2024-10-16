@@ -8,4 +8,9 @@ export const ROUTES = {
   CREATE_OFFER: '/erc20trade/create-offer',
   MY_OFFERS: '/erc20trade/my-offers',
   HISTORY: '/erc20trade/history',
+
+  AIRDROP: '/nft/airdrop',
+  PRESALE: '/nft/presale',
+  PUBLIC_SALE: '/nft/public-sale',
+  COLLECTION: '/nft/collection',
 };

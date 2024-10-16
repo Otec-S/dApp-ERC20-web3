@@ -1,0 +1,32 @@
+@value fonts: "@assets/fonts.css";
+@value montserrat from fonts;
+
+.wrap {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+}
+
+.box {
+  position: absolute;
+  padding: 4px 8px;
+  width: fit-content;
+  right: 0;
+  top: 0;
+  border-radius: 1000px;
+  border: 1px solid #6cff47;
+  background: #2f52dd;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.text {
+  color: #fff;
+  font-family: montserrat;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}

@@ -1,0 +1,24 @@
+@value fonts: "@assets/fonts.css";
+@value montserrat, openSans from fonts;
+
+.pageWrap {
+  background-color: #2d4bc1;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 100%;
+  min-width: calc(100vw - 20px);
+  padding: 48px;
+  box-sizing: border-box;
+  min-height: calc(100vh - 100px);
+  background-color: #2d4bc1;
+  display: flex;
+  flex-direction: column;
+  gap: 96px;
+}
+
+.pageRow {
+  display: flex;
+  gap: 104px;
+}
