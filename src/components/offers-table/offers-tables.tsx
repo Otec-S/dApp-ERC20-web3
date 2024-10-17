@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
-import { Address, formatUnits, zeroAddress } from 'viem';
-import { useReadContract } from 'wagmi';
+import { formatUnits, zeroAddress } from 'viem';
+import { useAccount, useReadContract } from 'wagmi';
 
 import { OfferReal } from '@components/offers-table/offers-tables.types';
 import { tradeContractAbi } from '@shared/constants';
@@ -10,9 +10,8 @@ import { OffersTable } from './offers-table';
 import { OffersTableHistory } from './Offers-table-history';
 
 export const OffersTables: FC = () => {
-  // const { userAddress } = useAccount();
-  // TODO: бери из соответствующего хука
-  const userAddress: Address = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
+  const { address: walletAddress } = useAccount(); // TODO: бери из соответствующего хука
+  // const userAddress: Address = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
   const { contractAddress, tokens } = useChainDependentValues();
   console.log('contractAddress', contractAddress);
   const [rowsMyOffers, setRowsMyOffers] = useState<OfferReal[]>([]);
@@ -24,21 +23,29 @@ export const OffersTables: FC = () => {
     data: myOffersData,
     isError,
     error,
-  } = useReadContract({
-    address: contractAddress,
-    abi: tradeContractAbi,
-    functionName: 'getUserTrades',
-    args: [userAddress],
-  });
+  } = useReadContract(
+    walletAddress
+      ? {
+          address: contractAddress,
+          abi: tradeContractAbi,
+          functionName: 'getUserTrades',
+          args: [walletAddress],
+        }
+      : undefined,
+  );
 
   console.log('myOffersData', myOffersData);
 
-  // const { data: offersForMeData } = useReadContract({
-  //   address: contractAddress,
-  //   abi: tradeContractAbi,
-  //   functionName: 'getOptionalTakerTrades',
-  //   args: [userAddress],
-  // });
+  const { data: offersForMeData } = useReadContract(
+    walletAddress
+      ? {
+          address: contractAddress,
+          abi: tradeContractAbi,
+          functionName: 'getOptionalTakerTrades',
+          args: [walletAddress],
+        }
+      : undefined,
+  );
 
   // console.log('offersForMeData', offersForMeData);
 
@@ -78,7 +85,7 @@ export const OffersTables: FC = () => {
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
             // status: offer.active ? 'Open' : 'Cancelled',
-            status: offer.optionalTaker === userAddress ? 'For me' : offer.active ? 'Open' : 'Cancelled',
+            status: offer.optionalTaker === walletAddress ? 'For me' : offer.active ? 'Open' : 'Cancelled',
             receiver: offer.optionalTaker !== zeroAddress ? offer.optionalTaker : 'Any',
           };
         })
@@ -109,13 +116,10 @@ export const OffersTables: FC = () => {
     const cancelledMyOffers = parsedMyOffers.filter((offer) => offer.status === 'Cancelled');
 
     // Для offersForMeData просто разбираем данные без фильтрации
-    // const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
+    const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
 
     // В rowsMyOffers попадают все активные из myOffersData и все из offersForMeData
-    const newRowsMyOffers = [
-      ...activeMyOffers,
-      //  ...parsedOffersForMe
-    ];
+    const newRowsMyOffers = [...activeMyOffers, ...parsedOffersForMe];
     setRowsMyOffers(newRowsMyOffers);
 
     // В rowsHistory попадают все отменённые из myOffersData
