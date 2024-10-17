@@ -10,7 +10,7 @@ import FormButton from '@components/form-button/FormButton';
 import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
-import { tradeContractAbi } from '@shared/constants';
+import { erc20abiExtended, tradeContractAbi } from '@shared/constants';
 import { useChainDependentValues } from '@shared/hooks';
 
 import { IncomingOfferToken } from './incoming-offer-token/IncomingOfferToken';
@@ -69,11 +69,11 @@ export const IncomingOfferForm: FC = () => {
     contracts: tokenFrom &&
       tokenTo &&
       walletAddress && [
-        { abi: erc20Abi, address: tokenFrom, functionName: 'decimals' },
-        { abi: erc20Abi, address: tokenFrom, functionName: 'name' },
-        { abi: erc20Abi, address: tokenTo, functionName: 'decimals' },
-        { abi: erc20Abi, address: tokenTo, functionName: 'name' },
-        { abi: erc20Abi, address: tokenTo, functionName: 'allowance', args: [walletAddress, contractAddress] },
+        { abi: erc20abiExtended, address: tokenFrom, functionName: 'decimals' },
+        { abi: erc20abiExtended, address: tokenFrom, functionName: 'name' },
+        { abi: erc20abiExtended, address: tokenTo, functionName: 'decimals' },
+        { abi: erc20abiExtended, address: tokenTo, functionName: 'name' },
+        { abi: erc20abiExtended, address: tokenTo, functionName: 'allowance', args: [walletAddress, contractAddress] },
       ],
   });
 

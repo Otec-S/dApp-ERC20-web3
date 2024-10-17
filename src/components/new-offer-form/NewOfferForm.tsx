@@ -4,7 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
+import { Address, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
@@ -13,7 +13,7 @@ import FormButton from '@components/form-button/FormButton';
 import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
-import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { erc20abiExtended, Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
 import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
@@ -117,13 +117,13 @@ const NewOfferForm: FC = () => {
       {
         address: tokenFrom?.address,
         functionName: 'allowance',
-        abi: erc20Abi,
+        abi: erc20abiExtended,
         args: walletAddress ? [walletAddress, tradeContractAddress[`${chainId}`]] : undefined,
       },
       {
         address: tokenFrom && tokenFrom.address,
         functionName: 'balanceOf',
-        abi: erc20Abi,
+        abi: erc20abiExtended,
         args: walletAddress ? [walletAddress] : undefined,
       },
     ],
@@ -221,7 +221,7 @@ const NewOfferForm: FC = () => {
       const tokensAllowedToSpend = contractsData && contractsData[1];
       if (tokensAllowedToSpend !== undefined && tokensToSpend > tokensAllowedToSpend) {
         writeContract({
-          abi: erc20Abi,
+          abi: erc20abiExtended,
           address: tokenFrom.address,
           functionName: 'approve',
           args: [tradeContractAddress[`${chainId}`], tokensToSpend],
