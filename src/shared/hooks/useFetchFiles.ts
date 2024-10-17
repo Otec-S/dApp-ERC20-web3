@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { createThirdwebClient } from 'thirdweb';
 import { download } from 'thirdweb/storage';
+
+import { thirdWebClient } from '../../../thirdWebClient';
 
 export interface NFTFile {
   image: string;
@@ -10,8 +11,6 @@ export interface NFTFile {
 const uri = 'https://ipfs.io/ipfs/QmNe7EebKaNuRoN2ov9nMuwHXQvXbYXCLM9W1nDBxnqLgL/';
 
 export const useFetchFiles = () => {
-  const clientId = import.meta.env.VITE_THIRD_WEB_CLIENT_ID ?? '';
-  const client = createThirdwebClient({ clientId });
   const [tokenIds, setTokenIds] = useState<number[]>([]);
 
   const [files, setFiles] = useState<NFTFile[]>([]);
@@ -20,7 +19,7 @@ export const useFetchFiles = () => {
     const fetches: Promise<NFTFile>[] = tokenIds.map((id) => {
       return new Promise((resolve) => {
         download({
-          client,
+          client: thirdWebClient,
           uri: `${uri}${id}.json`,
         }).then((file) => {
           resolve(file.json());
