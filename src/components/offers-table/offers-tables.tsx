@@ -14,6 +14,7 @@ export const OffersTables: FC = () => {
   // TODO: бери из соответствующего хука
   const userAddress: Address = '0x9c7c832BEDA90253D6B971178A5ec8CdcB7C9054';
   const { contractAddress, tokens } = useChainDependentValues();
+  console.log('contractAddress', contractAddress);
   const [rowsMyOffers, setRowsMyOffers] = useState<OfferReal[]>([]);
   console.log('rowsMyOffers', rowsMyOffers);
   const [rowsHistory, setRowsHistory] = useState<OfferReal[]>([]);
