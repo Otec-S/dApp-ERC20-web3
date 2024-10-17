@@ -1,4 +1,5 @@
 export { default as ARBIcon } from './arb.svg';
+export { default as ArrowDownIcon } from './arrow_down.svg';
 export { default as ArrowRightIcon } from './arrow-right.svg';
 export { default as ClearCloseIcon } from './clear_close_icon.svg';
 export { default as CloseIcon } from './close.svg';

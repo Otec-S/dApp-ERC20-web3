@@ -1,1 +1,3 @@
-export { useChainDependentValues } from './useChainDependentValues';
+export * from './useChainDependentValues';
+export * from './useEtherPrice';
+export * from './useFetchFiles';

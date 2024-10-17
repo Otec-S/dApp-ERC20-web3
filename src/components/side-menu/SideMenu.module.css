@@ -1,0 +1,33 @@
+.sideMenu {
+  border-radius: 16px;
+  border: 1px solid #000;
+  background: #2f52de;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: fit-content;
+  height: fit-content;
+}
+
+.link {
+  text-decoration: none;
+  opacity: 0.6;
+}
+
+.linkActive {
+  opacity: 1;
+}
+
+.linkDisabled {
+  opacity: 0.3;
+}
+
+.linkText {
+  color: #fff;
+  font-family: montserrat;
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
