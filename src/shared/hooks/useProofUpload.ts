@@ -28,7 +28,6 @@ export const useProofUpload = (proofs?: Proofs) => {
       };
       uploadData();
     }
-    return () => {};
   }, [proofs]);
   return { uri, loading, error };
 };

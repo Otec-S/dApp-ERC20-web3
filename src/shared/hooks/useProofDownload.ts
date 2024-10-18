@@ -28,7 +28,6 @@ export const useProofDownload = (uri: string | null) => {
       }
     };
     downloadData();
-    return () => {};
   }, [uri]);
   return { file, loading, error };
 };
