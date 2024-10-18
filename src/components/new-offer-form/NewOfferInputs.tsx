@@ -28,7 +28,7 @@ interface Props {
   formStage: FormStages;
   showDefaultTokenPopupTo: boolean;
   rate: number;
-  infinite:boolean;
+  infinite: boolean;
   serviceFee: string;
   tokenFrom?: TokenDataNewOfferForm;
   tokenTo?: TokenDataNewOfferForm;
@@ -74,7 +74,8 @@ export const NewOfferInputs: FC<Props> = ({
           placeholder="0"
           readOnly={formStage !== 'approveToken'}
           {...register('from', {
-            validate: (value) => (infinite ? true : balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0),
+            validate: (value) =>
+              infinite ? true : balanceOfTokenFrom ? value > 0 && value <= balanceOfTokenFrom : value > 0,
           })}
         />
         {errors.from?.type === 'validate' && (

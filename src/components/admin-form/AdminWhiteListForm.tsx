@@ -4,12 +4,14 @@ import toast from 'react-hot-toast';
 import { MerkleTree } from 'merkletreejs';
 import { isAddress, keccak256 } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
 import { Loader } from '@components/loader/Loader';
 import { nftContractAddress, Proofs } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
+import { useProofDownload } from '@shared/hooks/useProofDownload';
 import { useProofUpload } from '@shared/hooks/useProofUpload';
 
 import styles from './AdminWhiteListForm.module.css';
@@ -25,6 +27,15 @@ interface FormData {
 
 export const AdminWhiteListForm: FC = () => {
   const [proofs, setProofs] = useState<Proofs | undefined>(undefined);
+  const {
+    data: urlData,
+    isPending: isUrlPending
+  } = useReadContract({
+    abi: nftContractAbi,
+    address: nftContractAddress,
+    functionName: 'getMerkleProofs',
+  });
+  const { file: proofsFromIFPS, loading: proofsDownloading } = useProofDownload(urlData);
   const {
     writeContract: writeRootHash,
     data: approveTreeRootHash,
@@ -47,6 +58,7 @@ export const AdminWhiteListForm: FC = () => {
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
@@ -66,6 +78,13 @@ export const AdminWhiteListForm: FC = () => {
     name: 'private',
     control,
   });
+
+  useEffect(() => {
+    if (proofsFromIFPS) {
+      setValue('airdrop',proofsFromIFPS.airdrop.map((proof)=>{return {value:proof.address as `0x${string}`}}))
+      setValue('private',proofsFromIFPS.private.map((proof)=>{return {value:proof.address as `0x${string}`}}))
+    }
+  }, [proofsFromIFPS,setValue]);
 
   const onSubmit = (data: FormData) => {
     const airdropMerkleTree = new MerkleTree(
@@ -151,7 +170,13 @@ export const AdminWhiteListForm: FC = () => {
   }, [uri, writeUri]);
 
   const dataIsLoading =
-    isRootHashLoading || isTransactionLoading || proofsLoading || isUriLoading || isUriLoadingTransaction;
+    isRootHashLoading ||
+    isTransactionLoading ||
+    proofsLoading ||
+    isUriLoading ||
+    isUriLoadingTransaction ||
+    proofsDownloading ||
+    isUrlPending;
 
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
