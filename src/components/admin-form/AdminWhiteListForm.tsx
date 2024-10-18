@@ -35,22 +35,27 @@ export const AdminWhiteListForm: FC = () => {
     address: nftContractAddress,
     functionName: 'getMerkleProofs',
   });
+
   const { file: proofsFromIFPS, loading: proofsDownloading } = useProofDownload(urlData);
+
   const {
     writeContract: writeRootHash,
     data: approveTreeRootHash,
     error: rootHashWriteError,
     isPending: isTransactionLoading,
   } = useWriteContract();
+
   const { isLoading: isRootHashLoading } = useWaitForTransactionReceipt({
     hash: approveTreeRootHash,
   });
+
   const {
     writeContract: writeUri,
     data: approveUri,
     error: uriWriteError,
     isPending: isUriLoading,
   } = useWriteContract();
+
   const { isLoading: isUriLoadingTransaction } = useWaitForTransactionReceipt({
     hash: approveUri,
   });
@@ -62,6 +67,7 @@ export const AdminWhiteListForm: FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
   const {
     fields: airdropFields,
     append: appendAirdrop,
@@ -70,6 +76,7 @@ export const AdminWhiteListForm: FC = () => {
     name: 'airdrop',
     control,
   });
+  
   const {
     fields: privatePresaleFields,
     append: appendPrivatePresale,
