@@ -1,5 +1,6 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { parseUnits, zeroAddress } from 'viem';
 
 import { ROUTES } from '@shared/constants';
 
@@ -28,9 +29,54 @@ export const OffersTableHistory: FC<Props> = ({ rowsHistory }) => {
     );
   };
 
+  // const handleReOpenClick = () => {
+  //   if (selectedRows.length > 0) {
+  //     navigate(ROUTES.CREATE_OFFER, { replace: true });
+  //   }
+  // };
+
+  // export interface OfferReal {
+  //   id: number;
+  //   fromTokenAddress: Address;
+  //   fromTokenName: string;
+  //   toTokenAddress: Address;
+  //   toTokenName: string;
+  //   amount1: number;
+  //   amount2: number;
+  //   rate: number;
+  //   // hash: Address;
+  //   // status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
+  //   status: string;
+  //   receiver: Address | string;
+  // }
+
   const handleReOpenClick = () => {
-    if (selectedRows.length > 0) {
-      navigate(ROUTES.CREATE_OFFER, { replace: true });
+    if (selectedRows.length === 1) {
+      // Продолжаем, только если выбран один ряд
+      const selectedRow = rowsHistory.find((row) => row.id === selectedRows[0]);
+      if (selectedRow) {
+        const queryParams = new URLSearchParams({
+          tokenToName: selectedRow.toTokenName,
+          tokenFromAddress: selectedRow.fromTokenAddress,
+          tokenToAddress: selectedRow.toTokenAddress,
+          tokenFromName: selectedRow.fromTokenName,
+          // FIXME: разберись с decimals
+          tokenToDecimals: '18',
+          tokenFromDecimals: '18',
+          tokenFromAmount: selectedRow.amount1.toString(),
+
+          // Первый способ: используя parseUnits, если он доступен
+          // const bigintValue = parseUnits(numberValue.toString(), decimals);
+          // FIXME: разберись с decimals
+          // tokenFromAmount: parseUnits(selectedRow.amount1.toString(), 18).toString(),
+          tokenToAmount: selectedRow.amount2.toString(),
+          // tokenToAmount: parseUnits(selectedRow.amount2.toString(), 18).toString(),
+          // optionalTaker: selectedRow.receiver || '', // Предполагается, что optionalTaker — необязательный
+          optionalTaker: selectedRow.receiver === 'Any' ? zeroAddress : selectedRow.receiver, // Предполагается, что optionalTaker — необязательный
+        });
+
+        navigate(`${ROUTES.CREATE_OFFER}?${queryParams.toString()}`, { replace: true });
+      }
     }
   };
 
@@ -91,7 +137,7 @@ export const OffersTableHistory: FC<Props> = ({ rowsHistory }) => {
       statusButtons={tableConfig.statusButtons}
       activeButton={activeButton}
       mainButton={tableConfig.mainButton}
-      rows={rowsHistory}
+      // rows={rowsHistory}
       visibleRows={visibleRows}
       searchText={searchText}
       selectedRows={selectedRows}

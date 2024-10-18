@@ -1,7 +1,7 @@
 import { CSSProperties, FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
@@ -13,7 +13,7 @@ import AddTokenInfo from '@components/add-token-info-popup/AddTokenInfo';
 import FormButton from '@components/form-button/FormButton';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
-import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { ROUTES, Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
 import { PAGE_RELOAD_TIMEOUT } from '@shared/constants/timeout';
 
 import { NewOfferFormStages } from './NewOfferFormStages';
@@ -70,6 +70,9 @@ const NewOfferForm: FC = () => {
     mode: 'onChange',
   });
 
+  const navigate = useNavigate();
+
+  // TODO:
   useEffect(() => {
     if (
       searchParams.get('tokenToName') &&
@@ -77,7 +80,7 @@ const NewOfferForm: FC = () => {
       searchParams.get('tokenToAddress') &&
       searchParams.get('tokenFromName') &&
       searchParams.get('tokenToDecimals') &&
-      searchParams.get('tokenfromDecimals')
+      searchParams.get('tokenFromDecimals')
     ) {
       const tokenToParams = {
         decimals: Number(searchParams.get('tokenToDecimals')),
@@ -338,6 +341,7 @@ const NewOfferForm: FC = () => {
   useEffect(() => {
     if (formStage === 'tradeCreated') {
       const timer = setTimeout(() => {
+        navigate(`${ROUTES.CREATE_OFFER}`, { replace: true });
         window.location.reload();
       }, PAGE_RELOAD_TIMEOUT);
 

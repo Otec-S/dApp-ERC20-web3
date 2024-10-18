@@ -34,7 +34,7 @@ interface Props {
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
   mainButton: string;
-  rows: OfferReal[];
+  // rows: OfferReal[];
   visibleRows: OfferReal[];
   filteredRows: OfferReal[];
   searchText: string;
@@ -178,6 +178,7 @@ const OffersTableBox: FC<Props> = ({
                         {row.toTokenName}
                       </div>
                     </TableCell>
+                    {/* TODO: */}
                     <TableCell align="right">{row.amount1}</TableCell>
                     <TableCell align="right">{row.amount2}</TableCell>
                     <TableCell align="right">{row.rate}</TableCell>

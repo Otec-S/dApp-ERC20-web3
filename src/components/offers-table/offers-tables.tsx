@@ -49,14 +49,14 @@ export const OffersTables: FC = () => {
 
   // console.log('offersForMeData', offersForMeData);
 
-  const { data: offer25 } = useReadContract({
-    address: contractAddress,
-    abi: tradeContractAbi,
-    functionName: 'getOfferDetails',
-    args: [BigInt(25)],
-  });
+  // const { data: offer25 } = useReadContract({
+  //   address: contractAddress,
+  //   abi: tradeContractAbi,
+  //   functionName: 'getOfferDetails',
+  //   args: [BigInt(25)],
+  // });
 
-  console.log('offer25', offer25);
+  // console.log('offer25', offer25);
 
   const handleContractError = (error: unknown) => {
     if (error instanceof Error) {
@@ -66,10 +66,7 @@ export const OffersTables: FC = () => {
     }
   };
 
-  const parseTradeData = (
-    tradeData: typeof myOffersData,
-    // | typeof offersForMeData
-  ) => {
+  const parseTradeData = (tradeData: typeof myOffersData | typeof offersForMeData) => {
     return tradeData && Array.isArray(tradeData)
       ? tradeData.map((offer) => {
           const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
@@ -81,11 +78,20 @@ export const OffersTables: FC = () => {
             fromTokenName: fromToken ? fromToken.name : 'Unknown',
             toTokenAddress: offer.tokenTo,
             toTokenName: toToken ? toToken.name : 'Unknown',
+            // TODO: decimals беруться из массива НАШИХ токенов
             amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
             // status: offer.active ? 'Open' : 'Cancelled',
-            status: offer.optionalTaker === walletAddress ? 'For me' : offer.active ? 'Open' : 'Cancelled',
+            // status: offer.optionalTaker === walletAddress ? 'For me' : offer.active ? 'Open' : 'Cancelled',
+            status:
+              offer.optionalTaker === walletAddress && offer.completed
+                ? 'Accepted'
+                : offer.optionalTaker === walletAddress
+                  ? 'For me'
+                  : offer.active
+                    ? 'Open'
+                    : 'Cancelled',
             receiver: offer.optionalTaker !== zeroAddress ? offer.optionalTaker : 'Any',
           };
         })
@@ -126,10 +132,7 @@ export const OffersTables: FC = () => {
     setRowsHistory(cancelledMyOffers);
 
     // TODO: дополни массив зависимостей, но следи за перерендерами
-  }, [
-    myOffersData,
-    // offersForMeData
-  ]);
+  }, [myOffersData, offersForMeData]);
 
   return (
     <>
