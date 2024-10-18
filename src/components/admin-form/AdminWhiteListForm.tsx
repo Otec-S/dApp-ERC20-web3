@@ -27,10 +27,7 @@ interface FormData {
 
 export const AdminWhiteListForm: FC = () => {
   const [proofs, setProofs] = useState<Proofs | undefined>(undefined);
-  const {
-    data: urlData,
-    isPending: isUrlPending
-  } = useReadContract({
+  const { data: urlData, isPending: isUrlPending } = useReadContract({
     abi: nftContractAbi,
     address: nftContractAddress,
     functionName: 'getMerkleProofs',
@@ -76,7 +73,7 @@ export const AdminWhiteListForm: FC = () => {
     name: 'airdrop',
     control,
   });
-  
+
   const {
     fields: privatePresaleFields,
     append: appendPrivatePresale,
@@ -88,10 +85,20 @@ export const AdminWhiteListForm: FC = () => {
 
   useEffect(() => {
     if (proofsFromIFPS) {
-      setValue('airdrop',proofsFromIFPS.airdrop.map((proof)=>{return {value:proof.address as `0x${string}`}}))
-      setValue('private',proofsFromIFPS.private.map((proof)=>{return {value:proof.address as `0x${string}`}}))
+      setValue(
+        'airdrop',
+        proofsFromIFPS.airdrop.map((proof) => {
+          return { value: proof.address as `0x${string}` };
+        }),
+      );
+      setValue(
+        'private',
+        proofsFromIFPS.private.map((proof) => {
+          return { value: proof.address as `0x${string}` };
+        }),
+      );
     }
-  }, [proofsFromIFPS,setValue]);
+  }, [proofsFromIFPS, setValue]);
 
   const onSubmit = (data: FormData) => {
     const airdropMerkleTree = new MerkleTree(
@@ -109,19 +116,22 @@ export const AdminWhiteListForm: FC = () => {
     const airdropTreeRoot = airdropMerkleTree.getHexRoot();
     const privatePresaleTreeRoot = privatePresaleMerkleTree.getHexRoot();
 
-    writeRootHash({
-      abi: nftContractAbi,
-      address: nftContractAddress,
-      functionName: 'setMerkleRootAirDrop',
-      args: [airdropTreeRoot],
-    });
-
-    writeRootHash({
-      abi: nftContractAbi,
-      address: nftContractAddress,
-      functionName: 'setMerkleRootWhiteList',
-      args: [privatePresaleTreeRoot],
-    });
+    if (airdropTreeRoot.length > 2) {
+      writeRootHash({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'setMerkleRootAirDrop',
+        args: [airdropTreeRoot],
+      });
+    }
+    if (privatePresaleTreeRoot.length > 2) {
+      writeRootHash({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'setMerkleRootWhiteList',
+        args: [privatePresaleTreeRoot],
+      });
+    }
 
     const proofs: Proofs = {
       airdrop: [],
