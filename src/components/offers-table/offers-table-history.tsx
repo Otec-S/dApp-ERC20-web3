@@ -1,23 +1,24 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { parseUnits, zeroAddress } from 'viem';
+import { zeroAddress } from 'viem';
 
 import { ROUTES } from '@shared/constants';
+import { useUserTrades } from '@shared/hooks/useUserTrades';
 
 // import { rowsHistory } from './offers-table.mock';
 import OffersTableBox from './offers-table-box';
-import { OfferReal } from './offers-tables.types';
 
-interface Props {
-  rowsHistory: OfferReal[];
-}
+// interface Props {
+//   rowsHistory: OfferReal[];
+// }
 
-export const OffersTableHistory: FC<Props> = ({ rowsHistory }) => {
+export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const { rowsHistory } = useUserTrades();
   const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
   const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 

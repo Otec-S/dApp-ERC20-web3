@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
+import { useUserTrades } from '@shared/hooks/useUserTrades';
 
 // import { useUserTrades } from '@shared/hooks/useUserTrades';
 // import { rows } from './Offers-table.mock';
@@ -9,11 +10,11 @@ import { OfferReal } from './offers-tables.types';
 // import { Offer } from './offers-tables.types';
 import styles from './offers-table.module.css';
 
-interface Props {
-  rowsMyOffers: OfferReal[];
-}
+// interface Props {
+//   rowsMyOffers: OfferReal[];
+// }
 
-export const OffersTable: FC<Props> = ({ rowsMyOffers }) => {
+export const OffersTable: FC = () => {
   // const rowsReal = useUserTrades(userAddress);
   // console.log('rowsReal', rowsReal);
 
@@ -24,6 +25,8 @@ export const OffersTable: FC<Props> = ({ rowsMyOffers }) => {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
   const [offerToCancel, setOfferToCancel] = useState<OfferReal | null>(null);
+  // TODO:
+  const { rowsMyOffers } = useUserTrades();
   const openOffersCount = rowsMyOffers.filter((row) => row.status === 'Open').length;
   const forMeOffersCount = rowsMyOffers.filter((row) => row.status === 'For me').length;
 
@@ -104,7 +107,7 @@ export const OffersTable: FC<Props> = ({ rowsMyOffers }) => {
         activeButton={activeButton}
         mainButton={tableConfig.mainButton}
         // rows={rows}
-        rows={rowsMyOffers}
+        // rows={rowsMyOffers}
         visibleRows={visibleRows}
         filteredRows={filteredRows}
         searchText={searchText}

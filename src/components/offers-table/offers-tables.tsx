@@ -126,6 +126,7 @@ export const OffersTables: FC = () => {
 
     // Разбор offersForMeData по статусу
     const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
+    // убираем задвоение отображения принятых офферов For me
     const filteredOffersForMe = parsedOffersForMe.filter((offer) => !myOfferIds.includes(offer.id));
     // const acceptedOffersForMe = parsedOffersForMe.filter((offer) => offer.status === 'Accepted');
 
