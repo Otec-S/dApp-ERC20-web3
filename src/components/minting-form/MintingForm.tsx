@@ -78,10 +78,10 @@ export const MintingForm: FC<Props> = ({ title, description, balance, price, max
         </div>
         <div className={styles.imageGroup}>
           <div className={styles.contentImage}>
-            <img className={styles.image} src={files?.[0]?.image ?? ''}></img>
+            <img className={styles.image} src={files?.[0]?.image ?? ''} alt="first token image"></img>
           </div>
           <div className={styles.contentImage}>
-            <img className={styles.image} src={files?.[1]?.image ?? ''}></img>
+            <img className={styles.image} src={files?.[1]?.image ?? ''} alt="second token image"></img>
           </div>
         </div>
       </div>
