@@ -34,7 +34,7 @@ export const OffersTables: FC = () => {
       : undefined,
   );
 
-  console.log('myOffersData', myOffersData);
+  // console.log('myOffersData', myOffersData);
 
   const { data: offersForMeData } = useReadContract(
     walletAddress
@@ -47,7 +47,7 @@ export const OffersTables: FC = () => {
       : undefined,
   );
 
-  // console.log('offersForMeData', offersForMeData);
+  console.log('offersForMeData', offersForMeData);
 
   // const { data: offer25 } = useReadContract({
   //   address: contractAddress,
@@ -116,20 +116,30 @@ export const OffersTables: FC = () => {
     //   setRowsMyOffers(newRowsReal);
     // }
 
-    // Разбор только myOffersData по статусу
+    // Разбор myOffersData по статусу
     const parsedMyOffers = myOffersData ? parseTradeData(myOffersData) : [];
-    const activeMyOffers = parsedMyOffers.filter((offer) => offer.status !== 'Cancelled');
     const cancelledMyOffers = parsedMyOffers.filter((offer) => offer.status === 'Cancelled');
+    const acceptedOffersForMe = parsedMyOffers.filter((offer) => offer.status === 'Accepted');
 
-    // Для offersForMeData просто разбираем данные без фильтрации
+    // Получить массив id из parsedMyOffers
+    const myOfferIds = parsedMyOffers.map((offer) => offer.id);
+
+    // Разбор offersForMeData по статусу
     const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
+    const filteredOffersForMe = parsedOffersForMe.filter((offer) => !myOfferIds.includes(offer.id));
+    // const acceptedOffersForMe = parsedOffersForMe.filter((offer) => offer.status === 'Accepted');
+
+    const activeMyOffers = parsedMyOffers.filter(
+      (offer) => offer.status !== 'Cancelled' && offer.status !== 'Accepted',
+    );
 
     // В rowsMyOffers попадают все активные из myOffersData и все из offersForMeData
-    const newRowsMyOffers = [...activeMyOffers, ...parsedOffersForMe];
+    const newRowsMyOffers = [...activeMyOffers, ...filteredOffersForMe];
     setRowsMyOffers(newRowsMyOffers);
 
-    // В rowsHistory попадают все отменённые из myOffersData
-    setRowsHistory(cancelledMyOffers);
+    // аналогично для rowsHistory
+    const newRowsHistory = [...cancelledMyOffers, ...acceptedOffersForMe];
+    setRowsHistory(newRowsHistory);
 
     // TODO: дополни массив зависимостей, но следи за перерендерами
   }, [myOffersData, offersForMeData]);

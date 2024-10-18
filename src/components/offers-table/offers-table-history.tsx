@@ -14,7 +14,7 @@ interface Props {
 
 export const OffersTableHistory: FC<Props> = ({ rowsHistory }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
