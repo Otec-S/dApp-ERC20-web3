@@ -71,7 +71,7 @@ const NewOfferForm: FC = () => {
       searchParams.get('tokenToAddress') &&
       searchParams.get('tokenFromName') &&
       searchParams.get('tokenToDecimals') &&
-      searchParams.get('tokenfromDecimals')
+      searchParams.get('tokenFromDecimals')
     ) {
       const tokenToParams = {
         decimals: Number(searchParams.get('tokenToDecimals')),
