@@ -1,29 +1,24 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { useSearchParams } from 'react-router-dom';
-import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
-import { Address, erc20Abi, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
+import { Address, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
 import { sepolia } from 'viem/chains';
 import { useAccount, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import AddTokenInfo from '@components/add-token-info-popup/AddTokenInfo';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
-import { Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { erc20abiExtended, Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
 
 import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
 import NewOfferTradeCreated from './NewOfferTradeCreated';
 import styles from './NewOfferForm.module.css';
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 export interface TokenDataNewOfferForm {
   decimals: number;
@@ -54,7 +49,7 @@ const NewOfferForm: FC = () => {
   const [showCustomTokenPopupTo, setShowCustomTokenPopupTo] = useState(false);
   const [formStage, setFormStage] = useState<FormStages>('approveToken');
   const [tokenFrom, setTokenFrom] = useState<TokenDataNewOfferForm | undefined>(undefined);
-  const [tokenFromAmount, setTokenFromAmount] = useState<number|undefined>(undefined);
+  const [tokenFromAmount, setTokenFromAmount] = useState<number | undefined>(undefined);
   const [tokenTo, setTokenTo] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const [tokenApproved, setTokenApproved] = useState<TokenDataNewOfferForm | undefined>(undefined);
   const {
@@ -76,17 +71,17 @@ const NewOfferForm: FC = () => {
       searchParams.get('tokenToAddress') &&
       searchParams.get('tokenFromName') &&
       searchParams.get('tokenToDecimals') &&
-      searchParams.get('tokenfromDecimals')
+      searchParams.get('tokenFromDecimals')
     ) {
       const tokenToParams = {
         decimals: Number(searchParams.get('tokenToDecimals')),
         name: `${searchParams.get('tokenToName')}`,
-        address: getAddress(searchParams.get('tokenToAddress') ?? '')
+        address: getAddress(searchParams.get('tokenToAddress') ?? ''),
       };
       const tokenFromParams = {
         decimals: Number(searchParams.get('tokenFromDecimals')),
         name: `${searchParams.get('tokenFromName')}`,
-        address: getAddress(searchParams.get('tokenFromAddress') ?? '')
+        address: getAddress(searchParams.get('tokenFromAddress') ?? ''),
       };
       const tokenFromAmount = Number(searchParams.get('tokenFromAmount'));
       const tokenToAmount = Number(searchParams.get('tokenToAmount'));
@@ -107,7 +102,7 @@ const NewOfferForm: FC = () => {
   const {
     data: contractsData,
     isLoading: isLoadingContractData,
-    refetch
+    refetch,
   } = useReadContracts({
     allowFailure: false,
     query: {
@@ -122,14 +117,14 @@ const NewOfferForm: FC = () => {
       {
         address: tokenFrom?.address,
         functionName: 'allowance',
-        abi: erc20Abi,
-        args: walletAddress && [walletAddress, tradeContractAddress[`${chainId}`]],
+        abi: erc20abiExtended,
+        args: walletAddress ? [walletAddress, tradeContractAddress[`${chainId}`]] : undefined,
       },
       {
         address: tokenFrom && tokenFrom.address,
         functionName: 'balanceOf',
-        abi: erc20Abi,
-        args: walletAddress && [walletAddress],
+        abi: erc20abiExtended,
+        args: walletAddress ? [walletAddress] : undefined,
       },
     ],
   });
@@ -138,8 +133,10 @@ const NewOfferForm: FC = () => {
     if (
       formStage === 'createTrade' &&
       tokenFrom &&
-      contractsData && tokenFromAmount && 
-      tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals))
+      contractsData &&
+      tokenFromAmount &&
+      tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals)) && 
+      Number(formatUnits(contractsData[1], tokenFrom?.decimals)) > 0
     ) {
       setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
     }
@@ -225,7 +222,7 @@ const NewOfferForm: FC = () => {
       const tokensAllowedToSpend = contractsData && contractsData[1];
       if (tokensAllowedToSpend !== undefined && tokensToSpend > tokensAllowedToSpend) {
         writeContract({
-          abi: erc20Abi,
+          abi: erc20abiExtended,
           address: tokenFrom.address,
           functionName: 'approve',
           args: [tradeContractAddress[`${chainId}`], tokensToSpend],
@@ -345,18 +342,7 @@ const NewOfferForm: FC = () => {
           <AddTokenInfo colorScheme="yellow" onClose={(data) => handleCustomTokenPopupChoice(data, 'from')} />
         </div>
       )}
-      {isDataFromNetworkLoading && (
-        <div className={styles.loader}>
-          <BeatLoader
-            color={'red'}
-            loading={true}
-            cssOverride={override}
-            size={100}
-            aria-label="Loading Spinner"
-            data-testid="loader"
-          />
-        </div>
-      )}
+      {isDataFromNetworkLoading && <Loader />}
       <div className={styles.headerWrapper}>
         <h2 className={styles.header}>{formStage !== 'tradeCreated' ? 'New offer' : 'New offer has been created!'}</h2>
         {formStage !== 'tradeCreated' && (
@@ -373,6 +359,7 @@ const NewOfferForm: FC = () => {
             <NewOfferInputs
               showDefaultTokenPopupTo={showDefaultTokenPopupTo}
               errors={errors}
+              infinite={watch('infiniteApprove')}
               tokenTo={tokenTo}
               register={register}
               serviceFee={serviceFee}

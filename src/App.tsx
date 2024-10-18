@@ -5,6 +5,7 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
+import { Admin } from '@pages/admin/Admin';
 import { CreateOffer } from '@pages/ERC20trade/modules/CreateOffer';
 import { History } from '@pages/ERC20trade/modules/History';
 import { IncomingOffer } from '@pages/ERC20trade/modules/IncomingOffer';
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       { path: ROUTES.PUBLIC_SALE, element: <PublicSale /> },
       { path: ROUTES.COLLECTION, element: <Collection /> },
     ],
+  },
+  {
+    path: ROUTES.ADMIN,
+    element: <Admin />,
   },
 ]);
 

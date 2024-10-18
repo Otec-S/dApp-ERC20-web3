@@ -1,6 +1,5 @@
-import { CSSProperties, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import BeatLoader from 'react-spinners/BeatLoader';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, isAddress } from 'viem';
@@ -9,6 +8,7 @@ import { useAccount, useReadContracts } from 'wagmi';
 import ClearIcon from '@assets/icons/clear_close_icon.svg';
 import SuccessIcon from '@assets/icons/success.svg';
 import FormButton from '@components/form-button/FormButton';
+import { Loader } from '@components/loader/Loader';
 import { TokenData } from '@shared/constants';
 import { erc20abiExtended } from '@shared/constants';
 
@@ -28,11 +28,6 @@ interface FormData {
   tokenName?: string;
   tokenDecimals?: number;
 }
-
-const override: CSSProperties = {
-  display: 'block',
-  margin: '100px auto',
-};
 
 const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
   const [formState, setFormState] = useState<FormStages>('initialState');
@@ -152,18 +147,7 @@ const AddTokenInfo: FC<Props> = ({ colorScheme = 'default', onClose }) => {
   return (
     <div className="container">
       <div className={cn(styles.addToken, { [styles.addTokenYellowScheme]: colorScheme === 'yellow' })}>
-        {isLoadingContacts && (
-          <div className={styles.loader}>
-            <BeatLoader
-              color={'red'}
-              loading={isLoadingContacts}
-              cssOverride={override}
-              size={100}
-              aria-label="Loading Spinner"
-              data-testid="loader"
-            />
-          </div>
-        )}
+        {isLoadingContacts && <Loader />}
         {formState !== 'errorState' && (
           <div className={cn(styles.headerWrapper, { [styles.headerWrapperYellow]: colorScheme === 'yellow' })}>
             <h5 className={styles.header}>
