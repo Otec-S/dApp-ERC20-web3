@@ -135,7 +135,8 @@ const NewOfferForm: FC = () => {
       tokenFrom &&
       contractsData &&
       tokenFromAmount &&
-      tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals))
+      tokenFromAmount >= Number(formatUnits(contractsData[1], tokenFrom?.decimals)) && 
+      Number(formatUnits(contractsData[1], tokenFrom?.decimals)) > 0
     ) {
       setValue('from', Number(formatUnits(contractsData[1], tokenFrom?.decimals)));
     }
