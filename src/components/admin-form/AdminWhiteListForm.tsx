@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { MerkleTree } from 'merkletreejs';
+import { Address } from 'thirdweb';
 import { isAddress, keccak256 } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { useReadContract } from 'wagmi';
@@ -18,10 +19,10 @@ import styles from './AdminWhiteListForm.module.css';
 
 interface FormData {
   airdrop: {
-    value?: `0x${string}`;
+    value?: Address;
   }[];
   private: {
-    value?: `0x${string}`;
+    value?: Address;
   }[];
 }
 
@@ -88,13 +89,13 @@ export const AdminWhiteListForm: FC = () => {
       setValue(
         'airdrop',
         proofsFromIFPS.airdrop.map((proof) => {
-          return { value: proof.address as `0x${string}` };
+          return { value: proof.address as Address };
         }),
       );
       setValue(
         'private',
         proofsFromIFPS.private.map((proof) => {
-          return { value: proof.address as `0x${string}` };
+          return { value: proof.address as Address };
         }),
       );
     }
