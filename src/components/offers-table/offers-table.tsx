@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { useUserTrades } from '@shared/hooks';
@@ -27,10 +28,13 @@ export const OffersTable: FC = () => {
   };
 
   const handleCancelOffer = () => {
-    if (selectedRows.length > 0) {
+    // TODO:
+    if (selectedRows.length === 1) {
       const selectedOffer = rowsMyOffers.find((row) => row.id === selectedRows[0]);
       setOfferToCancel(selectedOffer || null);
       setIsCancelPopupOpen(true);
+    } else {
+      toast.error(`Please select only one offer to cancel`);
     }
   };
 

@@ -1,4 +1,5 @@
 import { ChangeEvent, FC, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { zeroAddress } from 'viem';
 
@@ -28,7 +29,6 @@ export const OffersTableHistory: FC = () => {
 
   const handleReOpenClick = () => {
     if (selectedRows.length === 1) {
-      // TODO: Продолжаем, только если выбран один ряд
       const selectedRow = rowsHistory.find((row) => row.id === selectedRows[0]);
 
       if (selectedRow) {
@@ -46,6 +46,8 @@ export const OffersTableHistory: FC = () => {
 
         navigate(`${ROUTES.CREATE_OFFER}?${queryParams.toString()}`, { replace: true });
       }
+    } else {
+      toast.error(`Please select only one offer to re-open`);
     }
   };
 
