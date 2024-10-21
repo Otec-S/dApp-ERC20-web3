@@ -28,7 +28,6 @@ export const OffersTable: FC = () => {
   };
 
   const handleCancelOffer = () => {
-    // TODO:
     if (selectedRows.length === 1) {
       const selectedOffer = rowsMyOffers.find((row) => row.id === selectedRows[0]);
       setOfferToCancel(selectedOffer || null);

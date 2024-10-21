@@ -27,8 +27,6 @@ export const useUserTrades = () => {
       : undefined,
   );
 
-  // console.log('myOffersData', myOffersData);
-
   const { data: offersForMeData } = useReadContract(
     walletAddress
       ? {
@@ -60,7 +58,6 @@ export const useUserTrades = () => {
             fromTokenName: fromToken ? fromToken.name : 'Unknown',
             toTokenAddress: offer.tokenTo,
             toTokenName: toToken ? toToken.name : 'Unknown',
-            // TODO:
             tokenFromDecimals: (fromToken ? fromToken.decimals : 18).toString(),
             tokenToDecimals: (toToken ? toToken.decimals : 18).toString(),
             amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
@@ -86,28 +83,22 @@ export const useUserTrades = () => {
       return;
     }
 
-    // Разбор myOffersData по статусу
     const parsedMyOffers = myOffersData ? parseTradeData(myOffersData) : [];
     const cancelledMyOffers = parsedMyOffers.filter((offer) => offer.status === 'Cancelled');
     const acceptedOffersForMe = parsedMyOffers.filter((offer) => offer.status === 'Accepted');
 
-    // Получить массив id из parsedMyOffers
     const myOfferIds = parsedMyOffers.map((offer) => offer.id);
 
-    // Разбор offersForMeData по статусу
     const parsedOffersForMe = offersForMeData ? parseTradeData(offersForMeData) : [];
-    // убираем задвоение отображения принятых офферов For me
     const filteredOffersForMe = parsedOffersForMe.filter((offer) => !myOfferIds.includes(offer.id));
 
     const activeMyOffers = parsedMyOffers.filter(
       (offer) => offer.status !== 'Cancelled' && offer.status !== 'Accepted',
     );
 
-    // В rowsMyOffers попадают все активные из myOffersData и все из offersForMeData
     const newRowsMyOffers = [...activeMyOffers, ...filteredOffersForMe];
     setRowsMyOffers(newRowsMyOffers);
 
-    // аналогично для rowsHistory
     const newRowsHistory = [...cancelledMyOffers, ...acceptedOffersForMe];
     setRowsHistory(newRowsHistory);
   }, [myOffersData, offersForMeData]);

@@ -15,7 +15,6 @@ export const OffersTableHistory: FC = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const { rowsHistory } = useUserTrades();
-  console.log('rowsHistory', rowsHistory);
   const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
   const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
