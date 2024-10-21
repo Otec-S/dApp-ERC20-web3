@@ -18,7 +18,6 @@ import cn from 'classnames';
 import { ShareIcon } from '@assets/icons';
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
-// import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
@@ -34,7 +33,6 @@ interface Props {
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
   mainButton: string;
-  // rows: OfferReal[];
   visibleRows: OfferReal[];
   filteredRows: OfferReal[];
   searchText: string;
@@ -142,7 +140,6 @@ const OffersTableBox: FC<Props> = ({
                   <TableCell align="right">Amount 1</TableCell>
                   <TableCell align="right">Amount 2</TableCell>
                   <TableCell align="right">Rate</TableCell>
-                  {/* <TableCell align="left">Tx hash</TableCell> */}
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left">Receiver</TableCell>
                   <TableCell align="left">Share</TableCell>
@@ -178,25 +175,9 @@ const OffersTableBox: FC<Props> = ({
                         {row.toTokenName}
                       </div>
                     </TableCell>
-                    {/* TODO: */}
                     <TableCell align="right">{row.amount1}</TableCell>
                     <TableCell align="right">{row.amount2}</TableCell>
                     <TableCell align="right">{row.rate}</TableCell>
-                    {/* <TableCell align="left">
-                      <div className={styles.hash}>
-                        {shortenHash(row.hash)}
-                        <div className={styles.icons}>
-                          <div className={styles.etherscanIcon}>
-                            <EtherScanLogo />
-                          </div>
-                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.hash}>
-                            <div className={styles.copyIcon}>
-                              <CopyIcon />
-                            </div>
-                          </CopyToClipboard>
-                        </div>
-                      </div>
-                    </TableCell> */}
                     <TableCell align="left">
                       <div className={styles.status}>
                         {row.status}

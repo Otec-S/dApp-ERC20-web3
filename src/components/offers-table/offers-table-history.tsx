@@ -5,12 +5,7 @@ import { zeroAddress } from 'viem';
 import { ROUTES } from '@shared/constants';
 import { useUserTrades } from '@shared/hooks/useUserTrades';
 
-// import { rowsHistory } from './offers-table.mock';
 import OffersTableBox from './offers-table-box';
-
-// interface Props {
-//   rowsHistory: OfferReal[];
-// }
 
 export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
@@ -30,27 +25,6 @@ export const OffersTableHistory: FC = () => {
     );
   };
 
-  // const handleReOpenClick = () => {
-  //   if (selectedRows.length > 0) {
-  //     navigate(ROUTES.CREATE_OFFER, { replace: true });
-  //   }
-  // };
-
-  // export interface OfferReal {
-  //   id: number;
-  //   fromTokenAddress: Address;
-  //   fromTokenName: string;
-  //   toTokenAddress: Address;
-  //   toTokenName: string;
-  //   amount1: number;
-  //   amount2: number;
-  //   rate: number;
-  //   // hash: Address;
-  //   // status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
-  //   status: string;
-  //   receiver: Address | string;
-  // }
-
   const handleReOpenClick = () => {
     if (selectedRows.length === 1) {
       // Продолжаем, только если выбран один ряд
@@ -65,15 +39,8 @@ export const OffersTableHistory: FC = () => {
           tokenToDecimals: '18',
           tokenFromDecimals: '18',
           tokenFromAmount: selectedRow.amount1.toString(),
-
-          // Первый способ: используя parseUnits, если он доступен
-          // const bigintValue = parseUnits(numberValue.toString(), decimals);
-          // FIXME: разберись с decimals
-          // tokenFromAmount: parseUnits(selectedRow.amount1.toString(), 18).toString(),
           tokenToAmount: selectedRow.amount2.toString(),
-          // tokenToAmount: parseUnits(selectedRow.amount2.toString(), 18).toString(),
-          // optionalTaker: selectedRow.receiver || '', // Предполагается, что optionalTaker — необязательный
-          optionalTaker: selectedRow.receiver === 'Any' ? zeroAddress : selectedRow.receiver, // Предполагается, что optionalTaker — необязательный
+          optionalTaker: selectedRow.receiver === 'Any' ? zeroAddress : selectedRow.receiver,
         });
 
         navigate(`${ROUTES.CREATE_OFFER}?${queryParams.toString()}`, { replace: true });
@@ -138,7 +105,6 @@ export const OffersTableHistory: FC = () => {
       statusButtons={tableConfig.statusButtons}
       activeButton={activeButton}
       mainButton={tableConfig.mainButton}
-      // rows={rowsHistory}
       visibleRows={visibleRows}
       searchText={searchText}
       selectedRows={selectedRows}
