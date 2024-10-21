@@ -6,6 +6,7 @@ export { default as CloseIcon } from './close.svg';
 export { default as CopyIcon } from './copy_icon.svg';
 export { default as DAIIcon } from './dai.svg';
 export { default as DOGEIcon } from './doge.svg';
+export { default as EthLogoIcon } from './eth_logo.svg';
 export { default as EtherScanIcon } from './etherscan.svg';
 export { default as HistoryIcon } from './history.svg';
 export { default as LINKIcon } from './link.svg';

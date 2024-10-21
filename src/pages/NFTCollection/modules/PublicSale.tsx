@@ -20,7 +20,8 @@ const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
 
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
-  const { files } = useFetchFiles({ tokenIds });
+
+  const { files, setTokenIds } = useFetchFiles();
   const { writeContract, error, isError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
@@ -77,6 +78,10 @@ export const PublicSale: FC = () => {
       toast.error(error.name);
     }
   }, [error, isError, isSuccess, refetch]);
+
+  useEffect(() => {
+    setTokenIds(tokenIds);
+  }, [setTokenIds]);
 
   if (isLoading) {
     return <Loader />;

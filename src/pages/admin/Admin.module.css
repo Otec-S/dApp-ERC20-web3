@@ -1,0 +1,20 @@
+.admin {
+  display: flex;
+  flex-direction: column;
+  background: #2d4bc1;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.header {
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 20px 0;
+  text-align: center;
+}
