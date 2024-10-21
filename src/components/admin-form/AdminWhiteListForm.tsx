@@ -143,7 +143,7 @@ export const AdminWhiteListForm: FC = () => {
       if (address.value) {
         const proofWithAddress = {
           address: address.value,
-          proof: isAddress(address.value) ? airdropMerkleTree.getHexProof(keccak256(address.value)) : [],
+          proof: airdropMerkleTree.getHexProof(keccak256(address.value)),
         };
         proofs.airdrop.push(proofWithAddress);
       }
