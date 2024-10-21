@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { zeroAddress } from 'viem';
 
 import { ROUTES } from '@shared/constants';
-import { useUserTrades } from '@shared/hooks/useUserTrades';
+import { useUserTrades } from '@shared/hooks';
 
 import OffersTableBox from './offers-table-box';
 

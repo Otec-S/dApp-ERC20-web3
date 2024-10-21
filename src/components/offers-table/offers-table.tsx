@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useState } from 'react';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
-import { useUserTrades } from '@shared/hooks/useUserTrades';
+import { useUserTrades } from '@shared/hooks';
 
 import OffersTableBox from './offers-table-box';
 import { OfferReal } from './offers-tables.types';

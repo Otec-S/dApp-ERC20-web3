@@ -49,6 +49,7 @@ const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFro
 
   const handleClose = () => {
     onClose(isTransactionSuccess);
+    window.location.reload();
   };
 
   const isDataFromNetworkLoading = isWriteApprovePending || isTransactionLoading;
