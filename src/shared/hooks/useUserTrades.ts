@@ -27,6 +27,8 @@ export const useUserTrades = () => {
       : undefined,
   );
 
+  // console.log('myOffersData', myOffersData);
+
   const { data: offersForMeData } = useReadContract(
     walletAddress
       ? {
@@ -58,7 +60,9 @@ export const useUserTrades = () => {
             fromTokenName: fromToken ? fromToken.name : 'Unknown',
             toTokenAddress: offer.tokenTo,
             toTokenName: toToken ? toToken.name : 'Unknown',
-            // decimals беруться из массива НАШИХ токенов
+            // TODO:
+            tokenFromDecimals: (fromToken ? fromToken.decimals : 18).toString(),
+            tokenToDecimals: (toToken ? toToken.decimals : 18).toString(),
             amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),

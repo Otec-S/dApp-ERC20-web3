@@ -14,6 +14,7 @@ export const OffersTableHistory: FC = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const { rowsHistory } = useUserTrades();
+  console.log('rowsHistory', rowsHistory);
   const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
   const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
@@ -27,17 +28,17 @@ export const OffersTableHistory: FC = () => {
 
   const handleReOpenClick = () => {
     if (selectedRows.length === 1) {
-      // Продолжаем, только если выбран один ряд
+      // TODO: Продолжаем, только если выбран один ряд
       const selectedRow = rowsHistory.find((row) => row.id === selectedRows[0]);
+
       if (selectedRow) {
         const queryParams = new URLSearchParams({
           tokenToName: selectedRow.toTokenName,
           tokenFromAddress: selectedRow.fromTokenAddress,
           tokenToAddress: selectedRow.toTokenAddress,
           tokenFromName: selectedRow.fromTokenName,
-          // FIXME: разберись с decimals
-          tokenToDecimals: '18',
-          tokenFromDecimals: '18',
+          tokenToDecimals: selectedRow.tokenToDecimals,
+          tokenFromDecimals: selectedRow.tokenFromDecimals,
           tokenFromAmount: selectedRow.amount1.toString(),
           tokenToAmount: selectedRow.amount2.toString(),
           optionalTaker: selectedRow.receiver === 'Any' ? zeroAddress : selectedRow.receiver,

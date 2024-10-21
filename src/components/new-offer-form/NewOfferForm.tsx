@@ -67,7 +67,6 @@ const NewOfferForm: FC = () => {
 
   const navigate = useNavigate();
 
-  // TODO:
   useEffect(() => {
     if (
       searchParams.get('tokenToName') &&
@@ -332,7 +331,6 @@ const NewOfferForm: FC = () => {
   const showApproveButtonDisabled = tokenFrom === undefined;
   const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData || isTransactionLoading;
 
-  // TODO: перезагрузка страницы созданного оффера посе 5 сек задержки
   useEffect(() => {
     if (formStage === 'tradeCreated') {
       const timer = setTimeout(() => {

@@ -11,4 +11,6 @@ export interface OfferReal {
   rate: number;
   status: string;
   receiver: Address | string;
+  tokenFromDecimals: string;
+  tokenToDecimals: string;
 }
