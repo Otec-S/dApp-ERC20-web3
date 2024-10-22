@@ -21,14 +21,18 @@ const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
 export const PublicSale: FC = () => {
   const { nftContractAddress } = useChainDependentValues();
 
-  const { files, setTokenIds } = useFetchFiles();
+  const { files, setTokenIds, loading: isFileLoading } = useFetchFiles();
   const { writeContract, error, isError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
   const { signMessage } = useSignMessage();
 
-  const { data, refetch } = useReadContracts({
+  const {
+    data,
+    refetch,
+    isLoading: isDataLoading,
+  } = useReadContracts({
     allowFailure: false,
     contracts: walletAddress
       ? [
@@ -83,7 +87,7 @@ export const PublicSale: FC = () => {
     setTokenIds(tokenIds);
   }, [setTokenIds]);
 
-  if (isLoading) {
+  if (isLoading || isFileLoading || isDataLoading) {
     return <Loader />;
   }
 
