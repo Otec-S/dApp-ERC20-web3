@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { formatUnits, zeroAddress } from 'viem';
 import { useAccount, useReadContract } from 'wagmi';
 
@@ -40,9 +41,9 @@ export const useUserTrades = () => {
 
   const handleContractError = (error: unknown) => {
     if (error instanceof Error) {
-      console.error('Error fetching user trades:', error.message);
+      toast.error(`Error fetching user trades: ${error.message}`);
     } else {
-      console.error('An unknown error occurred.');
+      toast.error('An unknown error occurred.');
     }
   };
 

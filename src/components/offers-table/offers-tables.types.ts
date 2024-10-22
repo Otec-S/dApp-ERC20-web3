@@ -9,8 +9,8 @@ export interface OfferReal {
   amount1: number;
   amount2: number;
   rate: number;
-  status: string;
-  receiver: Address | string;
+  status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
+  receiver: string;
   tokenFromDecimals: string;
   tokenToDecimals: string;
 }
