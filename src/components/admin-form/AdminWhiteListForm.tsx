@@ -2,44 +2,57 @@ import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { MerkleTree } from 'merkletreejs';
-import { isAddress, keccak256 } from 'viem';
+import { Address, isAddress, keccak256 } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useReadContract } from 'wagmi';
 
 import { WarningIcon } from '@assets/icons';
 import FormButton from '@components/form-button/FormButton';
 import { Loader } from '@components/loader/Loader';
 import { nftContractAddress, Proofs } from '@shared/constants/nftContract';
 import { nftContractAbi } from '@shared/constants/nftContractAbi';
+import { useProofDownload } from '@shared/hooks/useProofDownload';
 import { useProofUpload } from '@shared/hooks/useProofUpload';
 
 import styles from './AdminWhiteListForm.module.css';
 
 interface FormData {
   airdrop: {
-    value?: `0x${string}`;
+    value?: Address;
   }[];
   private: {
-    value?: `0x${string}`;
+    value?: Address;
   }[];
 }
 
 export const AdminWhiteListForm: FC = () => {
   const [proofs, setProofs] = useState<Proofs | undefined>(undefined);
+  const { data: urlData, isPending: isUrlPending } = useReadContract({
+    abi: nftContractAbi,
+    address: nftContractAddress,
+    functionName: 'getMerkleProofs',
+  });
+
+  const { file: proofsFromIFPS, loading: proofsDownloading } = useProofDownload(urlData);
+
   const {
     writeContract: writeRootHash,
     data: approveTreeRootHash,
     error: rootHashWriteError,
     isPending: isTransactionLoading,
   } = useWriteContract();
+
   const { isLoading: isRootHashLoading } = useWaitForTransactionReceipt({
     hash: approveTreeRootHash,
   });
+
   const {
     writeContract: writeUri,
     data: approveUri,
     error: uriWriteError,
     isPending: isUriLoading,
   } = useWriteContract();
+
   const { isLoading: isUriLoadingTransaction } = useWaitForTransactionReceipt({
     hash: approveUri,
   });
@@ -47,9 +60,11 @@ export const AdminWhiteListForm: FC = () => {
   const {
     register,
     control,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+
   const {
     fields: airdropFields,
     append: appendAirdrop,
@@ -58,6 +73,7 @@ export const AdminWhiteListForm: FC = () => {
     name: 'airdrop',
     control,
   });
+
   const {
     fields: privatePresaleFields,
     append: appendPrivatePresale,
@@ -66,6 +82,23 @@ export const AdminWhiteListForm: FC = () => {
     name: 'private',
     control,
   });
+
+  useEffect(() => {
+    if (proofsFromIFPS) {
+      setValue(
+        'airdrop',
+        proofsFromIFPS.airdrop.map((proof) => {
+          return { value: proof.address as Address };
+        }),
+      );
+      setValue(
+        'private',
+        proofsFromIFPS.private.map((proof) => {
+          return { value: proof.address as Address };
+        }),
+      );
+    }
+  }, [proofsFromIFPS, setValue]);
 
   const onSubmit = (data: FormData) => {
     const airdropMerkleTree = new MerkleTree(
@@ -83,19 +116,22 @@ export const AdminWhiteListForm: FC = () => {
     const airdropTreeRoot = airdropMerkleTree.getHexRoot();
     const privatePresaleTreeRoot = privatePresaleMerkleTree.getHexRoot();
 
-    writeRootHash({
-      abi: nftContractAbi,
-      address: nftContractAddress,
-      functionName: 'setMerkleRootAirDrop',
-      args: [airdropTreeRoot],
-    });
-
-    writeRootHash({
-      abi: nftContractAbi,
-      address: nftContractAddress,
-      functionName: 'setMerkleRootWhiteList',
-      args: [privatePresaleTreeRoot],
-    });
+    if (airdropTreeRoot.length > 2) {
+      writeRootHash({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'setMerkleRootAirDrop',
+        args: [airdropTreeRoot as Address],
+      });
+    }
+    if (privatePresaleTreeRoot.length > 2) {
+      writeRootHash({
+        abi: nftContractAbi,
+        address: nftContractAddress,
+        functionName: 'setMerkleRootWhiteList',
+        args: [privatePresaleTreeRoot as Address],
+      });
+    }
 
     const proofs: Proofs = {
       airdrop: [],
@@ -106,7 +142,7 @@ export const AdminWhiteListForm: FC = () => {
       if (address.value) {
         const proofWithAddress = {
           address: address.value,
-          proof: isAddress(address.value) ? airdropMerkleTree.getHexProof(keccak256(address.value)) : [],
+          proof: airdropMerkleTree.getHexProof(keccak256(address.value)),
         };
         proofs.airdrop.push(proofWithAddress);
       }
@@ -151,7 +187,13 @@ export const AdminWhiteListForm: FC = () => {
   }, [uri, writeUri]);
 
   const dataIsLoading =
-    isRootHashLoading || isTransactionLoading || proofsLoading || isUriLoading || isUriLoadingTransaction;
+    isRootHashLoading ||
+    isTransactionLoading ||
+    proofsLoading ||
+    isUriLoading ||
+    isUriLoadingTransaction ||
+    proofsDownloading ||
+    isUrlPending;
 
   return (
     <form className={styles.adminWhiteListForm} onSubmit={handleSubmit(onSubmit)}>
