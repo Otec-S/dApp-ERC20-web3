@@ -2,8 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { MerkleTree } from 'merkletreejs';
-import { Address } from 'thirdweb';
-import { isAddress, keccak256 } from 'viem';
+import { Address, isAddress, keccak256 } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { useReadContract } from 'wagmi';
 
@@ -122,7 +121,7 @@ export const AdminWhiteListForm: FC = () => {
         abi: nftContractAbi,
         address: nftContractAddress,
         functionName: 'setMerkleRootAirDrop',
-        args: [airdropTreeRoot],
+        args: [airdropTreeRoot as Address],
       });
     }
     if (privatePresaleTreeRoot.length > 2) {
@@ -130,7 +129,7 @@ export const AdminWhiteListForm: FC = () => {
         abi: nftContractAbi,
         address: nftContractAddress,
         functionName: 'setMerkleRootWhiteList',
-        args: [privatePresaleTreeRoot],
+        args: [privatePresaleTreeRoot as Address],
       });
     }
 
