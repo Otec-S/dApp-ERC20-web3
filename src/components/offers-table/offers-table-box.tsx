@@ -72,10 +72,6 @@ const OffersTableBox: FC<Props> = ({
     setShowCopyOfClipboard(false);
   };
 
-  const sortedVisibleRows = [...visibleRows].sort((a, b) => {
-    return b.id - a.id;
-  });
-
   return (
     <>
       <Box className={styles.box}>
@@ -146,7 +142,7 @@ const OffersTableBox: FC<Props> = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedVisibleRows.map((row) => (
+                {visibleRows.map((row) => (
                   <TableRow key={row.id} className={styles.tableBodyRow}>
                     <TableCell padding="none">
                       <Checkbox

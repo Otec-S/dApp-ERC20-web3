@@ -65,7 +65,11 @@ export const OffersTable: FC = () => {
     return row.status === activeButton;
   });
 
-  const searchedRows = filteredRows.filter((row) => {
+  const sortedFilteredRows = [...filteredRows].sort((a, b) => {
+    return b.id - a.id;
+  });
+
+  const searchedRows = sortedFilteredRows.filter((row) => {
     if (searchText === '') {
       return true;
     }
