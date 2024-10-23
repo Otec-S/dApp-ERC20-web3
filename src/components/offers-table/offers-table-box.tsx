@@ -20,11 +20,11 @@ import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
+import { getShortHash } from '@shared/utils/getShortHash';
 import getTokenIcon from '@shared/utils/getTokenIcon';
-import { shortenHash } from '@shared/utils/shortenHash';
 
 import { Offer } from './Offers-tables.types';
-import styles from './Offers-table.module.css';
+import styles from './offers-table.module.css';
 
 interface Props {
   title: string;
@@ -174,7 +174,7 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="right">{row.rate}</TableCell>
                     <TableCell align="left">
                       <div className={styles.hash}>
-                        {shortenHash(row.hash)}
+                        {getShortHash(row.hash)}
                         <div className={styles.icons}>
                           <div className={styles.etherscanIcon}>
                             <EtherScanLogo />
@@ -195,7 +195,7 @@ const OffersTableBox: FC<Props> = ({
                     </TableCell>
                     <TableCell align="left">
                       <div className={styles.receiver}>
-                        {shortenHash(row.receiver)}
+                        {getShortHash(row.receiver)}
                         <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
                           <div className={styles.copyIcon}>
                             <CopyIcon />
