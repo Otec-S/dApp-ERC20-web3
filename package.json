@@ -28,8 +28,8 @@
     "react-spinners": "^0.14.1",
     "styled-components": "^6.1.13",
     "thirdweb": "^5.61.6",
-    "viem": "^2.21.5",
-    "wagmi": "^2.12.10"
+    "viem": "^2.21.32",
+    "wagmi": "^2.12.22"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

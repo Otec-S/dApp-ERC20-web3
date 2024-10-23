@@ -5,7 +5,7 @@ import { Proofs } from '@shared/constants/nftContract';
 
 import { thirdWebClient } from '../../../thirdWebClient';
 
-export const useProofDownload = (uri: string | null) => {
+export const useProofDownload = (uri: string | null | undefined) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [file, setFile] = useState<Proofs | null>(null);
