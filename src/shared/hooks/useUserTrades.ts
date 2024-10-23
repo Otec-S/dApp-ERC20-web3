@@ -3,15 +3,15 @@ import toast from 'react-hot-toast';
 import { formatUnits, zeroAddress } from 'viem';
 import { useAccount, useReadContract } from 'wagmi';
 
-import { OfferReal } from '@components/offers-table/offers-tables.types';
+import { Offer } from '@components/offers-table/offers-tables.types';
 import { tradeContractAbi } from '@shared/constants';
 import { useChainDependentValues } from '@shared/hooks/useChainDependentValues';
 
 export const useUserTrades = () => {
   const { address: walletAddress } = useAccount();
   const { contractAddress, tokens } = useChainDependentValues();
-  const [rowsMyOffers, setRowsMyOffers] = useState<OfferReal[]>([]);
-  const [rowsHistory, setRowsHistory] = useState<OfferReal[]>([]);
+  const [rowsMyOffers, setRowsMyOffers] = useState<Offer[]>([]);
+  const [rowsHistory, setRowsHistory] = useState<Offer[]>([]);
 
   const {
     data: myOffersData,
@@ -52,7 +52,14 @@ export const useUserTrades = () => {
       ? tradeData.map((offer) => {
           const fromToken = tokens.find((token) => token.address === offer.tokenFrom);
           const toToken = tokens.find((token) => token.address === offer.tokenTo);
-
+          const status: 'Open' | 'For me' | 'Cancelled' | 'Accepted' =
+            offer.optionalTaker === walletAddress && offer.completed
+              ? 'Accepted'
+              : offer.optionalTaker === walletAddress
+                ? 'For me'
+                : offer.active
+                  ? 'Open'
+                  : 'Cancelled';
           return {
             id: Number(offer.tradeID),
             fromTokenAddress: offer.tokenFrom,
@@ -64,14 +71,7 @@ export const useUserTrades = () => {
             amount1: Number(formatUnits(offer.amountFrom, fromToken ? fromToken.decimals : 18)),
             amount2: Number(formatUnits(offer.amountTo, toToken ? toToken.decimals : 18)),
             rate: Number((Number(offer.amountFrom) / Number(offer.amountTo)).toFixed(2)),
-            status:
-              offer.optionalTaker === walletAddress && offer.completed
-                ? 'Accepted'
-                : offer.optionalTaker === walletAddress
-                  ? 'For me'
-                  : offer.active
-                    ? 'Open'
-                    : 'Cancelled',
+            status,
             receiver: offer.optionalTaker !== zeroAddress ? offer.optionalTaker : 'Any',
           };
         })

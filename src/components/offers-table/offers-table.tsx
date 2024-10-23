@@ -5,7 +5,7 @@ import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
 import { useUserTrades } from '@shared/hooks';
 
 import OffersTableBox from './offers-table-box';
-import { OfferReal } from './offers-tables.types';
+import { Offer } from './offers-tables.types';
 import styles from './offers-table.module.css';
 
 export const OffersTable: FC = () => {
@@ -15,7 +15,7 @@ export const OffersTable: FC = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
-  const [offerToCancel, setOfferToCancel] = useState<OfferReal | null>(null);
+  const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
 
   const { rowsMyOffers } = useUserTrades();
   const openOffersCount = rowsMyOffers.filter((row) => row.status === 'Open').length;

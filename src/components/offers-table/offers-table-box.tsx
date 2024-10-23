@@ -25,7 +25,7 @@ import { ROUTES } from '@shared/constants';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 import { shortenHash } from '@shared/utils/shortenHash';
 
-import { OfferReal } from './offers-tables.types';
+import { Offer } from './offers-tables.types';
 import styles from './Offers-table.module.css';
 
 interface Props {
@@ -33,8 +33,8 @@ interface Props {
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
   mainButton: string;
-  visibleRows: OfferReal[];
-  filteredRows: OfferReal[];
+  visibleRows: Offer[];
+  filteredRows: Offer[];
   searchText: string;
   selectedRows: number[];
   rowsPerPage: number;

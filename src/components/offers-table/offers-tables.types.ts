@@ -1,6 +1,6 @@
 import { Address } from 'viem';
 
-export interface OfferReal {
+export interface Offer {
   id: number;
   fromTokenAddress: Address;
   fromTokenName: string;
