@@ -1,6 +1,6 @@
 import { FC, FormEventHandler, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { useQueryClient } from '@tanstack/react-query';
+// import { useQueryClient } from '@tanstack/react-query';
 import { useChainId, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import CloseIcon from '@assets/icons/clear_close_icon.svg';
@@ -21,7 +21,7 @@ interface Props {
 
 const CancelOffer: FC<Props> = ({ tradeId, tokenFromName, tokenToName, amountFrom, amountTo, onClose }) => {
   // TODO:
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
   const chainId = useChainId();
   const {
     writeContract,
