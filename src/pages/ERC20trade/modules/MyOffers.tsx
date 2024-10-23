@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { OffersTable } from '@components/offers-table/Offers-table';
+import { OffersTable } from '@components/offers-table/offers-table';
 
 export const MyOffers: FC = () => {
   return (

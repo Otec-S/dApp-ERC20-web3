@@ -1,17 +1,20 @@
 import { ChangeEvent, FC, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { zeroAddress } from 'viem';
 
 import { ROUTES } from '@shared/constants';
+import { useUserTrades } from '@shared/hooks';
 
-import { rowsHistory } from './Offers-table.mock';
-import OffersTableBox from './Offers-table-box';
+import OffersTableBox from './offers-table-box';
 
 export const OffersTableHistory: FC = () => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const { rowsHistory } = useUserTrades();
   const acceptedOffersCount = rowsHistory.filter((row) => row.status === 'Accepted').length;
   const cancelledOffersCount = rowsHistory.filter((row) => row.status === 'Cancelled').length;
 
@@ -24,8 +27,26 @@ export const OffersTableHistory: FC = () => {
   };
 
   const handleReOpenClick = () => {
-    if (selectedRows.length > 0) {
-      navigate(ROUTES.CREATE_OFFER, { replace: true });
+    if (selectedRows.length === 1) {
+      const selectedRow = rowsHistory.find((row) => row.id === selectedRows[0]);
+
+      if (selectedRow) {
+        const queryParams = new URLSearchParams({
+          tokenToName: selectedRow.toTokenName,
+          tokenFromAddress: selectedRow.fromTokenAddress,
+          tokenToAddress: selectedRow.toTokenAddress,
+          tokenFromName: selectedRow.fromTokenName,
+          tokenToDecimals: selectedRow.tokenToDecimals,
+          tokenFromDecimals: selectedRow.tokenFromDecimals,
+          tokenFromAmount: selectedRow.amount1.toString(),
+          tokenToAmount: selectedRow.amount2.toString(),
+          optionalTaker: selectedRow.receiver === 'Any' ? zeroAddress : selectedRow.receiver,
+        });
+
+        navigate(`${ROUTES.CREATE_OFFER}?${queryParams.toString()}`, { replace: true });
+      }
+    } else {
+      toast.error(`Please select only one offer to re-open`);
     }
   };
 
@@ -57,7 +78,11 @@ export const OffersTableHistory: FC = () => {
     return row.status === activeButton;
   });
 
-  const searchedRows = filteredRows.filter((row) => {
+  const sortedFilteredRows = [...filteredRows].sort((a, b) => {
+    return b.id - a.id;
+  });
+
+  const searchedRows = sortedFilteredRows.filter((row) => {
     if (searchText === '') {
       return true;
     }
@@ -86,7 +111,6 @@ export const OffersTableHistory: FC = () => {
       statusButtons={tableConfig.statusButtons}
       activeButton={activeButton}
       mainButton={tableConfig.mainButton}
-      rows={rowsHistory}
       visibleRows={visibleRows}
       searchText={searchText}
       selectedRows={selectedRows}

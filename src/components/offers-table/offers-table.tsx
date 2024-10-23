@@ -1,22 +1,25 @@
 import { ChangeEvent, FC, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import CancelOffer from '@components/cancel-offer-popup/CancelOffer';
+import { useUserTrades } from '@shared/hooks';
 
-import { rows } from './Offers-table.mock';
-import OffersTableBox from './Offers-table-box';
-import { Offer } from './Offers-tables.types';
-import styles from './Offers-table.module.css';
+import OffersTableBox from './offers-table-box';
+import { Offer } from './offers-tables.types';
+import styles from './offers-table.module.css';
 
 export const OffersTable: FC = () => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [activeButton, setActiveButton] = useState('All');
   const [searchText, setSearchText] = useState('');
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [isCancelPopupOpen, setIsCancelPopupOpen] = useState(false);
   const [offerToCancel, setOfferToCancel] = useState<Offer | null>(null);
-  const openOffersCount = rows.filter((row) => row.status === 'Open').length;
-  const forMeOffersCount = rows.filter((row) => row.status === 'For me').length;
+
+  const { rowsMyOffers } = useUserTrades();
+  const openOffersCount = rowsMyOffers.filter((row) => row.status === 'Open').length;
+  const forMeOffersCount = rowsMyOffers.filter((row) => row.status === 'For me').length;
 
   const handleCheckboxChange = (rowId: number) => {
     setSelectedRows((prevSelectedRows) =>
@@ -25,10 +28,12 @@ export const OffersTable: FC = () => {
   };
 
   const handleCancelOffer = () => {
-    if (selectedRows.length > 0) {
-      const selectedOffer = rows.find((row) => row.id === selectedRows[0]);
+    if (selectedRows.length === 1) {
+      const selectedOffer = rowsMyOffers.find((row) => row.id === selectedRows[0]);
       setOfferToCancel(selectedOffer || null);
       setIsCancelPopupOpen(true);
+    } else {
+      toast.error(`Please select only one offer to cancel`);
     }
   };
 
@@ -53,14 +58,18 @@ export const OffersTable: FC = () => {
     setPage(0);
   };
 
-  const filteredRows = rows.filter((row) => {
+  const filteredRows = rowsMyOffers.filter((row) => {
     if (activeButton === 'All') {
       return true;
     }
     return row.status === activeButton;
   });
 
-  const searchedRows = filteredRows.filter((row) => {
+  const sortedFilteredRows = [...filteredRows].sort((a, b) => {
+    return b.id - a.id;
+  });
+
+  const searchedRows = sortedFilteredRows.filter((row) => {
     if (searchText === '') {
       return true;
     }
@@ -80,7 +89,7 @@ export const OffersTable: FC = () => {
   const tableConfig = {
     title: 'My offers',
     statusButtons: [
-      { name: 'All', count: rows.length },
+      { name: 'All', count: rowsMyOffers.length },
       { name: 'Open', count: openOffersCount },
       { name: 'For me', count: forMeOffersCount },
     ],
@@ -94,7 +103,6 @@ export const OffersTable: FC = () => {
         statusButtons={tableConfig.statusButtons}
         activeButton={activeButton}
         mainButton={tableConfig.mainButton}
-        rows={rows}
         visibleRows={visibleRows}
         filteredRows={filteredRows}
         searchText={searchText}

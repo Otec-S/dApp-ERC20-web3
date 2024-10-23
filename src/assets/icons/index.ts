@@ -17,6 +17,7 @@ export { default as OPIcon } from './op.svg';
 export { default as PEPEIcon } from './pepe.svg';
 export { default as PlusIcon } from './plus.svg';
 export { default as SearchIcon } from './search.svg';
+export { default as ShareIcon } from './share_icon.svg';
 export { default as SquareArrowIcon } from './square_arrow.svg';
 export { default as SuccessIcon } from './success.svg';
 export { default as TRXIcon } from './trx.svg';

@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { Link } from 'react-router-dom';
 import {
   Box,
   Checkbox,
@@ -14,16 +15,17 @@ import {
 } from '@mui/material';
 import cn from 'classnames';
 
+import { ShareIcon } from '@assets/icons';
 import Close from '@assets/icons/close.svg';
 import CopyIcon from '@assets/icons/copy_icon.svg';
-import EtherScanLogo from '@assets/icons/etherscan.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
+import { ROUTES } from '@shared/constants';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 import { shortenHash } from '@shared/utils/shortenHash';
 
-import { Offer } from './Offers-tables.types';
+import { Offer } from './offers-tables.types';
 import styles from './Offers-table.module.css';
 
 interface Props {
@@ -31,7 +33,6 @@ interface Props {
   statusButtons: Array<{ name: string; count: number }>;
   activeButton: string;
   mainButton: string;
-  rows: Offer[];
   visibleRows: Offer[];
   filteredRows: Offer[];
   searchText: string;
@@ -70,6 +71,7 @@ const OffersTableBox: FC<Props> = ({
   const handleSnackbarClose = () => {
     setShowCopyOfClipboard(false);
   };
+
   return (
     <>
       <Box className={styles.box}>
@@ -134,9 +136,9 @@ const OffersTableBox: FC<Props> = ({
                   <TableCell align="right">Amount 1</TableCell>
                   <TableCell align="right">Amount 2</TableCell>
                   <TableCell align="right">Rate</TableCell>
-                  <TableCell align="left">Tx hash</TableCell>
                   <TableCell align="left">Status</TableCell>
                   <TableCell align="left">Receiver</TableCell>
+                  <TableCell align="left">Share</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -173,32 +175,33 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="right">{row.amount2}</TableCell>
                     <TableCell align="right">{row.rate}</TableCell>
                     <TableCell align="left">
-                      <div className={styles.hash}>
-                        {shortenHash(row.hash)}
-                        <div className={styles.icons}>
-                          <div className={styles.etherscanIcon}>
-                            <EtherScanLogo />
-                          </div>
-                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.hash}>
-                            <div className={styles.copyIcon}>
-                              <CopyIcon />
-                            </div>
-                          </CopyToClipboard>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell align="left">
                       <div className={styles.status}>
                         {row.status}
-                        {row.status === 'For me' && <SquareArrowIcon />}
+                        <Link to={`${ROUTES.ERC20_TRADE}/${row.id}`}>
+                          {row.status === 'For me' && <SquareArrowIcon />}
+                        </Link>
                       </div>
                     </TableCell>
                     <TableCell align="left">
                       <div className={styles.receiver}>
                         {shortenHash(row.receiver)}
-                        <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
+                        {row.receiver !== 'Any' && (
+                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.receiver}>
+                            <div className={styles.copyIcon}>
+                              <CopyIcon />
+                            </div>
+                          </CopyToClipboard>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell align="left">
+                      <div className={styles.share}>
+                        <CopyToClipboard
+                          onCopy={() => setShowCopyOfClipboard(true)}
+                          text={`${window.location.origin}${ROUTES.ERC20_TRADE}/${row.id}`}
+                        >
                           <div className={styles.copyIcon}>
-                            <CopyIcon />
+                            <ShareIcon />
                           </div>
                         </CopyToClipboard>
                       </div>

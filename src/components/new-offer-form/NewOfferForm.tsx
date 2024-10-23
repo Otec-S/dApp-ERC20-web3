@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import cn from 'classnames';
 import { Address, formatUnits, getAddress, maxUint256, parseUnits, zeroAddress } from 'viem';
@@ -13,7 +13,8 @@ import FormButton from '@components/form-button/FormButton';
 import { Loader } from '@components/loader/Loader';
 import { StepPagination } from '@components/step-pagination/StepPagination';
 import { StepStatus } from '@components/step-pagination/StepPagination.interface';
-import { erc20abiExtended, Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { erc20abiExtended, ROUTES, Token, TokenData, tradeContractAbi, tradeContractAddress } from '@shared/constants';
+import { PAGE_RELOAD_TIMEOUT } from '@shared/constants/timeout';
 
 import { NewOfferFormStages } from './NewOfferFormStages';
 import { NewOfferInputs } from './NewOfferInputs';
@@ -63,6 +64,8 @@ const NewOfferForm: FC = () => {
   } = useForm<FormData>({
     mode: 'onChange',
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (
@@ -328,6 +331,17 @@ const NewOfferForm: FC = () => {
 
   const showApproveButtonDisabled = tokenFrom === undefined;
   const isDataFromNetworkLoading = isWriteApprovePending || isLoadingContractData || isTransactionLoading;
+
+  useEffect(() => {
+    if (formStage === 'tradeCreated') {
+      const timer = setTimeout(() => {
+        navigate(`${ROUTES.CREATE_OFFER}`, { replace: true });
+        window.location.reload();
+      }, PAGE_RELOAD_TIMEOUT);
+
+      return () => clearTimeout(timer);
+    }
+  }, [formStage]);
 
   return (
     <section className={cn(styles.createOffer)}>
