@@ -1,24 +1,14 @@
 import { FC, useCallback, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { formatUnits, parseUnits } from 'viem';
-import {
-  useAccount,
-  useBalance,
-  useReadContracts,
-  // useSignMessage,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi';
+import { formatUnits } from 'viem';
+import { useAccount, useBalance, useReadContracts, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { Loader } from '@components/loader/Loader';
 import { MintingForm } from '@components/minting-form/MintingForm';
 import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
 import { useProofDownload } from '@shared/hooks/useProofDownload';
-import { getTotalCost } from '@shared/utils/getTotalCost';
-// import { getTotalCost } from '@shared/utils/getTotalCost';
 
-// FIXME: что это?
 const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
 
 export const PreSale: FC = () => {
@@ -29,8 +19,6 @@ export const PreSale: FC = () => {
   const { address: walletAddress } = useAccount();
   const { data: balanceData } = useBalance({ address: walletAddress });
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
-  // TODO: это вроде не используется
-  // const { signMessage } = useSignMessage();
 
   const {
     data,
@@ -41,57 +29,38 @@ export const PreSale: FC = () => {
     allowFailure: false,
     contracts: walletAddress
       ? [
-          // TODO: это вроде не используется
-          // { abi: nftContractAbi, address: nftContractAddress, functionName: 'CAT' },
           { abi: nftContractAbi, address: nftContractAddress, functionName: 'getMerkleProofs' },
           {
             abi: nftContractAbi,
             address: nftContractAddress,
-            // functionName: 'allowedToPublicMintAmount',
             functionName: 'allowedToWhiteListMintAmount',
             args: [walletAddress],
           },
           {
             abi: nftContractAbi,
             address: nftContractAddress,
-            // functionName: 'publicSalePrice'
             functionName: 'whiteListSalePrice',
           },
         ]
       : undefined,
   });
 
-  // const [cat, allowedToPublicMintAmount, salePrice] = data || [];
   const [proofsUri, allowedToWhiteListMintAmount, salePrice] = data || [];
-  console.log('salePrice', salePrice);
-
   const { file, loading: isFileLoading } = useProofDownload(proofsUri ?? '');
-  console.log('file', file);
-
   const isInWhiteList = file?.private.some((item) => item.address === walletAddress);
 
   const mintNft = useCallback(
     ({ amount }: { amount: number }) => {
       if (salePrice) {
         const proof = file?.private.find((item) => item.address === walletAddress)?.proof;
-        console.log('proof:', proof);
-        // FIXME: тут остановился
-        // const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
         const totalCost = BigInt(amount) * salePrice;
-        console.log('totalCost:', totalCost); // НЕ ВЕРНО
-        // console.log('amount:', amount); // верно
-        console.log('salePrice:', salePrice); // верно
-        console.log('price:', Number(formatUnits(salePrice, 18))); // НЕ верно
 
         if (proof && allowedToWhiteListMintAmount && allowedToWhiteListMintAmount > 0) {
           writeContract({
             abi: nftContractAbi,
             address: nftContractAddress,
             functionName: 'whitelistMint',
-            // args: [proof, BigInt(allowedToWhiteListMintAmount)],
             args: [proof, BigInt(amount)],
-            // TODO:
-            // value: parseUnits(totalCost.toString(), 18),
             value: totalCost,
           });
         }
@@ -105,14 +74,11 @@ export const PreSale: FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      // TODO: что это?
       refetch();
     }
   }, [isSuccess, refetch]);
 
   useEffect(() => {
-    console.log('dataError', dataError);
-    console.log('mintError', mintError);
     const error = dataError || mintError;
     if (error) {
       toast(error.name);
@@ -127,7 +93,6 @@ export const PreSale: FC = () => {
     return <Loader />;
   }
 
-  // TODO:
   return isInWhiteList && allowedToWhiteListMintAmount && salePrice && balanceData ? (
     <MintingForm
       title={'Be an early bird!'}

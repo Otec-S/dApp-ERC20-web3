@@ -48,8 +48,6 @@ export const PublicSale: FC = () => {
       : undefined,
   });
 
-  console.log('PublicSaleData:', data);
-
   const [cat, allowedToPublicMintAmount, salePrice] = data || [];
 
   const mintNft = useCallback(

@@ -38,8 +38,6 @@ export const AirDrop: FC = () => {
       : undefined,
   });
 
-  console.log('AirDropData:', data);
-
   const [proofsUri, allowedToClaimDropAmount] = data || [];
   const { file, loading: isFileLoading } = useProofDownload(proofsUri ?? '');
   const isInAirdropList = file?.airdrop.some((item) => item.address === walletAddress);
