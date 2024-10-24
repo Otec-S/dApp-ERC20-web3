@@ -74,19 +74,25 @@ export const PreSale: FC = () => {
     ({ amount }: { amount: number }) => {
       if (salePrice) {
         const proof = file?.private.find((item) => item.address === walletAddress)?.proof;
+        console.log('proof:', proof);
         // FIXME: тут остановился
-        const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
-        console.log('totalCost:', totalCost);
+        // const totalCost = getTotalCost({ amount, price: Number(formatUnits(salePrice, 18)) });
+        const totalCost = BigInt(amount) * salePrice;
+        console.log('totalCost:', totalCost); // НЕ ВЕРНО
+        // console.log('amount:', amount); // верно
+        console.log('salePrice:', salePrice); // верно
+        console.log('price:', Number(formatUnits(salePrice, 18))); // НЕ верно
 
         if (proof && allowedToWhiteListMintAmount && allowedToWhiteListMintAmount > 0) {
           writeContract({
             abi: nftContractAbi,
             address: nftContractAddress,
             functionName: 'whitelistMint',
-            args: [proof, BigInt(allowedToWhiteListMintAmount)],
+            // args: [proof, BigInt(allowedToWhiteListMintAmount)],
+            args: [proof, BigInt(amount)],
             // TODO:
             // value: parseUnits(totalCost.toString(), 18),
-            value: BigInt(totalCost),
+            value: totalCost,
           });
         }
         if (Number(allowedToWhiteListMintAmount) === 0) {
