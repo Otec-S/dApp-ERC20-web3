@@ -9,7 +9,8 @@ export interface Offer {
   amount1: number;
   amount2: number;
   rate: number;
-  hash: Address;
   status: 'Open' | 'For me' | 'Cancelled' | 'Accepted';
-  receiver: Address;
+  receiver: string;
+  tokenFromDecimals: string;
+  tokenToDecimals: string;
 }
