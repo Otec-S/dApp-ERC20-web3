@@ -21,8 +21,8 @@ import CopyIcon from '@assets/icons/copy_icon.svg';
 import Search from '@assets/icons/search.svg';
 import SquareArrowIcon from '@assets/icons/square_arrow.svg';
 import Snackbar from '@components/snackbar/Snackbar';
-import { getShortHash } from '@shared/utils/getShortHash';
 import { ROUTES } from '@shared/constants';
+import { getShortHash } from '@shared/utils/getShortHash';
 import getTokenIcon from '@shared/utils/getTokenIcon';
 
 import { Offer } from './offers-tables.types';
@@ -174,21 +174,6 @@ const OffersTableBox: FC<Props> = ({
                     <TableCell align="right">{row.amount1}</TableCell>
                     <TableCell align="right">{row.amount2}</TableCell>
                     <TableCell align="right">{row.rate}</TableCell>
-                    <TableCell align="left">
-                      <div className={styles.hash}>
-                        {getShortHash(row.hash)}
-                        <div className={styles.icons}>
-                          <div className={styles.etherscanIcon}>
-                            <EtherScanLogo />
-                          </div>
-                          <CopyToClipboard onCopy={() => setShowCopyOfClipboard(true)} text={row.hash}>
-                            <div className={styles.copyIcon}>
-                              <CopyIcon />
-                            </div>
-                          </CopyToClipboard>
-                        </div>
-                      </div>
-                    </TableCell>
                     <TableCell align="left">
                       <div className={styles.status}>
                         {row.status}
