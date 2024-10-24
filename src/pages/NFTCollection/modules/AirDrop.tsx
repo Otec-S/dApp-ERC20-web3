@@ -17,6 +17,7 @@ export const AirDrop: FC = () => {
   const { writeContract, error: mintError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+
   const {
     data,
     refetch,
@@ -36,6 +37,8 @@ export const AirDrop: FC = () => {
         ]
       : undefined,
   });
+
+  console.log('AirDropData:', data);
 
   const [proofsUri, allowedToClaimDropAmount] = data || [];
   const { file, loading: isFileLoading } = useProofDownload(proofsUri ?? '');
