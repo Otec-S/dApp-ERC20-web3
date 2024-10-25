@@ -9,6 +9,8 @@ import { nftContractAbi } from '@shared/constants';
 import { useChainDependentValues, useFetchFiles } from '@shared/hooks';
 import { useProofDownload } from '@shared/hooks/useProofDownload';
 
+import styles from '../NFTCollection.module.css';
+
 const tokenIds = Array.from(Array(10).keys()).map((item) => item + 1);
 
 export const PreSale: FC = () => {
@@ -103,5 +105,17 @@ export const PreSale: FC = () => {
       files={files}
       onClick={mintNft}
     />
-  ) : null;
+  ) : (
+    <div className={styles.content}>
+      <h2 className={styles.title}>{'You’re not whitelisted yet :('}</h2>
+      <div className={styles.contentRow}>
+        <div className={styles.contentBlockFullWidth}>
+          <p className={styles.description}>
+            To participate in PreSale please send us an information about your project
+          </p>
+          <button className={styles.mintButton}>Get whitelisted</button>
+        </div>
+      </div>
+    </div>
+  );
 };
