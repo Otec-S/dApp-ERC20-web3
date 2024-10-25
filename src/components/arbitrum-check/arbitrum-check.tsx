@@ -5,6 +5,8 @@ import { useChainModal } from '@rainbow-me/rainbowkit';
 import { arbitrumSepolia } from 'viem/chains';
 import { useAccount } from 'wagmi';
 
+import { ROUTES } from '@shared/constants';
+
 const ArbitrumCheck: FC<{ children: React.ReactNode }> = ({ children }) => {
   const { chain } = useAccount();
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const ArbitrumCheck: FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (chain?.id !== arbitrumSepolia.id) {
       toast.error('Please connect to Arbitrum network to access this page.');
-      navigate(-1);
+      navigate(ROUTES.HOME);
 
       setTimeout(() => {
         if (openChainModal) {
