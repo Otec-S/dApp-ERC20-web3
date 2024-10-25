@@ -5,6 +5,7 @@ import { darkTheme, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WagmiProvider } from 'wagmi';
 
+import ArbitrumCheck from '@components/arbitrum-check/arbitrum-check';
 import { Admin } from '@pages/admin/Admin';
 import { CreateOffer } from '@pages/ERC20trade/modules/CreateOffer';
 import { History } from '@pages/ERC20trade/modules/History';
@@ -57,7 +58,11 @@ const router = createBrowserRouter([
   },
   {
     path: ROUTES.NFT_COLLECTION,
-    element: <NFTCollection />,
+    element: (
+      <ArbitrumCheck>
+        <NFTCollection />
+      </ArbitrumCheck>
+    ),
     children: [
       { index: true, element: <Navigate to={ROUTES.AIRDROP} replace /> },
       { path: ROUTES.AIRDROP, element: <AirDrop /> },
