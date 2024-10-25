@@ -17,6 +17,7 @@ export const AirDrop: FC = () => {
   const { writeContract, error: mintError, data: hash } = useWriteContract({});
   const { address: walletAddress } = useAccount();
   const { isLoading, isSuccess } = useWaitForTransactionReceipt({ hash });
+
   const {
     data,
     refetch,
@@ -59,6 +60,7 @@ export const AirDrop: FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      toast.success('NFT claimed successfully');
       refetch();
     }
   }, [isSuccess, refetch]);

@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { useConnections } from 'wagmi';
+import { polygonAmoy, sepolia } from 'viem/chains';
+import { useAccount, useConnections } from 'wagmi';
 
 import { useChainDependentValues } from '@shared/hooks';
 
@@ -9,10 +10,13 @@ import classes from './TokensBlock.module.css';
 export const TokensBlock: FC = () => {
   const connections = useConnections();
   const { tokens } = useChainDependentValues();
+  const { chain } = useAccount();
+
+  const isSuppurtedChain = chain?.id === polygonAmoy.id || chain?.id === sepolia.id;
 
   return (
     <div className={classes.tokenContainer}>
-      {connections.length > 0 ? (
+      {connections.length > 0 && isSuppurtedChain ? (
         tokens?.map((token) => (
           <TokenRow
             icon={token.icon}

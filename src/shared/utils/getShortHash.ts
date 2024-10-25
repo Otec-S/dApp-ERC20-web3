@@ -1,4 +1,4 @@
-export const shortenHash = (hash: string, startLength: number = 6, endLength: number = 6): string => {
+export const getShortHash = (hash: string, startLength: number = 6, endLength: number = 6): string => {
   if (hash.length <= startLength + endLength) {
     return hash;
   }
