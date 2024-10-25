@@ -76,6 +76,7 @@ export const PublicSale: FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      toast.success('NFT claimed successfully');
       refetch();
     }
     if (isError) {

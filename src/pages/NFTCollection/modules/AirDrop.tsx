@@ -60,6 +60,7 @@ export const AirDrop: FC = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      toast.success('NFT claimed successfully');
       refetch();
     }
   }, [isSuccess, refetch]);
