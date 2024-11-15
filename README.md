@@ -54,7 +54,19 @@ as well as web3-specific ones like
 ## Running the Project in Development Mode Locally
 
 1. Clone the repository from https://github.com/Otec-S/dApp-ERC20-web3
-2. Install the dependencies by running _npm install_
-3. Start the project locally with the command _npm run dev_
+2. Add a **.env** file to the project with the following content:
+
+```
+VITE_WAGMI_PROJECT_ID: '60e77a926fcdd784897829d66c6dc30e'
+VITE_SEPOLIA_RPC_URL=https://eth-sepolia.g.alchemy.com/v2/5opf7-1xwOLzLDlRFmXAeQgbPdymDv02
+VITE_POLYGON_RPC_URL=https://polygon-mainnet.g.alchemy.com/v2/5opf7-1xwOLzLDlRFmXAeQgbPdymDv02
+VITE_POLYGON_AMOY_RPC_URL=https://polygon-amoy.g.alchemy.com/v2/5opf7-1xwOLzLDlRFmXAeQgbPdymDv02
+VITE_MAINNET_RPC_URL=https://eth-mainnet.g.alchemy.com/v2/5opf7-1xwOLzLDlRFmXAeQgbPdymDv02
+VITE_ARBITRUM_RPC_URL=https://arb-sepolia.g.alchemy.com/v2/5opf7-1xwOLzLDlRFmXAeQgbPdymDv02
+VITE_THIRD_WEB_CLIENT_ID: '2ca2f61795ced63becf2fedfb21e3d22'
+```
+
+3. Install the dependencies by running _npm install_
+4. Start the project locally with the command _npm run dev_
 
 **The deployment of the application to the server will take place shortly.**
