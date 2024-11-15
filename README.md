@@ -22,16 +22,13 @@ Users can view all NFTs they own in their wallet from our collection. A smart co
 
 ---
 
-### Whitelist Management with Merkle Tree
+## Whitelist Management with Merkle Tree
 
 Two of the three phases are whitelist-restricted. Admins manage whitelists through a Merkle Tree using `merkletreejs`. Via the admin panel, admins can add/remove addresses and set the whitelist on the contract. The leaf nodes are hashed wallet addresses using `keccack256`. Proof data for each address is uploaded to IPFS, then read by the main app, and the necessary proof is passed to the contract.
 
 ---
 
-**Technologies Used:**
-wagmi, viem, react-query, MUI, rainbowkit, react-hook-form, thirdweb, merkletreejs, TypeScript, React, Vite, HTML5, CSS3.
-
-### :hammer_and_wrench:
+## :hammer_and_wrench:
 
 I utilized both standard languages and tools such as
 
@@ -51,3 +48,13 @@ as well as web3-specific ones like
 - merkletreejs
 - thirdweb
 - rainbowkit
+
+---
+
+## Running the Project in Development Mode Locally
+
+1. Clone the repository from https://github.com/Otec-S/dApp-ERC20-web3
+2. Install the dependencies by running _npm install_
+3. Start the project locally with the command _npm run dev_
+
+**The deployment of the application to the server will take place shortly.**
