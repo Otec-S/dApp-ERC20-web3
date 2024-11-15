@@ -30,3 +30,24 @@ Two of the three phases are whitelist-restricted. Admins manage whitelists throu
 
 **Technologies Used:**
 wagmi, viem, react-query, MUI, rainbowkit, react-hook-form, thirdweb, merkletreejs, TypeScript, React, Vite, HTML5, CSS3.
+
+### :hammer_and_wrench:
+
+I utilized both standard languages and tools such as
+
+<div>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original-wordmark.svg" title="React" alt="React" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/typescript/typescript-original.svg" title="TypeScrypt" alt="TypeScrypt" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/materialui/materialui-plain.svg" title="MUI" alt="MUI" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/vitejs/vitejs-original.svg" title="Vite" alt="Vite" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg" title="HTML" alt="HTML" width="40" height="40"/>&nbsp;
+  <img src="https://github.com/devicons/devicon/blob/master/icons/css3/css3-original.svg" title="CSS" alt="CSS" width="40" height="40"/>&nbsp;
+</div>
+
+as well as web3-specific ones like
+
+- viem
+- wagmi
+- merkletreejs
+- thirdweb
+- rainbowkit
