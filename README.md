@@ -1,56 +1,34 @@
 # Scrum Team 17 web3 kEthers fans
 
-Мы рады вас приветствовать на командном этапе программы обучения!) Всем привет :)  
-**Цель проекта:** получить практические навыки в прикладных вещах, таких как React, TypeScript, работа с web3 и другие. Помимо этого, мы ждём от вас групповой работы и командного взаимодействия. Вы прежде всего команда, которая должна выполнить требования заказчика. Вы все несёте ответственность за общий результат и качество кода. Мы не оцениваем вас по одиночке, мы оцениваем вас как команду.
+# Ethers Fans
 
-**Проект является учебным и не имеет идеи дальнейшей коммерциализации. Он предназначен только для получения опыта.**
+A DApp on the web3 platform with a landing page and three different products:
 
-## В чем суть проекта
+1. ## Sending ERC-20 Tokens
 
-Вам необходимо реализовать платформу с несколькими продуктами из мира web3. Платформа будет состоять из лендинг страницы и 3х продуктов:
+   Users can send ERC-20 tokens to others. For test networks, we've deployed proprietary standard ERC-20 tokens. Users can select one of our platform tokens or add any other token not listed. To send a token, users choose the token, input the recipient's wallet address, and specify the amount to send. They then click "Send". No additional smart contract is required for this functionality since ERC-20 tokens come with default methods like `transfer`, `approve`, and `balanceOf`. We use an ABI imported from viem, considering legacy ABI specifics for USDT.
 
-- Отправка ERC-20 токенов другим пользователям
-- Создание и принятие офферов по обмену ERC-20 токенов
-- Выпуск коллекции NFT в 3 этапа
+2. ## Creating and Accepting ERC-20 Swap Offers
 
-По каждому из продуктов можно посмотреть ТЗ [здесь](./Task-1.md), [здесь](./Task-2.md) и [здесь](./Task-3.md). Всё приложение должно работать в двух сетях - mainnet и polygon. Разработка будет вестись в соответствующих тестовых сетях. В нашем случае это sepolia (тестнет для mainnet) и polygon amoy (тестнет для polygon). Так как проект учебный, у нас нет контрактов в основных сетях, но вы должны понимать, что любое dApp после разработки и отладки в тестовых сетях, должно работать в основных сетях. И это нужно учесть.
+   Users can create token swap offers by filling out a form with details of the token and amount they are offering, the token they wish to receive, and optionally, the recipient's address. If a recipient address is specified, only that wallet can accept the offer; otherwise, it’s open to anyone. Users can copy the offer link to share with others. They can view all offers they've created, in various statuses, and offers directly addressed to them. Users can cancel their offers or accept others'. A smart contract was developed to handle this functionality.
 
-В приложении должны быть учтены и обработаны все возможные ошибки, как с точки зрения интерфейса, так и с точки зрения работы с кошельками и смарт контрактами.
+3. ## Minting an NFT Collection in Three Phases: Airdrop, Private Presale, Public Sale
 
-## Чем проект инетересен
+   An admin panel allows the product owner to manage minting phases and whitelists. Each phase can be in one of three states: Soon, Available, Finished, with no set sequence. The typical order is Airdrop, Private Presale, Public Sale.
 
-Вы разработаете собственное dApp и познакомитесь с web3 разработкой с точки зрения фронтенда. Изучите новые технологии, работу с web3 кошельками и смарт контрактами, сделаете ваше приложение мультичейновым. Познакомитесь с некоторыми продуктами из мира web3, реализуете админ панель в рамках работ по 3му заданию. Вы так же столкнётесь с подводными камнями и требовательным заказчиком, который обязательно попытается что нибудь сломать.
+   - During **Airdrop**, users on the whitelist can mint 2 NFTs for free, covering only gas fees, by clicking mint on our site and confirming the wallet transaction. The admin can manage the airdrop whitelist.
+   - In **Private Presale**, users in the whitelist can purchase up to 3 NFTs at a reduced price using the network’s native currency (e.g., ETH for the mainnet). They specify the number to mint and confirm the wallet transaction, with the admin managing this whitelist as well.
+   - For **Public Sale**, anyone can buy NFTs from our site with a higher price than in Private Presale, with a 10 NFT limit per user. The total NFT collection is capped at 10,000.
 
-## Про тех. требования
+   Users can view all NFTs they own in their wallet from our collection. A smart contract manages this, with roles for the admin to control sales phases and whitelists: `DEFAULT_ADMIN_ROLE`, `SELL_PHASE_MANAGER_ROLE`, `WHITE_LIST_MANAGER_ROLE`, and `PRICE_MANAGER_ROLE`.
 
-Приложение нужно сделать на базе [React](https://react.dev/), в качестве фреймворка можно использовать [Next.js](https://nextjs.org/) или [Vite](https://vitejs.dev/). Для статической типизации использовать [Typescript](https://www.typescriptlang.org/).
+---
 
-В качестве базовых компонентов вы можете написать свои UI компоненты или воспользоваться готовыми библиотеками, напр. [Material UI](https://mui.com/) (или любую другую на ваш выбор).
+### Whitelist Management with Merkle Tree
 
-Для работы с web3 необходимо использовать [wagmi](https://wagmi.sh/) и [viem](https://viem.sh/).
+Two of the three phases are whitelist-restricted. Admins manage whitelists through a Merkle Tree using `merkletreejs`. Via the admin panel, admins can add/remove addresses and set the whitelist on the contract. The leaf nodes are hashed wallet addresses using `keccack256`. Proof data for each address is uploaded to IPFS, then read by the main app, and the necessary proof is passed to the contract.
 
-В некоторых заданиях вы встретите упоминание токенов, которые поддерживает наша платформа. Это какие-то ERC-20 токены, с которыми платформа работает по умолчанию. Для основных сетей, можно использовать топ 10 токенов. Например для mainnet топ 10 токенов можно найти на [etherscan](https://etherscan.io/tokens). Для тестовых сетей, в которых вы будете вести разработку, мы задеплоили собственные, типовые [ERC-20 токены](./test-erc-20-tokens.md).
+---
 
-## Как работать с задачами
-
-Базовая ветка - main.  
-Коммиты в main строго запрещены, все изменения по проекту в main должны попадать через пулреквесты/мержреквесты(ПР/МР).  
-Ниже приведен флоу по работе в проекте:  
-Каждая задача должна быть оформлена через ишью(issues).  
-После создания ишью ему автоматически присваивается номер. Даже если ишью ни на кого не назначена, необходимо спросить у команды (либо у менеджера проекта), не работает ли уже кто-то над этой задачей. В случае получения одобрения необходимо назначить ишью на себя.  
-После этого создаете ветку для выполнения ишью в формате issueNumber-short-task-description.  
-В ходе работы над задачей делаете коммиты с содержательными пояснениями на английском языке.
-
-- Пример плохого коментария к коммиту: "fix".
-- Пример хорошего комментария к комиту: "create profile service".
-
-После завершения все коммиты пушатся в текущую ветку.  
-Перед созданием ветки обязательно проверьте, нет ли конфликтов в вашей текущей ветке с main (можно находясь в нужной ветке выполнить `git pull origin main`).  
-Затем создается МР в main. После создания МРа в первую очередь небходимо проверить его самостоятельно. Обращаем внимание не запушили ли закомментированный код, работает ли весь функционал в соответствии с задачей, описанной в ишью. Плюс проверить работоспособность хотябы в двух браузерах, к примеру хром и файрфокс. И только после этого уже просить других смотреть МР.  
-Все участники проекта смотрят новый код и оставляют замечания(дискашены). После исправления замечаний от ваших коллег, вы пишите своему тех лиду о выполненной задачи. Тех лид так же проверяет МР и может оставить свои замечания.
-МР принимается только после исправления всех дискашенов.  
-Закрытием задачи является мерж ветки в main. Мержить позволяется только тех лиду в случае получения одобрения МРа всеми участниками команды (гитхаб позволяет ставить апрувы, нужно попросить всех участников поставить их, если замечаний больше нет).
-
-## Про доп. требования
-
-Не забывайте при разработке проекта следовать стандартам MetaLamp https://github.com/fullstack-development/front-end-best-practices
+**Technologies Used:**
+wagmi, viem, react-query, MUI, rainbowkit, react-hook-form, thirdweb, merkletreejs, TypeScript, React, Vite, HTML5, CSS3.
